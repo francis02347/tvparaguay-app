@@ -94,7 +94,11 @@ Write-Host "[INFO] 2. Creando commit: `"$commitMessage`"..." -ForegroundColor Gr
 git commit -m $commitMessage
 if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error en git commit" -ForegroundColor Red; exit }
 
-Write-Host "[INFO] 3. Subiendo cambios a GitHub en rama 'main' (git push origin main)..." -ForegroundColor Gray
+Write-Host "[INFO] 3. Sincronizando cambios desde GitHub (git pull --rebase origin main)..." -ForegroundColor Gray
+git pull --rebase origin main
+if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error al sincronizar cambios desde GitHub." -ForegroundColor Red; exit }
+
+Write-Host "[INFO] 4. Subiendo cambios a GitHub en rama 'main' (git push origin main)..." -ForegroundColor Gray
 git push origin main
 if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error al subir a rama main. Asegurate de tener configurado tu repositorio remoto." -ForegroundColor Red; exit }
 
