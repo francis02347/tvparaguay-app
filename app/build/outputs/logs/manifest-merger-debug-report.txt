@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:2:1-46:12
-INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:2:1-46:12
-INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:2:1-46:12
-INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:2:1-46:12
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:2:1-57:12
+INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:2:1-57:12
+INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:2:1-57:12
+INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:2:1-57:12
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\Francisco\.gradle\caches\transforms-3\99dc24b8086e9e02f60cbc0643cdc897\transformed\material-1.11.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Francisco\.gradle\caches\transforms-3\1f371f754bd6786f9a76f8e2fd18482b\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\Francisco\.gradle\caches\transforms-3\6bb17d2c54c905aa7b0c5b5bfe3537f3\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
@@ -80,21 +80,25 @@ MERGED from [androidx.media3:media3-common:1.3.1] C:\Users\Francisco\.gradle\cac
 MERGED from [androidx.media3:media3-common:1.3.1] C:\Users\Francisco\.gradle\caches\transforms-3\46b8506445b16cc87ce99b8420b82ba8\transformed\jetified-media3-common-1.3.1\AndroidManifest.xml:22:5-79
 	android:name
 		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:5:22-76
+uses-permission#android.permission.REQUEST_INSTALL_PACKAGES
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:6:5-83
+	android:name
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:6:22-80
 uses-feature#android.software.leanback
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:7:5-87
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:8:5-87
 	android:required
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:7:60-84
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:8:60-84
 	android:name
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:7:19-59
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:8:19-59
 uses-feature#android.hardware.touchscreen
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:8:5-90
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:9:5-90
 	android:required
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:8:63-87
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:9:63-87
 	android:name
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:8:19-62
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:9:19-62
 application
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:10:5-44:19
-INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:10:5-44:19
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:11:5-55:19
+INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:11:5-55:19
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\Francisco\.gradle\caches\transforms-3\99dc24b8086e9e02f60cbc0643cdc897\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\Francisco\.gradle\caches\transforms-3\99dc24b8086e9e02f60cbc0643cdc897\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Francisco\.gradle\caches\transforms-3\1f371f754bd6786f9a76f8e2fd18482b\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -116,65 +120,81 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Francisco\.gradle\
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.9.0] C:\Users\Francisco\.gradle\caches\transforms-3\a309491863f1cad1388d82071cb60f8c\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:16:9-35
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:17:9-35
 	android:label
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:14:9-41
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:15:9-41
 	android:hardwareAccelerated
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:19:9-43
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:20:9-43
 	android:roundIcon
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:15:9-48
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:16:9-48
 	android:icon
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:12:9-43
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:13:9-43
 	android:allowBackup
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:11:9-35
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:12:9-35
 	android:banner
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:13:9-45
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:14:9-45
 	android:theme
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:17:9-48
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:18:9-48
 	android:usesCleartextTraffic
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:18:9-44
-activity#com.tvpy.app.MainActivity
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:21:9-30:20
-	android:screenOrientation
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:24:13-52
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:19:9-44
+provider#androidx.core.content.FileProvider
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:22:9-30:20
+	android:grantUriPermissions
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:26:13-47
+	android:authorities
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:24:13-60
 	android:exported
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:23:13-36
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:25:13-37
 	android:name
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:22:13-41
-intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER+category:name:android.intent.category.LEANBACK_LAUNCHER
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:25:13-29:29
-action#android.intent.action.MAIN
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:26:17-69
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:23:13-62
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:27:13-29:54
+	android:resource
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:29:17-51
 	android:name
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:26:25-66
-category#android.intent.category.LAUNCHER
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:27:17-77
-	android:name
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:27:27-74
-category#android.intent.category.LEANBACK_LAUNCHER
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:28:17-86
-	android:name
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:28:27-83
-activity#com.tvpy.app.PlayerActivity
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:32:9-37:58
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:28:17-67
+activity#com.tvpy.app.MainActivity
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:32:9-41:20
 	android:screenOrientation
 		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:35:13-52
-	android:windowSoftInputMode
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:37:13-55
 	android:exported
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:34:13-37
-	android:configChanges
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:36:13-74
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:34:13-36
 	android:name
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:33:13-43
-activity#com.tvpy.app.ImportM3uActivity
-ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:39:9-42:55
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:33:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER+category:name:android.intent.category.LEANBACK_LAUNCHER
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:36:13-40:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:37:17-69
+	android:name
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:37:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:38:17-77
+	android:name
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:38:27-74
+category#android.intent.category.LEANBACK_LAUNCHER
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:39:17-86
+	android:name
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:39:27-83
+activity#com.tvpy.app.PlayerActivity
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:43:9-48:58
 	android:screenOrientation
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:42:13-52
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:46:13-52
+	android:windowSoftInputMode
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:48:13-55
 	android:exported
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:41:13-37
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:45:13-37
+	android:configChanges
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:47:13-74
 	android:name
-		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:40:13-46
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:44:13-43
+activity#com.tvpy.app.ImportM3uActivity
+ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:50:9-53:55
+	android:screenOrientation
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:53:13-52
+	android:exported
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:52:13-37
+	android:name
+		ADDED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml:51:13-46
 uses-sdk
 INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\Francisco\Downloads\TVParaguay_V8\TVParaguayV5\app\src\main\AndroidManifest.xml

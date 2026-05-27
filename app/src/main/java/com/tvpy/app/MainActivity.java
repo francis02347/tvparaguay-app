@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadAllChannels() {
         allChannels = new ArrayList<>();
-        allChannels.addAll(ChannelData.getChannels());
+        allChannels.addAll(ChannelData.getChannels(this));
         List<Channel> m3u = ChannelStore.loadM3uChannels(this);
         allChannels.addAll(m3u);
 

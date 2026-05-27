@@ -14,11 +14,38 @@ import java.util.List;
  */
 public class ChannelData {
 
-    public static List<Channel> getChannels() {
+    public static List<Channel> getChannels(android.content.Context context) {
         List<Channel> channels = new ArrayList<>();
+        
+        // 1. Agregar canales de Paraguay por defecto (hardcodeados)
+        channels.addAll(getHardcodedChannels());
+        
+        // 2. Cargar canales adicionales desde assets (M3U)
+        try {
+            java.io.InputStream is = context.getAssets().open("default_channels.m3u");
+            java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(is, "UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            reader.close();
+            
+            List<Channel> assetChannels = M3uParser.parse(sb.toString());
+            channels.addAll(assetChannels);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return channels;
+    }
 
-        // Para agregar canales duplicados alternativos en el futuro,
-        // están comentados al final de este archivo.
+    public static List<Channel> getChannels() {
+        return getHardcodedChannels();
+    }
+
+    private static List<Channel> getHardcodedChannels() {
+        List<Channel> channels = new ArrayList<>();
 
 
         channels.add(new Channel(

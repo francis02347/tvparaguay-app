@@ -687,6 +687,7 @@ com.tvpy.app:string/exo_track_role_commentary = 0x7f110053
 com.tvpy.app:style/ExoStyledControls.TimeBar = 0x7f12013d
 com.tvpy.app:string/exo_track_role_alternate = 0x7f110051
 com.tvpy.app:string/exo_track_bitrate = 0x7f11004e
+com.tvpy.app:xml/file_paths = 0x7f140000
 com.tvpy.app:string/exo_item_list = 0x7f11004d
 com.tvpy.app:string/exo_download_paused_for_wifi = 0x7f11004b
 com.tvpy.app:string/exo_download_paused = 0x7f110049

@@ -66,3 +66,4 @@ layout item_channel
 mipmap ic_launcher
 string app_name
 style Theme.TVParaguay
+xml file_paths

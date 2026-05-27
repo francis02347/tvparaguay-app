@@ -16,6 +16,10 @@
         "source": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-main-38:\\layout\\item_channel.xml"
     },
     {
+        "merged": "com.tvpy.app-merged_res-36:/xml_file_paths.xml.flat",
+        "source": "com.tvpy.app-main-38:/xml/file_paths.xml"
+    },
+    {
         "merged": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-merged_res-36:\\anim_dot_pulse_3.xml.flat",
         "source": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-main-38:\\anim\\dot_pulse_3.xml"
     },
@@ -40,10 +44,6 @@
         "source": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-main-38:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.tvpy.app-merged_res-36:/layout_item_channel.xml.flat",
-        "source": "com.tvpy.app-main-38:/layout/item_channel.xml"
-    },
-    {
         "merged": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-merged_res-36:\\drawable_dot_shape.xml.flat",
         "source": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-main-38:\\drawable\\dot_shape.xml"
     },
@@ -54,10 +54,6 @@
     {
         "merged": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-merged_res-36:\\anim_dot_pulse_2.xml.flat",
         "source": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-main-38:\\anim\\dot_pulse_2.xml"
-    },
-    {
-        "merged": "com.tvpy.app-merged_res-36:/layout_activity_player.xml.flat",
-        "source": "com.tvpy.app-main-38:/layout/activity_player.xml"
     },
     {
         "merged": "C:\\Users\\Francisco\\.gradle\\daemon\\8.2\\com.tvpy.app-merged_res-36:\\layout_activity_import_m3u.xml.flat",
