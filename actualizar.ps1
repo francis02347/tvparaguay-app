@@ -189,7 +189,7 @@ if ($waitConfirm -eq "S" -or $waitConfirm -eq "s" -or $waitConfirm -eq "") {
                 $downloadUrl = $apkAsset.browser_download_url
             } else {
                 # Fallback estatico
-                $downloadUrl = "https://github.com/francis02347/tvparaguay-app/releases/download/$tagName/app-debug.apk"
+                $downloadUrl = "https://github.com/francis02347/tvparaguay-app/releases/download/$tagName/app-release.apk"
             }
             
             $fileName = "TVParaguay-v$newVersionName.apk"
