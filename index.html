@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Paraguay — Descargar APK Oficial para Celular y Android TV</title>
+    <meta name="description" content="Descarga el APK oficial de TV Paraguay (v1.8). Disfruta de la mejor televisión paraguaya en vivo desde tu celular, tablet o televisor con Android TV de forma 100% gratuita.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://francis02347.github.io/tvparaguay-app/">
+    <meta property="og:title" content="TV Paraguay — Descargar APK Oficial para Celular y Android TV">
+    <meta property="og:description" content="Descarga el APK oficial de TV Paraguay (v1.8). Disfruta de la mejor televisión paraguaya en vivo desde tu celular, tablet o televisor con Android TV de forma 100% gratuita.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/francis02347/tvparaguay-app/main/app/src/main/res/mipmap-hdpi/ic_launcher.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://francis02347.github.io/tvparaguay-app/">
+    <meta property="twitter:title" content="TV Paraguay — Descargar APK Oficial para Celular y Android TV">
+    <meta property="twitter:description" content="Descarga el APK oficial de TV Paraguay (v1.8). Disfruta de la mejor televisión paraguaya en vivo desde tu celular, tablet o televisor con Android TV de forma 100% gratuita.">
+
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS RESET & VARIABLES */
+        :root {
+            --bg-color: #08080C;
+            --bg-card: rgba(18, 18, 26, 0.6);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --primary: #00F2FE;
+            --secondary: #4FACFE;
+            --accent: #FF007A;
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --text-dark: #4B5563;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* BACKGROUND DECORATIONS */
+        .glow-sphere {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(79, 172, 254, 0) 70%);
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glow-1 { top: -100px; right: -100px; }
+        .glow-2 { bottom: -200px; left: -100px; }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* HEADER */
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border-card);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            fill: url(#logoGrad);
+        }
+
+        .badge-version {
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            padding: 80px 0 60px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero-title span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 40px auto;
+            font-weight: 400;
+        }
+
+        /* CTA BUTTONS */
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--gradient);
+            color: #000;
+            padding: 18px 38px;
+            border-radius: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.35);
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.5);
+            color: #000;
+        }
+
+        .btn-download svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .download-info {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* FEATURES SECTION */
+        .features {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(16px);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.05);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: rgba(0, 242, 254, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: currentColor;
+        }
+
+        .feature-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* GUIDELINES & SIDE-LOADING INFO */
+        .guide-section {
+            padding: 60px 0;
+            position: relative;
+        }
+
+        .guide-box {
+            background: linear-gradient(180deg, rgba(18, 18, 26, 0.8) 0%, rgba(10, 10, 15, 0.9) 100%);
+            border: 1px solid var(--border-card);
+            border-radius: 32px;
+            padding: 48px;
+            backdrop-filter: blur(20px);
+        }
+
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .guide-step {
+            position: relative;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .guide-step h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .guide-step p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* WARNING BOX (THE GOOGLE FILES ALERT) */
+        .alert-box {
+            margin-top: 40px;
+            background: rgba(255, 0, 122, 0.05);
+            border: 1px solid rgba(255, 0, 122, 0.25);
+            border-radius: 20px;
+            padding: 24px 30px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .alert-icon {
+            color: var(--accent);
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .alert-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .alert-content h5 {
+            font-family: 'Outfit', sans-serif;
+            color: #FF5A9E;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .alert-content p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .alert-content strong {
+            color: var(--text-main);
+        }
+
+        /* FAQ SECTION (ACCORDION) */
+        .faq {
+            padding: 60px 0 100px 0;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 18px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .faq-icon svg {
+            width: 12px;
+            height: 12px;
+            fill: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+        }
+
+        .faq-answer-inner {
+            padding: 0 24px 24px 24px;
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .faq-item.active {
+            border-color: rgba(0, 242, 254, 0.2);
+            background: rgba(18, 18, 26, 0.8);
+        }
+
+        .faq-item.active .faq-icon {
+            background: var(--gradient);
+        }
+
+        .faq-item.active .faq-icon svg {
+            fill: #000;
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border-card);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* KEYFRAMES */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.7); }
+            70% { transform: scale(1.1); opacity: 0.8; box-shadow: 0 0 0 10px rgba(0, 242, 254, 0); }
+            100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 40px; }
+            .hero-subtitle { font-size: 16px; }
+            .section-title { font-size: 26px; }
+            .guide-box { padding: 32px; }
+            .alert-box { flex-direction: column; padding: 20px; }
+            .btn-download { padding: 16px 28px; font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SVG GRADIENT TEMPLATE -->
+    <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true" focusable="false">
+        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00F2FE" />
+            <stop offset="100%" stop-color="#4FACFE" />
+        </linearGradient>
+    </svg>
+
+    <!-- SPHERES BG -->
+    <div class="glow-sphere glow-1"></div>
+    <div class="glow-sphere glow-2"></div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container header-wrap">
+            <a href="#" class="logo">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+                </svg>
+                TV Paraguay
+            </a>
+            <div class="badge-version">
+                <div class="badge-dot"></div>
+                v1.8 Estable
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">La televisión de Paraguay, <br><span>en tu mano y en tu TV</span></h1>
+            <p class="hero-subtitle">Disfruta de todos los canales nacionales e iptv de Paraguay gratis. Adaptado perfectamente para celulares, tabletas y televisores Android TV con control remoto.</p>
+            
+            <div class="cta-container">
+                <a href="https://github.com/francis02347/tvparaguay-app/releases/download/v1.8/app-release.apk" class="btn-download" id="downloadBtn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+                    </svg>
+                    Descargar APK Gratis
+                </a>
+                <div class="download-info">
+                    <span>Tamaño: ~7.8 MB</span>
+                    <span>•</span>
+                    <span>Android 8.0 o superior</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">¿Por qué elegir <span>TV Paraguay</span>?</h2>
+            
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+                        </svg>
+                    </div>
+                    <h3>Diseño Híbrido Avanzado</h3>
+                    <p>Una interfaz única que se adapta automáticamente: en móviles se muestra en vertical para manejo táctil rápido, y en televisores se transforma a grilla horizontal optimizada para control remoto (D-Pad).</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-2.72 0-5.12 1.54-6.3 3.86C2.56 8.24 0 11.18 0 14.5 0 18.09 2.91 21 6.5 21h12c3.59 0 6.5-2.91 6.5-6.5 0-3.37-2.58-6.14-5.65-6.46zM19 18H6.5C4.57 18 3 16.43 3 14.5c0-1.68 1.19-3.1 2.82-3.41l1.04-.2.24-1.02C7.8 6.94 10.15 5 13 5c2.72 0 4.96 1.83 5.48 4.57l.22 1.17 1.18.08c1.72.12 3.12 1.56 3.12 3.29 0 1.87-1.53 3.39-3.4 3.39z"/>
+                        </svg>
+                    </div>
+                    <h3>Actualizaciones OTA Directas</h3>
+                    <p>La aplicación cuenta con su propio gestor de actualizaciones integrado en la nube. Te notificará y descargará automáticamente las nuevas versiones internamente con un solo toque.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/>
+                        </svg>
+                    </div>
+                    <h3>100% Gratis y Modular</h3>
+                    <p>Sin subscripciones y sin anuncios invasivos. Los canales predeterminados se cargan de forma asíncrona desde un archivo modular interno para garantizar el mínimo consumo de batería y memoria.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GUIDE SECTION -->
+    <section class="guide-section">
+        <div class="container">
+            <div class="guide-box">
+                <h3 class="section-title" style="margin-bottom: 10px; text-align: left;">Guía de Instalación <span>Paso a Paso</span></h3>
+                <p style="color: var(--text-muted); font-size: 15px;">Sigue estos pasos sencillos para instalar TV Paraguay directamente en tu dispositivo sin problemas.</p>
+                
+                <div class="guide-grid">
+                    <!-- Step 1 -->
+                    <div class="guide-step">
+                        <div class="step-number">1</div>
+                        <h4>Descarga el APK</h4>
+                        <p>Haz clic en el botón principal para iniciar la descarga del archivo seguro <code>TVParaguay-v1.8.apk</code> directamente en tu navegador.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="guide-step">
+                        <div class="step-number">2</div>
+                        <h4>Habilita Orígenes</h4>
+                        <p>Si tu sistema lo solicita, ve a Ajustes > Seguridad (o en tu Navegador) y permite la opción <strong>"Instalar aplicaciones de fuentes desconocidas"</strong>.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="guide-step">
+                        <div class="step-number">3</div>
+                        <h4>Instala y Disfruta</h4>
+                        <p>Abre el archivo descargado tocando la notificación del navegador o desde tus descargas y presiona <strong>"Instalar"</strong>.</p>
+                    </div>
+                </div>
+
+                <!-- ALERT BOX -->
+                <div class="alert-box">
+                    <div class="alert-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <h5>¿El instalador de tu dispositivo se cierra o da error?</h5>
+                        <p>Algunos teléfonos y tablets modernos tienen errores de código al instalar APKs desde exploradores de archivos genéricos. Si te aparece el mensaje <em>"Instalador de paquetes sigue sin funcionar"</em>, la solución es sumamente sencilla: instala la aplicación gratuita oficial <strong>Files de Google</strong> desde Play Store, busca el APK descargado en la carpeta "Descargas" desde allí e instálalo. ¡Se instalará con 100% de éxito!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title">Preguntas <span>Frecuentes</span></h2>
+            
+            <div class="faq-list">
+                <!-- FAQ 1 -->
+                <div class="faq-item">
+                    <button class="faq-question" id="faq1">
+                        ¿Es seguro instalar este archivo APK?
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            Totalmente seguro. El archivo APK está compilado directamente desde el código fuente abierto del proyecto y firmado de forma segura con un certificado criptográfico inmutable. Carece de cualquier tipo de código malicioso o publicidad intrusiva.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="faq-item">
+                    <button class="faq-question" id="faq2">
+                        ¿Cómo lo instalo en mi Smart TV con Android TV / Google TV?
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            Para instalarlo en tu TV de forma sencilla: <br>
+                            1. Descarga la aplicación gratuita <strong>"Downloader"</strong> desde la Play Store de tu televisor. <br>
+                            2. Abre Downloader e ingresa la dirección de este sitio web. <br>
+                            3. Haz clic en el botón de descarga directamente desde la TV e inicia la instalación. ¡La interfaz de la app se adaptará automáticamente al televisor!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="faq-item">
+                    <button class="faq-question" id="faq3">
+                        ¿Por qué dice "Instalador de paquetes sigue sin funcionar" en mi tablet?
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            Este es un error recurrente en Android 14+ en ciertas marcas donde el administrador de archivos de fábrica no maneja de forma correcta los enlaces temporales de instalación. La solución definitiva es descargar la aplicación <strong>Files de Google</strong> en la Play Store de tu tablet, abrir el APK desde esa aplicación e instalarlo. Esto bypassa el error de inmediato y la instala con total éxito.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="faq-item">
+                    <button class="faq-question" id="faq4">
+                        ¿Cómo se actualiza la aplicación en el futuro?
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        </div>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            ¡Es completamente automático! Gracias a nuestro actualizador OTA, cuando iniciemos la app en el futuro y haya una versión disponible en el servidor, te saldrá un aviso emergente invitándote a descargar la actualización. El sistema se encargará de bajar e instalar la nueva versión encima de la actual sin que tengas que desinstalar nada.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>© 2026 TV Paraguay. Todos los derechos reservados.</p>
+            <p style="margin-top: 8px; font-size: 13px;">Proyecto de código abierto hospedado en <a href="https://github.com/francis02347/tvparaguay-app" target="_blank" rel="noopener">GitHub</a>.</p>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE ACCORDION SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const item = question.parentElement;
+                    const isActive = item.classList.contains('active');
+
+                    // Close all active items
+                    document.querySelectorAll('.faq-item').forEach(el => {
+                        el.classList.remove('active');
+                    });
+
+                    // If it was not active, open it
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
