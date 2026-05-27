@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- ═══════════════════════════════════════════════════
+         Reproductor de video nativo (ExoPlayer / Media3)
+    ═══════════════════════════════════════════════════ -->
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/playerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <!-- ═══════════════════════════════════════════════════
+         SPINNER MINIMALISTA — tres puntos que pulsan
+    ═══════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/loadingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#E6000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <View
+                android:id="@+id/dot1"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_marginEnd="9dp"
+                android:background="@drawable/dot_shape" />
+
+            <View
+                android:id="@+id/dot2"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_marginEnd="9dp"
+                android:background="@drawable/dot_shape" />
+
+            <View
+                android:id="@+id/dot3"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:background="@drawable/dot_shape" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Conectando..."
+            android:textColor="#44FFFFFF"
+            android:textSize="12sp"
+            android:letterSpacing="0.1" />
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════════════════════════
+         PANTALLA DE ERROR
+    ═══════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/errorScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:background="#E6000000"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📡"
+            android:textSize="56sp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Canal no disponible"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvErrorChannelName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#7AACFF"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="La transmisión no pudo cargarse.\nDeslizá para probar otro canal."
+            android:textColor="#55FFFFFF"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.5"
+            android:layout_marginBottom="32dp" />
+
+        <Button
+            android:id="@+id/btnRetry"
+            android:layout_width="180dp"
+            android:layout_height="46dp"
+            android:text="Intentar de nuevo"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:backgroundTint="@color/accent" />
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════════════════════════
+         OVERLAY AL CAMBIAR CANAL (swipe)
+    ═══════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/overlayContainer"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:background="@drawable/overlay_bg"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/overlayEmoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="48sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/overlayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/overlayCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#88CCFF"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_marginBottom="14dp" />
+
+        <TextView
+            android:id="@+id/overlayHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#55FFFFFF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════════════════════════
+         BARRA SUPERIOR (se muestra al tocar, se oculta sola)
+         Contiene: ← volver | nombre canal | ❤ favorito
+    ═══════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:background="#CC000000"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_media_previous"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/white"
+            android:focusable="true"
+            android:clickable="true"
+            android:contentDescription="Volver" />
+
+        <TextView
+            android:id="@+id/tvChannelName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="1" />
+
+        <!-- Botón corazón favorito -->
+        <TextView
+            android:id="@+id/btnFavorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="🤍"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:clickable="true"
+            android:contentDescription="Favorito" />
+
+    </LinearLayout>
+
+</FrameLayout>

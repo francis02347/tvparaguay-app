@@ -1,0 +1,448 @@
+package com.tvpy.app;
+
+import android.graphics.Color;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * =====================================================
+ *   LISTA DE CANALES — TV PARAGUAY
+ * =====================================================
+ * Generado desde py.m3u — ordenado alfabéticamente
+ * Duplicados ocultos (se mantiene la mejor URL)
+ * =====================================================
+ */
+public class ChannelData {
+
+    public static List<Channel> getChannels() {
+        List<Channel> channels = new ArrayList<>();
+
+        // Para agregar canales duplicados alternativos en el futuro,
+        // están comentados al final de este archivo.
+
+
+        channels.add(new Channel(
+                "4DmásNoticias TV",
+                "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "A24 Paraguay",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/6.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "ABC-TV Paraguay",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/7.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Alcance FM PLAY TV",
+                "https://video.wilohosting.com:19360/alcancefmtv/alcancefmtv.m3u8",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Almaya TV",
+                "https://video.hostingcaaguazu.com:19360/almayatv/almayatv.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "America Paraguay",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/83.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Bruno Masi TV",
+                "https://rds3.desdeparaguay.net/brunomasitv/brunomasitv/playlist.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "C9N",
+                "https://alba-py-c9n-c9n.stream.mediatiquestream.com/index.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Canal 5 TV Max",
+                "https://video.wilohosting.com:19360/tvmax/tvmax.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Canal 8 C&amp;C Producciones",
+                "https://video.hostingcaaguazu.com:19360/canal8cvs/canal8cvs.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Canal 8 Vision TV",
+                "https://tigocloudgen.desdeparaguay.net/satelitaltv/satelitaltv/playlist.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Canal Pro",
+                "https://www.desde-paraguay.com/pro.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Cosmos TV",
+                "https://video.hostingcaaguazu.com:19360/cosmostv/cosmostv.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Cáritas TV",
+                "https://rds3.desdeparaguay.net/caritastv/caritastv/playlist.m3u8",
+                "✝️", "Religioso", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Del Rey TV",
+                "https://video.hostingcaaguazu.com:19360/delreytv/delreytv.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Dismar Radio TV",
+                "https://rds3.desdeparaguay.net/dismartv/dismartv/playlist.m3u8",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "E40",
+                "https://copacotf.desdeparaguay.net/e40tv/e40tv_py_alta/playlist.m3u8?admin=tvaccion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "En Lengua de Senas TV",
+                "https://cloudtv.streaming.com.py/lenguasdesenas/lenguasdesenas/chunklist.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Farra Play",
+                "https://stream.farra.com.py/live/farra_low.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Gen",
+                "https://copacogen.desdeparaguay.net/gentv/gentv_py_alta/playlist.m3u8?admin=nacion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "GO TV",
+                "https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "HEi Now",
+                "https://copacogen.desdeparaguay.net/heitv/heitv_py_alta/playlist.m3u8?admin=nacion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Latele",
+                "https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "LIM TV",
+                "https://tv.invasivamedia.com/hls/limtv.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Mega TV",
+                "https://www.desde-paraguay.com/mega.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "MiTV",
+                "https://rds3.desdeparaguay.net/mitv/mitv/playlist.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Monumental TV",
+                "https://copacogen.desdeparaguay.net/monumentaltv/monumentaltv_med/playlist.m3u8?admin=tvaccion",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Nande Portetepe TV",
+                "https://video.hostingcaaguazu.com:19360/nandeportetepe/nandeportetepe.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Nandejara Ne'e TV",
+                "https://copacogen.desdeparaguay.net/nandejaraneetv/nandejaraneetv/playlist.m3u8?admin=tvaccion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Nanduti",
+                "https://zn1tf.desdeparaguay.net/nandutitv/nandutitv_alta/playlist.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Next HD",
+                "https://live.enhdtv.com:19360/nexthd/nexthd.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "NPY",
+                "https://copacogen.desdeparaguay.net/npy/npy_py_alta/playlist.m3u8?admin=tvaccion",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Oasis TV",
+                "https://video.hostingcaaguazu.com:19360/oasistv/oasistv.m3u8",
+                "✝️", "Religioso", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Obedira TV",
+                "https://video.hostingcaaguazu.com:19360/obediratv/obediratv.m3u8",
+                "✝️", "Religioso", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Occidental TV",
+                "https://video.wilohosting.com:19360/occidentaltv/occidentaltv.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Oviedo TV",
+                "https://video.wilohosting.com:19360/oviedotv/oviedotv.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Paraguay TV",
+                "https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Paravision",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/120.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Popu TV",
+                "https://copacogen.desdeparaguay.net/universotv/universotv_py_alta/playlist.m3u8?admin=nacion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Productiva TV",
+                "https://copacoradios.desdeparaguay.net/productivatv/productivatv_baja/playlist.m3u8?admin=nacion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Radio Ciudad 98.9 FM TV",
+                "https://video.wilohosting.com:19360/radiociudadtv/radiociudadtv.m3u8",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Radio Nacional del Paraguay",
+                "https://stream.paraguaytv.gov.py/memfs/ea8a90e9-10f7-4b00-8e88-42f4a838d74b.m3u8",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Radio San Cristobal 88.7 FM",
+                "https://video.wilohosting.com:19360/sancristobalfm/sancristobalfm.m3u8",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Radio TV El Arca del Pacto",
+                "https://video.wilohosting.com:19360/radiotvelarcadelpacto/radiotvelarcadelpacto.m3u8",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "RCC TV",
+                "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8?admin=nacion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Red Digital",
+                "https://video.hostingcaaguazu.com:19360/reddigitalsanpedro/reddigitalsanpedro.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Red Interior TV",
+                "https://video.wilohosting.com:19360/redinteriortv/redinteriortv.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Regional TV Yaguaron",
+                "https://video.hostingcaaguazu.com:19360/regionaltv/regionaltv.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "República TV",
+                "https://rds3.desdeparaguay.net/republicatv/republicatv/playlist.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "RQP Paraguay",
+                "https://alba-py-rqp-rqp.stream.mediatiquestream.com/index.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "SNT",
+                "https://d2qsan2ut81n2k.cloudfront.net/live/2e1f1b6a-9d03-4194-8559-2eabe61a1555/ts:abr.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Suceso TV",
+                "https://live.enhdtv.com:8081/8060/index.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "SUR TV Itapua",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/1596.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Telefuturo",
+                "https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/media.m3u8?admin=tvaccion",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Telequince",
+                "https://video.hostingcaaguazu.com:19360/telequince/telequince.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Tigo Sports",
+                "https://live.enhdtv.com:8081/8160/index.m3u8",
+                "⚽", "Deporte", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Tigo Sports+",
+                "http://45.170.130.224:8000/play/a04i/index.m3u8",
+                "⚽", "Deporte", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Trece",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/82.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Tropicalia 93.9 FM",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/67.m3u8",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "TV Aire",
+                "https://video.hostingcaaguazu.com:19360/tvairepy/tvairepy.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "TV Camara",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/119.m3u8",
+                "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "TV Canindeyu",
+                "https://video.hostingcaaguazu.com:19360/tvcanindeyu/tvcanindeyu.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Unicanal",
+                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/72.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "UnionTV",
+                "https://tigocloud.desdeparaguay.net/800tv/800tv/playlist.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "UniRadio TV",
+                "https://video.hostingcaaguazu.com:19360/uniradiotv/uniradiotv.m3u8",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Venus Media",
+                "https://tigocloud.desdeparaguay.net/venusmedia/venusmedia/playlist.m3u8",
+                "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Villa Elisa Radio TV",
+                "https://copacogen.desdeparaguay.net/villaelisatv/villaelisatv/playlist.m3u8?admin=nacion",
+                "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        return channels;
+    }
+
+    // =====================================================
+    //  URLS ALTERNATIVAS (duplicados ocultos)
+    //  Descomentá cualquiera para usarla en su lugar
+    // =====================================================
+    //
+    // Farra Play (720p - alternativa):
+    //   http://159.203.148.226/live/farra.m3u8
+    //
+    // Gen (alternativa peer):
+    //   https://gentvpeer.desdeparaguay.net/gentvpeer/gentv_py_alta/master.m3u8
+    //
+    // Nanduti (baja calidad - alternativa):
+    //   https://copacogen.desdeparaguay.net/nandutitv/nandutitv_baja/index.m3u8
+    //
+    // Paraguay TV (alternativa):
+    //   http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/118.m3u8
+    //
+    // SNT (alternativa mediatiquestream):
+    //   https://alba-py-snt-snt.stream.mediatiquestream.com/index.m3u8
+}
