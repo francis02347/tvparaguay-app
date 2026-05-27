@@ -1,6 +1,6 @@
 {
-  "versionCode": 8,
-  "versionName": "1.7",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.7/app-release.apk",
-  "releaseNotes": "Actualización automática construida mediante GitHub Actions para la versión v1.7."
+  "versionCode": 4,
+  "versionName": "1.3",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.3/app-release.apk",
+  "releaseNotes": "Actualización automática construida mediante GitHub Actions para la versión v1.3."
 }
