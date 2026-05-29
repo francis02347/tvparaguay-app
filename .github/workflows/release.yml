@@ -25,8 +25,8 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x gradlew
 
-      - name: Build Release APKs
-        run: ./gradlew assembleRelease # Compila ambos sabores en modo release
+      - name: Build Release APKs and Bundles
+        run: ./gradlew assembleRelease bundleRelease # Compila ambos sabores en modo release (APK y AAB)
 
       - name: Extract Version Info from build.gradle
         id: get_version
@@ -50,6 +50,8 @@ jobs:
           files: |
             app/build/outputs/apk/playstore/release/app-playstore-release.apk
             app/build/outputs/apk/website/release/app-website-release.apk
+            app/build/outputs/bundle/playstoreRelease/app-playstore-release.aab
+            app/build/outputs/bundle/websiteRelease/app-website-release.aab
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
