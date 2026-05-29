@@ -1,0 +1,31 @@
+<variant
+    name="playstoreRelease"
+    package="com.tvpy.app"
+    minSdkVersion="26"
+    targetSdkVersion="34"
+    mergedManifest="build\intermediates\merged_manifest\playstoreRelease\AndroidManifest.xml"
+    manifestMergeReport="build\outputs\logs\manifest-merger-playstore-release-report.txt"
+    proguardFiles="build\intermediates\default_proguard_files\global\proguard-android-optimize.txt-8.2.2;proguard-rules.pro"
+    partialResultsDir="build\intermediates\lint_vital_partial_results\playstoreRelease\out">
+  <buildFeatures
+      namespacing="REQUIRED"/>
+  <sourceProviders>
+    <sourceProvider
+        manifests="src\main\AndroidManifest.xml"
+        javaDirectories="src\main\java;src\playstore\java;src\release\java;src\playstoreRelease\java;src\main\kotlin;src\playstore\kotlin;src\release\kotlin;src\playstoreRelease\kotlin"
+        resDirectories="src\main\res;src\playstore\res;src\release\res;src\playstoreRelease\res"
+        assetsDirectories="src\main\assets;src\playstore\assets;src\release\assets;src\playstoreRelease\assets"/>
+  </sourceProviders>
+  <testSourceProviders>
+  </testSourceProviders>
+  <testFixturesSourceProviders>
+  </testFixturesSourceProviders>
+  <artifact
+      classOutputs="build\intermediates\javac\playstoreRelease\classes;build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\playstoreRelease\R.jar"
+      type="MAIN"
+      applicationId="com.tvpy.tvapp"
+      generatedSourceFolders="build\generated\ap_generated_sources\playstoreRelease\out;build\generated\source\buildConfig\playstore\release"
+      generatedResourceFolders="build\generated\res\resValues\playstore\release"
+      desugaredMethodsFiles="C:\Users\Francisco\.gradle\caches\transforms-3\c53e198a15af26ea3acbbfc37da9bc11\transformed\D8BackportedDesugaredMethods.txt">
+  </artifact>
+</variant>

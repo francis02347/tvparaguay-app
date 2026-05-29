@@ -47,8 +47,24 @@ android {
         applicationId "com.tvpy.tvapp"
         minSdk 26
         targetSdk 34
-        versionCode 7
-        versionName "1.9"
+        versionCode 8
+        versionName "1.10"
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    flavorDimensions "distribution"
+    productFlavors {
+        playstore {
+            dimension "distribution"
+            buildConfigField "boolean", "IS_PLAY_STORE", "true"
+        }
+        website {
+            dimension "distribution"
+            buildConfigField "boolean", "IS_PLAY_STORE", "false"
+        }
     }
 
     buildTypes {

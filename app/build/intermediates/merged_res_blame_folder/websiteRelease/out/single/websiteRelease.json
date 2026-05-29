@@ -1,0 +1,62 @@
+[
+    {
+        "merged": "com.tvpy.app-merged_res-36:/layout_activity_main.xml.flat",
+        "source": "com.tvpy.app-main-37:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/anim_dot_pulse_2.xml.flat",
+        "source": "com.tvpy.app-main-37:/anim/dot_pulse_2.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/drawable_search_bg.xml.flat",
+        "source": "com.tvpy.app-main-37:/drawable/search_bg.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/drawable_badge_bg.xml.flat",
+        "source": "com.tvpy.app-main-37:/drawable/badge_bg.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/drawable_dot_shape.xml.flat",
+        "source": "com.tvpy.app-main-37:/drawable/dot_shape.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/layout_activity_import_m3u.xml.flat",
+        "source": "com.tvpy.app-main-37:/layout/activity_import_m3u.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/anim_dot_pulse_3.xml.flat",
+        "source": "com.tvpy.app-main-37:/anim/dot_pulse_3.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/xml_file_paths.xml.flat",
+        "source": "com.tvpy.app-main-37:/xml/file_paths.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/drawable_chip_filter.xml.flat",
+        "source": "com.tvpy.app-main-37:/drawable/chip_filter.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/drawable_overlay_bg.xml.flat",
+        "source": "com.tvpy.app-main-37:/drawable/overlay_bg.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/layout_item_channel.xml.flat",
+        "source": "com.tvpy.app-main-37:/layout/item_channel.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/layout_activity_player.xml.flat",
+        "source": "com.tvpy.app-main-37:/layout/activity_player.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/mipmap-hdpi_ic_launcher.xml.flat",
+        "source": "com.tvpy.app-main-37:/mipmap-hdpi/ic_launcher.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/drawable_input_bg.xml.flat",
+        "source": "com.tvpy.app-main-37:/drawable/input_bg.xml"
+    },
+    {
+        "merged": "com.tvpy.app-merged_res-36:/anim_dot_pulse_1.xml.flat",
+        "source": "com.tvpy.app-main-37:/anim/dot_pulse_1.xml"
+    }
+]

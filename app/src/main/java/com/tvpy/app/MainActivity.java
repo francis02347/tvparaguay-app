@@ -78,8 +78,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnImportM3u).setOnClickListener(v ->
             startActivity(new Intent(this, ImportM3uActivity.class)));
 
-        // ─── Verificar actualizaciones OTA ──────────────────────────────
-        new UpdateManager(this).checkForUpdates();
+        // ─── Verificar actualizaciones OTA (Solo variante de sitio web) ──
+        if (!BuildConfig.IS_PLAY_STORE) {
+            new UpdateManager(this).checkForUpdates();
+        }
 
         // ── Modo selección / eliminación ──────────────────────────────
         adapter.setSelectionListener(count -> {

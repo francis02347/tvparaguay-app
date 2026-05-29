@@ -182,14 +182,14 @@ if ($waitConfirm -eq "S" -or $waitConfirm -eq "s" -or $waitConfirm -eq "") {
             Write-Host ""
             Write-Host "[INFO] Iniciando descarga del APK desde GitHub..." -ForegroundColor Cyan
             
-            $apkAsset = $res.assets | Where-Object { $_.name -like "*.apk" } | Select-Object -First 1
+            $apkAsset = $res.assets | Where-Object { $_.name -like "*website-release.apk" } | Select-Object -First 1
             $downloadUrl = $null
             
             if ($apkAsset) {
                 $downloadUrl = $apkAsset.browser_download_url
             } else {
                 # Fallback estatico
-                $downloadUrl = "https://github.com/francis02347/tvparaguay-app/releases/download/$tagName/app-release.apk"
+                $downloadUrl = "https://github.com/francis02347/tvparaguay-app/releases/download/$tagName/app-website-release.apk"
             }
             
             $fileName = "TVParaguay-v$newVersionName.apk"

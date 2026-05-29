@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:background="@color/header_bg">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_media_previous"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:contentDescription="Volver" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="📋 Importar Lista M3U"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Contador -->
+            <TextView
+                android:id="@+id/tvChannelCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Canales M3U guardados: 0"
+                android:textColor="@color/accent"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp" />
+
+            <!-- ══════════════════════════════════════
+                 SECCIÓN: IMPORTAR POR PAÍS
+            ══════════════════════════════════════ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌍  Importar por país"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tocá un país para importar todos sus canales desde iptv-org"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Los botones de país se generan aquí dinámicamente -->
+            <LinearLayout
+                android:id="@+id/countryGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Progreso y estado -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:indeterminateTint="@color/accent"
+                android:visibility="gone"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Divisor -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#222233"
+                android:layout_marginBottom="20dp" />
+
+            <!-- ══════════════════════════════════════
+                 SECCIÓN: IMPORTAR DESDE URL
+            ══════════════════════════════════════ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌐  Importar desde URL"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pegá la URL de cualquier archivo .m3u"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/etUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="https://ejemplo.com/lista.m3u"
+                android:textColorHint="#555"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:padding="12dp"
+                android:background="@drawable/input_bg"
+                android:inputType="textUri"
+                android:singleLine="true"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/btnImportUrl"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:text="⬇️  Descargar e importar"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/accent"
+                android:layout_marginBottom="20dp" />
+
+
+            <!-- Divisor -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#222233"
+                android:layout_marginBottom="20dp" />
+
+            <!-- ══════════════════════════════════════
+                 SECCIÓN: ABRIR ARCHIVO .m3u
+            ══════════════════════════════════════ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📁  Importar desde archivo"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seleccioná un archivo .m3u o .m3u8 desde tu dispositivo"
+                android:textColor="#AAAAAA"
+                android:textSize="12sp"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/btnImportFile"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:text="📁  Elegir archivo .m3u"
+                android:textColor="@color/white"
+                android:backgroundTint="#1565C0"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Divisor -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#222233"
+                android:layout_marginBottom="20dp" />
+
+            <!-- ══════════════════════════════════════
+                 SECCIÓN: PEGAR CONTENIDO
+            ══════════════════════════════════════ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📋  Pegar contenido M3U"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <EditText
+                android:id="@+id/etPaste"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:hint="#EXTM3U&#10;#EXTINF:-1,Canal Ejemplo&#10;https://..."
+                android:textColorHint="#444"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:padding="12dp"
+                android:background="@drawable/input_bg"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:layout_marginBottom="10dp"
+                android:scrollbars="vertical" />
+
+            <Button
+                android:id="@+id/btnImportPaste"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:text="✅  Procesar lista pegada"
+                android:textColor="@color/white"
+                android:backgroundTint="#2E7D32"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Divisor -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#222233"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Borrar todo -->
+            <Button
+                android:id="@+id/btnClear"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:text="🗑️  Borrar todos los canales M3U"
+                android:textColor="@color/white"
+                android:backgroundTint="#7B0000"
+                android:layout_marginBottom="16dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

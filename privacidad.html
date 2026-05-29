@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad — TV Paraguay</title>
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #08080C;
+            --bg-card: rgba(18, 18, 26, 0.6);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --primary: #00F2FE;
+            --secondary: #4FACFE;
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
+
+        /* BACKGROUND DECORATIONS */
+        .glow-sphere {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.1) 0%, rgba(79, 172, 254, 0) 70%);
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glow-1 { top: -100px; right: -100px; }
+        .glow-2 { bottom: -200px; left: -100px; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* HEADER */
+        header {
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-card);
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        /* CONTENT */
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .update-date {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(16px);
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #FFFFFF;
+            border-left: 3px solid var(--primary);
+            padding-left: 12px;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 16px;
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* FOOTER */
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            border-top: 1px solid var(--border-card);
+            padding-top: 30px;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-sphere glow-1"></div>
+    <div class="glow-sphere glow-2"></div>
+
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <svg style="width: 24px; height: 24px; fill: url(#logoGrad);" viewBox="0 0 24 24">
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00F2FE" />
+                        <stop offset="100%" stop-color="#4FACFE" />
+                    </linearGradient>
+                    <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+                </svg>
+                TV Paraguay
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1>Política de Privacidad</h1>
+        <div class="update-date">Última actualización: 29 de mayo de 2026</div>
+
+        <section>
+            <h2>1. Información General</h2>
+            <p>Esta Política de Privacidad describe cómo la aplicación móvil <strong>TV Paraguay</strong> trata la información y los datos de los usuarios. Tu privacidad es de máxima importancia para nosotros, por lo que hemos diseñado una política sumamente clara y transparente.</p>
+        </section>
+
+        <section>
+            <h2>2. Recopilación de Datos Personales</h2>
+            <p><strong>TV Paraguay es una aplicación 100% privada y respetuosa con sus datos:</strong></p>
+            <ul>
+                <li><strong>No recopilamos:</strong> No solicitamos, almacenamos ni recopilamos ningún dato de carácter personal identificable, como nombres, direcciones de correo electrónico, números de teléfono, ubicaciones geográficas precisas ni identificadores de cuentas personales.</li>
+                <li><strong>Sin registro:</strong> La aplicación no requiere la creación de una cuenta de usuario, registro, ni inicio de sesión para acceder a sus funciones y reproductor de medios.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. Permisos Requeridos y su Uso</h2>
+            <p>Para funcionar correctamente, la aplicación requiere de forma única y transparente los siguientes permisos de Android:</p>
+            <ul>
+                <li><strong>Acceso a Internet (INTERNET):</strong> Necesario puramente para establecer la conexión con los servidores de streaming y poder reproducir las señales de televisión y radio solicitadas por el usuario.</li>
+                <li><strong>Estado de la Red (ACCESS_NETWORK_STATE):</strong> Utilizado por el reproductor ExoPlayer para verificar si el dispositivo cuenta con una conexión de datos móvil o Wi-Fi activa, optimizando el consumo de ancho de banda y la calidad de transmisión de manera automática.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Cookies y Tecnologías de Seguimiento</h2>
+            <p>La aplicación no utiliza cookies de seguimiento, herramientas de análisis de terceros (como Google Analytics) ni tecnologías de rastreo de comportamiento. No registramos el historial de reproducción de los canales ni recopilamos estadísticas de uso comercial.</p>
+        </section>
+
+        <section>
+            <h2>5. Compartición de Datos con Terceros</h2>
+            <p>Dado que no recopilamos ningún tipo de datos ni información del usuario, es absolutamente imposible para nosotros compartir, vender o distribuir información personal con empresas de publicidad, agencias gubernamentales ni terceros.</p>
+        </section>
+
+        <section>
+            <h2>6. Enlaces y Servicios de Terceros</h2>
+            <p>La aplicación reproduce transmisiones de video en vivo (HLS/M3U8) provistas públicamente por redes de televisión y radio. Esta política de privacidad no cubre las prácticas de estos proveedores externos de contenido en sus respectivas plataformas.</p>
+        </section>
+
+        <section>
+            <h2>7. Cambios en esta Política</h2>
+            <p>Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquier momento. Cualquier modificación será publicada de forma transparente en este mismo sitio web oficial.</p>
+        </section>
+
+        <section>
+            <h2>8. Contacto y Soporte</h2>
+            <p>Si tienes cualquier duda técnica o consulta sobre esta política de privacidad, puedes ponerte en contacto con el desarrollador del proyecto escribiendo a:</p>
+            <p style="color: var(--primary); font-weight: 600;">araujofrancis693@gmail.com</p>
+        </section>
+
+        <footer>
+            <p>© 2026 TV Paraguay. Todos los derechos reservados.</p>
+            <p style="margin-top: 8px;"><a href="index.html">Volver al Sitio Oficial</a></p>
+        </footer>
+    </main>
+
+</body>
+</html>

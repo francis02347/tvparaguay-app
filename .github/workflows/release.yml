@@ -25,8 +25,8 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x gradlew
 
-      - name: Build Release APK
-        run: ./gradlew assembleRelease # Compila el APK en modo release signed con debug keys
+      - name: Build Release APKs
+        run: ./gradlew assembleRelease # Compila ambos sabores en modo release
 
       - name: Extract Version Info from build.gradle
         id: get_version
@@ -47,19 +47,21 @@ jobs:
           name: "Versión ${{ env.VERSION_NAME }}"
           draft: false
           prerelease: false
-          files: app/build/outputs/apk/release/app-release.apk
+          files: |
+            app/build/outputs/apk/playstore/release/app-playstore-release.apk
+            app/build/outputs/apk/website/release/app-website-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update update.json
         run: |
-          # Genera dinámicamente el archivo update.json apuntando al nuevo APK en las Releases de tu repositorio
+          # Genera dinámicamente el archivo update.json apuntando al nuevo APK del sabor de sitio web
           cat <<EOF > update.json
           {
             "versionCode": ${{ env.VERSION_CODE }},
             "versionName": "${{ env.VERSION_NAME }}",
-            "apkUrl": "https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/app-release.apk",
-            "releaseNotes": "Actualización automática construida mediante GitHub Actions para la versión v${{ env.VERSION_NAME }}."
+            "apkUrl": "https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/app-website-release.apk",
+            "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v${{ env.VERSION_NAME }}."
           }
           EOF
 
