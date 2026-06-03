@@ -234,6 +234,12 @@ public class PlayerActivity extends AppCompatActivity {
             }
         }
 
+        if (cleanUrl.startsWith("dailymotion://")) {
+            String videoId = cleanUrl.substring("dailymotion://".length()).trim();
+            resolveDailymotionAndPlay(videoId, ch);
+            return;
+        }
+
         // Configurar cabeceras dinámicas en la fábrica de origen de datos
         if (dataSourceFactory != null) {
             dataSourceFactory.setHeaders(headers);
@@ -252,6 +258,83 @@ public class PlayerActivity extends AppCompatActivity {
 
         try {
             Uri uri = Uri.parse(cleanUrl);
+            MediaItem mediaItem = MediaItem.fromUri(uri);
+            player.stop();
+            player.setMediaItem(mediaItem);
+            player.prepare();
+            player.setPlayWhenReady(true);
+        } catch (Exception e) {
+            hideLoading();
+            showErrorScreen(ch.getName());
+        }
+    }
+
+    private void resolveDailymotionAndPlay(final String videoId, final Channel ch) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    java.net.URL url = new java.net.URL("https://www.dailymotion.com/player/metadata/video/" + videoId);
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                    conn.setRequestProperty("Referer", "https://www.abc.com.py/");
+                    conn.setConnectTimeout(5000);
+                    conn.setReadTimeout(5000);
+
+                    int responseCode = conn.getResponseCode();
+                    if (responseCode == 200) {
+                        java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(), "UTF-8"));
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        in.close();
+
+                        org.json.JSONObject json = new org.json.JSONObject(sb.toString());
+                        org.json.JSONObject qualities = json.optJSONObject("qualities");
+                        if (qualities != null) {
+                            org.json.JSONArray autoArray = qualities.optJSONArray("auto");
+                            if (autoArray != null && autoArray.length() > 0) {
+                                org.json.JSONObject autoObj = autoArray.getJSONObject(0);
+                                final String streamUrl = autoObj.optString("url");
+                                if (streamUrl != null && !streamUrl.isEmpty()) {
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            playResolvedUrl(streamUrl, ch);
+                                        }
+                                    });
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // If resolution fails
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideLoading();
+                        showErrorScreen(ch.getName());
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void playResolvedUrl(String streamUrl, Channel ch) {
+        if (dataSourceFactory != null) {
+            java.util.Map<String, String> headers = new java.util.HashMap<>();
+            headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36");
+            dataSourceFactory.setHeaders(headers);
+        }
+        try {
+            Uri uri = Uri.parse(streamUrl);
             MediaItem mediaItem = MediaItem.fromUri(uri);
             player.stop();
             player.setMediaItem(mediaItem);

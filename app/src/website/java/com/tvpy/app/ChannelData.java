@@ -56,13 +56,13 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "A24 Argentina",
-                "https://g5.vxral-slo.transport.edge-access.net/a12/ngrp:a24-100056_all/playlist.m3u8?sense=true|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
+                "https://g1.vxral-hor.transport.edge-access.net/a15/ngrp:a24-100056_all/a24-100056.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
                 "📰", "Noticias", "Argentina",
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
                 "ABC-TV Paraguay",
-                "https://cdn.jwplayer.com/live/broadcast/aide2636.m3u8|Referer=https://www.abc.com.py/",
+                "dailymotion://kQRS6ZAjGuMkByE4Mtc",
                 "📰", "Noticias", "Paraguay",
                 Color.parseColor("#1C2333")));
 
@@ -422,7 +422,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Unicanal",
-                "http://edge02-fdo-py.cvattv.com.ar/live/c5eds/UNICANAL_C4/verimatrix_rotating_FTA/UNICANAL_C4-video=3000000-audio_20000=144800.m3u8|Referer=https://unicanal.com.py/",
+                "dailymotion://k1mHLKycOlKgo3Db5GI",
                 "🎬", "Entretenimiento", "Paraguay",
                 Color.parseColor("#1C2333")));
 
