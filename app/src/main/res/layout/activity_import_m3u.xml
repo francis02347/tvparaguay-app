@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark">
+    android:background="@drawable/bg_gradient">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="8dp"
-            android:background="@color/header_bg">
+            android:background="@drawable/header_glass_bg">
 
             <ImageButton
                 android:id="@+id/btnBack"
@@ -71,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tocá un país para importar todos sus canales desde iptv-org"
-                android:textColor="#AAAAAA"
+                android:textColor="#94A3B8"
                 android:textSize="12sp"
                 android:layout_marginBottom="12dp" />
 
@@ -108,7 +109,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222233"
+                android:background="#1E293B"
                 android:layout_marginBottom="20dp" />
 
             <!-- ══════════════════════════════════════
@@ -127,7 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pegá la URL de cualquier archivo .m3u"
-                android:textColor="#AAAAAA"
+                android:textColor="#94A3B8"
                 android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
 
@@ -151,7 +152,8 @@
                 android:layout_height="46dp"
                 android:text="⬇️  Descargar e importar"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/accent"
+                android:background="@drawable/btn_gradient_bg"
+                app:backgroundTint="@null"
                 android:layout_marginBottom="20dp" />
 
 
@@ -159,7 +161,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222233"
+                android:background="#1E293B"
                 android:layout_marginBottom="20dp" />
 
             <!-- ══════════════════════════════════════
@@ -178,7 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Seleccioná un archivo .m3u o .m3u8 desde tu dispositivo"
-                android:textColor="#AAAAAA"
+                android:textColor="#94A3B8"
                 android:textSize="12sp"
                 android:layout_marginBottom="10dp" />
 
@@ -188,14 +190,15 @@
                 android:layout_height="46dp"
                 android:text="📁  Elegir archivo .m3u"
                 android:textColor="@color/white"
-                android:backgroundTint="#1565C0"
+                android:background="@drawable/btn_secondary_bg"
+                app:backgroundTint="@null"
                 android:layout_marginBottom="20dp" />
 
             <!-- Divisor -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222233"
+                android:background="#1E293B"
                 android:layout_marginBottom="20dp" />
 
             <!-- ══════════════════════════════════════
@@ -231,14 +234,15 @@
                 android:layout_height="46dp"
                 android:text="✅  Procesar lista pegada"
                 android:textColor="@color/white"
-                android:backgroundTint="#2E7D32"
+                android:background="@drawable/btn_secondary_bg"
+                app:backgroundTint="@null"
                 android:layout_marginBottom="20dp" />
 
             <!-- Divisor -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222233"
+                android:background="#1E293B"
                 android:layout_marginBottom="20dp" />
 
             <!-- Borrar todo -->
@@ -248,7 +252,8 @@
                 android:layout_height="46dp"
                 android:text="🗑️  Borrar todos los canales M3U"
                 android:textColor="@color/white"
-                android:backgroundTint="#7B0000"
+                android:background="@drawable/btn_danger_bg"
+                app:backgroundTint="@null"
                 android:layout_marginBottom="16dp" />
 
         </LinearLayout>

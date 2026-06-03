@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
+import com.google.android.material.card.MaterialCardView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Set;
@@ -98,7 +98,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
     }
 
     static class ChannelViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
+        MaterialCardView cardView;
         TextView tvEmoji;
         TextView tvName;
         TextView tvCategory;
@@ -119,7 +119,29 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
             tvEmoji.setText(channel.getEmoji());
             tvName.setText(ChannelDeduplicator.cleanName(channel.getName()));
             tvCategory.setText(channel.getCategory());
-            cardView.setCardBackgroundColor(channel.getBackgroundColor());
+            
+            // Set uniform deep dark background for Option C
+            cardView.setCardBackgroundColor(0xFF0D111C);
+            
+            // Set dynamic category outline color
+            int strokeColor = 0xFF334155; // Default Slate
+            String category = channel.getCategory() != null ? channel.getCategory().toLowerCase() : "";
+            if (category.contains("deport")) {
+                strokeColor = 0xFF10B981; // Emerald/Green
+            } else if (category.contains("noticia")) {
+                strokeColor = 0xFF3B82F6; // Blue
+            } else if (category.contains("entretenimiento") || category.contains("cine") || category.contains("serie") || category.contains("película") || category.contains("pelicula")) {
+                strokeColor = 0xFF8B5CF6; // Violet
+            } else if (category.contains("radio") || category.contains("música") || category.contains("musica")) {
+                strokeColor = 0xFFF59E0B; // Amber/Orange
+            } else {
+                int bg = channel.getBackgroundColor();
+                if (bg != 0xFF1C2333 && bg != 0) {
+                    strokeColor = bg; // M3U dynamic colors
+                }
+            }
+            cardView.setStrokeColor(strokeColor);
+            
             tvFavBadge.setVisibility(isFavorite ? View.VISIBLE : View.GONE);
 
             // Visual feedback for selection: opacity

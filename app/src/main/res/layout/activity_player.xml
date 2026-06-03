@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
@@ -23,7 +24,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="#E6000000"
+        android:background="#CC080A10"
         android:visibility="gone">
 
         <LinearLayout
@@ -58,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Conectando..."
-            android:textColor="#44FFFFFF"
+            android:textColor="#A0AEC0"
             android:textSize="12sp"
             android:letterSpacing="0.1" />
     </LinearLayout>
@@ -73,7 +74,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:padding="32dp"
-        android:background="#E6000000"
+        android:background="#E6080A10"
         android:visibility="gone">
 
         <TextView
@@ -119,7 +120,8 @@
             android:text="Intentar de nuevo"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:backgroundTint="@color/accent" />
+            android:background="@drawable/btn_gradient_bg"
+            app:backgroundTint="@null" />
     </LinearLayout>
 
     <!-- ═══════════════════════════════════════════════════
@@ -184,7 +186,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:orientation="horizontal"
-        android:background="#CC000000"
+        android:background="@drawable/header_glass_bg"
         android:gravity="center_vertical"
         android:padding="8dp"
         android:visibility="gone">
@@ -235,7 +237,7 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="#E61C2333"
+        android:background="@drawable/side_panel_bg"
         android:orientation="vertical"
         android:elevation="8dp"
         android:visibility="gone"

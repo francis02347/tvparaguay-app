@@ -231,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         chip.setTextSize(12f);
         chip.setTypeface(null, selected ? Typeface.BOLD : Typeface.NORMAL);
         chip.setBackground(getDrawable(R.drawable.chip_filter));
+        chip.setSelected(selected);
         chip.setGravity(Gravity.CENTER);
         chip.setAlpha(selected ? 1f : 0.55f);
 
