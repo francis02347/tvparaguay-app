@@ -121,6 +121,12 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "Claro Sports",
+                "https://dai.google.com/linear/hls/event/_OKWx76jT7mivD6d-25QAw/master.m3u8",
+                "⚽", "Deporte", "Internacional",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "Cosmos TV",
                 "https://video.hostingcaaguazu.com:19360/cosmostv/cosmostv.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
