@@ -151,6 +151,12 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "DW en Español",
+                "https://dwamdstream104.akamaized.net/hls/live/2015530/dwstream104/index.m3u8",
+                "📰", "Noticias", "Internacional",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "E40",
                 "https://copacotf.desdeparaguay.net/e40tv/e40tv_py_alta/playlist.m3u8?admin=tvaccion",
                 "🎬", "Entretenimiento", "Paraguay",
@@ -352,6 +358,18 @@ public class ChannelData {
                 "RQP Paraguay",
                 "https://alba-py-rqp-rqp.stream.mediatiquestream.com/index.m3u8",
                 "📰", "Noticias", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "RTVE Canal 24 Horas",
+                "https://rtvelivestream.rtve.es/rtvesec/24h/24h_main_dvr.m3u8",
+                "📰", "Noticias", "España",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "RTVE La 1",
+                "https://rtvelivestream.rtve.es/rtvesec/la1/la1_main_dvr.m3u8",
+                "🎬", "Entretenimiento", "España",
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
