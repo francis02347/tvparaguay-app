@@ -32,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText searchBar;
     private TextView tvNoResults;
     private TextView tvM3uBadge;
-    private LinearLayout countryChips;  // fila 1: Todos | ❤️ | países
-    private LinearLayout genreChips;    // fila 2: géneros
+    private LinearLayout filterChipsContainer; // Fila única de chips de filtro
     private LinearLayout alphaBar;
     private TextView       tvAlphaPopup;
     private View           deleteBar;
@@ -57,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
         searchBar     = findViewById(R.id.searchBar);
         tvNoResults   = findViewById(R.id.tvNoResults);
         tvM3uBadge    = findViewById(R.id.tvM3uBadge);
-        countryChips  = findViewById(R.id.countryChips);
-        genreChips    = findViewById(R.id.genreChips);
+        filterChipsContainer = findViewById(R.id.filterChipsContainer);
         alphaBar      = findViewById(R.id.alphaBar);
         tvAlphaPopup  = findViewById(R.id.tvAlphaPopup);
         deleteBar     = findViewById(R.id.deleteBar);
@@ -128,8 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.clearSelection();
                 deleteBar.setVisibility(View.GONE);
                 loadAllChannels();
-                buildChips();
-                buildGenreChips();
+                buildFilterChips();
                 applyFilter();
             })
             .setNegativeButton("Cancelar", null)
@@ -141,8 +138,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (adapter != null) { adapter.clearSelection(); deleteBar.setVisibility(View.GONE); }
         loadAllChannels();
-        buildChips();
-        buildGenreChips();
+        buildFilterChips();
         applyFilter();
     }
 
@@ -169,25 +165,66 @@ public class MainActivity extends AppCompatActivity {
 
     // ─── Chips fila 1: Todos | ❤️ | países ────────────────────────────────────
 
-    private void buildChips() {
+    private void buildFilterChips() {
+        filterChipsContainer.removeAllViews();
+
+        // 1. Chip "Todos"
+        boolean isTodosSelected = !showingFavorites && ALL.equals(activeCountry) && activeGenre.isEmpty();
+        addFilterChip(ALL, isTodosSelected, v -> {
+            showingFavorites = false;
+            activeCountry = ALL;
+            activeGenre = "";
+            buildFilterChips();
+            applyFilter();
+        });
+
+        // 2. Chip "❤️" (Favoritos)
+        addFilterChip(FAVS, showingFavorites, v -> {
+            showingFavorites = true;
+            activeCountry = ALL;
+            activeGenre = "";
+            buildFilterChips();
+            applyFilter();
+        });
+
+        // 3. Chips de Países
         Set<String> countries = new LinkedHashSet<>();
         for (Channel ch : allChannels) {
-            if (ch.getCountry() != null && !ch.getCountry().isEmpty())
+            if (ch.getCountry() != null && !ch.getCountry().isEmpty()) {
                 countries.add(ch.getCountry());
+            }
+        }
+        for (String co : countries) {
+            boolean isCountrySelected = !showingFavorites && co.equals(activeCountry) && activeGenre.isEmpty();
+            addFilterChip(co, isCountrySelected, v -> {
+                showingFavorites = false;
+                activeCountry = co;
+                activeGenre = "";
+                buildFilterChips();
+                applyFilter();
+            });
         }
 
-        countryChips.removeAllViews();
-
-        // "Todos"
-        addChip(ALL,  !showingFavorites && ALL.equals(activeCountry));
-        // "❤️ Favoritos"
-        addChip(FAVS, showingFavorites);
-        // países
-        for (String co : countries)
-            addChip(co, !showingFavorites && co.equals(activeCountry));
+        // 4. Chips de Géneros
+        Set<String> genres = new LinkedHashSet<>();
+        for (Channel ch : allChannels) {
+            if (ch.getCategory() != null && !ch.getCategory().isEmpty()) {
+                genres.add(ch.getCategory());
+            }
+        }
+        for (String genre : genres) {
+            boolean isGenreSelected = !showingFavorites && ALL.equals(activeCountry) && genre.equals(activeGenre);
+            addFilterChip(genre, isGenreSelected, v -> {
+                showingFavorites = false;
+                activeCountry = ALL;
+                activeGenre = genre;
+                buildFilterChips();
+                applyFilter();
+            });
+        }
     }
 
-    private void addChip(String label, boolean selected) {
+    private void addFilterChip(String label, boolean selected, View.OnClickListener clickListener) {
         TextView chip = new TextView(this);
         chip.setText(label);
         chip.setTextColor(0xFFFFFFFF);
@@ -218,88 +255,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        chip.setOnClickListener(v -> {
-            if (FAVS.equals(label)) {
-                showingFavorites = true;
-            } else {
-                showingFavorites = false;
-                activeCountry = label;
-            }
-            activeGenre = ""; // reset género al cambiar país
-            buildChips();
-            buildGenreChips();
-            applyFilter();
-        });
+        chip.setOnClickListener(clickListener);
 
-        countryChips.addView(chip);
+        filterChipsContainer.addView(chip);
     }
 
     private int dp(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
-    }
-
-
-    // ─── Chips fila 2: géneros ────────────────────────────────────────────────
-
-    private void buildGenreChips() {
-        java.util.LinkedHashSet<String> genres = new java.util.LinkedHashSet<>();
-        for (Channel ch : allChannels) {
-            if (ch.getCategory() != null && !ch.getCategory().isEmpty()) {
-                genres.add(ch.getCategory());
-            }
-        }
-
-        genreChips.removeAllViews();
-
-        // Chip "Todos" (sin filtro de género)
-        addGenreChip("", "Todos", activeGenre.isEmpty());
-
-        for (String genre : genres) {
-            addGenreChip(genre, genre, genre.equals(activeGenre));
-        }
-    }
-
-    private void addGenreChip(String genreValue, String label, boolean selected) {
-        TextView chip = new TextView(this);
-        chip.setText(label);
-        chip.setTextColor(0xFFFFFFFF);
-        chip.setTextSize(12f);
-        chip.setTypeface(null, selected ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
-        chip.setBackground(getDrawable(R.drawable.chip_filter));
-        chip.setGravity(android.view.Gravity.CENTER);
-        chip.setAlpha(selected ? 1f : 0.55f);
-
-        int ph = dp(12), pv = dp(7);
-        chip.setPadding(ph, pv, ph, pv);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMarginEnd(dp(5));
-        chip.setLayoutParams(lp);
-
-        chip.setFocusable(true);
-        chip.setClickable(true);
-        chip.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                v.animate().scaleX(1.1f).scaleY(1.1f).setDuration(150).start();
-                v.setAlpha(1.0f);
-            } else {
-                v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
-                v.setAlpha(selected ? 1.0f : 0.55f);
-            }
-        });
-
-        chip.setOnClickListener(v -> {
-            activeGenre = genreValue;
-            activeCountry = ALL;
-            showingFavorites = false;
-            buildChips();
-            buildGenreChips();
-            applyFilter();
-        });
-
-        genreChips.addView(chip);
     }
 
     // ─── Filtrado ─────────────────────────────────────────────────────────────

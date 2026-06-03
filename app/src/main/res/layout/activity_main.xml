@@ -64,28 +64,14 @@
             android:singleLine="true"
             android:layout_marginBottom="10dp" />
 
-        <!-- Fila 1: Todos | ❤️ | países -->
+        <!-- Fila única de Chips de Filtro (Todos | ❤️ | Países | Géneros) -->
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="38dp"
             android:scrollbars="none"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="10dp">
             <LinearLayout
-                android:id="@+id/countryChips"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical" />
-        </HorizontalScrollView>
-
-        <!-- Fila 2: géneros -->
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:scrollbars="none"
-            android:layout_marginBottom="8dp">
-            <LinearLayout
-                android:id="@+id/genreChips"
+                android:id="@+id/filterChipsContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
