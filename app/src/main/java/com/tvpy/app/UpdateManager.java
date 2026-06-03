@@ -51,6 +51,13 @@ public class UpdateManager {
      * Inicia la comprobación de actualizaciones en segundo plano.
      */
     public void checkForUpdates() {
+        checkForUpdates(false);
+    }
+
+    public void checkForUpdates(final boolean isManual) {
+        if (isManual) {
+            Toast.makeText(context, "Buscando actualizaciones...", Toast.LENGTH_SHORT).show();
+        }
         executor.execute(() -> {
             try {
                 // 1. Obtener versión local instalada
@@ -58,6 +65,7 @@ public class UpdateManager {
                 long localVersionCode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P 
                         ? pInfo.getLongVersionCode() 
                         : pInfo.versionCode;
+                final String localVersionName = pInfo.versionName;
                 
                 // 2. Descargar archivo JSON remoto
                 URL url = new URL(UPDATE_JSON_URL);
@@ -68,6 +76,9 @@ public class UpdateManager {
 
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     conn.disconnect();
+                    if (isManual) {
+                        mainHandler.post(() -> Toast.makeText(context, "❌ Error al conectar con el servidor de actualizaciones", Toast.LENGTH_SHORT).show());
+                    }
                     return;
                 }
 
@@ -90,10 +101,20 @@ public class UpdateManager {
                 // 4. Comparar versiones
                 if (remoteVersionCode > localVersionCode) {
                     mainHandler.post(() -> showUpdateDialog(remoteVersionName, apkUrl, releaseNotes));
+                } else {
+                    if (isManual) {
+                        mainHandler.post(() -> new AlertDialog.Builder(context)
+                                .setTitle("🔄 Actualización")
+                                .setMessage("Tu aplicación está al día.\n\nVersión instalada: v" + localVersionName + " (Código: " + localVersionCode + ")\nNo se detectaron nuevas actualizaciones.")
+                                .setPositiveButton("Aceptar", null)
+                                .show());
+                    }
                 }
             } catch (Exception e) {
-                // Silencioso en producción para no interrumpir la experiencia de TV
                 e.printStackTrace();
+                if (isManual) {
+                    mainHandler.post(() -> Toast.makeText(context, "❌ Error al verificar: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                }
             }
         });
     }

@@ -456,15 +456,24 @@ public class PlayerActivity extends AppCompatActivity {
             
             if (sideAdapter != null) {
                 sideAdapter.updateChannels(channelList, FavoriteStore.loadFavorites(this));
-                rvSideChannels.scrollToPosition(currentIndex);
-                rvSideChannels.postDelayed(() -> {
-                    RecyclerView.ViewHolder holder = rvSideChannels.findViewHolderForAdapterPosition(currentIndex);
-                    if (holder != null) {
-                        holder.itemView.requestFocus();
-                    } else {
-                        rvSideChannels.requestFocus();
+                
+                LinearLayoutManager lm = (LinearLayoutManager) rvSideChannels.getLayoutManager();
+                if (lm != null) {
+                    lm.scrollToPositionWithOffset(currentIndex, 0);
+                }
+                
+                rvSideChannels.getViewTreeObserver().addOnGlobalLayoutListener(new android.view.ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        rvSideChannels.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        RecyclerView.ViewHolder holder = rvSideChannels.findViewHolderForAdapterPosition(currentIndex);
+                        if (holder != null) {
+                            holder.itemView.requestFocus();
+                        } else {
+                            rvSideChannels.requestFocus();
+                        }
                     }
-                }, 100);
+                });
             } else {
                 sidePanel.requestFocus();
             }

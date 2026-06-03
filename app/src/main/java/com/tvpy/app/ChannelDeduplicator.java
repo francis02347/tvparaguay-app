@@ -47,16 +47,38 @@ public class ChannelDeduplicator {
      * El orden original de aparición se mantiene.
      */
     public static List<Channel> deduplicate(List<Channel> input) {
-        // Clave: nombre base normalizado → canal ganador
-        Map<String, Channel> best = new LinkedHashMap<>();
-
+        // 1. Deduplicate by URL first to remove identical streams
+        Map<String, Channel> byUrl = new LinkedHashMap<>();
         for (Channel ch : input) {
+            String url = ch.getUrl() != null ? ch.getUrl().trim() : "";
+            if (url.isEmpty()) continue;
+            if (!byUrl.containsKey(url)) {
+                byUrl.put(url, ch);
+            } else {
+                Channel existing = byUrl.get(url);
+                boolean existingCorrupt = existing.getName().contains("Ã");
+                boolean newCorrupt = ch.getName().contains("Ã");
+                if (existingCorrupt && !newCorrupt) {
+                    byUrl.put(url, ch);
+                } else if (!existingCorrupt && newCorrupt) {
+                    // Keep existing
+                } else {
+                    // Prefer the shorter name as it's typically cleaner
+                    if (ch.getName().length() < existing.getName().length()) {
+                        byUrl.put(url, ch);
+                    }
+                }
+            }
+        }
+
+        // 2. Deduplicate by normalized base name (different qualities)
+        Map<String, Channel> best = new LinkedHashMap<>();
+        for (Channel ch : byUrl.values()) {
             String baseName = normalizeBase(ch.getName());
             if (!best.containsKey(baseName)) {
                 best.put(baseName, ch);
             } else {
                 Channel current = best.get(baseName);
-                // Reemplazar si el nuevo tiene mayor puntuación de calidad
                 if (qualityScore(ch.getName()) > qualityScore(current.getName())) {
                     best.put(baseName, ch);
                 }

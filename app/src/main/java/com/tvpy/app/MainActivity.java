@@ -73,8 +73,34 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
 
-        findViewById(R.id.btnImportM3u).setOnClickListener(v ->
-            startActivity(new Intent(this, ImportM3uActivity.class)));
+        View btnImportM3u = findViewById(R.id.btnImportM3u);
+        if (btnImportM3u != null) {
+            btnImportM3u.setOnClickListener(v ->
+                startActivity(new Intent(this, ImportM3uActivity.class)));
+            btnImportM3u.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    v.animate().scaleX(1.05f).scaleY(1.05f).setDuration(150).start();
+                } else {
+                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                }
+            });
+        }
+
+        View btnCheckUpdate = findViewById(R.id.btnCheckUpdate);
+        if (BuildConfig.IS_PLAY_STORE) {
+            if (btnCheckUpdate != null) btnCheckUpdate.setVisibility(View.GONE);
+        } else {
+            if (btnCheckUpdate != null) {
+                btnCheckUpdate.setOnClickListener(v -> new UpdateManager(this).checkForUpdates(true));
+                btnCheckUpdate.setOnFocusChangeListener((v, hasFocus) -> {
+                    if (hasFocus) {
+                        v.animate().scaleX(1.05f).scaleY(1.05f).setDuration(150).start();
+                    } else {
+                        v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                    }
+                });
+            }
+        }
 
         // ─── Verificar actualizaciones OTA (Solo variante de sitio web) ──
         if (!BuildConfig.IS_PLAY_STORE) {
