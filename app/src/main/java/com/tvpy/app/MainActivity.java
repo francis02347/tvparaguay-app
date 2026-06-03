@@ -242,14 +242,9 @@ public class MainActivity extends AppCompatActivity {
     // ─── Chips fila 2: géneros ────────────────────────────────────────────────
 
     private void buildGenreChips() {
-        // Recopilar géneros presentes en los canales actualmente visibles según filtro de país
         java.util.LinkedHashSet<String> genres = new java.util.LinkedHashSet<>();
         for (Channel ch : allChannels) {
-            // Aplicar filtro de país/favorito para mostrar solo géneros relevantes
-            boolean matchCountry = showingFavorites
-                    || ALL.equals(activeCountry)
-                    || activeCountry.equals(ch.getCountry());
-            if (matchCountry && ch.getCategory() != null && !ch.getCategory().isEmpty()) {
+            if (ch.getCategory() != null && !ch.getCategory().isEmpty()) {
                 genres.add(ch.getCategory());
             }
         }
@@ -297,6 +292,9 @@ public class MainActivity extends AppCompatActivity {
 
         chip.setOnClickListener(v -> {
             activeGenre = genreValue;
+            activeCountry = ALL;
+            showingFavorites = false;
+            buildChips();
             buildGenreChips();
             applyFilter();
         });

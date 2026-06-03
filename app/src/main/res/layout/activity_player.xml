@@ -227,4 +227,38 @@
 
     </LinearLayout>
 
+    <!-- ═══════════════════════════════════════════════════
+         PANEL LATERAL DE CANALES (Android TV y Móvil)
+    ═══════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/sidePanel"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="#E61C2333"
+        android:orientation="vertical"
+        android:elevation="8dp"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lista de Canales"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="16dp"
+            android:background="#1affffff" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSideChannels"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:focusable="true"
+            android:clickable="true" />
+    </LinearLayout>
+
 </FrameLayout>
