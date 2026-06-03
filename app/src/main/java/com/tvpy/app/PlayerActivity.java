@@ -53,6 +53,10 @@ public class PlayerActivity extends AppCompatActivity {
     private View errorScreen;
     private TextView tvErrorChannelName;
 
+    private View sidePanel;
+    private RecyclerView rvSideChannels;
+    private ChannelAdapter sideAdapter;
+
     // ─── Estado ───────────────────────────────────────────────────────────────
     private ExoPlayer player;
     private List<Channel> channelList;
@@ -98,6 +102,20 @@ public class PlayerActivity extends AppCompatActivity {
         overlayHint        = findViewById(R.id.overlayHint);
         errorScreen        = findViewById(R.id.errorScreen);
         tvErrorChannelName = findViewById(R.id.tvErrorChannelName);
+        sidePanel          = findViewById(R.id.sidePanel);
+        rvSideChannels     = findViewById(R.id.rvSideChannels);
+
+        if (rvSideChannels != null) {
+            rvSideChannels.setLayoutManager(new LinearLayoutManager(this));
+            sideAdapter = new ChannelAdapter(channelList, channel -> {
+                int idx = channelList.indexOf(channel);
+                if (idx >= 0) {
+                    loadChannel(idx);
+                }
+                hideSidePanel();
+            });
+            rvSideChannels.setAdapter(sideAdapter);
+        }
 
         // Animaciones de puntos
         anim1 = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.dot_pulse_1);
@@ -133,11 +151,19 @@ public class PlayerActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                toggleTopBar();
+                if (isSidePanelVisible()) {
+                    hideSidePanel();
+                } else {
+                    toggleTopBar();
+                }
                 return true;
             }
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
+                if (isSidePanelVisible()) {
+                    hideSidePanel();
+                    return true;
+                }
                 if (e1 == null || e2 == null) return false;
                 float dy = Math.abs(e2.getY() - e1.getY());
                 float dx = e2.getX() - e1.getX();
@@ -419,6 +445,43 @@ public class PlayerActivity extends AppCompatActivity {
             .withEndAction(() -> topBar.setVisibility(View.GONE)).start();
     }
 
+    // ─── Panel lateral ───────────────────────────────────────────────────────
+
+    private void showSidePanel() {
+        if (sidePanel != null) {
+            if (hideTopBarRunnable != null) handler.removeCallbacks(hideTopBarRunnable);
+            hideTopBarNow();
+            
+            sidePanel.setVisibility(View.VISIBLE);
+            
+            if (sideAdapter != null) {
+                sideAdapter.updateChannels(channelList, FavoriteStore.loadFavorites(this));
+                rvSideChannels.scrollToPosition(currentIndex);
+                rvSideChannels.postDelayed(() -> {
+                    RecyclerView.ViewHolder holder = rvSideChannels.findViewHolderForAdapterPosition(currentIndex);
+                    if (holder != null) {
+                        holder.itemView.requestFocus();
+                    } else {
+                        rvSideChannels.requestFocus();
+                    }
+                }, 100);
+            } else {
+                sidePanel.requestFocus();
+            }
+        }
+    }
+
+    private void hideSidePanel() {
+        if (sidePanel != null && sidePanel.getVisibility() == View.VISIBLE) {
+            sidePanel.setVisibility(View.GONE);
+            playerView.requestFocus();
+        }
+    }
+
+    private boolean isSidePanelVisible() {
+        return sidePanel != null && sidePanel.getVisibility() == View.VISIBLE;
+    }
+
     // ─── Navegación ──────────────────────────────────────────────────────────
 
     private void navigateToChannel(int index) {
@@ -468,20 +531,28 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+        if (isSidePanelVisible()) {
+            if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                hideSidePanel();
+                return true;
+            }
+            return super.onKeyDown(keyCode, event);
+        }
+
         switch (keyCode) {
             case android.view.KeyEvent.KEYCODE_DPAD_LEFT:
-            case android.view.KeyEvent.KEYCODE_DPAD_UP:
+            case android.view.KeyEvent.KEYCODE_DPAD_DOWN:
             case android.view.KeyEvent.KEYCODE_CHANNEL_DOWN:
                 navigateToChannel(currentIndex - 1);
                 return true;
             case android.view.KeyEvent.KEYCODE_DPAD_RIGHT:
-            case android.view.KeyEvent.KEYCODE_DPAD_DOWN:
+            case android.view.KeyEvent.KEYCODE_DPAD_UP:
             case android.view.KeyEvent.KEYCODE_CHANNEL_UP:
                 navigateToChannel(currentIndex + 1);
                 return true;
             case android.view.KeyEvent.KEYCODE_DPAD_CENTER:
             case android.view.KeyEvent.KEYCODE_ENTER:
-                toggleTopBar();
+                showSidePanel();
                 return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -501,7 +572,11 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (isSidePanelVisible()) {
+            hideSidePanel();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
