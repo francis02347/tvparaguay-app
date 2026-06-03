@@ -16,6 +16,7 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.MediaItem;
@@ -167,7 +168,7 @@ public class PlayerActivity extends AppCompatActivity {
         dataSourceFactory = new MapHeaderDataSourceFactory(baseFactory);
 
         player = new ExoPlayer.Builder(this)
-                .setMediaSourceFactory(new DefaultMediaSourceFactory(this, dataSourceFactory))
+                .setMediaSourceFactory(new DefaultMediaSourceFactory(dataSourceFactory))
                 .build();
 
         playerView.setPlayer(player);
