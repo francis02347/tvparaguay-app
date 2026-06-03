@@ -24,9 +24,13 @@ import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
-import androidx.media3.ui.PlayerView;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.datasource.DataSpec;
+import androidx.media3.datasource.TransferListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.media3.ui.PlayerView;
 
 import java.util.List;
 
@@ -53,6 +57,7 @@ public class PlayerActivity extends AppCompatActivity {
     private List<Channel> channelList;
     private int currentIndex = 0;
     private GestureDetector gestureDetector;
+    private MapHeaderDataSourceFactory dataSourceFactory;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable hideOverlayRunnable;
@@ -158,8 +163,11 @@ public class PlayerActivity extends AppCompatActivity {
     // ─── ExoPlayer ────────────────────────────────────────────────────────────
 
     private void setupPlayer() {
+        DataSource.Factory baseFactory = new DefaultDataSource.Factory(this);
+        dataSourceFactory = new MapHeaderDataSourceFactory(baseFactory);
+
         player = new ExoPlayer.Builder(this)
-                .setMediaSourceFactory(new DefaultMediaSourceFactory(this))
+                .setMediaSourceFactory(new DefaultMediaSourceFactory(this, dataSourceFactory))
                 .build();
 
         playerView.setPlayer(player);
@@ -210,23 +218,39 @@ public class PlayerActivity extends AppCompatActivity {
         String rawUrl = ch.getUrl();
         if (rawUrl == null) rawUrl = "";
 
-        // Quitar parámetros tipo |Referer=... |User-Agent=... que algunos M3U incluyen
+        String cleanUrl = rawUrl;
+        java.util.Map<String, String> headers = new java.util.HashMap<>();
         int pipeIdx = rawUrl.indexOf('|');
-        if (pipeIdx >= 0) rawUrl = rawUrl.substring(0, pipeIdx).trim();
+        if (pipeIdx >= 0) {
+            cleanUrl = rawUrl.substring(0, pipeIdx).trim();
+            String headersPart = rawUrl.substring(pipeIdx + 1).trim();
+            String[] pairs = headersPart.split("&");
+            for (String pair : pairs) {
+                String[] kv = pair.split("=", 2);
+                if (kv.length == 2) {
+                    headers.put(Uri.decode(kv[0]), Uri.decode(kv[1]));
+                }
+            }
+        }
+
+        // Configurar cabeceras dinámicas en la fábrica de origen de datos
+        if (dataSourceFactory != null) {
+            dataSourceFactory.setHeaders(headers);
+        }
 
         // Verificar que sea un esquema soportado por ExoPlayer
-        boolean validScheme = rawUrl.startsWith("http://")
-                || rawUrl.startsWith("https://")
-                || rawUrl.startsWith("rtmp://")
-                || rawUrl.startsWith("rtsp://");
+        boolean validScheme = cleanUrl.startsWith("http://")
+                || cleanUrl.startsWith("https://")
+                || cleanUrl.startsWith("rtmp://")
+                || cleanUrl.startsWith("rtsp://");
 
-        if (!validScheme || rawUrl.isEmpty()) {
+        if (!validScheme || cleanUrl.isEmpty()) {
             showErrorScreen(ch.getName());
             return;
         }
 
         try {
-            Uri uri = Uri.parse(rawUrl);
+            Uri uri = Uri.parse(cleanUrl);
             MediaItem mediaItem = MediaItem.fromUri(uri);
             player.stop();
             player.setMediaItem(mediaItem);
@@ -421,5 +445,67 @@ public class PlayerActivity extends AppCompatActivity {
             player = null;
         }
         super.onDestroy();
+    }
+
+    private static class MapHeaderDataSourceFactory implements DataSource.Factory {
+        private final DataSource.Factory delegateFactory;
+        private final java.util.Map<String, String> currentHeaders = new java.util.HashMap<>();
+
+        public MapHeaderDataSourceFactory(DataSource.Factory delegateFactory) {
+            this.delegateFactory = delegateFactory;
+        }
+
+        public void setHeaders(java.util.Map<String, String> headers) {
+            synchronized (currentHeaders) {
+                currentHeaders.clear();
+                if (headers != null) {
+                    currentHeaders.putAll(headers);
+                }
+            }
+        }
+
+        @Override
+        public DataSource createDataSource() {
+            DataSource dataSource = delegateFactory.createDataSource();
+            return new DataSource() {
+                @Override
+                public void addTransferListener(TransferListener transferListener) {
+                    dataSource.addTransferListener(transferListener);
+                }
+
+                @Override
+                public long open(DataSpec dataSpec) throws java.io.IOException {
+                    synchronized (currentHeaders) {
+                        if (!currentHeaders.isEmpty()) {
+                            java.util.Map<String, String> combinedHeaders = new java.util.HashMap<>(dataSpec.httpRequestHeaders);
+                            combinedHeaders.putAll(currentHeaders);
+                            dataSpec = dataSpec.buildUpon().setHttpRequestHeaders(combinedHeaders).build();
+                        }
+                    }
+                    return dataSource.open(dataSpec);
+                }
+
+                @Override
+                public int read(byte[] buffer, int offset, int length) throws java.io.IOException {
+                    return dataSource.read(buffer, offset, length);
+                }
+
+                @Nullable
+                @Override
+                public Uri getUri() {
+                    return dataSource.getUri();
+                }
+
+                @Override
+                public java.util.Map<String, java.util.List<String>> getResponseHeaders() {
+                    return dataSource.getResponseHeaders();
+                }
+
+                @Override
+                public void close() throws java.io.IOException {
+                    dataSource.close();
+                }
+            };
+        }
     }
 }

@@ -56,13 +56,13 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "A24 Argentina",
-                "https://g5.vxral-slo.transport.edge-access.net/a12/ngrp:a24-100056_all/playlist.m3u8?sense=true",
+                "https://g5.vxral-slo.transport.edge-access.net/a12/ngrp:a24-100056_all/playlist.m3u8?sense=true|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
                 "📰", "Noticias", "Argentina",
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
                 "ABC-TV Paraguay",
-                "https://cdn.jwplayer.com/live/broadcast/aide2636.m3u8",
+                "https://cdn.jwplayer.com/live/broadcast/aide2636.m3u8|Referer=https://www.abc.com.py/",
                 "📰", "Noticias", "Paraguay",
                 Color.parseColor("#1C2333")));
 
@@ -79,9 +79,9 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
-                "America Paraguay",
-                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/83.m3u8",
-                "🎬", "Entretenimiento", "Paraguay",
+                "América TV Argentina",
+                "https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
+                "🎬", "Entretenimiento", "Argentina",
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
@@ -422,7 +422,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Unicanal",
-                "http://edge02-fdo-py.cvattv.com.ar/live/c5eds/UNICANAL_C4/verimatrix_rotating_FTA/UNICANAL_C4-video=3000000-audio_20000=144800.m3u8",
+                "http://edge02-fdo-py.cvattv.com.ar/live/c5eds/UNICANAL_C4/verimatrix_rotating_FTA/UNICANAL_C4-video=3000000-audio_20000=144800.m3u8|Referer=https://unicanal.com.py/",
                 "🎬", "Entretenimiento", "Paraguay",
                 Color.parseColor("#1C2333")));
 
