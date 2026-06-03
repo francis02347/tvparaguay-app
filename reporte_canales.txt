@@ -1,0 +1,811 @@
+REPORTE DE VERIFICACIÓN DE CANALES - 2026-06-03 09:28:08
+Total canales analizados: 663
+Canales funcionales: 462
+Canales caídos: 201
+============================================================
+
+LISTA DE CANALES CAÍDOS:
+1. A24 (720p)
+   URL: https://g5.vxral-slo.transport.edge-access.net/a12/ngrp:a24-100056_all/playlist.m3u8?sense=true
+   Detalle: Error HTTP 403: Access denied.
+
+2. 9Life (720p) [Geo-blocked]
+   URL: https://9now-livestreams.akamaized.net/hls/live/2008313/life-syd/master.m3u8
+   Detalle: Error HTTP 400: Bad Request
+
+3. Actualidad 360 (1080p) [Geo-blocked]
+   URL: https://amg01821-lovetv-amg01821c27-lg-es-6726.playouts.now.amagi.tv/playlist/amg01821-lovetvfast-lovenews-lges/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+4. BDNCOM (1080p)
+   URL: https://liveingesta318.cdnmedia.tv/badalonatvlive/smil:live.smil/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+5. Awapa Sports TV (1080p) [Not 24/7]
+   URL: https://mgv-awapa.akamaized.net/hls/live/2104282/MGV_CHANNEL15/master.m3u8
+   Detalle: Error HTTP 400: Bad Request
+
+6. 101tv Malaga
+   URL: https://liveingesta318.cdnmedia.tv/101weblive/smil:malaga.smil/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+7. Blu Radio (720p)
+   URL: https://mdstrm.com/live-stream-playlist/58d1921a72e2b22e2905e493.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+8. 3Cat Exclusiu 2 (1080p) [Geo-blocked]
+   URL: https://directes-tv-cat.3catdirectes.cat/live-content/oca2-hls/master.m3u8
+   Detalle: Error HTTP 403: geofence:blocked
+
+9. 3Cat Exclusiu 3 (1080p) [Geo-blocked]
+   URL: https://directes-tv-cat.3catdirectes.cat/live-content/oca3-hls/master.m3u8
+   Detalle: Error HTTP 403: geofence:blocked
+
+10. 3Cat Exclusiu 1 (1080p) [Geo-blocked]
+   URL: https://directes-tv-cat.3catdirectes.cat/live-content/oca1-hls/master.m3u8
+   Detalle: Error HTTP 403: geofence:blocked
+
+11. Barca TV
+   URL: https://live20.bozztv.com/dvrfl06/astv/astv-barca/index.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+12. Canal 27 (1080p)
+   URL: https://live.canal27.tv:3633/live/canal27live.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'live.canal27.tv'. (_ssl.c:1032)
+
+13. Canal Iglesia Luz y Verdad (1080p)
+   URL: https://stream.oursnetworktv.com/latin/IglesialuzyVerdad/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stream.oursnetworktv.com'. (_ssl.c:1032)
+
+14. Canal 4 (480p) [Not 24/7]
+   URL: http://138.117.4.70:8075/Canal04_CooTelmnbv/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+15. Canal 1 Mar Menor-Torre Pacheco (1080p)
+   URL: https://directo.tuwebtv.es/canal1.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1032)
+
+16. BAMOS TV (1080p) [Not 24/7]
+   URL: https://video2.getstreamhosting.com:19360/8092/8092.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+17. Canal Santa MarÃ­a (360p)
+   URL: https://streaming.telered.com.ar/santa-maria/streaming/mystream.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1032)
+
+18. Canal TV Radio Maya TGBA (480p)
+   URL: https://stream.oursnetworktv.com/latin/radioTGBAgtm/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stream.oursnetworktv.com'. (_ssl.c:1032)
+
+19. Classica (720p)
+   URL: https://jmp2.uk/plu-5f779951372da90007fd45e8.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+20. CMC (California Music Channel) (1080p)
+   URL: https://cmc-ono.amagi.tv/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+21. Cristo TV (480p)
+   URL: https://stream.oursnetworktv.com/latin/CristoTV/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stream.oursnetworktv.com'. (_ssl.c:1032)
+
+22. California Medios TV (720p)
+   URL: https://s5.mexside.net:1936/medios/medios/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+23. CMT Equal Play (720p)
+   URL: https://jmp2.uk/plu-5f68f53eb1e5800007390bf8.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+24. CMB Television (1080p)
+   URL: https://cdn1.cmbcolombia.tv/bethesda/video.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+25. Daystar TV Espanol (1080p)
+   URL: https://hls-live-media-gc.cdn01.net/mpegts/232076_2222907/karlKyiKToEdHsTFUcjs9g/1776816000/master_mpegts.m3u8
+   Detalle: Error HTTP 410: Gone
+
+26. CDNN 23 (1080p) [Not 24/7]
+   URL: https://cootv.cootel.com.ni:8095/Canal23_CooTel/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+27. CineLife (1080p)
+   URL: https://magnolia-cinelife.amagi.tv/hls/amagi_hls_data_magnoliaA-cinelife-oando/CDN/playlist.m3u8
+   Detalle: Error de red/DNS: [Errno 11001] getaddrinfo failed
+
+28. CrÃ­menes imperfectos
+   URL: https://jmp2.uk/plu-5e94cd036cc69d0007e8a1ba.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+29. ESPN Deportes (360p)
+   URL: http://Tdo@origin.thetvapp.to/hls/espn-deportes/mono.m3u8
+   Detalle: Error de red/DNS: [Errno 11003] getaddrinfo failed
+
+30. A24 Paraguay
+   URL: http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/6.m3u8
+   Detalle: Error de red/DNS: timed out
+
+31. ABC-TV Paraguay
+   URL: http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/7.m3u8
+   Detalle: Error de red/DNS: timed out
+
+32. Biosfera TV (720p) [Not 24/7]
+   URL: https://tvdatta.com:3021/live/biosferatvlive.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+33. Alterna TV (720p) [Not 24/7]
+   URL: https://tv.alterna.ar/stream/hls/live.m3u8
+   Detalle: Error de red/DNS: timed out
+
+34. Alcance TV (720p)
+   URL: https://rv100.globalhost1.com:3516/live/tjjqdqurlive.m3u8
+   Detalle: Error de red/DNS: timed out
+
+35. Dega TV (720p) [Not 24/7]
+   URL: https://59d39900ebfb8.streamlock.net/saintlouisltv/saintlouisltv/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+36. Canal 65 (1080p) [Not 24/7]
+   URL: https://panel.streamingtv-mediacp.online:1936/tv65/tv65/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+37. Fe Viviente (480p)
+   URL: https://stream.oursnetworktv.com/latin/feVivienteGtm/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stream.oursnetworktv.com'. (_ssl.c:1032)
+
+38. CÃ³rdoba TV [Not 24/7]
+   URL: https://cloudvideo.servers10.com:8081/8020/index.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+39. Canal Peniel (720p) [Not 24/7]
+   URL: https://cdn.streamhispanatv.net:3840/live/penielfamlive.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+40. ExpresiÃ³n TV (1080p)
+   URL: https://ssh101.bozztv.com/ssh101/expresiongrany/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'ssh101.bozztv.com'. (_ssl.c:1032)
+
+41. El Mueble (720p)
+   URL: https://jmp2.uk/plu-690dd10a37b131228d76d5b1.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+42. Candelaria TV (720p) [Not 24/7]
+   URL: https://cdn.streamhispanatv.net:3921/live/candetvlive.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+43. ATV Argentina
+   URL: https://tv.streaming.com.bo/atvargentina/index.m3u8
+   Detalle: Error: The read operation timed out
+
+44. EWTN Spanish (720p) [Geo-blocked]
+   URL: https://cdn3.wowza.com/1/TUI5dU5ucnUxdGFD/ZFlVeGRl/hls/live/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+45. Franchs TV (720p)
+   URL: https://stream.oursnetworktv.com/latin/franchstv/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stream.oursnetworktv.com'. (_ssl.c:1032)
+
+46. El-Roi TV (720p)
+   URL: https://cdn.streamhispanatv.net:3648/live/elroitvlive.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+47. Esport3 (1080p) [Geo-blocked]
+   URL: https://directes-tv-cat.3catdirectes.cat/live-content/esport3-hls/master.m3u8
+   Detalle: Error HTTP 403: geofence:blocked
+
+48. Foro TV (1080p)
+   URL: https://channel02-notusa.akamaized.net/hls/live/2023914/event01/index.m3u8
+   Detalle: Error HTTP 400: Bad Request
+
+49. Ici Radio-Canada TÃ©lÃ© Ontario (CBLFT-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704022/cancblft/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+50. Ici Radio-Canada TÃ©lÃ© Ottawa/Gatineau (CBOFT-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/664046/cancboft/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+51. Ici Radio-Canada TÃ©lÃ© Estrie (CKSH-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704016/cancksh/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+52. Ici Radio-Canada TÃ©lÃ© Manitoba (CBWFT-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704018/cancbwft/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+53. Ici Radio-Canada TÃ©lÃ© Alberta (CBXFT-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704020/cancbxft/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+54. Ici Radio-Canada TÃ©lÃ© Saskatchewan (CBKFT-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704019/cancbkft/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+55. Ici Radio-Canada TÃ©lÃ© Saguenay/Lac-St-Jean (CKTV-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704023/cancktv/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+56. Ici Radio-Canada TÃ©lÃ© Terre-Neuve-et-Labrador (CBAFT-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704014/cancbaft/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+57. Ici Radio-Canada TÃ©lÃ© Mauricie/Centre-du-QuÃ©bec (CKTM-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704021/cancktm/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+58. Ici Radio-Canada TÃ©lÃ© Colombie-Britannique/Yukon (CBUFT-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704017/cancbuft/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+59. Ici Radio-Canada TÃ©lÃ© QuÃ©bec (CBVT-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/664045/cancbvt/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+60. Ici Radio-Canada TÃ©lÃ© (1080p) [Geo-blocked]
+   URL: https://rcavlive-dai.akamaized.net/hls/live/696614/cancbftprem/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+61. Ici Radio-Canada TÃ©lÃ© Est du QuÃ©bec (CJBR-DT) [Geo-blocked]
+   URL: https://rcavlive.akamaized.net/hls/live/704024/cancjbr/master.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+62. Fabulosa EstÃ©reo 100.5 FM (720p)
+   URL: https://www.streaming507.net:19360/videofabulosa/videofabulosa.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+63. Hope4Life TV (720p)
+   URL: http://144.217.14.88/hls/hope4life.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: IP address mismatch, certificate is not valid for '144.217.14.88'. (_ssl.c:1032)
+
+64. Elim TV (480p) [Not 24/7]
+   URL: https://stream.soporteccrtv.xyz/hls/master-dveo.m3u8
+   Detalle: Error HTTP 530: <none>
+
+65. Dance TV [Geo-blocked]
+   URL: https://op-group1-swiftservehd-1.dens.tv/h/h250/index.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+66. JehovÃ¡ Nissi (720p)
+   URL: https://stream.oursnetworktv.com/latin/nissiGtmH/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stream.oursnetworktv.com'. (_ssl.c:1032)
+
+67. Karibena [Not 24/7]
+   URL: https://live-player.egostreaming.pe/karibenatv_685a-pe-a5676-584412/index.fmp4.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'live-player.egostreaming.pe'. (_ssl.c:1032)
+
+68. Familia VisiÃ³n HD [Not 24/7]
+   URL: https://584097344c1f0.streamlock.net/29/stream/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+69. Inmaculada TV (720p) [Not 24/7]
+   URL: https://live20.bozztv.com/akamaissh101/ssh101/radiotvcholy/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+70. EcuaMundo Radio TV (720p) [Not 24/7]
+   URL: https://pacific.direcnode.com:3353/live/ecuamundotvlive.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+71. Cristiana TV (576p)
+   URL: https://cristianos2.todostreaming.es/live/malaga-livestream.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'cristianos2.todostreaming.es'. (_ssl.c:1032)
+
+72. La Mega Mundial
+   URL: https://server40.servistreaming.com:3477/stream/play.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'server40.servistreaming.com'. (_ssl.c:1032)
+
+73. L1 Max (720p)
+   URL: https://live20.bozztv.com/akamaissh101/ssh101/l1maxhd/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+74. LaXitosa PanamÃ¡ (360p) [Not 24/7]
+   URL: https://stmvideo2.livecastv.com/lax953/lax953/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stmvideo2.livecastv.com'. (_ssl.c:1032)
+
+75. La Urban TV (1080p) [Not 24/7]
+   URL: https://urbanrevolution.es:8443/live/TV/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'urbanrevolution.es'. (_ssl.c:1032)
+
+76. Italianissimo (360p) [Not 24/7]
+   URL: https://vcp.myplaytv.com/italianissimo/italianissimo/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+77. Luna EstÃ©reo 106.4 FM (720p) [Not 24/7]
+   URL: https://servervideo.intermediacolombia.com:19360/kychbbfhdz/kychbbfhdz.m3u8
+   Detalle: Error de red/DNS: [Errno 11001] getaddrinfo failed
+
+78. DSports Uruguay
+   URL: https://cors-proxy.cooks.fyi/http://147.135.114.221:8001/play/a00m/index.m3u8
+   Detalle: Error: The read operation timed out
+
+79. La Cheverisima Radio TV (720p)
+   URL: https://byecablecluster.ddns.net/neira/neira.stream/index.fmp4.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+80. Hits 360 TV (720p) [Not 24/7]
+   URL: http://cm.hostlagarto.com:8081/hits360tv/hits360HD.myStream/playlist.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+81. Meridiano TV (480p)
+   URL: https://e1.viginet.vectormax.com:5210/quickstart/114-934-21/index.m3u8
+   Detalle: Error de red/DNS: [Errno 11001] getaddrinfo failed
+
+82. Fox Deportes (1280p)
+   URL: https://cors-proxy.cooks.fyi/http://23.237.104.106:8080/USA_FOX_DEPORTES/index.m3u8
+   Detalle: Error: The read operation timed out
+
+83. GO TV (720p)
+   URL: https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8
+   Detalle: Error: The read operation timed out
+
+84. JBN Canal 39 (720p) [Not 24/7]
+   URL: https://hdbox.chunklistv.com/live?stream=jbn39
+   Detalle: Error HTTP 405: Method Not Allowed
+
+85. MCN6 Music Channel (1080p) [Not 24/7]
+   URL: https://d18fcxaqfnwjhj.cloudfront.net/CDN_Ingest/MCN6_MUSIC.smil/Playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+86. MTV Catfish TV Show (720p)
+   URL: https://jmp2.uk/plu-5db6a697d5f34a000934cd13.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+87. MTV en espaÃ±ol
+   URL: https://jmp2.uk/plu-5cf96d351652631e36d4331f.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+88. Molahits TV (720p)
+   URL: http://ventdelnord.tv:8080/mola/directe.m3u8
+   Detalle: Error: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+
+89. Maya TV (480p) [Not 24/7]
+   URL: https://media.streambrothers.com:19360/8356/8356.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+90. MTV Ridiculousness
+   URL: https://jmp2.uk/plu-5f9847fd513250000728a9a5.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+91. MTV Teen Mom (720p)
+   URL: https://jmp2.uk/plu-5cffcf5686dfe15595fb3f56.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+92. Mario Pinto TV (720p) [Not 24/7]
+   URL: https://eu1.servers10.com:8081/8028/index.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+93. iTV Indian Music
+   URL: https://ca1.buximedia.com/itv/indian/tracks-v1a1/mono.m3u8
+   Detalle: Error: The read operation timed out
+
+94. iTV Latin Music
+   URL: https://ca1.buximedia.com/itv/latin/tracks-v1a1/mono.m3u8
+   Detalle: Error: The read operation timed out
+
+95. iTV Afrobeats Music
+   URL: https://ca1.buximedia.com/itv/afrobeats/tracks-v1a1/mono.m3u8
+   Detalle: Error: The read operation timed out
+
+96. MusicTop (1080p)
+   URL: https://stream-gtlc.telecentro.net.ar/hls/musictophls/0/playlist.m3u8
+   Detalle: Error HTTP 400: Bad Request
+
+97. iTV Turkish Music
+   URL: https://ca1.buximedia.com/itv/turkish/tracks-v1a1/mono.m3u8
+   Detalle: Error: The read operation timed out
+
+98. iTV Urban Music
+   URL: https://ca1.buximedia.com/itv/love2/tracks-v1a1/mono.m3u8
+   Detalle: Error: The read operation timed out
+
+99. iTV Arabic Music
+   URL: https://ca1.buximedia.com/itv/arabic/tracks-v1a1/mono.m3u8
+   Detalle: Error: The read operation timed out
+
+100. Cholusat Sur 36 (214p) [Not 24/7]
+   URL: http://audiotvserver.net:1935/livemedia/cholusat/playlist.m3u8
+   Detalle: Error de red/DNS: [Errno 11002] getaddrinfo failed
+
+101. MTV Biggest Pop (1080p)
+   URL: https://jmp2.uk/plu-5d14fd1a252d35decbc4080c.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+102. MTV Biggest Pop (1080p)
+   URL: https://jmp2.uk/plu-6047fbdbbb776a0007e7f2ff.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+103. La 98.1 TV (720p) [Not 24/7]
+   URL: https://6019dcac4147f.streamlock.net:9443/la98/Invosa/playlist.m3u8
+   Detalle: Error de red/DNS: timed out
+
+104. Now 70s (720p)
+   URL: https://lightningnow70-samsungau.amagi.tv/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+105. MTV Dating (720p)
+   URL: https://jmp2.uk/plu-5caf330ea5068259a32320fd.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+106. MTV Com o Ex
+   URL: https://jmp2.uk/plu-61a528267e1b8b0007357920.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+107. MTV Pluto TV
+   URL: https://jmp2.uk/plu-5ca672f515a62078d2ec0ad2.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+108. MTV Pluto TV
+   URL: https://jmp2.uk/plu-624edee2d6394a0007efcac4.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+109. EspÃ­ritu Santo Y Fuego TV (480p)
+   URL: https://inliveserver.com:1936/8392/8392/playlist.m3u8
+   Detalle: Error de red/DNS: timed out
+
+110. Now 80s (1080p)
+   URL: https://lightningnow80-samsungau.amagi.tv/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+111. Orbita Chile TV (1080p)
+   URL: https://orbitachiletv.org/hls/0/stream.m3u8
+   Detalle: Error HTTP 530: <none>
+
+112. MTV Chontales (720p) [Not 24/7]
+   URL: https://altair.hostingnica.net/hls/mtv_stream/index.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+113. Olympic Channel [Geo-blocked]
+   URL: https://ocshls-2-olympicchannel.akamaized.net/ocshls/OCTV_32.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+114. MÃ­rame TV (360p) [Not 24/7]
+   URL: https://bit.controlstreams.com:5443/LiveApp/streams/mirametv.m3u8
+   Detalle: Error HTTP 404: 
+
+115. Plus TV (720p) [Not 24/7]
+   URL: https://vcp4.myplaytv.com:1936/plustv/plustv/playlist.m3u8
+   Detalle: Error de red/DNS: [Errno 11001] getaddrinfo failed
+
+116. Lifetime Movies East (720p) [Not 24/7]
+   URL: https://tvpass.org/live/LifetimeMoviesEast/hd
+   Detalle: Error HTTP 403: Forbidden
+
+117. Pluto TV Futbol Para Fans (1080p)
+   URL: https://jmp2.uk/plu-63c6e37e636b7e0007ccb635.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+118. Pluto TV KaraokÃª por Stingray (720p)
+   URL: https://jmp2.uk/plu-604b99d633a72b00078e05ad.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+119. Popstar! TV (1080p)
+   URL: https://linear-10.frequency.stream/dist/stirr/10/hls/master/playlist.m3u8
+   Detalle: Error de red/DNS: [Errno 11001] getaddrinfo failed
+
+120. Plenitud TV (360p)
+   URL: https://stream.oursnetworktv.com/latin/PlenitudGtm/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stream.oursnetworktv.com'. (_ssl.c:1032)
+
+121. Pluto TV Shows por Stingray (720p)
+   URL: https://jmp2.uk/plu-604b91e0692f770007d9f33f.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+122. Popu TV (1080p)
+   URL: https://copacogen.desdeparaguay.net/universotv/universotv_py_alta/playlist.m3u8?admin=nacion
+   Detalle: Error HTTP 404: Not Found
+
+123. Multivision Federal
+   URL: https://panel.host-live.com:19360/8250/8250.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+124. Pop Up (1080p) [Geo-blocked]
+   URL: https://amg01753-amg01753c9-samsung-gb-8005.playouts.now.amagi.tv/ts-eu-w1-n2/playlist/amg01753-narrativeuk-popup-samsunggb/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+125. NotiUno TV (854p) [Not 24/7]
+   URL: https://59a564764e2b6.streamlock.net/notiunotv/notiunotv/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+126. Melody Hits (576p)
+   URL: https://mumt03.tangotv.in/MELODYHITS/index.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+127. MTV Pluto TV
+   URL: https://jmp2.uk/plu-5caf325764025859afdd6c4d.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+128. MTV The Shores
+   URL: https://jmp2.uk/plu-5caf32c2a5068259a32320fc.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+129. Radio Turrialba TV Sports (720p) [Not 24/7]
+   URL: https://live-stream.iblups.com/live/a5ae024a1bbc4a05a68debbc9d379db6bb6a6da3.m3u8
+   Detalle: Error de red/DNS: [Errno 11001] getaddrinfo failed
+
+130. PTL Television Network (1080p)
+   URL: https://storage.sardius.media/archives/-KyMV-J0vDqnClcSXs8p/events/site_1a4721d3BA/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+131. Prattel TV
+   URL: https://vs20.live.opencaster.com/prattelpe_a2b8d350/index.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+132. NG Radio TV (360p)
+   URL: https://67acccf130420.streamlock.net/ngradiotv/ngradiotv/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+133. Oxigeno TV (360p) [Not 24/7]
+   URL: https://vcp.myplaytv.com/oxigenotv/oxigenotv/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+134. ProclamaciÃ³n TV [Not 24/7]
+   URL: https://video2.getstreamhosting.com:19360/8000/8000.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+135. Realmadrid TV (720p)
+   URL: https://jmp2.uk/plu-63dac28760bc8f0008a7654b.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+136. Radio y TelevisiÃ³n Crisol de la AlegrÃ­a (1080p) [Not 24/7]
+   URL: https://omegaingenieria.com:19360/CRisolTVdigital-Live_abr/CRisolTVdigital-Live_abr.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'omegaingenieria.com'. (_ssl.c:1032)
+
+137. LaLiga Hypermotion (1080p)
+   URL: http://latam-cache-sv2-cdn.latamlive.net/LA_LIGA_SMARTBANK_IP_ENC_LIVE/index.m3u8
+   Detalle: Error: timed out
+
+138. Pequeradio (720p) [Not 24/7]
+   URL: https://canadaremar2.todostreaming.es/live/peque-pequetv.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+139. Sony Canal Escape Perfecto
+   URL: https://jmp2.uk/plu-605e479d5b8229000763e697.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+140. Radio TÃ©lÃ© Kajou (480p) [Not 24/7]
+   URL: https://59d39900ebfb8.streamlock.net/RadioTelekAJOU/RadioTelekAJOU/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+141. Radio U TV (720p) [Not 24/7]
+   URL: https://1826200335.rsc.cdn77.org/1826200335/index.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+142. Red de ComunicaciÃ³n Regional (RCR) (720p) [Not 24/7]
+   URL: https://5c3fb01839654.streamlock.net:1963/iptvrcrperu/livercrperutv/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for '5c3fb01839654.streamlock.net'. (_ssl.c:1032)
+
+143. Samsung Wild Life (720p) [Geo-blocked]
+   URL: https://pb-olm46bexcljjf.akamaized.net/Samsung_Wild_Life.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+144. Radio Carnaval TV (720p) [Not 24/7]
+   URL: https://eu1.servers10.com:8081/8116/index.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+145. MTV Spankin' New (1080p)
+   URL: https://jmp2.uk/plu-5d14fdb8ca91eedee1633117.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+146. PJ Digital Radio TV (720p)
+   URL: https://vdo1.panelstreaming.live:3363/hybrid/play.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+147. Presencia TV (720p) [Not 24/7]
+   URL: https://cdn.streamhispanatv.net:3473/live/presenciatvlive.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+148. Radio Monumental TV (720p) [Not 24/7]
+   URL: https://cloud37.ecuatel.com/monumentaltv/live/manifest.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+149. Radio Alegria 98.5 FM (720p)
+   URL: https://video.compuwebecuador.com:3880/stream/play.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+150. Tastemade en Espanol (1080p) [Geo-blocked]
+   URL: https://tastemadees16us-xumo.amagi.tv/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+151. Telefe Rosario [Geo-blocked]
+   URL: https://cdn-cirion01.sensa.com.ar/output/ARR2/TelefeRosarioH/playlist.m3u8
+   Detalle: Error de red/DNS: [Errno 11001] getaddrinfo failed
+
+152. Radio Impacto 2 (288p) [Not 24/7]
+   URL: https://panel.streamingtv-mediacp.online:1936/jawepvrvyz/jawepvrvyz/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+153. TDV TV (240p)
+   URL: https://stream.oursnetworktv.com/latin/TierraDeValientes/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'stream.oursnetworktv.com'. (_ssl.c:1032)
+
+154. Telefides (720p)
+   URL: https://s2.cwebtv.net:4433/telefides/telefides/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1032)
+
+155. Telehit Musica
+   URL: http://190.61.55.34:2401/play/a06t/index.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+156. Radio TV Tendencias (1080p) [Not 24/7]
+   URL: https://s1.tvdatta.com:3950/multi_web/play.m3u8
+   Detalle: Error de red/DNS: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión
+
+157. Tiny Pop (1080p)
+   URL: https://amg01753-narrativeuk-amg01753c1-lg-gb-1830.playouts.now.amagi.tv/playlist/amg01753-narrativeuk-tinypop-lggb/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+158. Telecafe (1080p)
+   URL: https://liveingesta318.cdnmedia.tv/telecafelive/smil:rtmp01.smil/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+159. TNE (720p) [Not 24/7]
+   URL: https://v2.tustreaming.cl/tnetv/index.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+160. The Country Network (1080p)
+   URL: https://amg00600-amg00600c1-thecountrynetwork-us-5497.playouts.now.amagi.tv/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+161. Tigo Sports TV El Salvador (720p) [Geo-blocked]
+   URL: https://channel03.tigosports.com.sv/out/v1/31f36d52d558475ca18799d8ca5e4b40/index.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+162. That's 70s (576p)
+   URL: http://92.114.85.72:8000/play/a0lc
+   Detalle: Error HTTP 403: Forbidden
+
+163. Radio VisiÃ³n de Dios Stereo (720p) [Not 24/7]
+   URL: https://live.tvcontrolcp.com:1936/8286/8286/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+164. Tigo Sports (720p) [Geo-blocked]
+   URL: https://live20.bozztv.com/akamaissh101/ssh101/livetigocr/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+165. Tiny Pop +1 (576p)
+   URL: http://92.114.85.72:8000/play/a08p
+   Detalle: Error HTTP 403: Forbidden
+
+166. TDN Medios (720p) [Not 24/7]
+   URL: https://castv10.plugstreaming.com:19360/tdntv/tdntv.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+167. TV CRET (1080p)
+   URL: https://radiocret.net:8082/hls/tvcret.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1032)
+
+168. TRACE Latina (720p)
+   URL: https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/trace-latina/encrypted.m3u8?ads.vf=8rE20DsHHI0
+   Detalle: Error HTTP 404: Not Found
+
+169. Tigo Sports (720p)
+   URL: https://live.enhdtv.com:8081/8160/index.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+170. Radiotele Morelia (352p)
+   URL: http://linkrt.ddns.net:8080/hls/rtmorelia_MID.m3u8
+   Detalle: Error: timed out
+
+171. Tu Musica HD (1080p) [Not 24/7]
+   URL: https://edge.essastream.com/tumusicahd/tracks-v1a1/mono.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+172. TV Peru Noticias (360p)
+   URL: https://cdnhd.iblups.com/hls/902c1a0395264f269f1160efa00660e47.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+173. Voyages & Saveurs (720p)
+   URL: https://jmp2.uk/plu-680291e38e1ff89c2427aefd.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+174. TVN24 (720p)
+   URL: https://ss2.tvrdomi.com:1936/vozzmedianetwork/vozzmedianetwork/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+175. T13 (720p)
+   URL: https://jireh-2-hls-video-us-isp.dps.live/hls-video/10b92cafdf3646cbc1e727f3dc76863621a327fd/t13/t13.smil/playlist.m3u8
+   Detalle: Error de red/DNS: timed out
+
+176. Tv Famypanc HD (1080p)
+   URL: https://panel.host-live.com:19360/8042/8042.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+177. Tour Spot TV (1280p) [Not 24/7]
+   URL: https://fox.hostlagarto.com:8081/toursporttv/playlist.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+178. Telecanal (720p)
+   URL: http://45.232.210.1:8029/play/a00s/index.m3u8
+   Detalle: Error de red/DNS: timed out
+
+179. Telefe Internacional (1080p)
+   URL: http://187.190.55.136:5501/udp/225.1.1.240:5240
+   Detalle: Error de red/DNS: timed out
+
+180. VTV Canal 17 (720p) [Not 24/7]
+   URL: https://solo.disfrutaenlared.com:1936/vtvcanal/vtvcanal/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'solo.disfrutaenlared.com'. (_ssl.c:1032)
+
+181. Zoy TV Sports 1 (1080p) [Not 24/7]
+   URL: https://mio.zoymilton.com/ZoyEventos/index.m3u8
+   Detalle: Error de red/DNS: [Errno 11001] getaddrinfo failed
+
+182. WZNT (Zeta 93) (1080p) [Not 24/7]
+   URL: https://livestream.lamusica.com/nacionz/ngrp:nacionz_all/playlist.m3u8
+   Detalle: Error de red/DNS: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1032)
+
+183. VPItv (1080p)
+   URL: https://ott3.streann.com/loadbalancer/services/public/channels/5d23d5882cdce61dae029fd8/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+184. Win+ Futbol
+   URL: http://190.60.40.34:8001/play/a02r
+   Detalle: Error HTTP 404: Not Found
+
+185. Win Sports (1080p)
+   URL: http://190.60.40.34:8001/play/a0ef
+   Detalle: Error HTTP 404: Not Found
+
+186. TN (2160p)
+   URL: https://latam-cache-sv2-cdn.latamlive.net/TN_ENC_LIVE/index.mpd
+   Detalle: Error: The read operation timed out
+
+187. TribunaTV (720p) [Not 24/7]
+   URL: https://cloudflare.streamgato.us:3300/live/tribunatvlive.m3u8
+   Detalle: Error de red/DNS: timed out
+
+188. Tropicalia 93.9 FM (1280p)
+   URL: http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/67.m3u8
+   Detalle: Error de red/DNS: timed out
+
+189. Turf Movil (720p)
+   URL: https://tvturf4.janus.cl/playlist/stream.m3u8?d=w&id=
+   Detalle: Error: The read operation timed out
+
+190. Tropical Moon Cumbia TV (720p)
+   URL: https://srv2.tropicalmoonmedia.com/cumbiatv/cumbiatv/playlist.m3u8
+   Detalle: Error de red/DNS: timed out
+
+191. GSG TV (720p)
+   URL: https://schurch1.bozztv.com/livecdn69/live/playlist.m3u8
+   Detalle: Error de red/DNS: timed out
+
+192. TV MarÃ­a (720p) [Not 24/7]
+   URL: https://streamtv.intervenhosting.net:3155/live/juandelacruz3live.m3u8
+   Detalle: Error de red/DNS: timed out
+
+193. TVM El Salvador [Not 24/7]
+   URL: http://201.247.102.189/tmp_hls/stream/index.m3u8
+   Detalle: Error de red/DNS: timed out
+
+194. WECN (Ãšnico TV) (720p)
+   URL: https://59825a54e4454.streamlock.net:8443/pastorairisn394/pastorairisn394/chunklist_w239411719.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+195. Unicanal (1080p)
+   URL: http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/72.m3u8
+   Detalle: Error de red/DNS: timed out
+
+196. Tele Vid (1080p)
+   URL: https://liveingesta118.cdnmedia.tv/televidtvlive/smil:rtmp01.smil/playlist.m3u8
+   Detalle: Error HTTP 403: Forbidden
+
+197. Telerumba TV (720p) [Not 24/7]
+   URL: https://inliveserver.com:1936/18506/18506/playlist.m3u8
+   Detalle: Error de red/DNS: timed out
+
+198. Yo! MTV (1080p)
+   URL: https://jmp2.uk/plu-5d14fc31252d35decbc4080b.m3u8
+   Detalle: Error HTTP 404: Not Found
+
+199. Villa Elisa Radio TV (1080p)
+   URL: https://copacogen.desdeparaguay.net/villaelisatv/villaelisatv/playlist.m3u8?admin=nacion
+   Detalle: Error: The read operation timed out
+
+200. Zona Music TV (1080p)
+   URL: https://acceso.radiosportstv.online:3022/stream/play.m3u8
+   Detalle: Error de red/DNS: timed out
+
+201. MÃ¡s Noticias TelevisiÃ³n (720p)
+   URL: https://www.amixtv.com:8081/mntvh/index.m3u8
+   Detalle: Error de red/DNS: timed out
+
