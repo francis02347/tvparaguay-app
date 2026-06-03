@@ -229,6 +229,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void loadChannel(int index) {
         if (channelList == null || index < 0 || index >= channelList.size()) return;
+        currentIndex = index;
         Channel ch = channelList.get(index);
 
         hideErrorScreen();
