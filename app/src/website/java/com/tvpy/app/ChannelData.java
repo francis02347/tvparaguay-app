@@ -409,6 +409,12 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "SuperTennis (Italia)",
+                "https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c0-16/restreamer/outgest/aa3673f1-e178-44a9-a947-ef41db73211a/manifest.m3u8",
+                "🎾", "Deportes", "Italia",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "SUR TV Itapua",
                 "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/1596.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
@@ -436,6 +442,12 @@ public class ChannelData {
                 "Telequince",
                 "https://video.hostingcaaguazu.com:19360/telequince/telequince.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Tennis Channel (Internacional)",
+                "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischnlintl-lggb/playlist.m3u8",
+                "🎾", "Deportes", "Internacional",
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
