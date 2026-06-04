@@ -181,6 +181,18 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "FOX (Estados Unidos)",
+                "https://aegis-cloudfront-1.tubi.video/8d9284ec-c451-4e51-a1d4-d16e5c8972af/index.m3u8",
+                "🎬", "Entretenimiento", "Estados Unidos",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "FS1 (Estados Unidos)",
+                "http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8",
+                "⚽", "Deportes", "Estados Unidos",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "Gen",
                 "https://copacogen.desdeparaguay.net/gentv/gentv_py_alta/playlist.m3u8?admin=nacion",
                 "🎬", "Entretenimiento", "Paraguay",
@@ -415,6 +427,12 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "Telemundo (Estados Unidos)",
+                "https://content.uplynk.com/channel/b6a96ed39d694ae1b738faa98cf7dd3f.m3u8",
+                "🎬", "Entretenimiento", "Estados Unidos",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "Telequince",
                 "https://video.hostingcaaguazu.com:19360/telequince/telequince.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
@@ -490,6 +508,12 @@ public class ChannelData {
                 "UniRadio TV",
                 "https://video.hostingcaaguazu.com:19360/uniradiotv/uniradiotv.m3u8",
                 "📻", "Radio TV", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Universo (Estados Unidos)",
+                "http://190.11.225.124:5000/live/universo_hd/playlist.m3u8",
+                "🎬", "Entretenimiento", "Estados Unidos",
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
