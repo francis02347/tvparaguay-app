@@ -391,6 +391,12 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "Telefe Internacional (Argentina)",
+                "https://telefeviacom1.akamaized.net/hls/live/2037987/viacomINT/TOK/master.m3u8",
+                "🎬", "Entretenimiento", "Argentina",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "Telefuturo",
                 "https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/media.m3u8?admin=tvaccion",
                 "🎬", "Entretenimiento", "Paraguay",
@@ -442,6 +448,18 @@ public class ChannelData {
                 "TV Canindeyu",
                 "https://video.hostingcaaguazu.com:19360/tvcanindeyu/tvcanindeyu.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "TV Globo Bahia (Brasil)",
+                "http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8",
+                "🎬", "Entretenimiento", "Brasil",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "TV Pública (Argentina)",
+                "https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
+                "🎬", "General", "Argentina",
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
