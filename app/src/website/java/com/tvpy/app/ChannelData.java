@@ -85,6 +85,12 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "Azteca Internacional (México)",
+                "https://azt-mun.otteravision.com/azt/mun/mun.m3u8",
+                "🎬", "Entretenimiento", "México",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "Bruno Masi TV",
                 "https://rds3.desdeparaguay.net/brunomasitv/brunomasitv/playlist.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
@@ -196,6 +202,12 @@ public class ChannelData {
                 "Latele",
                 "https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion",
                 "🎬", "Entretenimiento", "Paraguay",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
+                "Las Estrellas (México) [Geo-blocked]",
+                "https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8",
+                "🎬", "Entretenimiento", "México",
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
