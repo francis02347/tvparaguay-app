@@ -1,5 +1,10 @@
 # Script para automatizar la actualización local y el lanzamiento a GitHub de TVParaguay
 
+[CmdletBinding()]
+param (
+    [switch]$Auto
+)
+
 Write-Host "=============================================" -ForegroundColor Cyan
 Write-Host "   ACTUALIZADOR AUTOMATICO DE TVPARAGUAY" -ForegroundColor Cyan
 Write-Host "=============================================" -ForegroundColor Cyan
@@ -58,17 +63,21 @@ Write-Host "  [i] Nuevo Codigo de version: $newVersionCode" -ForegroundColor Gre
 Write-Host ""
 
 # 5. Preguntar al usuario confirmacion
-Write-Host "Escribi 'S' para usar la sugerida, ingresa un nombre personalizado (ej: 1.3), o presiona 'N' para cancelar:" -ForegroundColor Gray
-$userInput = Read-Host "Opcion"
 $newVersionName = ""
-
-if ($userInput -eq "N" -or $userInput -eq "n") {
-    Write-Host "[INFO] Proceso cancelado por el usuario." -ForegroundColor Red
-    exit
-} elseif ($userInput -eq "S" -or $userInput -eq "s" -or $userInput -eq "") {
+if ($Auto) {
+    Write-Host "[AUTO] Bumping version code to $newVersionCode and name to $suggestedVersionName automatically." -ForegroundColor Green
     $newVersionName = $suggestedVersionName
 } else {
-    $newVersionName = $userInput.Trim()
+    Write-Host "Escribi 'S' para usar la sugerida, ingresa un nombre personalizado (ej: 1.3), o presiona 'N' para cancelar:" -ForegroundColor Gray
+    $userInput = Read-Host "Opcion"
+    if ($userInput -eq "N" -or $userInput -eq "n") {
+        Write-Host "[INFO] Proceso cancelado por el usuario." -ForegroundColor Red
+        exit
+    } elseif ($userInput -eq "S" -or $userInput -eq "s" -or $userInput -eq "") {
+        $newVersionName = $suggestedVersionName
+    } else {
+        $newVersionName = $userInput.Trim()
+    }
 }
 
 Write-Host ""
@@ -116,8 +125,18 @@ Write-Host "[OK] El proceso de Git y el envio de cambios han finalizado!" -Foreg
 Write-Host ""
 
 # 8. Monitoreo opcional de compilacion en GitHub
-$waitConfirm = Read-Host "[?] Deseas esperar a que la compilacion en la nube finalice para recibir una notificacion? (S/N)"
-if ($waitConfirm -eq "S" -or $waitConfirm -eq "s" -or $waitConfirm -eq "") {
+$shouldWait = $false
+if ($Auto) {
+    Write-Host "[AUTO] Esperando compilacion en la nube automaticamente..." -ForegroundColor Green
+    $shouldWait = $true
+} else {
+    $waitConfirm = Read-Host "[?] Deseas esperar a que la compilacion en la nube finalice para recibir una notificacion? (S/N)"
+    if ($waitConfirm -eq "S" -or $waitConfirm -eq "s" -or $waitConfirm -eq "") {
+        $shouldWait = $true
+    }
+}
+
+if ($shouldWait) {
     Write-Host ""
     Write-Host "[WAIT] Conectando con GitHub Actions para monitorear la compilacion..." -ForegroundColor Cyan
     Write-Host "Este proceso suele tardar entre 2 y 3 minutos mientras GitHub compila el APK." -ForegroundColor Gray
@@ -177,8 +196,18 @@ if ($waitConfirm -eq "S" -or $waitConfirm -eq "s" -or $waitConfirm -eq "") {
 
         # 8b. Preguntar al usuario si desea descargar el APK localmente en la carpeta del proyecto
         Write-Host ""
-        $downloadConfirm = Read-Host "[?] Deseas descargar el archivo APK compilado en esta carpeta? (S/N)"
-        if ($downloadConfirm -eq "S" -or $downloadConfirm -eq "s" -or $downloadConfirm -eq "") {
+        $shouldDownload = $false
+        if ($Auto) {
+            Write-Host "[AUTO] Descargando APK de forma automatica..." -ForegroundColor Green
+            $shouldDownload = $true
+        } else {
+            $downloadConfirm = Read-Host "[?] Deseas descargar el archivo APK compilado en esta carpeta? (S/N)"
+            if ($downloadConfirm -eq "S" -or $downloadConfirm -eq "s" -or $downloadConfirm -eq "") {
+                $shouldDownload = $true
+            }
+        }
+        
+        if ($shouldDownload) {
             Write-Host ""
             Write-Host "[INFO] Iniciando descarga del APK desde GitHub..." -ForegroundColor Cyan
             
