@@ -194,72 +194,8 @@ if ($shouldWait) {
             $notify.Dispose()
         } catch {}
 
-        # 8b. Preguntar al usuario si desea descargar el APK localmente en la carpeta del proyecto
-        Write-Host ""
-        $shouldDownload = $false
-        if ($Auto) {
-            Write-Host "[AUTO] Descargando APK de forma automatica..." -ForegroundColor Green
-            $shouldDownload = $true
-        } else {
-            $downloadConfirm = Read-Host "[?] Deseas descargar el archivo APK compilado en esta carpeta? (S/N)"
-            if ($downloadConfirm -eq "S" -or $downloadConfirm -eq "s" -or $downloadConfirm -eq "") {
-                $shouldDownload = $true
-            }
-        }
-        
-        if ($shouldDownload) {
-            Write-Host ""
-            Write-Host "[INFO] Iniciando descarga del APK desde GitHub..." -ForegroundColor Cyan
-            
-            $apkAsset = $res.assets | Where-Object { $_.name -like "*website-release.apk" } | Select-Object -First 1
-            $downloadUrl = $null
-            
-            if ($apkAsset) {
-                $downloadUrl = $apkAsset.browser_download_url
-            } else {
-                # Fallback estatico
-                $downloadUrl = "https://github.com/francis02347/tvparaguay-app/releases/download/$tagName/app-website-release.apk"
-            }
-            
-            $fileName = "TVParaguay-v$newVersionName.apk"
-            $localPath = Join-Path -Path $PSScriptRoot -ChildPath $fileName
-            
-            Write-Host "  [i] Archivo destino: $fileName" -ForegroundColor White
-            Write-Host "  [i] URL de descarga: $downloadUrl" -ForegroundColor Gray
-            
-            try {
-                # Descargar con Invoke-WebRequest
-                Invoke-WebRequest -Uri $downloadUrl -OutFile $localPath -UserAgent "Mozilla/5.0" -ErrorAction Stop
-                
-                Write-Host ""
-                Write-Host "==========================================================" -ForegroundColor Green
-                Write-Host " [SUCCESS] APK DESCARGADO CON EXITO!                       " -ForegroundColor Green
-                Write-Host " Ubicacion: $localPath" -ForegroundColor Green
-                Write-Host "==========================================================" -ForegroundColor Green
-                Write-Host ""
-            } catch {
-                # Reintento con WebClient por si da problemas el comando nativo
-                try {
-                    $webClient = New-Object System.Net.WebClient
-                    $webClient.Headers.Add("User-Agent", "Mozilla/5.0")
-                    $webClient.DownloadFile($downloadUrl, $localPath)
-                    
-                    Write-Host ""
-                    Write-Host "==========================================================" -ForegroundColor Green
-                    Write-Host " [SUCCESS] APK DESCARGADO CON EXITO (via WebClient)!       " -ForegroundColor Green
-                    Write-Host " Ubicacion: $localPath" -ForegroundColor Green
-                    Write-Host "==========================================================" -ForegroundColor Green
-                    Write-Host ""
-                } catch {
-                    Write-Host ""
-                    Write-Host "[ERROR] No se pudo descargar el APK automaticamente." -ForegroundColor Red
-                    Write-Host "Detalle del error: $_" -ForegroundColor Yellow
-                    Write-Host "Podes descargarlo manualmente desde:" -ForegroundColor Gray
-                    Write-Host "$downloadUrl" -ForegroundColor Cyan
-                    Write-Host ""
-                }
-            }
-        }
+        # El APK no se descarga localmente para ahorrar espacio de disco.
+        Write-Host "[INFO] El APK se encuentra disponible directamente en el repositorio de GitHub." -ForegroundColor Gray
 
     } else {
         Write-Host ""
