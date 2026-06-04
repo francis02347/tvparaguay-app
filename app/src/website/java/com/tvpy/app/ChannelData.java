@@ -349,6 +349,12 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "Rally TV (Internacional)",
+                "https://rally-tv-live.akamaized.net/hls/live/2117704/RallyTV-Pri/master.m3u8",
+                "🏁", "Deportes", "Internacional",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "RCC TV",
                 "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8?admin=nacion",
                 "🎬", "Entretenimiento", "Paraguay",
