@@ -1,0 +1,21 @@
+# Credenciales y Configuración Local
+bot_config.json
+
+# Archivos de Compilación de Android
+.gradle/
+build/
+app/build/
+*.apk
+capturas/
+
+# Archivos de Configuración del IDE (Android Studio / IntelliJ)
+.idea/
+*.iml
+local.properties
+
+# Archivos Temporales de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/

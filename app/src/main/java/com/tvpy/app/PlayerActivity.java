@@ -232,6 +232,8 @@ public class PlayerActivity extends AppCompatActivity {
         currentIndex = index;
         Channel ch = channelList.get(index);
 
+        LastChannelManager.saveLastChannel(this, ch.getUrl());
+
         hideErrorScreen();
         tvChannelName.setText(ChannelDeduplicator.cleanName(ch.getName()));
 
