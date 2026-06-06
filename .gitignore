@@ -1,5 +1,6 @@
 # Credenciales y Configuración Local
 bot_config.json
+bot_log.txt
 
 # Archivos de Compilación de Android
 .gradle/
