@@ -434,7 +434,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Telefuturo",
-                "https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/media.m3u8?admin=tvaccion",
+                "https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/playlist.m3u8?admin=tvaccion",
                 "🎬", "Entretenimiento", "Paraguay",
                 Color.parseColor("#1C2333")));
 
@@ -548,24 +548,4 @@ public class ChannelData {
 
         return channels;
     }
-
-    // =====================================================
-    //  URLS ALTERNATIVAS (duplicados ocultos)
-    //  Descomentá cualquiera para usarla en su lugar
-    // =====================================================
-    //
-    // Farra Play (720p - alternativa):
-    //   http://159.203.148.226/live/farra.m3u8
-    //
-    // Gen (alternativa peer):
-    //   https://gentvpeer.desdeparaguay.net/gentvpeer/gentv_py_alta/master.m3u8
-    //
-    // Nanduti (baja calidad - alternativa):
-    //   https://copacogen.desdeparaguay.net/nandutitv/nandutitv_baja/index.m3u8
-    //
-    // Paraguay TV (alternativa):
-    //   http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/118.m3u8
-    //
-    // SNT (alternativa mediatiquestream):
-    //   https://alba-py-snt-snt.stream.mediatiquestream.com/index.m3u8
 }

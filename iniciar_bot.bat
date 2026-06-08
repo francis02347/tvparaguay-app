@@ -5,9 +5,9 @@ set PYTHONIOENCODING=utf-8
 echo ==================================================
 echo       INICIANDO BOT DE DESARROLLO REMOTO         
 echo ==================================================
-powershell -Command "Get-CimInstance Win32_Process -Filter \"CommandLine like '%%telegram_developer_bot.py%%'\" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }" >nul 2>&1
-powershell -Command "Get-CimInstance Win32_Process -Filter \"CommandLine like '%%actualizar.ps1%%'\" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }" >nul 2>&1
-timeout /t 1 >nul
+type nul | powershell -NoProfile -NonInteractive -Command "Get-CimInstance Win32_Process -Filter \"CommandLine like '%%telegram_developer_bot.py%%'\" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }" >nul 2>&1
+type nul | powershell -NoProfile -NonInteractive -Command "Get-CimInstance Win32_Process -Filter \"CommandLine like '%%actualizar.ps1%%'\" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }" >nul 2>&1
+ping 127.0.0.1 -n 2 >nul
 
 echo.
 echo Iniciando el bot en segundo plano. Por favor, espera...
@@ -21,7 +21,7 @@ wscript.exe start_detached.vbs
 :: Bucle de espera y verificación (máximo 15 segundos)
 set "success=0"
 for /l %%i in (1,1,30) do (
-    timeout /t 1 >nul
+    ping 127.0.0.1 -n 2 >nul
     if exist bot_log.txt (
         findstr /c:"Listo para nuevos mensajes" bot_log.txt >nul
         if not errorlevel 1 (

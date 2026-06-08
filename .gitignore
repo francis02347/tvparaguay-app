@@ -1,6 +1,7 @@
 # Credenciales y Configuración Local
 bot_config.json
 bot_log.txt
+session_history_*.json
 
 # Archivos de Compilación de Android
 .gradle/
@@ -20,3 +21,15 @@ __pycache__/
 *.pyo
 *.pyd
 .pytest_cache/
+
+# Dependencias y compilaciones de Node.js / Electron (Reloj de Escritorio)
+node_modules/
+dist/
+package-lock.json
+package.json
+main.js
+app.js
+index.html
+style.css
+electron-app/
+reloj_backup/

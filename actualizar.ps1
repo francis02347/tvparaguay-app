@@ -73,7 +73,7 @@ if ($Auto) {
     if ($userInput -eq "N" -or $userInput -eq "n") {
         Write-Host "[INFO] Proceso cancelado por el usuario." -ForegroundColor Red
         exit
-    } elseif ($userInput -eq "S" -or $userInput -eq "s" -or $userInput -eq "") {
+    } elseif ([string]::IsNullOrEmpty($userInput) -or $userInput -eq "S" -or $userInput -eq "s") {
         $newVersionName = $suggestedVersionName
     } else {
         $newVersionName = $userInput.Trim()

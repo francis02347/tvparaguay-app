@@ -4,6 +4,7 @@ import android.animation.AnimatorInflater;
 import android.net.Uri;
 import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -127,7 +128,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         // Botones
         View btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> onBackPressed());
+        btnBack.setOnClickListener(v -> finishAndGoHome());
         btnBack.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 v.animate().scaleX(1.2f).scaleY(1.2f).setDuration(150).start();
@@ -187,6 +188,13 @@ public class PlayerActivity extends AppCompatActivity {
         if (!channelList.isEmpty()) loadChannel(currentIndex);
     }
 
+    private void finishAndGoHome() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
+    }
+
     // ─── ExoPlayer ────────────────────────────────────────────────────────────
 
     private void setupPlayer() {
@@ -211,8 +219,6 @@ public class PlayerActivity extends AppCompatActivity {
                 } else if (state == Player.STATE_ENDED) {
                     loadChannel(currentIndex);
                 } else if (state == Player.STATE_IDLE) {
-                    // STATE_IDLE después de un error ya es manejado por onPlayerError,
-                    // pero si llegamos aquí sin error previo, ocultamos el spinner.
                     hideLoading();
                 }
             }
@@ -241,10 +247,6 @@ public class PlayerActivity extends AppCompatActivity {
         showChannelOverlay(ch, index);
         updateFavoriteButton(ch.getUrl());
 
-        // Sanitizar la URL antes de pasarla a ExoPlayer.
-        // Algunas URLs de listas M3U de países tienen esquemas no soportados
-        // (pipe://, vacías, con parámetros |Key=Value), lo que lanza
-        // IllegalArgumentException que no es capturada por onPlayerError.
         String rawUrl = ch.getUrl();
         if (rawUrl == null) rawUrl = "";
 
@@ -269,12 +271,10 @@ public class PlayerActivity extends AppCompatActivity {
             return;
         }
 
-        // Configurar cabeceras dinámicas en la fábrica de origen de datos
         if (dataSourceFactory != null) {
             dataSourceFactory.setHeaders(headers);
         }
 
-        // Verificar que sea un esquema soportado por ExoPlayer
         boolean validScheme = cleanUrl.startsWith("http://")
                 || cleanUrl.startsWith("https://")
                 || cleanUrl.startsWith("rtmp://")
@@ -344,7 +344,6 @@ public class PlayerActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                // If resolution fails
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -375,8 +374,6 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
-    // ─── Favorito ─────────────────────────────────────────────────────────────
-
     private void toggleFavorite() {
         if (channelList == null || currentIndex >= channelList.size()) return;
         String url = channelList.get(currentIndex).getUrl();
@@ -388,8 +385,6 @@ public class PlayerActivity extends AppCompatActivity {
         boolean isFav = FavoriteStore.isFavorite(this, url);
         btnFavorite.setText(isFav ? "❤️" : "🤍");
     }
-
-    // ─── Spinner de puntos ───────────────────────────────────────────────────
 
     private void showLoading() {
         loadingContainer.setVisibility(View.VISIBLE);
@@ -404,8 +399,6 @@ public class PlayerActivity extends AppCompatActivity {
         dot1.setTranslationY(0); dot2.setTranslationY(0); dot3.setTranslationY(0);
         dot1.setAlpha(1f); dot2.setAlpha(1f); dot3.setAlpha(1f);
     }
-
-    // ─── Pantalla completa ───────────────────────────────────────────────────
 
     private void enterImmersiveMode() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -423,8 +416,6 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
-    // ─── Barra superior ──────────────────────────────────────────────────────
-
     private void toggleTopBar() {
         if (topBar.getVisibility() == View.VISIBLE) hideTopBarNow();
         else showTopBarBriefly();
@@ -434,7 +425,6 @@ public class PlayerActivity extends AppCompatActivity {
         if (hideTopBarRunnable != null) handler.removeCallbacks(hideTopBarRunnable);
         topBar.setVisibility(View.VISIBLE);
         topBar.animate().alpha(1f).setDuration(200).start();
-        // Actualizar corazón cada vez que se muestra la barra
         if (channelList != null && currentIndex < channelList.size()) {
             updateFavoriteButton(channelList.get(currentIndex).getUrl());
         }
@@ -447,8 +437,6 @@ public class PlayerActivity extends AppCompatActivity {
         topBar.animate().alpha(0f).setDuration(400)
             .withEndAction(() -> topBar.setVisibility(View.GONE)).start();
     }
-
-    // ─── Panel lateral ───────────────────────────────────────────────────────
 
     private void showSidePanel() {
         if (sidePanel != null) {
@@ -494,8 +482,6 @@ public class PlayerActivity extends AppCompatActivity {
         return sidePanel != null && sidePanel.getVisibility() == View.VISIBLE;
     }
 
-    // ─── Navegación ──────────────────────────────────────────────────────────
-
     private void navigateToChannel(int index) {
         if (channelList == null || channelList.isEmpty()) return;
         if (index < 0) index = channelList.size() - 1;
@@ -503,8 +489,6 @@ public class PlayerActivity extends AppCompatActivity {
         currentIndex = index;
         loadChannel(currentIndex);
     }
-
-    // ─── Error screen ────────────────────────────────────────────────────────
 
     private void showErrorScreen(String name) {
         hideLoading();
@@ -517,8 +501,6 @@ public class PlayerActivity extends AppCompatActivity {
     private void hideErrorScreen() {
         errorScreen.setVisibility(View.GONE);
     }
-
-    // ─── Overlay de canal ────────────────────────────────────────────────────
 
     private void showChannelOverlay(Channel ch, int index) {
         if (hideOverlayRunnable != null) handler.removeCallbacks(hideOverlayRunnable);
@@ -539,8 +521,6 @@ public class PlayerActivity extends AppCompatActivity {
         handler.postDelayed(hideOverlayRunnable, OVERLAY_DURATION_MS);
     }
 
-    // ─── Ciclo de vida ───────────────────────────────────────────────────────
-
     @Override
     public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
         if (isSidePanelVisible()) {
@@ -549,6 +529,11 @@ public class PlayerActivity extends AppCompatActivity {
                 return true;
             }
             return super.onKeyDown(keyCode, event);
+        }
+
+        if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+            finishAndGoHome();
+            return true;
         }
 
         switch (keyCode) {
@@ -587,7 +572,7 @@ public class PlayerActivity extends AppCompatActivity {
         if (isSidePanelVisible()) {
             hideSidePanel();
         } else {
-            super.onBackPressed();
+            finishAndGoHome();
         }
     }
 

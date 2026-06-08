@@ -41,8 +41,103 @@ ALLOWED_CHAT_ID = int(config["ALLOWED_CHAT_ID"])
 GEMINI_KEY = config["GEMINI_API_KEY"]
 GEMINI_MODEL = "gemini-3.1-flash-lite"  # Modelo rápido, eficiente y con amplia ventana de contexto
 
-# Diccionario en memoria para almacenar el historial de chat de cada sesión
+# Diccionario en memoria para almacenar la sesión activa de cada chat
 sessions = {}
+
+def get_session_file(chat_id):
+    return f"session_history_{chat_id}.json"
+
+def load_session(chat_id):
+    filename = get_session_file(chat_id)
+    default_dir = os.getcwd()
+    if os.path.exists(filename):
+        try:
+            with open(filename, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    history = data.get("history", [])
+                    cwd = data.get("current_working_dir", default_dir)
+                    print(f"[*] Sesión para {chat_id} cargada desde disco ({len(history)} turnos, cwd: {cwd}).")
+                    return {"history": history, "current_working_dir": cwd}
+                elif isinstance(data, list):
+                    print(f"[*] Historial para {chat_id} cargado (formato antiguo) ({len(data)} turnos).")
+                    return {"history": data, "current_working_dir": default_dir}
+        except Exception as e:
+            print(f"[-] Error al cargar sesión desde disco: {e}")
+    return {"history": [], "current_working_dir": default_dir}
+
+def save_session(chat_id):
+    if chat_id not in sessions:
+        return
+    try:
+        filename = get_session_file(chat_id)
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(sessions[chat_id], f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"[-] Error al guardar sesión en disco: {e}")
+
+def save_session_history(chat_id, history):
+    if chat_id not in sessions:
+        sessions[chat_id] = {"history": history, "current_working_dir": os.getcwd()}
+    else:
+        sessions[chat_id]["history"] = history
+    save_session(chat_id)
+
+def load_session_history(chat_id):
+    sessions[chat_id] = load_session(chat_id)
+    return sessions[chat_id]["history"]
+
+def get_session_cwd(chat_id):
+    if chat_id not in sessions:
+        sessions[chat_id] = load_session(chat_id)
+    return sessions[chat_id].get("current_working_dir", os.getcwd())
+
+def get_session_path(path, chat_id):
+    cwd = get_session_cwd(chat_id)
+    if not path:
+        return cwd
+    if os.path.isabs(path):
+        return os.path.abspath(path)
+    return os.path.abspath(os.path.join(cwd, path))
+
+REGISTRY_FILE = "projects_registry.json"
+
+def load_projects_registry():
+    default_registry = {
+        "tv": os.path.abspath(os.getcwd()),
+        "tvparaguay": os.path.abspath(os.getcwd()),
+        "reloj": "C:\\Users\\Francisco\\OneDrive\\Reloj",
+        "clock": "C:\\Users\\Francisco\\OneDrive\\Reloj"
+    }
+    if os.path.exists(REGISTRY_FILE):
+        try:
+            with open(REGISTRY_FILE, "r", encoding="utf-8") as f:
+                registry = json.load(f)
+                if isinstance(registry, dict):
+                    # Combinar con los valores predeterminados para asegurar que la app de TV esté registrada
+                    for k, v in default_registry.items():
+                        if k not in registry:
+                            registry[k] = v
+                    return registry
+        except Exception as e:
+            print(f"[-] Error al cargar registro de proyectos: {e}")
+    return default_registry
+
+def save_projects_registry(registry):
+    try:
+        with open(REGISTRY_FILE, "w", encoding="utf-8") as f:
+            json.dump(registry, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"[-] Error al guardar registro de proyectos: {e}")
+
+def register_project(name, path):
+    if not name or not path:
+        return
+    registry = load_projects_registry()
+    clean_name = name.lower().strip()
+    registry[clean_name] = os.path.abspath(path)
+    save_projects_registry(registry)
+    print(f"[*] Proyecto registrado: '{clean_name}' -> '{path}'")
 
 # Definición de herramientas para la API de Gemini
 GEMINI_TOOLS = [{
@@ -165,6 +260,32 @@ GEMINI_TOOLS = [{
                 },
                 "required": ["query"]
             }
+        },
+        {
+            "name": "change_working_directory",
+            "description": "Changes the current working directory for the active session (e.g. to switch to a different project).",
+            "parameters": {
+                "type": "OBJECT",
+                "properties": {
+                    "new_path": {
+                        "type": "STRING",
+                        "description": "The absolute physical path to the new working directory (e.g., 'C:/Users/Francisco/OneDrive/Reloj')."
+                    },
+                    "project_name": {
+                        "type": "STRING",
+                        "description": "Optional name or keyword for the project (e.g. 'reloj', 'tv') to register it for future quick switches."
+                    }
+                },
+                "required": ["new_path"]
+            }
+        },
+        {
+            "name": "get_registered_projects",
+            "description": "Returns a dictionary mapping registered project names/keywords to their absolute directory paths on the user's computer.",
+            "parameters": {
+                "type": "OBJECT",
+                "properties": {}
+            }
         }
     ]
 }]
@@ -172,16 +293,20 @@ GEMINI_TOOLS = [{
 SYSTEM_INSTRUCTION = {
     "parts": [{
         "text": """You are an AI coding assistant running locally on the user's computer as a Telegram bot. 
-Your goal is to help the user manage their Android application project, make changes to code, run terminal commands (such as git, gradlew, gradle, python scripts), and send files (like compiled APKs) back to the user.
+Your goal is to help the user manage their projects (Android apps, Electron, web, etc.), make changes to code, run terminal commands, and send compiled files back.
 
 Rules:
-1. Always be precise when modifying files. Read a file first to understand its contents before writing changes.
-2. When the user asks to compile or build the app, execute the appropriate command (usually 'gradlew assembleDebug' or 'gradlew.bat' on Windows) and then, when completed, use the 'send_file_to_user' tool to send the generated APK. In Android projects, the debug APK is typically generated at: 'app/build/outputs/apk/debug/app-debug.apk'.
-3. Always explain what you did or what tools you ran in your final response.
+1. BE PROACTIVE AND AUTONOMOUS: When the user asks you to do a task or suggests an action, do NOT ask for permission, propose plans for approval, or wait for the user to confirm. Do NOT ask the user to manually perform actions that you can execute yourself using your tools (such as list_directory, read_file, write_file, execute_command, search_text, etc.). Do them automatically.
+2. Avoid conversational loops. Do not explain what you are 'going to do'—just call the tools to do it and then report the results.
+3. Always be precise when modifying files. Read a file first to understand its contents before writing changes.
 4. Keep your responses concise and in Spanish, as the user speaks Spanish.
-5. If a command fails, report the error and try to debug it.
-6. Only call tools when necessary. If the user's request is purely conversational, reply directly without calling any tools.
-7. Use function calling to inspect files, edit them, run commands, and send files back. Keep looping until the task is complete.
+5. If a command fails, report the error and try to debug it autonomously by calling tools.
+6. Use function calling to inspect files, edit them, run commands, and send files back. Keep looping until the task is complete.
+7. DISPLAY CODE CONTENT: If the user asks for the contents of a file (like 'dame el contenido de X' or 'pásame el contenido de Y'), you MUST read the file using the read_file tool first, and then output its COMPLETE content inside an appropriate Markdown code block in your response. Do not truncate the code, do not explain it unless asked, and do not just give installation instructions without the code itself. Also, IF YOU CREATE OR MODIFY A FILE (using the write_file tool), you MUST automatically output the file's COMPLETE updated content inside an appropriate Markdown code block in your response, so the user doesn't have to ask for it separately.
+8. INTERACTIVE STEP-BY-STEP GUIDANCE FOR MANUAL ACTIONS: If a task strictly requires the user to perform a manual action (e.g., setting up a browser extension, physically connecting a device, etc.), do NOT flood the user with all steps at once. Explain ONLY the first step, ask the user if they have finished it, and wait for their confirmation/response before providing the next step. Guide them step-by-step interactively.
+9. PHYSICAL FOLDER PATHS: Whenever you start, create, or configure a new project, you MUST explicitly tell the user the exact physical directory path on their PC where the new project folder was created.
+10. SPATIAL AWARENESS & SWITCHING PROJECTS: If the user changes the topic to a different project or app (for example, switching from the TV app to the desktop clock, or vice-versa), you MUST look up the project's path. First, check your registered projects list using get_registered_projects(). If the project is registered, immediately call change_working_directory to switch to its path. If it is NOT registered, ask the user for the path once (or search the hard drive if appropriate), then call change_working_directory passing both the new_path and the project_name (e.g. 'reloj') to register it for all future conversations.
+11. AUTOMATIC COMPILATION & UPLOADS: When you finish making code modifications to a project (e.g., using write_file), you MUST automatically compile or build the project (e.g. running 'gradlew assembleDebug' for Android or 'npm run build' for web/Electron) to verify that the changes build correctly, without waiting for the user to ask you to do so. If you need to upload/publish the update to GitHub, you MUST always call `powershell -File actualizar.ps1 -Auto` (the `-Auto` switch prevents interactive blocking and ensures version numbers are bumped correctly) to build and release the app to GitHub automatically.
 """
     }]
 }
@@ -224,15 +349,49 @@ def send_document(chat_id, file_path):
 def handle_function_call(name, args, chat_id):
     print(f"[*] Ejecutando herramienta: {name} con argumentos: {args}")
     
-    # Resolver ruta absoluta y validar que esté en el directorio de trabajo (seguridad básica)
-    cwd = os.getcwd()
+    # Obtener el directorio de trabajo dinámico de esta sesión
+    cwd = get_session_cwd(chat_id)
     
-    if name == "list_directory":
+    if name == "change_working_directory":
+        new_path = args.get("new_path")
+        project_name = args.get("project_name")
+        send_message(chat_id, f"📂 *Cambiando directorio de trabajo a:* `{new_path}`...")
+        try:
+            real_path = os.path.abspath(new_path)
+            if not os.path.exists(real_path):
+                # Crear el directorio si no existe (por ejemplo, para nuevos proyectos)
+                os.makedirs(real_path, exist_ok=True)
+                send_message(chat_id, f"✨ Se ha creado la nueva carpeta en: `{real_path}`")
+            
+            # Actualizar la sesión
+            if chat_id not in sessions:
+                sessions[chat_id] = load_session(chat_id)
+            sessions[chat_id]["current_working_dir"] = real_path
+            save_session(chat_id)
+            
+            # Registrar el proyecto si se indicó un nombre
+            if project_name:
+                register_project(project_name, real_path)
+                send_message(chat_id, f"📌 Proyecto registrado para futuras búsquedas rápidas: *'{project_name}'* ➔ `{real_path}`")
+            
+            return {
+                "status": "success",
+                "message": f"Directorio de trabajo cambiado con éxito a '{real_path}'."
+            }
+        except Exception as e:
+            return {"error": str(e)}
+
+    elif name == "get_registered_projects":
+        try:
+            registry = load_projects_registry()
+            return {"registered_projects": registry}
+        except Exception as e:
+            return {"error": str(e)}
+
+    elif name == "list_directory":
         dir_path = args.get("dir_path", ".")
         send_message(chat_id, f"📁 *Listando directorio:* `{dir_path}`...")
-        real_path = os.path.abspath(dir_path)
-        if not real_path.startswith(cwd):
-            return {"error": "Acceso denegado. No puedes listar directorios fuera de la raíz del proyecto."}
+        real_path = get_session_path(dir_path, chat_id)
         try:
             items = []
             for item in os.listdir(real_path):
@@ -248,13 +407,11 @@ def handle_function_call(name, args, chat_id):
     elif name == "read_file":
         file_path = args.get("file_path")
         send_message(chat_id, f"📖 *Leyendo archivo:* `{file_path}`...")
-        real_path = os.path.abspath(file_path)
-        if not real_path.startswith(cwd):
-            return {"error": "Acceso denegado. No puedes leer archivos fuera de la raíz del proyecto."}
+        real_path = get_session_path(file_path, chat_id)
         try:
             # Limitar lectura a 150KB para evitar exceder el límite de tokens
             if not os.path.exists(real_path):
-                return {"error": f"El archivo '{file_path}' no existe."}
+                return {"error": f"El archivo '{file_path}' no existe en '{real_path}'."}
             with open(real_path, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read(150000)
             return {"content": content}
@@ -265,9 +422,7 @@ def handle_function_call(name, args, chat_id):
         file_path = args.get("file_path")
         content = args.get("content")
         send_message(chat_id, f"💾 *Guardando cambios en:* `{file_path}`...")
-        real_path = os.path.abspath(file_path)
-        if not real_path.startswith(cwd):
-            return {"error": "Acceso denegado. No puedes modificar archivos fuera de la raíz del proyecto."}
+        real_path = get_session_path(file_path, chat_id)
         try:
             os.makedirs(os.path.dirname(real_path), exist_ok=True)
             with open(real_path, "w", encoding="utf-8") as f:
@@ -280,26 +435,36 @@ def handle_function_call(name, args, chat_id):
         query = args.get("query")
         search_path = args.get("search_path", ".")
         send_message(chat_id, f"🔎 *Buscando texto:* `{query}` en `{search_path}`...")
-        real_path = os.path.abspath(search_path)
-        if not real_path.startswith(cwd):
-            return {"error": "Acceso denegado. No puedes buscar fuera de la raíz del proyecto."}
+        real_path = get_session_path(search_path, chat_id)
         try:
             results = []
-            for root, dirs, files in os.walk(real_path):
-                # Omitir directorios pesados/temporales
-                dirs[:] = [d for d in dirs if d not in (".git", ".gradle", ".idea", "build")]
-                for file in files:
-                    full_path = os.path.join(root, file)
-                    try:
-                        with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
-                            for i, line in enumerate(f, 1):
-                                if query.lower() in line.lower():
-                                    rel_path = os.path.relpath(full_path, cwd)
-                                    results.append({"file": rel_path, "line": i, "content": line.strip()})
-                                    if len(results) >= 30:
-                                        return {"results": results, "note": "Búsqueda limitada a los primeros 30 resultados."}
-                    except:
-                        pass
+            if os.path.isfile(real_path):
+                # Si es un archivo, buscar directamente en él
+                try:
+                    with open(real_path, "r", encoding="utf-8", errors="ignore") as f:
+                        for i, line in enumerate(f, 1):
+                            if query.lower() in line.lower():
+                                rel_path = os.path.relpath(real_path, cwd)
+                                results.append({"file": rel_path, "line": i, "content": line.strip()})
+                except:
+                    pass
+            else:
+                # Si es un directorio, buscar recursivamente
+                for root, dirs, files in os.walk(real_path):
+                    # Omitir directorios pesados/temporales
+                    dirs[:] = [d for d in dirs if d not in (".git", ".gradle", ".idea", "build")]
+                    for file in files:
+                        full_path = os.path.join(root, file)
+                        try:
+                            with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
+                                for i, line in enumerate(f, 1):
+                                    if query.lower() in line.lower():
+                                        rel_path = os.path.relpath(full_path, cwd)
+                                        results.append({"file": rel_path, "line": i, "content": line.strip()})
+                                        if len(results) >= 30:
+                                            return {"results": results, "note": "Búsqueda limitada a los primeros 30 resultados."}
+                        except:
+                            pass
             return {"results": results}
         except Exception as e:
             return {"error": str(e)}
@@ -308,7 +473,7 @@ def handle_function_call(name, args, chat_id):
         command = args.get("command")
         send_message(chat_id, f"⚡ *Ejecutando comando localmente:*\n`{command}`")
         try:
-            # Ejecutar comando en la shell en el directorio actual
+            # Ejecutar comando en la shell en el directorio de la sesión
             process = subprocess.run(
                 command,
                 shell=True,
@@ -334,9 +499,7 @@ def handle_function_call(name, args, chat_id):
 
     elif name == "send_file_to_user":
         file_path = args.get("file_path")
-        real_path = os.path.abspath(file_path)
-        if not real_path.startswith(cwd):
-            return {"error": "Acceso denegado. No puedes enviar archivos fuera del proyecto."}
+        real_path = get_session_path(file_path, chat_id)
         
         # Búsqueda inteligente de APK si no se encuentra exactamente
         if not os.path.exists(real_path) and file_path.endswith(".apk"):
@@ -552,53 +715,71 @@ def sanitize_history(history):
 def query_gemini(chat_id, history):
     clean_history = sanitize_history(history)
     if chat_id in sessions:
-        sessions[chat_id] = clean_history
+        sessions[chat_id]["history"] = clean_history
+    save_session_history(chat_id, clean_history)
         
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_KEY}"
-    payload = {
-        "contents": clean_history,
-        "tools": GEMINI_TOOLS,
-        "systemInstruction": SYSTEM_INSTRUCTION
-    }
+    url_template = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}"
     
-    max_retries = 2
-    for attempt in range(max_retries):
-        try:
-            res = requests.post(url, json=payload, timeout=90)
-            if res.status_code == 200:
-                return res.json(), None
-            elif res.status_code in (503, 504, 429) and attempt < max_retries - 1:
-                print(f"[!] Advertencia: API devolvió {res.status_code}. Reintentando en 5 segundos (intento {attempt+1}/{max_retries})...")
-                time.sleep(5)
+    # Lista de modelos a probar (primero el configurado, luego fallbacks si hay saturación)
+    models_to_try = [
+        GEMINI_MODEL,
+        "gemini-2.0-flash",
+        "gemini-1.5-flash",
+        "gemini-1.5-pro"
+    ]
+    
+    last_error = "No se intentó ningún modelo."
+    
+    for model in models_to_try:
+        url = url_template.format(model=model, key=GEMINI_KEY)
+        payload = {
+            "contents": clean_history,
+            "tools": GEMINI_TOOLS,
+            "systemInstruction": SYSTEM_INSTRUCTION
+        }
+        
+        retries = 3
+        for attempt in range(retries):
+            try:
+                print(f"[*] Consultando modelo {model} (intento {attempt+1}/{retries})...")
+                res = requests.post(url, json=payload, timeout=90)
+                if res.status_code == 200:
+                    return res.json(), None
+                
+                # Si es un error de sobrecarga (503), saturación (429) o gateway (504), esperar y reintentar
+                if res.status_code in (429, 503, 504):
+                    wait_time = (attempt + 1) * 3
+                    print(f"[!] Advertencia: {model} devolvió status {res.status_code}. Reintentando en {wait_time}s...")
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    last_error = f"Error status {res.status_code} en {model}: {res.text}"
+                    print(f"[-] {last_error}")
+                    break
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                wait_time = (attempt + 1) * 3
+                print(f"[!] Error de red/timeout en {model}. Reintentando en {wait_time}s: {e}")
+                time.sleep(wait_time)
                 continue
-            else:
-                err_msg = f"Error de API Gemini (status {res.status_code}): {res.text}"
-                print(f"[-] {err_msg}")
-                return None, err_msg
-        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
-            if attempt < max_retries - 1:
-                print(f"[!] Advertencia: Tiempo de espera agotado o error de conexión ({e}). Reintentando en 5 segundos...")
-                time.sleep(5)
-                continue
-            else:
-                err_msg = f"Error de conexión con la API: {str(e)}"
-                print(f"[-] {err_msg}")
-                return None, err_msg
-        except Exception as e:
-            err_msg = f"Error inesperado al consultar API: {str(e)}"
-            print(f"[-] {err_msg}")
-            return None, err_msg
+            except Exception as e:
+                last_error = f"Error inesperado en {model}: {str(e)}"
+                print(f"[-] {last_error}")
+                break
+        else:
+            last_error = f"Modelo {model} no disponible tras {retries} reintentos."
+            
+    return None, last_error
 
 
 
 def process_chat_message(chat_id, user_text, msg_id, image_data=None):
     print(f"\n[*] Procesando mensaje de {chat_id}: '{user_text}' (tiene imagen: {image_data is not None})")
     
-    # Inicializar sesión si no existe
+    # Inicializar sesión si no existe (cargar desde disco si existe)
     if chat_id not in sessions:
-        sessions[chat_id] = []
+        load_session_history(chat_id)
         
-    session_history = sessions[chat_id]
+    session_history = sessions[chat_id]["history"]
     
     # Agregar mensaje del usuario (soportando imagen si existe)
     if image_data:
@@ -619,12 +800,14 @@ def process_chat_message(chat_id, user_text, msg_id, image_data=None):
             "role": "user",
             "parts": [{"text": user_text}]
         })
+    save_session_history(chat_id, session_history)
     
     # Limitar el historial en memoria para no desbordar tokens
     if len(session_history) > 30:
         # Mantener los últimos 30 elementos
-        sessions[chat_id] = session_history[-30:]
-        session_history = sessions[chat_id]
+        sessions[chat_id]["history"] = session_history[-30:]
+        session_history = sessions[chat_id]["history"]
+        save_session_history(chat_id, session_history)
         
     max_agent_loops = 40
     current_loop = 0
@@ -658,6 +841,7 @@ def process_chat_message(chat_id, user_text, msg_id, image_data=None):
         
         # Guardar la respuesta del modelo en el historial
         session_history.append(content)
+        save_session_history(chat_id, session_history)
         
         # Buscar llamadas a funciones
         function_calls = [p["functionCall"] for p in parts if "functionCall" in p]
@@ -698,6 +882,7 @@ def process_chat_message(chat_id, user_text, msg_id, image_data=None):
             "role": "function",
             "parts": function_response_parts
         })
+        save_session_history(chat_id, session_history)
         
         # En la siguiente iteración del while, se le enviarán las respuestas de las funciones a Gemini
         # para que decida qué hacer a continuación.
