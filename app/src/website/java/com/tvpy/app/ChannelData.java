@@ -512,7 +512,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Unicanal",
-                "dailymotion://k1mHLKycOlKgo3Db5GI",
+                "https://tigocloudgen.desdeparaguay.net/unicanal/unicanal/playlist.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
                 Color.parseColor("#1C2333")));
 

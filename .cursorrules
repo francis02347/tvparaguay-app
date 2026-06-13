@@ -1,0 +1,25 @@
+# Instrucciones de Análisis y Desarrollo para el Asistente de IA
+
+Este archivo contiene las directrices de razonamiento, análisis y buenas prácticas que debe seguir cualquier asistente de IA (bot) que trabaje en esta base de código.
+
+## 1. Proceso de Razonamiento y Análisis
+Antes de escribir cualquier línea de código o sugerir una solución:
+- **Investiga Primero**: Busca en la base de código las referencias a la clase, método o error mencionado.
+- **Identifica la Causa Raíz**: No sugieras soluciones rápidas (parches) sin entender por qué ocurre el error. Investiga si es un error de configuración, de arquitectura, de hilos o de dependencias nativas.
+- **Evita Suposiciones**: Si un error proviene de una biblioteca externa (como `youtubedl-android`), investiga su documentación o problemas conocidos (por ejemplo, en GitHub) antes de intentar implementar soluciones a ciegas.
+
+## 2. Reglas Específicas para este Proyecto (Android con Binarios Nativos)
+Este proyecto utiliza `youtubedl-android`, el cual depende de ejecutables nativos compilados (como `yt-dlp` y `ffmpeg`). Cuando trabajes con este tipo de dependencias:
+- **Extracción de Binarios**: Los binarios nativos deben ser extraídos al sistema de archivos del dispositivo para poder ser ejecutados como subprocesos. Asegúrate siempre de que `android:extractNativeLibs="true"` esté declarado en el `<application>` de `AndroidManifest.xml`.
+- **Compatibilidad de Empaquetado**: Cuando `extractNativeLibs` sea `true`, configura `useLegacyPackaging = true` dentro de `packagingOptions` en `app/build.gradle` para evitar advertencias o errores de compilación con las herramientas de empaquetado de Android.
+- **Ciclo de Vida e Inicialización**: Inicializa las bibliotecas (como `YoutubeDL.getInstance().init(context)`) únicamente **una vez** en el punto de entrada de la aplicación (`App.kt` que hereda de `Application`). Nunca inicialices la biblioteca repetidamente en hilos secundarios o al hacer clic en botones de acción.
+- **Manejo de FFmpeg**: No intentes importar ni inicializar `FFmpeg` de forma manual en el código Kotlin si la versión de la biblioteca que estás usando (como la de `junkfood02`) la maneja internamente.
+
+## 3. Flujo de Trabajo para Modificaciones
+1. **Planifica**: Explica al usuario qué archivos vas a modificar y por qué.
+2. **Modifica con Cuidado**: Mantén los comentarios existentes y respeta el estilo de código del proyecto.
+3. **Verifica la Compilación**: Siempre ejecuta la compilación de la aplicación después de tus cambios para verificar que no haya errores de importación o de sintaxis:
+   ```powershell
+   gradle\bin\gradle.bat assembleDebug
+   ```
+4. **Reporta Resultados**: Informa de forma clara y concisa si la compilación fue exitosa o si hubo fallos.

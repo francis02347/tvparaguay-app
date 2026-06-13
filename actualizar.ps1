@@ -25,14 +25,14 @@ $content = Get-Content $gradlePath -Raw
 $currentVersionCode = $null
 $currentVersionName = $null
 
-if ($content -match 'versionCode\s+(\d+)') {
+if ($content -match 'versionCode\s*=?\s*(\d+)') {
     $currentVersionCode = [int]$Matches[1]
 } else {
     Write-Host "[ERROR] No se pudo extraer el 'versionCode' de build.gradle" -ForegroundColor Red
     exit
 }
 
-if ($content -match 'versionName\s+["'']([^"'']+)["'']') {
+if ($content -match 'versionName\s*=?\s*["'']([^"'']+)["'']') {
     $currentVersionName = $Matches[1]
 } else {
     Write-Host "[ERROR] No se pudo extraer el 'versionName' de build.gradle" -ForegroundColor Red
@@ -42,7 +42,7 @@ if ($content -match 'versionName\s+["'']([^"'']+)["'']') {
 # 4. Calcular versiones sugeridas automaticamente
 $newVersionCode = $currentVersionCode + 1
 
-# Dividir versionName por puntos (ej: "1.1" -> 1 y 1)
+# Dividir versionName por puntos (ej: "1.37" -> 1 y 37)
 $versionParts = $currentVersionName -split '\.'
 if ($versionParts.Count -ge 2) {
     $major = [int]$versionParts[0]
@@ -84,131 +84,189 @@ Write-Host ""
 Write-Host "[INFO] Aplicando cambios en build.gradle..." -ForegroundColor Cyan
 
 # 6. Reemplazar versionCode y versionName en el archivo build.gradle
-$newContent = $content -replace "versionCode\s+$currentVersionCode", "versionCode $newVersionCode"
+$newContent = $content -replace "versionCode\s*=\s*$currentVersionCode", "versionCode = $newVersionCode"
+$newContent = $newContent -replace "versionCode\s+$currentVersionCode", "versionCode $newVersionCode"
+$newContent = $newContent -replace "versionName\s*=\s*['\`"]$currentVersionName['\`"]", "versionName = `"$newVersionName`""
 $newContent = $newContent -replace "versionName\s+['\`"]$currentVersionName['\`"]", "versionName `"$newVersionName`""
 Set-Content -Path $gradlePath -Value $newContent -NoNewLine
 
 Write-Host "[OK] Archivo build.gradle modificado con exito." -ForegroundColor Green
 Write-Host ""
-Write-Host "[INFO] Iniciando comandos de Git..." -ForegroundColor Cyan
-Write-Host ""
 
-# 7. Ejecutar comandos de Git
-Write-Host "[INFO] 1. Agregando archivos al commit (git add .)..." -ForegroundColor Gray
-git add .
-if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error en git add" -ForegroundColor Red; exit }
-
-$commitMessage = "Release version $newVersionName"
-Write-Host "[INFO] 2. Creando commit: `"$commitMessage`"..." -ForegroundColor Gray
-git commit -m $commitMessage
-if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error en git commit" -ForegroundColor Red; exit }
-
-Write-Host "[INFO] 3. Sincronizando cambios desde GitHub (git pull --rebase origin main)..." -ForegroundColor Gray
-git pull --rebase origin main
-if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error al sincronizar cambios desde GitHub." -ForegroundColor Red; exit }
-
-Write-Host "[INFO] 4. Subiendo cambios a GitHub en rama 'main' (git push origin main)..." -ForegroundColor Gray
-git push origin main
-if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error al subir a rama main. Asegurate de tener configurado tu repositorio remoto." -ForegroundColor Red; exit }
-
-$tagName = "v$newVersionName"
-Write-Host "[INFO] 4. Creando etiqueta de version: $tagName..." -ForegroundColor Gray
-git tag $tagName
-if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error en git tag" -ForegroundColor Red; exit }
-
-Write-Host "[INFO] 5. Subiendo etiqueta a GitHub (git push origin $tagName)..." -ForegroundColor Gray
-git push origin $tagName
-if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] Error al subir etiqueta" -ForegroundColor Red; exit }
-
-Write-Host ""
-Write-Host "[OK] El proceso de Git y el envio de cambios han finalizado!" -ForegroundColor Green
-Write-Host ""
-
-# 8. Monitoreo opcional de compilacion en GitHub
-$shouldWait = $false
-if ($Auto) {
-    Write-Host "[AUTO] Esperando compilacion en la nube automaticamente..." -ForegroundColor Green
-    $shouldWait = $true
-} else {
-    $waitConfirm = Read-Host "[?] Deseas esperar a que la compilacion en la nube finalice para recibir una notificacion? (S/N)"
-    if ($waitConfirm -eq "S" -or $waitConfirm -eq "s" -or $waitConfirm -eq "") {
-        $shouldWait = $true
+# 7. Buscar JDK compatible
+if ([string]::IsNullOrEmpty($env:JAVA_HOME) -or -not (Test-Path $env:JAVA_HOME)) {
+    $commonJdks = @(
+        "D:\Android Studio\jbr",
+        "C:\Program Files\Android\Android Studio\jbr",
+        "D:\Android Studio\jre",
+        "C:\Program Files\Android\Android Studio\jre"
+    )
+    foreach ($jdk in $commonJdks) {
+        if (Test-Path $jdk) {
+            $env:JAVA_HOME = $jdk
+            $env:PATH = "$(Join-Path $jdk 'bin');$env:PATH"
+            Write-Host "[INFO] Usando JDK compatible en: $jdk" -ForegroundColor Gray
+            break
+        }
     }
 }
 
-if ($shouldWait) {
-    Write-Host ""
-    Write-Host "[WAIT] Conectando con GitHub Actions para monitorear la compilacion..." -ForegroundColor Cyan
-    Write-Host "Este proceso suele tardar entre 2 y 3 minutos mientras GitHub compila el APK." -ForegroundColor Gray
-    Write-Host "Podes minimizar esta ventana; te avisaremos con una notificacion de Windows al finalizar." -ForegroundColor Gray
-    Write-Host ""
-    Write-Host "Monitoreando" -NoNewline -ForegroundColor Cyan
+# 8. Compilar APK localmente
+Write-Host "[INFO] Iniciando compilacion local de la version Website..." -ForegroundColor Cyan
+$gradleExe = "./gradlew.bat"
+if (-not (Test-Path $gradleExe)) {
+    $gradleExe = "./gradlew"
+}
+if (-not (Test-Path $gradleExe)) {
+    $gradleExe = "gradle"
+}
 
-    $released = $false
-    $attempts = 0
-    $maxAttempts = 24
-    $apiUrl = "https://api.github.com/repos/francis02347/tvparaguay-app/releases/tags/$tagName"
+& $gradleExe assembleWebsiteRelease
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] La compilacion local ha fallado. Revisa los errores." -ForegroundColor Red
+    exit
+}
+Write-Host "[OK] Compilacion completada con exito." -ForegroundColor Green
+Write-Host ""
 
-    while (-not $released -and $attempts -lt $maxAttempts) {
-        Start-Sleep -Seconds 10
-        $attempts++
-        Write-Host "." -NoNewline -ForegroundColor Cyan
-        try {
-            $headers = @{ "User-Agent" = "Mozilla/5.0" }
-            $res = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method Get -ErrorAction Stop
-            if ($res -and $res.assets -and $res.assets.Count -gt 0) {
-                $released = $true
-            }
-        } catch {
-            # 404 es normal mientras compila
+# 9. Encontrar el archivo APK compilado
+$apkPath = "app/build/outputs/apk/website/release/app-website-release.apk"
+if (-not (Test-Path $apkPath)) {
+    $apkPath = Get-ChildItem -Path app/build -Filter *website-release*.apk -Recurse | Select-Object -First 1 -ExpandProperty FullName
+}
+if (-not $apkPath -or -not (Test-Path $apkPath)) {
+    $apkPath = Get-ChildItem -Path app/build -Filter *.apk -Recurse | Select-Object -First 1 -ExpandProperty FullName
+}
+if (-not $apkPath -or -not (Test-Path $apkPath)) {
+    Write-Host "[ERROR] No se pudo encontrar el archivo APK compilado." -ForegroundColor Red
+    exit
+}
+Write-Host "[INFO] APK encontrado en: $apkPath" -ForegroundColor Gray
+Write-Host ""
+
+# 10. Buscar token de GitHub
+$githubToken = $env:GITHUB_TOKEN
+if ([string]::IsNullOrEmpty($githubToken)) {
+    # Intentar buscar en bot_config.json en directorios conocidos
+    $pathsToTry = @(
+        "bot_config.json",
+        "../bot_config.json",
+        "../../bot_config.json",
+        "../Antigravity_Proyectos/TV Paraguay/bot_config.json",
+        "D:/Antigravity_Proyectos/TV Paraguay/bot_config.json",
+        "C:/Users/Francisco/OneDrive/Reloj/bot_config.json"
+    )
+    foreach ($p in $pathsToTry) {
+        if (Test-Path $p) {
+            try {
+                $json = Get-Content $p -Raw | ConvertFrom-Json
+                if ($json.GITHUB_TOKEN) {
+                    $githubToken = $json.GITHUB_TOKEN
+                    break
+                }
+            } catch {}
         }
     }
+}
 
-    Write-Host ""
-    if ($released) {
-        Write-Host ""
-        Write-Host "==========================================================" -ForegroundColor Green
-        Write-Host " [SUCCESS] ACTUALIZACION PUBLICADA EXITOSAMENTE EN LA NUBE " -ForegroundColor Green
-        Write-Host " La version v$newVersionName ya esta disponible para tu TV." -ForegroundColor Green
-        Write-Host "==========================================================" -ForegroundColor Green
-        Write-Host ""
-
-        # Reproducir sonido de notificacion
-        try {
-            [System.Media.SystemSounds]::Asterisk.Play()
-        } catch {}
-
+if ([string]::IsNullOrEmpty($githubToken) -or $githubToken -eq "TU_GITHUB_TOKEN_AQUI") {
+    Write-Host "[WARNING] No se encontro GITHUB_TOKEN. Solo se guardaran los cambios locales." -ForegroundColor Yellow
+} else {
+    Write-Host "[INFO] Creando Release en GitHub y subiendo APK..." -ForegroundColor Cyan
+    
+    $owner = "francis02347"
+    $repo = "tvparaguay-app"
+    $tagName = "v$newVersionName"
+    
+    # Git commit de los cambios de version en build.gradle
+    Write-Host "[INFO] Registrando cambios de version en Git local..." -ForegroundColor Gray
+    git add app/build.gradle
+    git commit -m "Version bump to $newVersionName [skip ci]"
+    git push origin main
+    
+    # Crear etiqueta y subirla
+    Write-Host "[INFO] Etiquetando como $tagName..." -ForegroundColor Gray
+    git tag -d $tagName 2>$null
+    git tag $tagName
+    git push origin :refs/tags/$tagName 2>$null
+    git push origin $tagName
+    
+    # 1. Crear el Release en GitHub
+    $headers = @{
+        "Authorization" = "Bearer $githubToken"
+        "Accept"        = "application/vnd.github.v3+json"
+        "User-Agent"    = "PowerShell-Release-Script"
+    }
+    
+    $releaseBody = @{
+        "tag_name"         = $tagName
+        "target_commitish" = "main"
+        "name"             = "Release $tagName"
+        "body"             = "Release automatizada de la version $newVersionName"
+        "draft"            = $false
+        "prerelease"       = $false
+    } | ConvertTo-Json
+    
+    $releaseUrl = "https://api.github.com/repos/$owner/$repo/releases"
+    try {
+        $releaseResponse = Invoke-RestMethod -Uri $releaseUrl -Headers $headers -Method Post -Body $releaseBody -ContentType "application/json"
+        $releaseId = $releaseResponse.id
+        Write-Host "[OK] Release creada en GitHub (ID: $releaseId)." -ForegroundColor Green
+        
+        # 2. Subir el APK como asset a la release
+        Write-Host "[INFO] Subiendo APK a la Release..." -ForegroundColor Cyan
+        $uploadUrl = "https://uploads.github.com/repos/$owner/$repo/releases/$releaseId/assets?name=app-website-release.apk"
+        
+        # Leer los bytes del APK
+        $fileBytes = [System.IO.File]::ReadAllBytes($apkPath)
+        
+        $uploadHeaders = @{
+            "Authorization" = "Bearer $githubToken"
+            "Accept"        = "application/vnd.github.v3+json"
+            "User-Agent"    = "PowerShell-Release-Script"
+        }
+        
+        $uploadResponse = Invoke-RestMethod -Uri $uploadUrl -Headers $uploadHeaders -Method Post -Body $fileBytes -ContentType "application/vnd.android.package-archive"
+        $downloadUrl = $uploadResponse.browser_download_url
+        Write-Host "[OK] APK subida correctamente: $downloadUrl" -ForegroundColor Green
+        
+        # 3. Actualizar update.json
+        Write-Host "[INFO] Actualizando update.json..." -ForegroundColor Cyan
+        $updateJsonPath = "update.json"
+        
+        $updateInfo = [PSCustomObject]@{
+            versionCode = [int]$newVersionCode
+            versionName = $newVersionName
+            apkUrl = $downloadUrl
+            releaseNotes = "Actualización automática de la versión completa (sabor web) construida para la versión $tagName."
+        }
+        
+        $updateInfo | ConvertTo-Json -Depth 5 | Set-Content -Path $updateJsonPath
+        
+        # Subir update.json a GitHub
+        Write-Host "[INFO] Subiendo update.json a GitHub..." -ForegroundColor Gray
+        git add update.json
+        git commit -m "chore: auto-update update.json to $newVersionName [skip ci]"
+        git push origin main
+        Write-Host "[OK] Proceso finalizado. update.json actualizado en GitHub con exito." -ForegroundColor Green
+        
         # Lanzar Notificacion de Windows Nativa (Balloon Tip)
         try {
             Add-Type -AssemblyName System.Windows.Forms
             Add-Type -AssemblyName System.Drawing
             $notify = New-Object System.Windows.Forms.NotifyIcon
             $notify.Icon = [System.Drawing.SystemIcons]::Information
-            $notify.BalloonTipTitle = "TVParaguay - Version publicada!"
-            $notify.BalloonTipText = "La version $newVersionName ya esta publicada en GitHub y lista para descargar en tu TV."
+            $notify.BalloonTipTitle = "TVParaguay - Publicada!"
+            $notify.BalloonTipText = "La version $newVersionName ya esta publicada en GitHub y lista para descargar."
             $notify.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
             $notify.Visible = $true
             $notify.ShowBalloonTip(8000)
-            
             Start-Sleep -Seconds 2
             $notify.Dispose()
         } catch {}
-
-        # El APK no se descarga localmente para ahorrar espacio de disco.
-        Write-Host "[INFO] El APK se encuentra disponible directamente en el repositorio de GitHub." -ForegroundColor Gray
-
-    } else {
-        Write-Host ""
-        Write-Host "[WARN] La compilacion esta tardando mas de lo habitual en la nube." -ForegroundColor Yellow
-        Write-Host "Se agoto el tiempo de espera del script, pero podes seguir el estado en la web:" -ForegroundColor Gray
-        Write-Host "https://github.com/francis02347/tvparaguay-app/actions" -ForegroundColor Cyan
-        Write-Host ""
+        
+    } catch {
+        Write-Host "[ERROR] Fallo al crear la Release o subir la APK a GitHub:" -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor Red
     }
-} else {
-    Write-Host ""
-    Write-Host "==========================================================" -ForegroundColor Green
-    Write-Host " [OK] Los cambios locales y etiquetas han sido subidos!    " -ForegroundColor Green
-    Write-Host " GitHub continuara compilando tu APK en segundo plano.    " -ForegroundColor Green
-    Write-Host "==========================================================" -ForegroundColor Green
-    Write-Host ""
 }

@@ -39,6 +39,7 @@ config = load_config()
 BOT_TOKEN = config["TELEGRAM_BOT_TOKEN"]
 ALLOWED_CHAT_ID = int(config["ALLOWED_CHAT_ID"])
 GEMINI_KEY = config["GEMINI_API_KEY"]
+GITHUB_TOKEN = config.get("GITHUB_TOKEN", None)
 GEMINI_MODEL = "gemini-3.1-flash-lite"  # Modelo rápido, eficiente y con amplia ventana de contexto
 
 # Diccionario en memoria para almacenar la sesión activa de cada chat
@@ -99,6 +100,64 @@ def get_session_path(path, chat_id):
     if os.path.isabs(path):
         return os.path.abspath(path)
     return os.path.abspath(os.path.join(cwd, path))
+
+def find_compatible_jdk():
+    # 1. Buscar en el registro de Windows el path de instalación de Android Studio
+    try:
+        import winreg
+        for hive in (winreg.HKEY_LOCAL_MACHINE, winreg.HKEY_CURRENT_USER):
+            for key_path in (r"Software\Android Studio", r"Software\WOW6432Node\Android Studio"):
+                try:
+                    with winreg.OpenKey(hive, key_path) as key:
+                        path, _ = winreg.QueryValueEx(key, "Path")
+                        if path:
+                            for sub in ("jbr", "jre"):
+                                full_path = os.path.join(path, sub)
+                                if os.path.exists(full_path):
+                                    return os.path.abspath(full_path)
+                except FileNotFoundError:
+                    continue
+    except Exception as e:
+        print(f"[-] Error al buscar JDK en el registro: {e}")
+        
+    # 2. Rutas comunes predefinidas
+    common_paths = [
+        r"C:\Program Files\Android\Android Studio\jbr",
+        r"C:\Program Files\Android\Android Studio\jre",
+        r"D:\Android Studio\jbr",
+        r"D:\Android Studio\jre",
+    ]
+    for path in common_paths:
+        if os.path.exists(path):
+            return os.path.abspath(path)
+            
+    return None
+
+def find_android_sdk():
+    # 1. Verificar si ANDROID_HOME ya está establecido en el entorno
+    if "ANDROID_HOME" in os.environ and os.path.exists(os.environ["ANDROID_HOME"]):
+        return os.environ["ANDROID_HOME"]
+        
+    # 2. Rutas comunes en Windows
+    username = os.environ.get("USERNAME")
+    common_paths = []
+    if username:
+        common_paths.append(rf"C:\Users\{username}\AppData\Local\Android\Sdk")
+        common_paths.append(rf"C:\Users\{username}\AppData\Local\Android\sdk")
+    common_paths.extend([
+        r"C:\Android\Sdk",
+        r"C:\Android\sdk",
+        r"D:\Android\Sdk",
+        r"D:\Android\sdk",
+        r"C:\Program Files\Android\Android Studio\sdk",
+        r"D:\Android Studio\sdk",
+    ])
+    
+    for path in common_paths:
+        if os.path.exists(path):
+            return os.path.abspath(path)
+            
+    return None
 
 REGISTRY_FILE = "projects_registry.json"
 
@@ -221,7 +280,7 @@ GEMINI_TOOLS = [{
         },
         {
             "name": "send_file_to_user",
-            "description": "Sends a file (e.g. an APK, log, or image) from the local machine back to the user's Telegram chat.",
+            "description": "Sends a file (e.g. an APK, log, or image) from the local machine back to the user. If the file is larger than 50MB (like a large APK), the tool will automatically upload it to a fast, direct download link and send it. ALWAYS use this tool to send requested files.",
             "parameters": {
                 "type": "OBJECT",
                 "properties": {
@@ -286,6 +345,24 @@ GEMINI_TOOLS = [{
                 "type": "OBJECT",
                 "properties": {}
             }
+        },
+        {
+            "name": "create_github_repo",
+            "description": "Creates a new repository on GitHub under the user's account using the GITHUB_TOKEN configured in the bot.",
+            "parameters": {
+                "type": "OBJECT",
+                "properties": {
+                    "repo_name": {
+                        "type": "STRING",
+                        "description": "The name of the repository to create (e.g. 'YouTubeMp3Downloader')."
+                    },
+                    "private": {
+                        "type": "BOOLEAN",
+                        "description": "Whether the repository should be private. Defaults to false."
+                    }
+                },
+                "required": ["repo_name"]
+            }
         }
     ]
 }]
@@ -307,6 +384,8 @@ Rules:
 9. PHYSICAL FOLDER PATHS: Whenever you start, create, or configure a new project, you MUST explicitly tell the user the exact physical directory path on their PC where the new project folder was created.
 10. SPATIAL AWARENESS & SWITCHING PROJECTS: If the user changes the topic to a different project or app (for example, switching from the TV app to the desktop clock, or vice-versa), you MUST look up the project's path. First, check your registered projects list using get_registered_projects(). If the project is registered, immediately call change_working_directory to switch to its path. If it is NOT registered, ask the user for the path once (or search the hard drive if appropriate), then call change_working_directory passing both the new_path and the project_name (e.g. 'reloj') to register it for all future conversations.
 11. AUTOMATIC COMPILATION & UPLOADS: When you finish making code modifications to a project (e.g., using write_file), you MUST automatically compile or build the project (e.g. running 'gradlew assembleDebug' for Android or 'npm run build' for web/Electron) to verify that the changes build correctly, without waiting for the user to ask you to do so. If you need to upload/publish the update to GitHub, you MUST always call `powershell -File actualizar.ps1 -Auto` (the `-Auto` switch prevents interactive blocking and ensures version numbers are bumped correctly) to build and release the app to GitHub automatically.
+12. SENDING LARGE FILES: If the user asks for a file (like 'pásame el APK' or 'envíame el ejecutable') and you know the file is larger than 50MB, do NOT say you cannot send it. You MUST call the 'send_file_to_user' tool, as it is fully capable of automatically uploading files larger than 50MB to a secure download server and delivering the link.
+13. REPLACING DEFECTIVE STREAMING LINKS: If the user asks you to fix or replace a defective streaming link or channel (e.g., Unicanal, Telefuturo, etc.), do NOT give up or assume a working link does not exist. You MUST proactively search the web (using search_web) for candidate M3U8 links. Then, you MUST write and execute a short Python script (via execute_command) to test each collected link with HTTP requests (using short timeouts) to verify which one returns HTTP 200. Once you find a working link, modify the project's source file (like ChannelData.java), compile the project, and publish/send the updated APK to the user.
 """
     }]
 }
@@ -334,9 +413,50 @@ def send_message(chat_id, text, reply_to_message_id=None):
         print(f"[-] Error al enviar mensaje: {e}")
         return {"ok": False}
 
+def upload_to_catbox(file_path):
+    url = "https://catbox.moe/user/api.php"
+    try:
+        print(f"[*] Subiendo '{file_path}' a Catbox...")
+        with open(file_path, "rb") as f:
+            files = {"fileToUpload": f}
+            data = {"reqtype": "fileupload"}
+            res = requests.post(url, data=data, files=files, timeout=600)
+            if res.status_code == 200:
+                link = res.text.strip()
+                print(f"[+] Archivo subido con éxito a Catbox: {link}")
+                return link
+    except Exception as e:
+        print(f"[-] Error al subir a Catbox: {e}")
+    return None
+
 def send_document(chat_id, file_path):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendDocument"
     try:
+        # Verificar tamaño del archivo (el límite de Telegram Bot API es de 50MB)
+        if os.path.exists(file_path):
+            file_size = os.path.getsize(file_path)
+            limit_50mb = 50 * 1024 * 1024  # 52,428,800 bytes
+            if file_size > limit_50mb:
+                size_mb = file_size / (1024 * 1024)
+                send_message(chat_id, f"📦 El archivo pesa {size_mb:.1f} MB (supera el límite de 50 MB de Telegram). Generando enlace de descarga directa externa...")
+                
+                # Intentar subir a Catbox
+                download_link = upload_to_catbox(file_path)
+                if download_link:
+                    # Enviar el enlace de descarga directamente al usuario
+                    send_message(chat_id, f"📥 *Archivo disponible para descarga directa:* [Descargar aquí]({download_link})\n\n*(También guardado localmente en tu PC: `{os.path.abspath(file_path)}`)*")
+                    return {
+                        "ok": True,
+                        "description": "Uploaded to Catbox"
+                    }
+                else:
+                    return {
+                        "ok": False,
+                        "description": f"El archivo pesa {size_mb:.1f} MB (límite de Telegram superado) y falló la subida al servidor externo. Ruta local: {os.path.abspath(file_path)}"
+                    }
+        else:
+            return {"ok": False, "description": "El archivo especificado no existe."}
+            
         with open(file_path, "rb") as f:
             files = {"document": f}
             data = {"chat_id": chat_id}
@@ -385,6 +505,41 @@ def handle_function_call(name, args, chat_id):
         try:
             registry = load_projects_registry()
             return {"registered_projects": registry}
+        except Exception as e:
+            return {"error": str(e)}
+
+    elif name == "create_github_repo":
+        repo_name = args.get("repo_name")
+        private = args.get("private", False)
+        if not GITHUB_TOKEN or GITHUB_TOKEN == "TU_GITHUB_TOKEN_AQUI":
+            return {"error": "El token de GitHub (GITHUB_TOKEN) no está configurado en bot_config.json. Por favor, configúralo para poder crear repositorios automáticamente."}
+            
+        send_message(chat_id, f"🐱 *Creando repositorio en GitHub:* `{repo_name}`...")
+        try:
+            url = "https://api.github.com/user/repos"
+            headers = {
+                "Authorization": f"Bearer {GITHUB_TOKEN}",
+                "Accept": "application/vnd.github.v3+json"
+            }
+            payload = {
+                "name": repo_name,
+                "private": private
+            }
+            res = requests.post(url, json=payload, headers=headers, timeout=15)
+            res_json = res.json()
+            if res.status_code == 201:
+                html_url = res_json.get("html_url")
+                clone_url = res_json.get("clone_url")
+                send_message(chat_id, f"✅ Repositorio creado con éxito en GitHub: {html_url}")
+                return {
+                    "status": "success",
+                    "html_url": html_url,
+                    "clone_url": clone_url
+                }
+            else:
+                return {
+                    "error": f"Error de GitHub (status {res.status_code}): {res_json.get('message', 'Sin mensaje de error')}"
+                }
         except Exception as e:
             return {"error": str(e)}
 
@@ -473,6 +628,31 @@ def handle_function_call(name, args, chat_id):
         command = args.get("command")
         send_message(chat_id, f"⚡ *Ejecutando comando localmente:*\n`{command}`")
         try:
+            # Configurar entorno con JDK compatible si existe
+            cmd_env = os.environ.copy()
+            jdk_path = find_compatible_jdk()
+            if jdk_path:
+                cmd_env["JAVA_HOME"] = jdk_path
+                # Anteponer la carpeta bin del JDK al PATH para resolver comandos 'java' locales
+                bin_path = os.path.join(jdk_path, "bin")
+                if "PATH" in cmd_env:
+                    cmd_env["PATH"] = bin_path + os.pathsep + cmd_env["PATH"]
+                else:
+                    cmd_env["PATH"] = bin_path
+                print(f"[*] Inyectando JAVA_HOME compatible: '{jdk_path}' para el comando.")
+                
+            # Configurar entorno con SDK de Android compatible si existe
+            sdk_path = find_android_sdk()
+            if sdk_path:
+                cmd_env["ANDROID_HOME"] = sdk_path
+                cmd_env["ANDROID_SDK_ROOT"] = sdk_path
+                print(f"[*] Inyectando ANDROID_HOME: '{sdk_path}' para el comando.")
+                
+            # Configurar entorno con GITHUB_TOKEN si está disponible
+            if GITHUB_TOKEN:
+                cmd_env["GITHUB_TOKEN"] = GITHUB_TOKEN
+                print(f"[*] Inyectando GITHUB_TOKEN para el comando.")
+            
             # Ejecutar comando en la shell en el directorio de la sesión
             process = subprocess.run(
                 command,
@@ -481,7 +661,9 @@ def handle_function_call(name, args, chat_id):
                 stderr=subprocess.PIPE,
                 stdin=subprocess.DEVNULL, # Evitar bloqueos interactivos (como Read-Host)
                 text=True,
+                errors='replace',
                 cwd=cwd,
+                env=cmd_env,
                 timeout=450  # 7.5 minutos máximo por si compila
             )
             # Acortar salida para el contexto de la IA
@@ -849,10 +1031,12 @@ def process_chat_message(chat_id, user_text, msg_id, image_data=None):
         # Si no hay llamadas a funciones, es la respuesta final de texto
         if not function_calls:
             text_response = "".join([p.get("text", "") for p in parts if "text" in p])
+            # Añadir indicador visual de que el bot ha finalizado su ciclo autónomo y espera respuesta del usuario
+            footer = "\n\n🟢 *[Listo - Esperando tu respuesta]*"
             if text_response:
-                send_message(chat_id, text_response, reply_to_message_id=msg_id)
+                send_message(chat_id, text_response + footer, reply_to_message_id=msg_id)
             else:
-                send_message(chat_id, "🤖 (Respuesta vacía de la IA)", reply_to_message_id=msg_id)
+                send_message(chat_id, "🤖 (Respuesta vacía de la IA)" + footer, reply_to_message_id=msg_id)
             break
             
         # Si hay texto además de las llamadas a funciones, lo enviamos de inmediato
