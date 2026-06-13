@@ -385,7 +385,7 @@ Rules:
 10. SPATIAL AWARENESS & SWITCHING PROJECTS: If the user changes the topic to a different project or app (for example, switching from the TV app to the desktop clock, or vice-versa), you MUST look up the project's path. First, check your registered projects list using get_registered_projects(). If the project is registered, immediately call change_working_directory to switch to its path. If it is NOT registered, ask the user for the path once (or search the hard drive if appropriate), then call change_working_directory passing both the new_path and the project_name (e.g. 'reloj') to register it for all future conversations.
 11. AUTOMATIC COMPILATION & UPLOADS: When you finish making code modifications to a project (e.g., using write_file), you MUST automatically compile or build the project (e.g. running 'gradlew assembleDebug' for Android or 'npm run build' for web/Electron) to verify that the changes build correctly, without waiting for the user to ask you to do so. If you need to upload/publish the update to GitHub, you MUST always call `powershell -File actualizar.ps1 -Auto` (the `-Auto` switch prevents interactive blocking and ensures version numbers are bumped correctly) to build and release the app to GitHub automatically.
 12. SENDING LARGE FILES: If the user asks for a file (like 'pásame el APK' or 'envíame el ejecutable') and you know the file is larger than 50MB, do NOT say you cannot send it. You MUST call the 'send_file_to_user' tool, as it is fully capable of automatically uploading files larger than 50MB to a secure download server and delivering the link.
-13. REPLACING DEFECTIVE STREAMING LINKS: If the user asks you to fix or replace a defective streaming link or channel (e.g., Unicanal, Telefuturo, etc.), do NOT give up or assume a working link does not exist. You MUST proactively search the web (using search_web) for candidate M3U8 links. Then, you MUST write and execute a short Python script (via execute_command) to test each collected link with HTTP requests (using short timeouts) to verify which one returns HTTP 200. Once you find a working link, modify the project's source file (like ChannelData.java), compile the project, and publish/send the updated APK to the user.
+13. REPLACING DEFECTIVE STREAMING LINKS: If the user asks you to fix or replace a defective streaming link or channel (e.g., Unicanal, Telefuturo, Trece, etc.), do NOT give up or assume a working link does not exist. You MUST search the web using search_web to find candidate M3U8 URLs. When searching for Paraguayan channels, you MUST explicitly search for the channel name combined with known regional CDN domains (like "desdeparaguay.net", "desdeparaguay.com", "streaming.com.py", "tustreaming.cl") and playlist keywords (like "playlist.m3u8", "index.m3u8", "m3u8"). You MUST write and execute a short Python script (via execute_command) to test each candidate URL with short-timeout HTTP GET requests to verify which one returns HTTP 200. Never declare a channel "impossible to fix" or conclude that it has geoblocks/proprietary protection without testing at least 5-10 different URL variations (including trying prefixes like copacogen, copacotf, tigocloudgen, rds3gen). Once a working link is found, update the project's source file (like ChannelData.java), compile the project, and publish/send the updated APK.
 """
     }]
 }
@@ -736,99 +736,129 @@ def handle_function_call(name, args, chat_id):
         
         results = []
         
-        # 1. Búsqueda específica en GitHub (Si la consulta es sobre IPTV o canales de TV)
+        # 1. Expandir la consulta automáticamente si es de IPTV/Canales para incluir CDNs conocidos
+        queries_to_run = [query]
         is_iptv_query = any(kw in query.lower() for kw in ["m3u", "iptv", "channel", "canal", "lista", "stream", "github", "television", "transmision"])
+        is_paraguay = any(kw in query.lower() for kw in ["paraguay", "py", "trece", "unicanal", "telefuturo", "snt", "c9n", "latele", "abctv", "nanduti", "venus", "tropicalia"])
+        
+        if is_iptv_query and is_paraguay:
+            # Limpiar y extraer la palabra clave principal del canal
+            clean_query = query.lower()
+            for w in ["m3u8", "m3u", "stream", "link", "canal", "channel", "paraguay", "live", "en vivo", "en directo", "transmision", "url"]:
+                clean_query = clean_query.replace(w, "")
+            words = [w.strip() for w in clean_query.split() if len(w.strip()) > 2]
+            channel_name = words[0] if words else ""
+            if channel_name:
+                # Agregar consultas dirigidas a CDNs de desdeparaguay.net/com y streaming.com.py
+                queries_to_run.append(f'"desdeparaguay.net" "{channel_name}" "playlist.m3u8"')
+                queries_to_run.append(f'"desdeparaguay.com" "{channel_name}" "playlist.m3u8"')
+                queries_to_run.append(f'"{channel_name}" "playlist.m3u8" "streaming.com.py"')
+
+        # 2. Búsqueda en la API de GitHub
         if is_iptv_query:
-            try:
-                print(f"[*] Detectada consulta sobre IPTV/Canales. Buscando en la API de GitHub primero...")
-                github_url = f"https://api.github.com/search/repositories?q={urllib.parse.quote(query)}"
-                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-                gh_res = requests.get(github_url, headers=headers, timeout=8)
-                if gh_res.status_code == 200:
-                    gh_data = gh_res.json()
-                    for repo in gh_data.get("items", [])[:8]:
-                        results.append({
-                            "title": f"Repositorio GitHub: {repo.get('full_name')}",
-                            "url": repo.get("html_url"),
-                            "description": repo.get("description", "Sin descripción")
-                        })
-                    print(f"[*] API de GitHub devolvió {len(results)} repositorios relacionados.")
-            except Exception as gh_ex:
-                print(f"[-] Error en la API de GitHub: {gh_ex}")
-                
-        # 2. Si no es de IPTV o no obtuvimos resultados, intentamos SearXNG (JSON)
-        if not results:
-            searx_instances = [
-                "https://searx.be/search",
-                "https://search.mdelta.me/search",
-                "https://searx.ch/search",
-                "https://priv.au/search",
-                "https://opnxng.com/search",
-                "https://grep.vim.wtf/search",
-                "https://copp.gg/search",
-                "https://etsi.me/search",
-                "https://kantan.cat/search"
-            ]
+            for q in queries_to_run[:2]: # Limitar a las dos consultas principales en GitHub
+                try:
+                    print(f"[*] Buscando q='{q}' en la API de GitHub...")
+                    github_url = f"https://api.github.com/search/repositories?q={urllib.parse.quote(q)}"
+                    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+                    gh_res = requests.get(github_url, headers=headers, timeout=8)
+                    if gh_res.status_code == 200:
+                        gh_data = gh_res.json()
+                        for repo in gh_data.get("items", [])[:5]:
+                            if not any(r["url"] == repo.get("html_url") for r in results):
+                                results.append({
+                                    "title": f"Repositorio GitHub: {repo.get('full_name')}",
+                                    "url": repo.get("html_url"),
+                                    "description": repo.get("description", "Sin descripción")
+                                })
+                except Exception as gh_ex:
+                    print(f"[-] Error en la API de GitHub: {gh_ex}")
+
+        # 3. Búsqueda en SearXNG
+        searx_instances = [
+            "https://searx.be/search",
+            "https://search.mdelta.me/search",
+            "https://searx.ch/search",
+            "https://priv.au/search",
+            "https://opnxng.com/search",
+            "https://grep.vim.wtf/search",
+            "https://copp.gg/search",
+            "https://etsi.me/search",
+            "https://kantan.cat/search"
+        ]
+        
+        for q in queries_to_run:
+            found_results_for_q = False
             for instance in searx_instances:
                 try:
-                    print(f"[*] Intentando buscar en SearXNG: {instance}")
+                    print(f"[*] Intentando buscar q='{q}' en SearXNG: {instance}")
                     params = {
-                        "q": query,
+                        "q": q,
                         "format": "json",
                         "language": "es"
                     }
                     headers = {
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/120.0.0.0"
                     }
-                    res = requests.get(instance, params=params, headers=headers, timeout=6)
+                    res = requests.get(instance, params=params, headers=headers, timeout=5)
                     if res.status_code == 200:
                         data = res.json()
                         raw_results = data.get("results", [])
+                        added_count = 0
                         for item in raw_results:
                             if item.get("url"):
-                                results.append({
-                                    "title": item.get("title", "Sin título"),
-                                    "url": item.get("url"),
-                                    "description": item.get("content", "")
-                                })
-                                if len(results) >= 8:
-                                    break
-                        if results:
-                            print(f"[*] Éxito al buscar en SearXNG ({instance}). Resultados: {len(results)}")
+                                if not any(r["url"] == item["url"] for r in results):
+                                    results.append({
+                                        "title": item.get("title", "Sin título"),
+                                        "url": item.get("url"),
+                                        "description": item.get("content", "")
+                                    })
+                                    added_count += 1
+                                    if added_count >= 5:
+                                        break
+                        if added_count > 0:
+                            print(f"[+] Éxito en SearXNG ({instance}) para '{q}'. Agregados: {added_count}")
+                            found_results_for_q = True
                             break
                 except Exception as e:
-                    print(f"[-] Error al consultar instancia SearXNG {instance}: {e}")
-                    
-        # 3. Fallback a DuckDuckGo Lite con UA móvil
-        if not results:
-            try:
-                print("[*] Fallback: Intentando DuckDuckGo Lite...")
-                url_lite = "https://lite.duckduckgo.com/lite/"
-                headers = {
-                    "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36",
-                    "Content-Type": "application/x-www-form-urlencoded"
-                }
-                res = requests.post(url_lite, headers=headers, data={"q": query}, timeout=10)
-                if res.status_code == 200:
-                    matches = re.findall(r'class="result-link"\s+href="([^"]+)"[^>]*>(.*?)</a>', res.text, re.S)
-                    for href, title in matches:
-                        clean_title = re.sub(r'<[^>]+>', '', title).strip()
-                        actual_url = href
-                        if "uddg=" in href:
-                            try:
-                                actual_url = urllib.parse.unquote(href.split("uddg=")[1].split("&")[0])
-                            except:
-                                pass
-                        results.append({"title": clean_title, "url": actual_url, "description": ""})
-                        if len(results) >= 8:
-                            break
-            except Exception as e:
-                print(f"[-] Error en DuckDuckGo Lite: {e}")
+                    pass
+            
+            # Si SearXNG falló por completo para esta query, intentar DuckDuckGo Lite como fallback
+            if not found_results_for_q:
+                try:
+                    print(f"[*] Fallback: Buscando q='{q}' en DuckDuckGo Lite...")
+                    url_lite = "https://lite.duckduckgo.com/lite/"
+                    headers = {
+                        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    }
+                    res = requests.post(url_lite, headers=headers, data={"q": q}, timeout=10)
+                    if res.status_code == 200:
+                        matches = re.findall(r'class="result-link"\s+href="([^"]+)"[^>]*>(.*?)</a>', res.text, re.S)
+                        added_count = 0
+                        for href, title in matches:
+                            clean_title = re.sub(r'<[^>]+>', '', title).strip()
+                            actual_url = href
+                            if "uddg=" in href:
+                                try:
+                                    actual_url = urllib.parse.unquote(href.split("uddg=")[1].split("&")[0])
+                                except:
+                                    pass
+                            if not any(r["url"] == actual_url for r in results):
+                                results.append({"title": clean_title, "url": actual_url, "description": ""})
+                                added_count += 1
+                                if added_count >= 5:
+                                    break
+                        if added_count > 0:
+                            print(f"[+] Éxito en DuckDuckGo Lite para '{q}'. Agregados: {added_count}")
+                except Exception as e:
+                    print(f"[-] Error en DuckDuckGo Lite para '{q}': {e}")
 
         # 4. Devolver resultados o Fallback Inteligente de URLs para IPTV
         if results:
             formatted_res = "Resultados de búsqueda en tiempo real:\n\n"
-            for r in results:
+            # Limitar a los mejores 15 resultados únicos para no desbordar contexto
+            for r in results[:15]:
                 desc = r.get("description", "")
                 desc_str = f" - {desc}" if desc else ""
                 formatted_res += f"- **{r['title']}**: {r['url']}{desc_str}\n"
