@@ -470,7 +470,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Trece",
-                "http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/82.m3u8",
+                "https://tigocloudgen.desdeparaguay.net/trecetv/trecetv/playlist.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
                 Color.parseColor("#1C2333")));
 
