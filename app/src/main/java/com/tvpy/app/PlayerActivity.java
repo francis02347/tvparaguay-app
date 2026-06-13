@@ -298,21 +298,64 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
-    private void resolveDailymotionAndPlay(final String videoId, final Channel ch) {
+    private void resolveDailymotionAndPlay(final String videoIdInput, final Channel ch) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    java.net.URL url = new java.net.URL("https://www.dailymotion.com/player/metadata/video/" + videoId);
+                    String videoId = videoIdInput;
+                    String referer = "https://www.abc.com.py/"; // default referer
+                    String embedder = null;
+
+                    int qIdx = videoId.indexOf('?');
+                    if (qIdx >= 0) {
+                        String query = videoId.substring(qIdx + 1);
+                        videoId = videoId.substring(0, qIdx);
+                        String[] pairs = query.split("&");
+                        for (String pair : pairs) {
+                            String[] kv = pair.split("=", 2);
+                            if (kv.length == 2) {
+                                String key = Uri.decode(kv[0]);
+                                String val = Uri.decode(kv[1]);
+                                if ("referer".equalsIgnoreCase(key)) {
+                                    referer = val;
+                                } else if ("embedder".equalsIgnoreCase(key)) {
+                                    embedder = val;
+                                }
+                            }
+                        }
+                    }
+
+                    String metadataUrl = "https://www.dailymotion.com/player/metadata/video/" + videoId;
+                    if (embedder != null && !embedder.isEmpty()) {
+                        metadataUrl += "?embedder=" + Uri.encode(embedder);
+                    }
+
+                    java.net.URL url = new java.net.URL(metadataUrl);
                     java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
                     conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                    conn.setRequestProperty("Referer", "https://www.abc.com.py/");
+                    conn.setRequestProperty("Referer", referer);
                     conn.setConnectTimeout(5000);
                     conn.setReadTimeout(5000);
 
                     int responseCode = conn.getResponseCode();
                     if (responseCode == 200) {
+                        // Extract cookies
+                        StringBuilder cookieBuilder = new StringBuilder();
+                        java.util.List<String> cookieHeaders = conn.getHeaderFields().get("Set-Cookie");
+                        if (cookieHeaders != null) {
+                            for (String cookie : cookieHeaders) {
+                                int semiIdx = cookie.indexOf(';');
+                                String pair = (semiIdx >= 0) ? cookie.substring(0, semiIdx) : cookie;
+                                if (cookieBuilder.length() > 0) {
+                                    cookieBuilder.append("; ");
+                                }
+                                cookieBuilder.append(pair);
+                            }
+                        }
+                        final String cookieStr = cookieBuilder.toString();
+
                         java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(), "UTF-8"));
                         StringBuilder sb = new StringBuilder();
                         String line;
@@ -329,10 +372,11 @@ public class PlayerActivity extends AppCompatActivity {
                                 org.json.JSONObject autoObj = autoArray.getJSONObject(0);
                                 final String streamUrl = autoObj.optString("url");
                                 if (streamUrl != null && !streamUrl.isEmpty()) {
+                                    final String finalReferer = referer;
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            playResolvedUrl(streamUrl, ch);
+                                            playResolvedUrl(streamUrl, cookieStr, finalReferer, ch);
                                         }
                                     });
                                     return;
@@ -355,10 +399,16 @@ public class PlayerActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void playResolvedUrl(String streamUrl, Channel ch) {
+    private void playResolvedUrl(String streamUrl, String cookieStr, String referer, Channel ch) {
         if (dataSourceFactory != null) {
             java.util.Map<String, String> headers = new java.util.HashMap<>();
             headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36");
+            if (referer != null && !referer.isEmpty()) {
+                headers.put("Referer", referer);
+            }
+            if (cookieStr != null && !cookieStr.isEmpty()) {
+                headers.put("Cookie", cookieStr);
+            }
             dataSourceFactory.setHeaders(headers);
         }
         try {

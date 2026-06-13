@@ -62,7 +62,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "ABC-TV Paraguay",
-                "dailymotion://kQRS6ZAjGuMkByE4Mtc",
+                "dailymotion://kQRS6ZAjGuMkByE4Mtc?referer=https://www.abc.com.py/&embedder=https://www.abc.com.py/",
                 "📰", "Noticias", "Paraguay",
                 Color.parseColor("#1C2333")));
 
@@ -470,7 +470,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Trece",
-                "https://tigocloudgen.desdeparaguay.net/trecetv/trecetv/playlist.m3u8",
+                "dailymotion://k4nLYiNrBX8W5jDbSlM?referer=https://trece.com.py/&embedder=https://trece.com.py/",
                 "🎬", "Entretenimiento", "Paraguay",
                 Color.parseColor("#1C2333")));
 
