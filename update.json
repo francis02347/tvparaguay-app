@@ -1,6 +1,6 @@
 {
-    "versionCode":  47,
-    "versionName":  "1.49",
-    "apkUrl":  "https://github.com/francis02347/tvparaguay-app/releases/download/v1.49/app-website-release.apk",
-    "releaseNotes":  "Reparada la señal de FS1 (Estados Unidos) con transmisión de video funcional. Correcciones de estabilidad en Trece, Unicanal y Telemundo."
+    "versionCode":  48,
+    "versionName":  "1.50",
+    "apkUrl":  "https://github.com/francis02347/tvparaguay-app/releases/download/v1.50/app-website-release.apk",
+    "releaseNotes":  "Corregido el canal Gen con resolución dinámica de tokens de transmisión en tiempo real."
 }
