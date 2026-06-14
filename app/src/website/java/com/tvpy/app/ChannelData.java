@@ -314,7 +314,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Popu TV",
-                "https://copacogen.desdeparaguay.net/universotv/universotv_py_alta/playlist.m3u8?admin=nacion",
+                "desdeparaguay://universotv",
                 "🎬", "Entretenimiento", "Paraguay",
                 Color.parseColor("#1C2333")));
 
