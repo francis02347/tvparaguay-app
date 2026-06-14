@@ -1,6 +1,6 @@
 {
-    "versionCode":  49,
-    "versionName":  "1.51",
+    "versionCode":  51,
+    "versionName":  "1.53",
     "apkUrl":  "https://raw.githubusercontent.com/francis02347/tvparaguay-app/main/releases/app-website-release.apk",
-    "releaseNotes":  "Corregida la transmisión de Telefe Internacional usando señal alternativa estable."
+    "releaseNotes":  "Restaurados todos los canales a la versión estable anterior."
 }
