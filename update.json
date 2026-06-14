@@ -1,6 +1,6 @@
 {
-    "versionCode":  52,
-    "versionName":  "1.54",
-    "apkUrl":  "https://raw.githubusercontent.com/francis02347/tvparaguay-app/main/releases/app-website-release.apk",
-    "releaseNotes":  "Corregido el canal Popu TV usando resolución dinámica de tokens en tiempo real."
+  "versionCode": 52,
+  "versionName": "1.54",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.54/app-website-release.apk",
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v1.54."
 }
