@@ -276,7 +276,8 @@ if ([string]::IsNullOrEmpty($githubToken) -or $githubToken -eq "TU_GITHUB_TOKEN_
             releaseNotes = $ReleaseNotes
         }
         
-        $updateInfo | ConvertTo-Json -Depth 5 | Set-Content -Path $updateJsonPath
+        $absoluteJsonPath = [System.IO.Path]::GetFullPath($updateJsonPath)
+        [System.IO.File]::WriteAllText($absoluteJsonPath, ($updateInfo | ConvertTo-Json -Depth 5))
         
         # Subir update.json a GitHub
         Write-Host "[INFO] Subiendo update.json a GitHub..." -ForegroundColor Gray
