@@ -428,7 +428,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Telefe Internacional (Argentina)",
-                "https://telefeviacom1.akamaized.net/hls/live/2037987/viacomINT/TOK/master.m3u8",
+                "https://stream.arcast.com.ar/c7nq/ngrp:c7nq_all/playlist.m3u8",
                 "🎬", "Entretenimiento", "Argentina",
                 Color.parseColor("#1C2333")));
 

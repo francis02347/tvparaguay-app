@@ -8,6 +8,7 @@ session_history_*.json
 build/
 app/build/
 *.apk
+!releases/*.apk
 capturas/
 
 # Archivos de Configuración del IDE (Android Studio / IntelliJ)

@@ -1,4 +1,8 @@
 @echo off
+if not "%1"=="min" (
+    start "" /min "%~f0" min
+    exit /b
+)
 title Iniciar Bot de Desarrollo
 set PYTHONUTF8=1
 set PYTHONIOENCODING=utf-8
@@ -40,14 +44,16 @@ if "%success%"=="1" (
     echo.
     echo ==================================================
     echo [+] EL BOT SE HA INICIADO CORRECTAMENTE EN SEGUNDO PLANO
-    echo [!] Ya puedes cerrar esta ventana de CMD.
+    echo [!] Cerrando esta ventana de CMD automaticamente...
     echo ==================================================
+    ping 127.0.0.1 -n 4 >nul
+    exit
 ) else (
     echo.
     echo ==================================================
     echo [-] HUBO UN ERROR AL INICIAR EL BOT o tardo demasiado.
     echo [!] Revisa el archivo 'bot_log.txt' para ver los detalles.
     echo ==================================================
+    echo.
+    pause
 )
-echo.
-pause

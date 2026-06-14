@@ -1,6 +1,6 @@
 {
-    "versionCode":  48,
-    "versionName":  "1.50",
-    "apkUrl":  "https://github.com/francis02347/tvparaguay-app/releases/download/v1.50/app-website-release.apk",
-    "releaseNotes":  "Corregido el canal Gen con resolución dinámica de tokens de transmisión en tiempo real."
+    "versionCode":  49,
+    "versionName":  "1.51",
+    "apkUrl":  "https://raw.githubusercontent.com/francis02347/tvparaguay-app/main/releases/app-website-release.apk",
+    "releaseNotes":  "Corregida la transmisión de Telefe Internacional usando señal alternativa estable."
 }

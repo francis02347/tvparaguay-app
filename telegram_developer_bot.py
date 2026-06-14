@@ -422,6 +422,45 @@ def send_message(chat_id, text, reply_to_message_id=None):
         print(f"[-] Error al enviar mensaje: {e}")
         return {"ok": False}
 
+def send_or_update_status(chat_id, text, status_msg_id=None):
+    if status_msg_id is None:
+        res = send_message(chat_id, text)
+        if res.get("ok"):
+            return res["result"]["message_id"]
+    else:
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/editMessageText"
+        payload = {
+            "chat_id": chat_id,
+            "message_id": status_msg_id,
+            "text": text,
+            "parse_mode": "Markdown"
+        }
+        try:
+            res = requests.post(url, json=payload, timeout=10)
+            res_json = res.json()
+            if not res_json.get("ok"):
+                payload.pop("parse_mode", None)
+                res = requests.post(url, json=payload, timeout=10)
+                res_json = res.json()
+            return status_msg_id
+        except Exception as e:
+            print(f"[-] Error al editar mensaje de estado: {e}")
+            return status_msg_id
+    return None
+
+def delete_message(chat_id, message_id):
+    if not message_id:
+        return
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/deleteMessage"
+    payload = {
+        "chat_id": chat_id,
+        "message_id": message_id
+    }
+    try:
+        requests.post(url, json=payload, timeout=10)
+    except Exception as e:
+        print(f"[-] Error al eliminar mensaje: {e}")
+
 def upload_to_catbox(file_path):
     url = "https://catbox.moe/user/api.php"
     try:
@@ -475,22 +514,28 @@ def send_document(chat_id, file_path):
         print(f"[-] Error al enviar documento: {e}")
         return {"ok": False, "description": str(e)}
 
-def handle_function_call(name, args, chat_id):
+def handle_function_call(name, args, chat_id, status_msg_id=None, status_prefix=""):
     print(f"[*] Ejecutando herramienta: {name} con argumentos: {args}")
     
+    def notify(text):
+        if status_msg_id:
+            send_or_update_status(chat_id, f"{status_prefix}{text}", status_msg_id)
+        else:
+            send_message(chat_id, text)
+            
     # Obtener el directorio de trabajo dinámico de esta sesión
     cwd = get_session_cwd(chat_id)
     
     if name == "change_working_directory":
         new_path = args.get("new_path")
         project_name = args.get("project_name")
-        send_message(chat_id, f"📂 *Cambiando directorio de trabajo a:* `{new_path}`...")
+        notify(f"📂 *Cambiando directorio de trabajo a:* `{new_path}`...")
         try:
             real_path = os.path.abspath(new_path)
             if not os.path.exists(real_path):
                 # Crear el directorio si no existe (por ejemplo, para nuevos proyectos)
                 os.makedirs(real_path, exist_ok=True)
-                send_message(chat_id, f"✨ Se ha creado la nueva carpeta en: `{real_path}`")
+                notify(f"✨ Se ha creado la nueva carpeta en: `{real_path}`")
             
             # Actualizar la sesión
             if chat_id not in sessions:
@@ -501,7 +546,7 @@ def handle_function_call(name, args, chat_id):
             # Registrar el proyecto si se indicó un nombre
             if project_name:
                 register_project(project_name, real_path)
-                send_message(chat_id, f"📌 Proyecto registrado para futuras búsquedas rápidas: *'{project_name}'* ➔ `{real_path}`")
+                notify(f"📌 Proyecto registrado para futuras búsquedas rápidas: *'{project_name}'* ➔ `{real_path}`")
             
             return {
                 "status": "success",
@@ -523,7 +568,7 @@ def handle_function_call(name, args, chat_id):
         if not GITHUB_TOKEN or GITHUB_TOKEN == "TU_GITHUB_TOKEN_AQUI":
             return {"error": "El token de GitHub (GITHUB_TOKEN) no está configurado en bot_config.json. Por favor, configúralo para poder crear repositorios automáticamente."}
             
-        send_message(chat_id, f"🐱 *Creando repositorio en GitHub:* `{repo_name}`...")
+        notify(f"🐱 *Creando repositorio en GitHub:* `{repo_name}`...")
         try:
             url = "https://api.github.com/user/repos"
             headers = {
@@ -539,7 +584,7 @@ def handle_function_call(name, args, chat_id):
             if res.status_code == 201:
                 html_url = res_json.get("html_url")
                 clone_url = res_json.get("clone_url")
-                send_message(chat_id, f"✅ Repositorio creado con éxito en GitHub: {html_url}")
+                notify(f"✅ Repositorio creado con éxito en GitHub: {html_url}")
                 return {
                     "status": "success",
                     "html_url": html_url,
@@ -554,14 +599,14 @@ def handle_function_call(name, args, chat_id):
 
     elif name == "list_directory":
         dir_path = args.get("dir_path", ".")
-        # send_message(chat_id, f"📁 *Listando directorio:* `{dir_path}`...")
+        notify(f"📁 *Listando directorio:* `{dir_path}`...")
         real_path = get_session_path(dir_path, chat_id)
         try:
             items = []
             for item in os.listdir(real_path):
                 # Omitir carpetas pesadas o privadas para no saturar
                 if item in (".git", ".gradle", ".idea", "build"):
-                    continue
+                     continue
                 is_dir = os.path.isdir(os.path.join(real_path, item))
                 items.append({"name": item, "type": "directory" if is_dir else "file"})
             return {"files": items}
@@ -570,7 +615,7 @@ def handle_function_call(name, args, chat_id):
 
     elif name == "read_file":
         file_path = args.get("file_path")
-        # send_message(chat_id, f"📖 *Leyendo archivo:* `{file_path}`...")
+        notify(f"📖 *Leyendo archivo:* `{file_path}`...")
         real_path = get_session_path(file_path, chat_id)
         try:
             # Limitar lectura a 150KB para evitar exceder el límite de tokens
@@ -585,7 +630,7 @@ def handle_function_call(name, args, chat_id):
     elif name == "write_file":
         file_path = args.get("file_path")
         content = args.get("content")
-        send_message(chat_id, f"💾 *Guardando cambios en:* `{file_path}`...")
+        notify(f"💾 *Guardando cambios en:* `{file_path}`...")
         real_path = get_session_path(file_path, chat_id)
         try:
             os.makedirs(os.path.dirname(real_path), exist_ok=True)
@@ -598,7 +643,7 @@ def handle_function_call(name, args, chat_id):
     elif name == "search_text":
         query = args.get("query")
         search_path = args.get("search_path", ".")
-        # send_message(chat_id, f"🔎 *Buscando texto:* `{query}` en `{search_path}`...")
+        notify(f"🔎 *Buscando texto:* `{query}` en `{search_path}`...")
         real_path = get_session_path(search_path, chat_id)
         try:
             results = []
@@ -642,7 +687,7 @@ def handle_function_call(name, args, chat_id):
 
     elif name == "execute_command":
         command = args.get("command")
-        send_message(chat_id, f"⚡ *Ejecutando comando localmente:*\n`{command}`")
+        notify(f"⚡ *Ejecutando comando localmente:*\n`{command}`")
         try:
             # Configurar entorno con JDK compatible si existe
             cmd_env = os.environ.copy()
@@ -717,7 +762,7 @@ def handle_function_call(name, args, chat_id):
         if not os.path.exists(real_path):
             return {"error": f"El archivo '{file_path}' no existe."}
             
-        send_message(chat_id, f"📤 *Enviando archivo:* `{file_path}`...")
+        notify(f"📤 *Enviando archivo:* `{file_path}`...")
         res = send_document(chat_id, real_path)
         if res.get("ok"):
             return {"status": "success", "message": f"Archivo '{file_path}' enviado con éxito al usuario."}
@@ -726,7 +771,7 @@ def handle_function_call(name, args, chat_id):
 
     elif name == "read_web_page":
         url = args.get("url")
-        send_message(chat_id, f"🌐 *Leyendo página web:* `{url}`...")
+        notify(f"🌐 *Leyendo página web:* `{url}`...")
         if not url.startswith(("http://", "https://")):
             return {"error": "URL inválida. Debe comenzar con http:// o https://"}
         try:
@@ -746,7 +791,7 @@ def handle_function_call(name, args, chat_id):
 
     elif name == "search_web":
         query = args.get("query")
-        send_message(chat_id, f"🔍 *Buscando en la web:* `{query}`...")
+        notify(f"🔍 *Buscando en la web:* `{query}`...")
         import urllib.parse
         import re
         
@@ -1039,86 +1084,105 @@ def process_chat_message(chat_id, user_text, msg_id, image_data=None):
         
     max_agent_loops = 40
     current_loop = 0
+    status_msg_id = None
     
-    while current_loop < max_agent_loops:
-        current_loop += 1
-        print(f"[*] Llamando a Gemini... (Paso {current_loop}/{max_agent_loops})")
+    try:
+        status_msg_id = send_or_update_status(chat_id, "🔄 *Procesando tu solicitud...*")
         
-        # Mostrar estado "escribiendo" en Telegram
-        requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendChatAction", json={"chat_id": chat_id, "action": "typing"})
-        
-        response_json, error_details = query_gemini(chat_id, session_history)
-        if not response_json or "candidates" not in response_json or not response_json["candidates"]:
-            err_text = "❌ *Lo siento, ocurrió un error al comunicarme con el motor de IA.*"
-            if error_details:
-                try:
-                    # Intentar parsear el JSON de error para mostrarlo embellecido
-                    parts = error_details.split("): ", 1)
-                    status_header = parts[0] + "):"
-                    error_json = json.loads(parts[1])
-                    formatted_json = json.dumps(error_json, indent=2, ensure_ascii=False)
-                    err_text += f"\n\n*Detalles del error:*\n`{status_header}`\n```json\n{formatted_json}\n```"
-                except Exception:
-                    err_text += f"\n\n*Detalles del error:*\n```text\n{error_details}\n```"
-            send_message(chat_id, err_text, reply_to_message_id=msg_id)
-            break
+        while current_loop < max_agent_loops:
+            current_loop += 1
+            status_prefix = f"🔄 *[Paso {current_loop}/{max_agent_loops}]* "
+            send_or_update_status(chat_id, f"{status_prefix}Pensando...", status_msg_id)
+            print(f"[*] Llamando a Gemini... (Paso {current_loop}/{max_agent_loops})")
             
-        candidate = response_json["candidates"][0]
-        content = candidate.get("content", {})
-        parts = content.get("parts", [])
-        
-        # Guardar la respuesta del modelo en el historial
-        session_history.append(content)
-        save_session_history(chat_id, session_history)
-        
-        # Buscar llamadas a funciones
-        function_calls = [p["functionCall"] for p in parts if "functionCall" in p]
-        
-        # Si no hay llamadas a funciones, es la respuesta final de texto
-        if not function_calls:
-            text_response = "".join([p.get("text", "") for p in parts if "text" in p])
-            # Añadir indicador visual de que el bot ha finalizado su ciclo autónomo y espera respuesta del usuario
-            footer = "\n\n🟢 *[Listo - Esperando tu respuesta]*"
-            if text_response:
-                send_message(chat_id, text_response + footer, reply_to_message_id=msg_id)
-            else:
-                send_message(chat_id, "🤖 (Respuesta vacía de la IA)" + footer, reply_to_message_id=msg_id)
-            break
+            # Mostrar estado "escribiendo" en Telegram
+            requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendChatAction", json={"chat_id": chat_id, "action": "typing"})
             
-        # Si hay texto además de las llamadas a funciones, lo enviamos de inmediato
-        text_message = "".join([p.get("text", "") for p in parts if "text" in p])
-        if text_message:
-            send_message(chat_id, text_message)
+            response_json, error_details = query_gemini(chat_id, session_history)
+            if not response_json or "candidates" not in response_json or not response_json["candidates"]:
+                err_text = "❌ *Lo siento, ocurrió un error al comunicarme con el motor de IA.*"
+                if error_details:
+                    try:
+                        # Intentar parsear el JSON de error para mostrarlo embellecido
+                        parts = error_details.split("): ", 1)
+                        status_header = parts[0] + "):"
+                        error_json = json.loads(parts[1])
+                        formatted_json = json.dumps(error_json, indent=2, ensure_ascii=False)
+                        err_text += f"\n\n*Detalles del error:*\n`{status_header}`\n```json\n{formatted_json}\n```"
+                    except Exception:
+                        err_text += f"\n\n*Detalles del error:*\n```text\n{error_details}\n```"
+                send_message(chat_id, err_text, reply_to_message_id=msg_id)
+                break
+                
+            candidate = response_json["candidates"][0]
+            content = candidate.get("content", {})
+            parts = content.get("parts", [])
             
-        # Ejecutar las funciones solicitadas
-        function_response_parts = []
-        for fc in function_calls:
-            name = fc["name"]
-            args = fc.get("args", {})
+            # Guardar la respuesta del modelo en el historial
+            session_history.append(content)
+            save_session_history(chat_id, session_history)
             
-            # Ejecutar localmente
-            result = handle_function_call(name, args, chat_id)
+            # Buscar llamadas a funciones
+            function_calls = [p["functionCall"] for p in parts if "functionCall" in p]
             
-            # Agregar el resultado al formato de respuesta de función
-            function_response_parts.append({
-                "functionResponse": {
-                    "name": name,
-                    "response": result
-                }
+            # Si no hay llamadas a funciones, es la respuesta final de texto
+            if not function_calls:
+                text_response = "".join([p.get("text", "") for p in parts if "text" in p])
+                # Añadir indicador visual de que el bot ha finalizado su ciclo autónomo y espera respuesta del usuario
+                footer = "\n\n🟢 *[Listo - Esperando tu respuesta]*"
+                
+                # Eliminar el mensaje de estado justo antes de enviar la respuesta final
+                # para evitar parpadeos, y poner status_msg_id a None para evitar doble borrado en el finally
+                if status_msg_id:
+                    delete_message(chat_id, status_msg_id)
+                    status_msg_id = None
+                    
+                if text_response:
+                    send_message(chat_id, text_response + footer, reply_to_message_id=msg_id)
+                else:
+                    send_message(chat_id, "🤖 (Respuesta vacía de la IA)" + footer, reply_to_message_id=msg_id)
+                break
+                
+            # Si hay texto además de las llamadas a funciones, lo enviamos de inmediato
+            text_message = "".join([p.get("text", "") for p in parts if "text" in p])
+            if text_message:
+                send_message(chat_id, text_message)
+                
+            # Ejecutar las funciones solicitadas
+            function_response_parts = []
+            for fc in function_calls:
+                name = fc["name"]
+                args = fc.get("args", {})
+                
+                # Ejecutar localmente, pasando el id de mensaje y prefijo para que actualice el mismo
+                result = handle_function_call(name, args, chat_id, status_msg_id=status_msg_id, status_prefix=status_prefix)
+                
+                # Agregar el resultado al formato de respuesta de función
+                function_response_parts.append({
+                    "functionResponse": {
+                        "name": name,
+                        "response": result
+                    }
+                })
+                
+            # Agregar las respuestas de las funciones al historial
+            session_history.append({
+                "role": "function",
+                "parts": function_response_parts
             })
+            save_session_history(chat_id, session_history)
             
-        # Agregar las respuestas de las funciones al historial
-        session_history.append({
-            "role": "function",
-            "parts": function_response_parts
-        })
-        save_session_history(chat_id, session_history)
-        
-        # En la siguiente iteración del while, se le enviarán las respuestas de las funciones a Gemini
-        # para que decida qué hacer a continuación.
-        time.sleep(4)
-    else:
-        send_message(chat_id, "⚠️ Se alcanzó el límite máximo de pasos para esta tarea para evitar un bucle infinito.", reply_to_message_id=msg_id)
+            # En la siguiente iteración del while, se le enviarán las respuestas de las funciones a Gemini
+            # para que decida qué hacer a continuación.
+            time.sleep(4)
+        else:
+            if status_msg_id:
+                delete_message(chat_id, status_msg_id)
+                status_msg_id = None
+            send_message(chat_id, "⚠️ Se alcanzó el límite máximo de pasos para esta tarea para evitar un bucle infinito.", reply_to_message_id=msg_id)
+    finally:
+        if status_msg_id:
+            delete_message(chat_id, status_msg_id)
 
 def main():
     print("==================================================")
