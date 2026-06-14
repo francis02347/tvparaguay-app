@@ -554,7 +554,7 @@ def handle_function_call(name, args, chat_id):
 
     elif name == "list_directory":
         dir_path = args.get("dir_path", ".")
-        send_message(chat_id, f"📁 *Listando directorio:* `{dir_path}`...")
+        # send_message(chat_id, f"📁 *Listando directorio:* `{dir_path}`...")
         real_path = get_session_path(dir_path, chat_id)
         try:
             items = []
@@ -570,7 +570,7 @@ def handle_function_call(name, args, chat_id):
 
     elif name == "read_file":
         file_path = args.get("file_path")
-        send_message(chat_id, f"📖 *Leyendo archivo:* `{file_path}`...")
+        # send_message(chat_id, f"📖 *Leyendo archivo:* `{file_path}`...")
         real_path = get_session_path(file_path, chat_id)
         try:
             # Limitar lectura a 150KB para evitar exceder el límite de tokens
@@ -598,7 +598,7 @@ def handle_function_call(name, args, chat_id):
     elif name == "search_text":
         query = args.get("query")
         search_path = args.get("search_path", ".")
-        send_message(chat_id, f"🔎 *Buscando texto:* `{query}` en `{search_path}`...")
+        # send_message(chat_id, f"🔎 *Buscando texto:* `{query}` en `{search_path}`...")
         real_path = get_session_path(search_path, chat_id)
         try:
             results = []
