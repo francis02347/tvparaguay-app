@@ -618,6 +618,13 @@ def handle_function_call(name, args, chat_id):
                     # Omitir directorios pesados/temporales
                     dirs[:] = [d for d in dirs if d not in (".git", ".gradle", ".idea", "build")]
                     for file in files:
+                        ext = os.path.splitext(file)[1].lower()
+                        if ext in (".png", ".jpg", ".jpeg", ".gif", ".webp", ".apk", ".jar", ".zip", ".rar", ".class", ".dex", ".pyc", ".db", ".pdf", ".mp4", ".mp3", ".wav", ".log"):
+                            continue
+                        if file == "bot_log.txt" or file.startswith("session_history_") or file == "gen_live.html" or file.endswith("_player.html"):
+                            continue
+                        if ext == ".json" and file not in ("update.json", "bot_config.json", "player_config.json", "settings.json", "projects_registry.json"):
+                            continue
                         full_path = os.path.join(root, file)
                         try:
                             with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
