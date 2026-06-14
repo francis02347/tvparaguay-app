@@ -1,6 +1,6 @@
 {
-    "versionCode":  45,
-    "versionName":  "1.47",
-    "apkUrl":  "https://github.com/francis02347/tvparaguay-app/releases/download/v1.47/app-website-release.apk",
-    "releaseNotes":  "Actualización automática de la versión completa (sabor web) construida para la versión v1.47."
+    "versionCode":  46,
+    "versionName":  "1.48",
+    "apkUrl":  "https://github.com/francis02347/tvparaguay-app/releases/download/v1.48/app-website-release.apk",
+    "releaseNotes":  "Reparada la se�al de FS1 (Estados Unidos) con transmisi�n de video funcional. Correcciones de estabilidad en Trece, Unicanal y Telemundo."
 }
