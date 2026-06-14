@@ -2,7 +2,8 @@
 
 [CmdletBinding()]
 param (
-    [switch]$Auto
+    [switch]$Auto,
+    [string]$ReleaseNotes
 )
 
 Write-Host "=============================================" -ForegroundColor Cyan
@@ -121,7 +122,7 @@ if (-not (Test-Path $gradleExe)) {
     $gradleExe = "gradle"
 }
 
-& $gradleExe assembleWebsiteRelease
+& $gradleExe --no-daemon assembleWebsiteRelease
 if ($LASTEXITCODE -ne 0) {
     Write-Host "[ERROR] La compilacion local ha fallado. Revisa los errores." -ForegroundColor Red
     exit
@@ -234,11 +235,45 @@ if ([string]::IsNullOrEmpty($githubToken) -or $githubToken -eq "TU_GITHUB_TOKEN_
         Write-Host "[INFO] Actualizando update.json..." -ForegroundColor Cyan
         $updateJsonPath = "update.json"
         
+        # Obtener o construir notas de versión si no fueron suministradas
+        if ([string]::IsNullOrEmpty($ReleaseNotes)) {
+            if ($Auto) {
+                # Intentar buscar la última etiqueta de git para listar los cambios desde entonces
+                $lastTag = (git describe --tags --abbrev=0 2>$null)
+                if ($lastTag) {
+                    $commits = (git log "$lastTag..HEAD" --oneline 2>$null)
+                    if ($commits) {
+                        $cleanCommits = $commits | Where-Object { $_ -notmatch 'Version bump to' -and $_ -notmatch 'chore: auto-update' } | ForEach-Object {
+                            if ($_ -match '^[a-f0-9]+\s+(.*)$') { $Matches[1] } else { $_ }
+                        }
+                        if ($cleanCommits) {
+                            $ReleaseNotes = $cleanCommits -join "`n"
+                        }
+                    }
+                }
+                if ([string]::IsNullOrEmpty($ReleaseNotes)) {
+                    $lastCommitMsg = (git log -1 --pretty=%B 2>$null)
+                    if ($lastCommitMsg) {
+                        $ReleaseNotes = $lastCommitMsg.Trim()
+                    }
+                }
+                if ([string]::IsNullOrEmpty($ReleaseNotes) -or $ReleaseNotes -match 'Version bump to' -or $ReleaseNotes -match 'chore: auto-update') {
+                    $ReleaseNotes = "Mejoras de estabilidad y corrección de canales para la versión $newVersionName."
+                }
+            } else {
+                Write-Host "Ingrese los detalles de lo que se cambió/reparó (Notas de lanzamiento):" -ForegroundColor Gray
+                $ReleaseNotes = Read-Host "Notas"
+                if ([string]::IsNullOrEmpty($ReleaseNotes)) {
+                    $ReleaseNotes = "Actualización de canales y mejoras generales."
+                }
+            }
+        }
+        
         $updateInfo = [PSCustomObject]@{
             versionCode = [int]$newVersionCode
             versionName = $newVersionName
             apkUrl = $downloadUrl
-            releaseNotes = "Actualización automática de la versión completa (sabor web) construida para la versión $tagName."
+            releaseNotes = $ReleaseNotes
         }
         
         $updateInfo | ConvertTo-Json -Depth 5 | Set-Content -Path $updateJsonPath
