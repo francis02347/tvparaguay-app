@@ -271,6 +271,12 @@ public class PlayerActivity extends AppCompatActivity {
             return;
         }
 
+        if (cleanUrl.startsWith("desdeparaguay://")) {
+            String channelId = cleanUrl.substring("desdeparaguay://".length()).trim();
+            resolveDesdeParaguayAndPlay(channelId, ch);
+            return;
+        }
+
         if (dataSourceFactory != null) {
             dataSourceFactory.setHeaders(headers);
         }
@@ -382,6 +388,72 @@ public class PlayerActivity extends AppCompatActivity {
                                     return;
                                 }
                             }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideLoading();
+                        showErrorScreen(ch.getName());
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void resolveDesdeParaguayAndPlay(final String channelId, final Channel ch) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String urlStr = "https://gentv.desdepylabs.com/External/heinetwork/" + channelId;
+                    java.net.URL url = new java.net.URL(urlStr);
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(8000);
+                    conn.setReadTimeout(8000);
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                    conn.setRequestProperty("Origin", "https://gen.com.py");
+                    conn.setRequestProperty("Referer", "https://gen.com.py/");
+
+                    if (conn.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                        java.io.BufferedReader reader = new java.io.BufferedReader(
+                            new java.io.InputStreamReader(conn.getInputStream(), "UTF-8")
+                        );
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            sb.append(line).append("\n");
+                        }
+                        reader.close();
+
+                        String html = sb.toString();
+                        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+                            "(https?://[^\\s\"'\\>]+?\\.m3u8[^\\s\"'\\>]*)"
+                        );
+                        java.util.regex.Matcher matcher = pattern.matcher(html);
+                        String resolvedUrl = null;
+                        while (matcher.find()) {
+                            String found = matcher.group(1);
+                            if (found.contains("rds3gen") && found.contains("k=")) {
+                                resolvedUrl = found;
+                                break;
+                            }
+                        }
+
+                        if (resolvedUrl != null) {
+                            resolvedUrl = resolvedUrl.replace("&amp;", "&");
+                            final String finalUrl = resolvedUrl;
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    playResolvedUrl(finalUrl, null, "https://gen.com.py/", ch);
+                                }
+                            });
+                            return;
                         }
                     }
                 } catch (Exception e) {

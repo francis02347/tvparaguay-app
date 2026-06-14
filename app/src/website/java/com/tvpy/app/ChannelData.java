@@ -194,7 +194,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Gen",
-                "https://copacogen.desdeparaguay.net/gentv/gentv_py_alta/playlist.m3u8?admin=nacion",
+                "desdeparaguay://gentv",
                 "🎬", "Entretenimiento", "Paraguay",
                 Color.parseColor("#1C2333")));
 
