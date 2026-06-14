@@ -440,7 +440,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "Telemundo (Estados Unidos)",
-                "https://content.uplynk.com/channel/b6a96ed39d694ae1b738faa98cf7dd3f.m3u8",
+                "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8",
                 "🎬", "Entretenimiento", "Estados Unidos",
                 Color.parseColor("#1C2333")));
 
