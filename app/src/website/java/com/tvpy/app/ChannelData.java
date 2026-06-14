@@ -188,7 +188,7 @@ public class ChannelData {
 
         channels.add(new Channel(
                 "FS1 (Estados Unidos)",
-                "http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8",
+                "http://41.223.30.230/FOXSPORTS1/index.m3u8",
                 "⚽", "Deportes", "Estados Unidos",
                 Color.parseColor("#1C2333")));
 
