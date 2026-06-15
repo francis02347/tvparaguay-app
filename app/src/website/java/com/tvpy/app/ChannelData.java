@@ -103,6 +103,12 @@ public class ChannelData {
                 Color.parseColor("#1C2333")));
 
         channels.add(new Channel(
+                "Canal 5 (Televisa) (México)",
+                "http://45.5.119.43:4000/play/a05o/index.m3u8",
+                "🎬", "Entretenimiento", "México",
+                Color.parseColor("#1C2333")));
+
+        channels.add(new Channel(
                 "Canal 5 TV Max",
                 "https://video.wilohosting.com:19360/tvmax/tvmax.m3u8",
                 "🎬", "Entretenimiento", "Paraguay",
