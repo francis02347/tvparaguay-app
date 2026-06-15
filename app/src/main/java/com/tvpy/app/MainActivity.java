@@ -24,6 +24,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import android.os.Handler;
+import android.os.Looper;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -188,6 +195,62 @@ public class MainActivity extends AppCompatActivity {
         loadAllChannels();
         buildFilterChips();
         applyFilter();
+        checkRemoteChannels();
+    }
+
+    private void checkRemoteChannels() {
+        if (BuildConfig.IS_PLAY_STORE) return;
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                URL url = new URL("https://raw.githubusercontent.com/francis02347/tvparaguay-app/refs/heads/main/app/src/website/assets/default_channels.m3u");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(10000);
+                conn.setReadTimeout(15000);
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+                
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+                    reader.close();
+
+                    String newM3u = sb.toString();
+                    if (!newM3u.isEmpty() && newM3u.startsWith("#EXTM3U")) {
+                        java.io.File cacheFile = new java.io.File(getFilesDir(), "default_channels_cached.m3u");
+                        boolean isDifferent = true;
+                        if (cacheFile.exists()) {
+                            StringBuilder cacheSb = new StringBuilder();
+                            BufferedReader cacheReader = new BufferedReader(new java.io.FileReader(cacheFile));
+                            while ((line = cacheReader.readLine()) != null) {
+                                cacheSb.append(line).append("\n");
+                            }
+                            cacheReader.close();
+                            if (cacheSb.toString().equals(newM3u)) {
+                                isDifferent = false;
+                            }
+                        }
+
+                        if (isDifferent) {
+                            java.io.FileWriter writer = new java.io.FileWriter(cacheFile);
+                            writer.write(newM3u);
+                            writer.close();
+
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                loadAllChannels();
+                                buildFilterChips();
+                                applyFilter();
+                            });
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void loadAllChannels() {

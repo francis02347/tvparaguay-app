@@ -83,6 +83,13 @@ public class ImportM3uActivity extends AppCompatActivity {
         refreshCount();
         buildCountryButtons();
 
+        Button btnLoadRecommended = findViewById(R.id.btnLoadRecommended);
+        if (btnLoadRecommended != null) {
+            btnLoadRecommended.setOnClickListener(v -> {
+                importFromUrl("https://raw.githubusercontent.com/francis02347/tvparaguay-app/refs/heads/main/app/src/website/assets/default_channels.m3u", "Recomendados");
+            });
+        }
+
         btnImportFile.setOnClickListener(v ->
             filePickerLauncher.launch(new String[]{
                 "*/*"   // aceptamos cualquier tipo; filtramos por extensión al leer

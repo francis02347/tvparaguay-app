@@ -77,10 +77,11 @@ public class M3uParser {
         if (l.contains("deport") || l.contains("sport"))        return "⚽";
         if (l.contains("pelicul") || l.contains("movie"))       return "🎬";
         if (l.contains("music"))                                 return "🎵";
+        if (l.contains("radio"))                                 return "📻";
         if (l.contains("niño") || l.contains("kid"))             return "🧸";
         if (l.contains("docu"))                                  return "🎥";
         if (l.contains("religi"))                                return "✝️";
-        if (l.contains("entret") || l.contains("variedades"))   return "🌟";
+        if (l.contains("entret") || l.contains("variedades"))   return "🎬";
         return "📺";
     }
 }
