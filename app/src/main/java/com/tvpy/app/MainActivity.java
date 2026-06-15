@@ -51,9 +51,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String FAVS = "❤️";
 
     private static final Set<String> MUNDIAL_CHANNELS = new HashSet<>(Arrays.asList(
+        "Azteca Internacional (México)",
+        "Canal 5 (Televisa) (México)",
         "FOX (Estados Unidos)",
         "FS1 (Estados Unidos)",
         "Gen",
+        "Las Estrellas (México) [Geo-blocked]",
         "Popu TV",
         "RTVE Canal 24 Horas",
         "RTVE La 1",
