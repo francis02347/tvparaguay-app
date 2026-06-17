@@ -1,6 +1,6 @@
 {
-  "versionCode": 58,
-  "versionName": "1.60",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.60/app-website-release.apk",
-  "releaseNotes": "Integracion de transmisiones en vivo: France 24 Espanol, RT en Espanol, Noticias Telemundo, NASA TV y Sky News utilizando el resolvedor dinamico de YouTube (youtube://) y enlaces CDN directos oficiales."
+  "versionCode": 59,
+  "versionName": "1.61",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.61/app-website-release.apk",
+  "releaseNotes": "Filtrado de canales recomendados en la pantalla principal basado en Canales.pdf (93 canales resaltados en amarillo), manteniendo intacta la base de datos de canales M3U completa."
 }
