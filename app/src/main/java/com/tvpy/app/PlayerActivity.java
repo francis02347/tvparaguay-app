@@ -277,6 +277,12 @@ public class PlayerActivity extends AppCompatActivity {
             return;
         }
 
+        if (cleanUrl.startsWith("youtube://")) {
+            String channelPath = cleanUrl.substring("youtube://".length()).trim();
+            resolveYouTubeAndPlay(channelPath, ch);
+            return;
+        }
+
         if (dataSourceFactory != null) {
             dataSourceFactory.setHeaders(headers);
         }
@@ -451,6 +457,63 @@ public class PlayerActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     playResolvedUrl(finalUrl, null, "https://gen.com.py/", ch);
+                                }
+                            });
+                            return;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideLoading();
+                        showErrorScreen(ch.getName());
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void resolveYouTubeAndPlay(final String youtubePath, final Channel ch) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String urlStr = "https://www.youtube.com/" + youtubePath + "/live";
+                    java.net.URL url = new java.net.URL(urlStr);
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(8000);
+                    conn.setReadTimeout(8000);
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                    conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
+
+                    if (conn.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                        java.io.BufferedReader reader = new java.io.BufferedReader(
+                            new java.io.InputStreamReader(conn.getInputStream(), "UTF-8")
+                        );
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            sb.append(line).append("\n");
+                        }
+                        reader.close();
+
+                        String html = sb.toString();
+                        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+                            "\"hlsManifestUrl\"\\s*:\\s*\"([^\"]+)\""
+                        );
+                        java.util.regex.Matcher matcher = pattern.matcher(html);
+                        if (matcher.find()) {
+                            String hlsUrl = matcher.group(1);
+                            hlsUrl = hlsUrl.replace("\\/", "/");
+                            final String finalUrl = hlsUrl;
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    playResolvedUrl(finalUrl, null, null, ch);
                                 }
                             });
                             return;
