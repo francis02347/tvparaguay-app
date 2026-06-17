@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TV Paraguay"
+rootProject.name = "Tv Paraguay Mundial"
 include ':app'
