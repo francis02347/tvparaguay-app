@@ -1,6 +1,6 @@
 {
-  "versionCode": 59,
-  "versionName": "1.61",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.61/app-website-release.apk",
-  "releaseNotes": "Filtrado de canales recomendados en la pantalla principal basado en Canales.pdf (93 canales resaltados en amarillo), manteniendo intacta la base de datos de canales M3U completa."
+  "versionCode": 60,
+  "versionName": "1.62",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.62/app-website-release.apk",
+  "releaseNotes": "Correccion de resolvedor de YouTube Live (Nasa TV y France 24) a traves de busqueda indexada rapida y stack-safe, y adicion de fallback automatico a Telemundo Puerto Rico para el canal Noticias Telemundo."
 }

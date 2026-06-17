@@ -488,7 +488,7 @@ public class PlayerActivity extends AppCompatActivity {
                     conn.setConnectTimeout(8000);
                     conn.setReadTimeout(8000);
                     conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                    conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
+                    conn.setRequestProperty("Accept-Language", "es-ES,es;q=0.9,en;q=0.8");
 
                     if (conn.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
                         java.io.BufferedReader reader = new java.io.BufferedReader(
@@ -502,12 +502,36 @@ public class PlayerActivity extends AppCompatActivity {
                         reader.close();
 
                         String html = sb.toString();
-                        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
-                            "\"hlsManifestUrl\"\\s*:\\s*\"([^\"]+)\""
-                        );
-                        java.util.regex.Matcher matcher = pattern.matcher(html);
-                        if (matcher.find()) {
-                            String hlsUrl = matcher.group(1);
+                        String hlsUrl = extractValue(html, "\"hlsManifestUrl\"");
+                        
+                        if (hlsUrl == null || hlsUrl.isEmpty()) {
+                            // Try fallback: extract videoId and fetch watch page
+                            String videoId = extractValue(html, "\"videoId\"");
+                            if (videoId != null && !videoId.isEmpty()) {
+                                String watchUrlStr = "https://www.youtube.com/watch?v=" + videoId;
+                                java.net.URL watchUrl = new java.net.URL(watchUrlStr);
+                                java.net.HttpURLConnection watchConn = (java.net.HttpURLConnection) watchUrl.openConnection();
+                                watchConn.setConnectTimeout(8000);
+                                watchConn.setReadTimeout(8000);
+                                watchConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                                watchConn.setRequestProperty("Accept-Language", "es-ES,es;q=0.9,en;q=0.8");
+                                
+                                if (watchConn.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                                    java.io.BufferedReader watchReader = new java.io.BufferedReader(
+                                        new java.io.InputStreamReader(watchConn.getInputStream(), "UTF-8")
+                                    );
+                                    StringBuilder watchSb = new StringBuilder();
+                                    String watchLine;
+                                    while ((watchLine = watchReader.readLine()) != null) {
+                                        watchSb.append(watchLine).append("\n");
+                                    }
+                                    watchReader.close();
+                                    hlsUrl = extractValue(watchSb.toString(), "\"hlsManifestUrl\"");
+                                }
+                            }
+                        }
+
+                        if (hlsUrl != null && !hlsUrl.isEmpty()) {
                             hlsUrl = hlsUrl.replace("\\/", "/");
                             final String finalUrl = hlsUrl;
                             handler.post(new Runnable() {
@@ -519,8 +543,20 @@ public class PlayerActivity extends AppCompatActivity {
                             return;
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+
+                // Fallback for Telemundo if offline or fails
+                if (youtubePath.contains("noticias") || (ch.getName() != null && ch.getName().contains("Telemundo"))) {
+                    final String fallbackUrl = "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8";
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            playResolvedUrl(fallbackUrl, null, null, ch);
+                        }
+                    });
+                    return;
                 }
 
                 handler.post(new Runnable() {
@@ -532,6 +568,23 @@ public class PlayerActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    private static String extractValue(String html, String key) {
+        int index = html.indexOf(key);
+        if (index >= 0) {
+            int colonIndex = html.indexOf(":", index + key.length());
+            if (colonIndex >= 0) {
+                int startQuote = html.indexOf("\"", colonIndex + 1);
+                if (startQuote >= 0 && startQuote < colonIndex + 10) {
+                    int endQuote = html.indexOf("\"", startQuote + 1);
+                    if (endQuote > startQuote) {
+                        return html.substring(startQuote + 1, endQuote);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void playResolvedUrl(String streamUrl, String cookieStr, String referer, Channel ch) {

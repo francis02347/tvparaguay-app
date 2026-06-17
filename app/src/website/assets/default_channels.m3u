@@ -514,7 +514,7 @@ youtube://@France24_es
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Rusia" group-title="Noticias",RT en Español
 https://rt-esp.rttv.com/live/rtesp/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Noticias",Noticias Telemundo
-https://nbcu-telemundoflorida-firetv.amagi.tv/playlist.m3u8
+youtube://@noticias
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Entretenimiento",NASA TV
 youtube://user/NASATelevision
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Noticias",Sky News (Inglés)
