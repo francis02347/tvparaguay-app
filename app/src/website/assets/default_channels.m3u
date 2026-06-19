@@ -450,7 +450,7 @@ https://d39g1vxj2ef6in.cloudfront.net/v1/manifest/3fec3e5cac39a52b2132f9c66c83da
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Televida (1080p)
 https://tls-cl.cdnz.cl/televida/live/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Teledeporte (1080p)
-http://92.176.119.180:2095/play/a16t
+https://rtvelivestream.rtve.es/rtvesec/tdp/tdp_main_dvr.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",SupermÃºsica TV (720p)
 https://backupmaxmedia.hvmultiplay.com/hls/stream4/supermusica.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Telesur HD (1080p)
