@@ -1,6 +1,6 @@
 {
-  "versionCode": 60,
-  "versionName": "1.62",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.62/app-website-release.apk",
-  "releaseNotes": "Correccion de resolvedor de YouTube Live (Nasa TV y France 24) a traves de busqueda indexada rapida y stack-safe, y adicion de fallback automatico a Telemundo Puerto Rico para el canal Noticias Telemundo."
+  "versionCode": 61,
+  "versionName": "1.63",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.63/app-website-release.apk",
+  "releaseNotes": "Mejora de reintento automático de canales en dispositivos de TV (Leanback/Android TV), facilitando la reconexión de señales inestables como Telefe Internacional de forma automática."
 }
