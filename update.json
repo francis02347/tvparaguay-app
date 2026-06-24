@@ -1,6 +1,6 @@
 {
-  "versionCode": 64,
-  "versionName": "1.66",
+  "versionCode": 65,
+  "versionName": "1.67",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Integración del modo Picture-in-Picture (PiP) automático al salir del reproductor de video (presionando Inicio o mediante el gesto Home)."
+  "releaseNotes": "Soporte de reproducción de audio en segundo plano (solo audio) mediante una acción de auriculares en la ventana PiP, permitiendo escuchar con la pantalla apagada."
 }
