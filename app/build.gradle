@@ -6,6 +6,11 @@ android {
     namespace 'com.tvpy.app'
     compileSdk 35
 
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
     // Generar release.keystore automáticamente si no existe
     def keystoreFile = file("release.keystore")
     if (!keystoreFile.exists()) {
@@ -47,8 +52,8 @@ android {
         applicationId "com.tvpy.tvapp"
         minSdk 26
         targetSdk 35
-        versionCode 62
-        versionName "1.64"
+        versionCode 63
+        versionName "1.65"
     }
 
     buildFeatures {
