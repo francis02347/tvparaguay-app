@@ -1,6 +1,6 @@
 {
-  "versionCode": 63,
-  "versionName": "1.65",
+  "versionCode": 64,
+  "versionName": "1.66",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Integración de 8 nuevos canales de naturaleza y documentales (Pluto TV Animales, Naturaleza, Smithsonian Channel, NatureTime, etc.) en la pantalla principal."
+  "releaseNotes": "Integración del modo Picture-in-Picture (PiP) automático al salir del reproductor de video (presionando Inicio o mediante el gesto Home)."
 }
