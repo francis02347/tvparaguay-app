@@ -1,6 +1,6 @@
 {
-  "versionCode": 62,
-  "versionName": "1.64",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v1.64/app-website-release.apk",
-  "releaseNotes": "Ajuste del tiempo de reintento automático de canales en dispositivos de TV de 5 a 3 segundos, logrando una reconexión mucho más ágil de señales inestables."
+  "versionCode": 63,
+  "versionName": "1.65",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
+  "releaseNotes": "Integración de 8 nuevos canales de naturaleza y documentales (Pluto TV Animales, Naturaleza, Smithsonian Channel, NatureTime, etc.) en la pantalla principal."
 }
