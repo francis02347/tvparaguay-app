@@ -268,13 +268,14 @@ public class BackgroundAudioService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        // Al hacer click en la notificación, vuelve a la app (opcional, dejamos intent vacío por ahora)
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        // Al hacer click en la notificación, vuelve a la reproducción del canal
+        Intent notificationIntent = new Intent(this, PlayerActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
                 0,
                 notificationIntent,
-                PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         // Intentar usar el ícono de auriculares que creamos o el de launcher de la app como fallback

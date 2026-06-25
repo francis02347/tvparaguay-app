@@ -108,6 +108,13 @@ public class PlayerActivity extends AppCompatActivity {
         channelList  = ChannelSession.getChannels();
         currentIndex = ChannelSession.getStartIndex();
 
+        if (channelList == null || channelList.isEmpty()) {
+            finishAndGoHome();
+            return;
+        }
+
+        stopService(new Intent(this, BackgroundAudioService.class));
+
         playerView         = findViewById(R.id.playerView);
         loadingContainer   = findViewById(R.id.loadingContainer);
         dot1               = findViewById(R.id.dot1);
