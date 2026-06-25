@@ -1,6 +1,6 @@
 {
-  "versionCode": 65,
-  "versionName": "1.67",
+  "versionCode": 66,
+  "versionName": "1.68",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Soporte de reproducción de audio en segundo plano (solo audio) mediante una acción de auriculares en la ventana PiP, permitiendo escuchar con la pantalla apagada."
+  "releaseNotes": "Corrección de reproducción de audio en segundo plano (solucionado cierre inesperado al presionar el auricular en PiP y visibilidad de la notificación persistente de control en Android 13+)."
 }

@@ -16,6 +16,16 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.app.PictureInPictureParams;
+import android.util.Rational;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.content.Context;
+import android.graphics.drawable.Icon;
+import android.app.RemoteAction;
+import android.app.PendingIntent;
+import android.annotation.TargetApi;
+import android.content.res.Configuration;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
@@ -53,6 +63,10 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView overlayEmoji, overlayName, overlayCategory, overlayHint;
     private View errorScreen;
     private TextView tvErrorChannelName;
+    private android.widget.Button btnRetry;
+    private int autoRetryCount = 0;
+    private Runnable autoRetryRunnable;
+    private static final int AUTO_RETRY_DELAY_MS = 3000;
 
     private View sidePanel;
     private RecyclerView rvSideChannels;
@@ -64,6 +78,11 @@ public class PlayerActivity extends AppCompatActivity {
     private int currentIndex = 0;
     private GestureDetector gestureDetector;
     private MapHeaderDataSourceFactory dataSourceFactory;
+    private BroadcastReceiver backgroundAudioReceiver;
+    private String activeStreamUrl;
+    private String activeCookie;
+    private String activeReferer;
+    private String activeUserAgent;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable hideOverlayRunnable;
@@ -84,6 +103,7 @@ public class PlayerActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_player);
         enterImmersiveMode();
+        checkNotificationPermission();
 
         channelList  = ChannelSession.getChannels();
         currentIndex = ChannelSession.getStartIndex();
@@ -103,6 +123,7 @@ public class PlayerActivity extends AppCompatActivity {
         overlayHint        = findViewById(R.id.overlayHint);
         errorScreen        = findViewById(R.id.errorScreen);
         tvErrorChannelName = findViewById(R.id.tvErrorChannelName);
+        btnRetry           = findViewById(R.id.btnRetry);
         sidePanel          = findViewById(R.id.sidePanel);
         rvSideChannels     = findViewById(R.id.rvSideChannels);
 
@@ -137,7 +158,13 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btnRetry).setOnClickListener(v -> loadChannel(currentIndex));
+        btnRetry.setOnClickListener(v -> {
+            if (autoRetryRunnable != null) {
+                handler.removeCallbacks(autoRetryRunnable);
+                autoRetryRunnable = null;
+            }
+            loadChannel(currentIndex);
+        });
 
         btnFavorite.setOnClickListener(v -> toggleFavorite());
         btnFavorite.setOnFocusChangeListener((v, hasFocus) -> {
@@ -184,7 +211,7 @@ public class PlayerActivity extends AppCompatActivity {
         });
 
         setupPlayer();
-
+        registerBackgroundAudioReceiver();
         if (!channelList.isEmpty()) loadChannel(currentIndex);
     }
 
@@ -215,6 +242,7 @@ public class PlayerActivity extends AppCompatActivity {
                 } else if (state == Player.STATE_READY) {
                     hideLoading();
                     hideErrorScreen();
+                    autoRetryCount = 0;
                     player.play();
                 } else if (state == Player.STATE_ENDED) {
                     loadChannel(currentIndex);
@@ -281,6 +309,20 @@ public class PlayerActivity extends AppCompatActivity {
             String channelPath = cleanUrl.substring("youtube://".length()).trim();
             resolveYouTubeAndPlay(channelPath, ch);
             return;
+        }
+
+        activeStreamUrl = cleanUrl;
+        activeCookie = null;
+        activeReferer = null;
+        activeUserAgent = null;
+        for (java.util.Map.Entry<String, String> entry : headers.entrySet()) {
+            if ("cookie".equalsIgnoreCase(entry.getKey())) {
+                activeCookie = entry.getValue();
+            } else if ("referer".equalsIgnoreCase(entry.getKey())) {
+                activeReferer = entry.getValue();
+            } else if ("user-agent".equalsIgnoreCase(entry.getKey())) {
+                activeUserAgent = entry.getValue();
+            }
         }
 
         if (dataSourceFactory != null) {
@@ -588,6 +630,11 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void playResolvedUrl(String streamUrl, String cookieStr, String referer, Channel ch) {
+        activeStreamUrl = streamUrl;
+        activeCookie = cookieStr;
+        activeReferer = referer;
+        activeUserAgent = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36";
+
         if (dataSourceFactory != null) {
             java.util.Map<String, String> headers = new java.util.HashMap<>();
             headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36");
@@ -734,10 +781,48 @@ public class PlayerActivity extends AppCompatActivity {
         errorScreen.setVisibility(View.VISIBLE);
         if (hideOverlayRunnable != null) handler.removeCallbacks(hideOverlayRunnable);
         overlayContainer.setVisibility(View.GONE);
+
+        if (isTelevision()) {
+            startAutomaticRetry();
+        }
+    }
+
+    private void startAutomaticRetry() {
+        if (autoRetryRunnable != null) {
+            handler.removeCallbacks(autoRetryRunnable);
+        }
+        autoRetryCount++;
+        if (btnRetry != null) {
+            btnRetry.setText("Reintentando... (" + autoRetryCount + ")");
+        }
+        autoRetryRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (errorScreen.getVisibility() == View.VISIBLE) {
+                    if (btnRetry != null) {
+                        btnRetry.setText("Intentando...");
+                    }
+                    loadChannel(currentIndex);
+                }
+            }
+        };
+        handler.postDelayed(autoRetryRunnable, AUTO_RETRY_DELAY_MS);
     }
 
     private void hideErrorScreen() {
         errorScreen.setVisibility(View.GONE);
+        if (autoRetryRunnable != null) {
+            handler.removeCallbacks(autoRetryRunnable);
+            autoRetryRunnable = null;
+        }
+        if (btnRetry != null) {
+            btnRetry.setText("Intentar de nuevo");
+        }
+    }
+
+    private boolean isTelevision() {
+        android.app.UiModeManager uiModeManager = (android.app.UiModeManager) getSystemService(UI_MODE_SERVICE);
+        return uiModeManager != null && uiModeManager.getCurrentModeType() == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
     }
 
     private void showChannelOverlay(Channel ch, int index) {
@@ -817,8 +902,141 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (player != null) player.pause();
-        anim1.pause(); anim2.pause(); anim3.pause();
+        boolean isPip = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            isPip = isInPictureInPictureMode();
+        }
+        if (!isPip) {
+            if (player != null) player.pause();
+            anim1.pause(); anim2.pause(); anim3.pause();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (player != null) {
+            player.pause();
+        }
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!isTelevision() && player != null && player.isPlaying()) {
+                enterPipModeCustom();
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    private void enterPipModeCustom() {
+        PictureInPictureParams.Builder builder = new PictureInPictureParams.Builder();
+        Rational aspectRatio = new Rational(16, 9);
+        builder.setAspectRatio(aspectRatio);
+
+        Intent broadcastIntent = new Intent("ACTION_BACKGROUND_AUDIO");
+        broadcastIntent.setPackage(getPackageName());
+        
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 
+                0, 
+                broadcastIntent, 
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        int iconRes = getResources().getIdentifier("ic_headphones", "drawable", getPackageName());
+        if (iconRes == 0) {
+            iconRes = android.R.drawable.ic_lock_silent_mode;
+        }
+        Icon icon = Icon.createWithResource(this, iconRes);
+        
+        RemoteAction remoteAction = new RemoteAction(
+                icon,
+                "Solo Audio",
+                "Escuchar en segundo plano",
+                pendingIntent
+        );
+
+        java.util.List<RemoteAction> actions = new java.util.ArrayList<>();
+        actions.add(remoteAction);
+        builder.setActions(actions);
+
+        enterPictureInPictureMode(builder.build());
+    }
+
+    private void registerBackgroundAudioReceiver() {
+        if (backgroundAudioReceiver == null) {
+            backgroundAudioReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if ("ACTION_BACKGROUND_AUDIO".equals(intent.getAction())) {
+                        startBackgroundAudio();
+                    }
+                }
+            };
+            IntentFilter filter = new IntentFilter("ACTION_BACKGROUND_AUDIO");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(backgroundAudioReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(backgroundAudioReceiver, filter);
+            }
+        }
+    }
+
+    private void unregisterBackgroundAudioReceiver() {
+        if (backgroundAudioReceiver != null) {
+            unregisterReceiver(backgroundAudioReceiver);
+            backgroundAudioReceiver = null;
+        }
+    }
+
+    private void startBackgroundAudio() {
+        if (currentIndex < 0 || currentIndex >= channelList.size()) return;
+        Channel currentChannel = channelList.get(currentIndex);
+        
+        String playUrl = activeStreamUrl;
+        if (playUrl == null || playUrl.isEmpty()) {
+            playUrl = currentChannel.getUrl();
+            if (player != null && player.getCurrentMediaItem() != null && player.getCurrentMediaItem().localConfiguration != null) {
+                playUrl = player.getCurrentMediaItem().localConfiguration.uri.toString();
+            }
+        }
+        
+        Intent serviceIntent = new Intent(this, BackgroundAudioService.class);
+        serviceIntent.putExtra("channel_name", currentChannel.getName());
+        serviceIntent.putExtra("stream_url", playUrl);
+        serviceIntent.putExtra("raw_url", currentChannel.getUrl());
+        if (activeCookie != null) {
+            serviceIntent.putExtra("cookie", activeCookie);
+        }
+        if (activeReferer != null) {
+            serviceIntent.putExtra("referer", activeReferer);
+        }
+        if (activeUserAgent != null) {
+            serviceIntent.putExtra("user_agent", activeUserAgent);
+        }
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+        
+        finish();
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
+        if (isInPictureInPictureMode) {
+            if (topBar != null) topBar.setVisibility(View.GONE);
+            if (sidePanel != null) sidePanel.setVisibility(View.GONE);
+            if (overlayContainer != null) overlayContainer.setVisibility(View.GONE);
+        } else {
+            enterImmersiveMode();
+        }
     }
 
     @Override
@@ -834,11 +1052,25 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onDestroy() {
         handler.removeCallbacksAndMessages(null);
         anim1.cancel(); anim2.cancel(); anim3.cancel();
+        unregisterBackgroundAudioReceiver();
         if (player != null) {
             player.release();
             player = null;
         }
         super.onDestroy();
+    }
+
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                androidx.core.app.ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                        101
+                );
+            }
+        }
     }
 
     private static class MapHeaderDataSourceFactory implements DataSource.Factory {
