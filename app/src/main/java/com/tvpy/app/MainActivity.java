@@ -167,11 +167,28 @@ public class MainActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
                     != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                androidx.core.app.ActivityCompat.requestPermissions(
-                        this,
-                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
-                        101
-                );
+                
+                final android.content.SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+                boolean shown = prefs.getBoolean("has_shown_notification_explanation", false);
+                
+                if (!shown) {
+                    new android.app.AlertDialog.Builder(this)
+                        .setTitle("Reproducción en Segundo Plano")
+                        .setMessage("Para poder escuchar el audio de los canales con la pantalla apagada o en segundo plano, la aplicación necesita permiso para mostrar una notificación persistente con los controles de reproducción.\n\n¿Deseas activar las notificaciones?")
+                        .setPositiveButton("Continuar", (d, w) -> {
+                            prefs.edit().putBoolean("has_shown_notification_explanation", true).apply();
+                            androidx.core.app.ActivityCompat.requestPermissions(
+                                    MainActivity.this,
+                                    new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                                    101
+                            );
+                        })
+                        .setNegativeButton("Ahora no", (d, w) -> {
+                            prefs.edit().putBoolean("has_shown_notification_explanation", true).apply();
+                        })
+                        .setCancelable(false)
+                        .show();
+                }
             }
         }
     }

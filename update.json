@@ -1,6 +1,6 @@
 {
-  "versionCode": 69,
-  "versionName": "1.71",
+  "versionCode": 70,
+  "versionName": "1.72",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Corrección de superposición visual: ahora la lista de canales se recorta correctamente al desplazarse y no se superpone sobre los botones de la cabecera."
+  "releaseNotes": "Aviso educativo de permisos de notificación: se explica por qué es necesario el permiso para habilitar la reproducción en segundo plano y se muestra un tip recordatorio en el reproductor e importación."
 }

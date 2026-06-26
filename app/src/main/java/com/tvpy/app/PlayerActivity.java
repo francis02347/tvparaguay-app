@@ -1071,11 +1071,7 @@ public class PlayerActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
                     != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                androidx.core.app.ActivityCompat.requestPermissions(
-                        this,
-                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
-                        101
-                );
+                android.widget.Toast.makeText(this, "💡 Recordá permitir las notificaciones para habilitar la reproducción en segundo plano", android.widget.Toast.LENGTH_LONG).show();
             }
         }
     }

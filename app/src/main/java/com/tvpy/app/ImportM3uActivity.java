@@ -522,6 +522,12 @@ public class ImportM3uActivity extends AppCompatActivity {
             } else {
                 details = "Los canales ya se encontraban en tu lista (duplicados).";
             }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                        != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    details += "\n\n💡 Tip: Recordá permitir las notificaciones para habilitar la reproducción en segundo plano.";
+                }
+            }
             tvSuccessDetails.setText(details);
         }
 
