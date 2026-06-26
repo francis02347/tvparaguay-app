@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Channel> filteredChannels = new ArrayList<>();
     private EditText searchBar;
     private TextView tvNoResults;
+    private View layoutTutorial;
     private TextView tvM3uBadge;
     private LinearLayout filterChipsContainer; // Fila única de chips de filtro
     private LinearLayout alphaBar;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView  = findViewById(R.id.recyclerView);
         searchBar     = findViewById(R.id.searchBar);
         tvNoResults   = findViewById(R.id.tvNoResults);
+        layoutTutorial = findViewById(R.id.layoutTutorial);
         tvM3uBadge    = findViewById(R.id.tvM3uBadge);
         filterChipsContainer = findViewById(R.id.filterChipsContainer);
         alphaBar      = findViewById(R.id.alphaBar);
@@ -429,14 +431,43 @@ public class MainActivity extends AppCompatActivity {
         }
 
         adapter.updateChannels(filteredChannels, favUrls);
-        boolean empty = filteredChannels.isEmpty();
-        tvNoResults.setVisibility(empty ? View.VISIBLE : View.GONE);
-        recyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
-        if (empty) tvNoResults.setText(showingFavorites
-            ? "❤️ Todavía no tenés canales favoritos"
-            : "😕 No se encontraron canales");
+        
+        if (allChannels.isEmpty()) {
+            if (layoutTutorial != null) {
+                layoutTutorial.setVisibility(View.VISIBLE);
+                startTutorialArrowBouncing();
+            }
+            recyclerView.setVisibility(View.GONE);
+            tvNoResults.setVisibility(View.GONE);
+        } else {
+            if (layoutTutorial != null) {
+                layoutTutorial.setVisibility(View.GONE);
+            }
+            boolean empty = filteredChannels.isEmpty();
+            tvNoResults.setVisibility(empty ? View.VISIBLE : View.GONE);
+            recyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
+            if (empty) tvNoResults.setText(showingFavorites
+                ? "❤️ Todavía no tenés canales favoritos"
+                : "😕 No se encontraron canales");
+        }
 
         buildAlphaBar();
+    }
+
+    private void startTutorialArrowBouncing() {
+        View arrowView = findViewById(R.id.tvTutorialArrow);
+        if (arrowView == null) return;
+        
+        arrowView.clearAnimation();
+        float density = getResources().getDisplayMetrics().density;
+        float bounceDistance = -8 * density;
+        
+        android.animation.ObjectAnimator animator = android.animation.ObjectAnimator.ofFloat(
+            arrowView, "translationY", 0f, bounceDistance, 0f
+        );
+        animator.setDuration(1200);
+        animator.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        animator.start();
     }
 
     // ─── Barra alfabética (puntitos + popup flotante) ────────────────────────

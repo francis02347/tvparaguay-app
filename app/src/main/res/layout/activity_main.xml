@@ -148,6 +148,66 @@
                 android:textSize="16sp"
                 android:visibility="gone" />
 
+            <!-- Guía onboarding / tutorial para lista de canales completamente vacía -->
+            <LinearLayout
+                android:id="@+id/layoutTutorial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="20dp"
+                android:visibility="gone">
+
+                <!-- Flechas y texto llamativo apuntando hacia arriba -->
+                <TextView
+                    android:id="@+id/tvTutorialArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⬆️  ¡PULSA AQUÍ PARA IMPORTAR CANALES!  ⬆️"
+                    android:textColor="#3B82F6"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/tutorial_card_bg"
+                    android:padding="20dp"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✨ ¡Bienvenido a Tv Paraguay!"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Por políticas de la Google Play Store, la lista inicial está vacía.\n\nSigue estos dos sencillos pasos para activar los canales recomendados:"
+                        android:textColor="#94A3B8"
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1️⃣ Presiona el botón azul de arriba:\n     «📋 Importar lista M3U»\n\n2️⃣ En la siguiente pantalla, elige:\n     «🚀 Cargar Canales Recomendados»"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:lineSpacingExtra="4dp"
+                        android:gravity="left" />
+                </LinearLayout>
+            </LinearLayout>
+
             <!-- Letra flotante al deslizar la barra alfabética -->
             <TextView
                 android:id="@+id/tvAlphaPopup"

@@ -88,6 +88,10 @@ public class ImportM3uActivity extends AppCompatActivity {
             btnLoadRecommended.setOnClickListener(v -> {
                 importFromUrl("https://raw.githubusercontent.com/francis02347/tvparaguay-app/refs/heads/main/app/src/website/assets/default_channels.m3u", "Recomendados");
             });
+            if (ChannelStore.loadM3uChannels(this).isEmpty()) {
+                btnLoadRecommended.setText("🔥  Cargar Canales Recomendados (Empezar Aquí)  🔥");
+                startPulseAnimation(btnLoadRecommended);
+            }
         }
 
         btnImportFile.setOnClickListener(v ->
@@ -342,4 +346,18 @@ public class ImportM3uActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() { super.onDestroy(); executor.shutdown(); }
+
+    private void startPulseAnimation(View view) {
+        if (view == null) return;
+        android.animation.ObjectAnimator scaleX = android.animation.ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.04f, 1f);
+        android.animation.ObjectAnimator scaleY = android.animation.ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.04f, 1f);
+        scaleX.setDuration(1200);
+        scaleY.setDuration(1200);
+        scaleX.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        scaleY.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        
+        android.animation.AnimatorSet animatorSet = new android.animation.AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY);
+        animatorSet.start();
+    }
 }
