@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean showingFavorites = false;
     private boolean showingMundial = false;
     private String activeGenre = "";
+    private android.animation.AnimatorSet tutorialAnimatorSet;
 
     private static final String ALL  = "Todos";
     private static final String FAVS = "❤️";
@@ -443,6 +444,10 @@ public class MainActivity extends AppCompatActivity {
             if (layoutTutorial != null) {
                 layoutTutorial.setVisibility(View.GONE);
             }
+            if (tutorialAnimatorSet != null) {
+                tutorialAnimatorSet.cancel();
+                tutorialAnimatorSet = null;
+            }
             boolean empty = filteredChannels.isEmpty();
             tvNoResults.setVisibility(empty ? View.VISIBLE : View.GONE);
             recyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
@@ -455,22 +460,70 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startTutorialArrowBouncing() {
-        View arrowView = findViewById(R.id.ivTutorialArrow);
+        final View arrowView = findViewById(R.id.ivTutorialArrow);
         if (arrowView == null) return;
         
         arrowView.clearAnimation();
-        float density = getResources().getDisplayMetrics().density;
+        if (tutorialAnimatorSet != null) {
+            tutorialAnimatorSet.cancel();
+            tutorialAnimatorSet = null;
+        }
         
-        // Animación vertical de rebote apuntando directo hacia arriba
-        float bounceY = -8 * density; // se mueve hacia arriba
+        // Restaurar estado inicial por seguridad antes de animar
+        arrowView.setScaleY(1.0f);
+        arrowView.setAlpha(1.0f);
+        arrowView.setTranslationY(0f);
         
-        android.animation.ObjectAnimator animY = android.animation.ObjectAnimator.ofFloat(
-            arrowView, "translationY", 0f, bounceY, 0f
-        );
-        
-        animY.setDuration(1000);
-        animY.setRepeatCount(android.animation.ValueAnimator.INFINITE);
-        animY.start();
+        arrowView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (arrowView.getWidth() == 0 || arrowView.getHeight() == 0) return;
+                
+                arrowView.setPivotX(arrowView.getWidth() / 2f);
+                arrowView.setPivotY(arrowView.getHeight()); // Pivote en la base de la flecha
+                
+                // 1. Fase de crecimiento hacia arriba (escala Y de 0 a 1) y aparición (alpha de 0 a 1)
+                android.animation.ObjectAnimator scaleY = android.animation.ObjectAnimator.ofFloat(
+                    arrowView, "scaleY", 0f, 1f
+                );
+                android.animation.ObjectAnimator fadeIn = android.animation.ObjectAnimator.ofFloat(
+                    arrowView, "alpha", 0f, 1f
+                );
+                
+                android.animation.AnimatorSet showSet = new android.animation.AnimatorSet();
+                showSet.playTogether(scaleY, fadeIn);
+                showSet.setDuration(900);
+                showSet.setInterpolator(new android.view.animation.DecelerateInterpolator());
+                
+                // 2. Fase de ocultación rápida (alpha de 1 a 0)
+                android.animation.ObjectAnimator fadeOut = android.animation.ObjectAnimator.ofFloat(
+                    arrowView, "alpha", 1f, 0f
+                );
+                fadeOut.setDuration(350);
+                fadeOut.setStartDelay(450); // Mantener visible por 450ms antes de reiniciar
+                
+                tutorialAnimatorSet = new android.animation.AnimatorSet();
+                tutorialAnimatorSet.playSequentially(showSet, fadeOut);
+                
+                tutorialAnimatorSet.addListener(new android.animation.AnimatorListenerAdapter() {
+                    private boolean isCancelled = false;
+                    
+                    @Override
+                    public void onAnimationCancel(android.animation.Animator animation) {
+                        isCancelled = true;
+                    }
+                    
+                    @Override
+                    public void onAnimationEnd(android.animation.Animator animation) {
+                        if (!isCancelled && arrowView.getVisibility() == View.VISIBLE) {
+                            tutorialAnimatorSet.start();
+                        }
+                    }
+                });
+                
+                tutorialAnimatorSet.start();
+            }
+        });
     }
 
     // ─── Barra alfabética (puntitos + popup flotante) ────────────────────────

@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_gradient">
+    android:background="@drawable/bg_gradient"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <!-- Header -->
     <LinearLayout
@@ -124,12 +126,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -157,8 +163,10 @@
                 android:gravity="top|center_horizontal"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:paddingTop="0dp"
+                android:paddingTop="6dp"
                 android:paddingBottom="20dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:visibility="gone">
 
                 <!-- Flecha indicadora animada que apunta hacia el botón del header -->
