@@ -1,6 +1,6 @@
 {
-  "versionCode": 67,
-  "versionName": "1.69",
+  "versionCode": 68,
+  "versionName": "1.70",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Corrección de reproducción de audio en segundo plano: ahora al pulsar en la notificación persistente se vuelve a abrir el canal a pantalla completa en la aplicación."
+  "releaseNotes": "Redirección automática al reproductor del primer canal de la lista al completar con éxito cualquier importación de canales."
 }

@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -485,6 +486,13 @@ public class ImportM3uActivity extends AppCompatActivity {
         TextView tvSuccessIcon = findViewById(R.id.tvSuccessIcon);
         TextView tvSuccessTitle = findViewById(R.id.tvSuccessTitle);
         TextView tvSuccessDetails = findViewById(R.id.tvSuccessDetails);
+        TextView tvSuccessRedirect = findViewById(R.id.tvSuccessRedirect);
+
+        final List<Channel> list = new ArrayList<>();
+        list.addAll(ChannelData.getChannels(this));
+        list.addAll(ChannelStore.loadM3uChannels(this));
+        final List<Channel> sortedList = ChannelDeduplicator.deduplicate(list);
+        sortedList.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
 
         if (tvSuccessIcon != null) {
             if ("Recomendados".equals(countryName)) {
@@ -517,6 +525,14 @@ public class ImportM3uActivity extends AppCompatActivity {
             tvSuccessDetails.setText(details);
         }
 
+        if (tvSuccessRedirect != null) {
+            if (sortedList.isEmpty()) {
+                tvSuccessRedirect.setText("Redirigiendo al inicio...");
+            } else {
+                tvSuccessRedirect.setText("Iniciando reproducción...");
+            }
+        }
+
         successOverlay.setAlpha(0f);
         successOverlay.setVisibility(View.VISIBLE);
         successOverlay.animate()
@@ -537,6 +553,11 @@ public class ImportM3uActivity extends AppCompatActivity {
         successOverlay.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (!sortedList.isEmpty()) {
+                    ChannelSession.set(sortedList, 0);
+                    Intent intent = new Intent(ImportM3uActivity.this, PlayerActivity.class);
+                    startActivity(intent);
+                }
                 finish();
             }
         }, 2500);
