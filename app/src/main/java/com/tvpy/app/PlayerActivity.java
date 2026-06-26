@@ -943,32 +943,34 @@ public class PlayerActivity extends AppCompatActivity {
         Rational aspectRatio = new Rational(16, 9);
         builder.setAspectRatio(aspectRatio);
 
-        Intent broadcastIntent = new Intent("ACTION_BACKGROUND_AUDIO");
-        broadcastIntent.setPackage(getPackageName());
-        
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this, 
-                0, 
-                broadcastIntent, 
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
+        if (!BuildConfig.IS_PLAY_STORE) {
+            Intent broadcastIntent = new Intent("ACTION_BACKGROUND_AUDIO");
+            broadcastIntent.setPackage(getPackageName());
+            
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    this, 
+                    0, 
+                    broadcastIntent, 
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
 
-        int iconRes = getResources().getIdentifier("ic_headphones", "drawable", getPackageName());
-        if (iconRes == 0) {
-            iconRes = android.R.drawable.ic_lock_silent_mode;
+            int iconRes = getResources().getIdentifier("ic_headphones", "drawable", getPackageName());
+            if (iconRes == 0) {
+                iconRes = android.R.drawable.ic_lock_silent_mode;
+            }
+            Icon icon = Icon.createWithResource(this, iconRes);
+            
+            RemoteAction remoteAction = new RemoteAction(
+                    icon,
+                    "Solo Audio",
+                    "Escuchar en segundo plano",
+                    pendingIntent
+            );
+
+            java.util.List<RemoteAction> actions = new java.util.ArrayList<>();
+            actions.add(remoteAction);
+            builder.setActions(actions);
         }
-        Icon icon = Icon.createWithResource(this, iconRes);
-        
-        RemoteAction remoteAction = new RemoteAction(
-                icon,
-                "Solo Audio",
-                "Escuchar en segundo plano",
-                pendingIntent
-        );
-
-        java.util.List<RemoteAction> actions = new java.util.ArrayList<>();
-        actions.add(remoteAction);
-        builder.setActions(actions);
 
         enterPictureInPictureMode(builder.build());
     }
@@ -1068,6 +1070,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void checkNotificationPermission() {
+        if (BuildConfig.IS_PLAY_STORE) return; // No se requiere permiso de notificación en Play Store
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
                     != android.content.pm.PackageManager.PERMISSION_GRANTED) {

@@ -1,6 +1,6 @@
 {
-  "versionCode": 70,
-  "versionName": "1.72",
+  "versionCode": 71,
+  "versionName": "1.73",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Aviso educativo de permisos de notificación: se explica por qué es necesario el permiso para habilitar la reproducción en segundo plano y se muestra un tip recordatorio en el reproductor e importación."
+  "releaseNotes": "Exclusión de reproducción en segundo plano para Google Play Store: la función de audio en segundo plano se restringe únicamente al canal de distribución directa (Web)."
 }
