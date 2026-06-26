@@ -327,6 +327,7 @@ public class ImportM3uActivity extends AppCompatActivity {
                 tvStatus.setText("✅ " + prefix + added + " canales importados ("
                     + (parsed.size() - added) + " duplicados omitidos)");
                 etPaste.setText(""); etUrl.setText("");
+                showSuccessOverlay(added, parsed.size() - added, countryName);
             });
         });
     }
@@ -472,5 +473,72 @@ public class ImportM3uActivity extends AppCompatActivity {
                 }
             })
             .start();
+    }
+
+    private void showSuccessOverlay(int added, int duplicates, String countryName) {
+        final FrameLayout successOverlay = findViewById(R.id.layoutSuccessOverlay);
+        if (successOverlay == null) {
+            finish();
+            return;
+        }
+
+        TextView tvSuccessIcon = findViewById(R.id.tvSuccessIcon);
+        TextView tvSuccessTitle = findViewById(R.id.tvSuccessTitle);
+        TextView tvSuccessDetails = findViewById(R.id.tvSuccessDetails);
+
+        if (tvSuccessIcon != null) {
+            if ("Recomendados".equals(countryName)) {
+                tvSuccessIcon.setText("🚀");
+            } else {
+                tvSuccessIcon.setText("✅");
+            }
+            tvSuccessIcon.setScaleX(0.3f);
+            tvSuccessIcon.setScaleY(0.3f);
+        }
+
+        if (tvSuccessTitle != null) {
+            if ("Recomendados".equals(countryName)) {
+                tvSuccessTitle.setText("¡Canales Cargados!");
+            } else {
+                tvSuccessTitle.setText("¡Importación Completada!");
+            }
+        }
+
+        if (tvSuccessDetails != null) {
+            String details = "";
+            if (added > 0) {
+                details = "Se agregaron " + added + " canales nuevos con éxito.";
+                if (duplicates > 0) {
+                    details += "\n(" + duplicates + " omitidos por estar duplicados)";
+                }
+            } else {
+                details = "Los canales ya se encontraban en tu lista (duplicados).";
+            }
+            tvSuccessDetails.setText(details);
+        }
+
+        successOverlay.setAlpha(0f);
+        successOverlay.setVisibility(View.VISIBLE);
+        successOverlay.animate()
+            .alpha(1f)
+            .setDuration(400)
+            .start();
+
+        if (tvSuccessIcon != null) {
+            tvSuccessIcon.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(600)
+                .setInterpolator(new android.view.animation.OvershootInterpolator())
+                .setStartDelay(200)
+                .start();
+        }
+
+        successOverlay.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 2500);
     }
 }
