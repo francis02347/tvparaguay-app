@@ -123,25 +123,41 @@ public class UpdateManager {
      * Muestra el diálogo de confirmación de actualización en pantalla.
      */
     private void showUpdateDialog(String versionName, String apkUrl, String releaseNotes) {
-        new AlertDialog.Builder(context)
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle("📢 ¡Actualización Disponible!")
                 .setMessage("Se ha detectado una nueva versión de Tv Paraguay Mundial (v" + versionName + ")."
                         + "\n\nNovedades:\n" + releaseNotes
-                        + "\n\n¿Querés descargar e instalar la actualización ahora?")
-                .setPositiveButton("Actualizar", (dialog, which) -> {
-                    // Verificar y solicitar permisos para fuentes desconocidas antes de descargar (Android 8.0+)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (!context.getPackageManager().canRequestPackageInstalls()) {
-                            Toast.makeText(context, "Por favor, habilitá la instalación para Tv Paraguay Mundial en los ajustes de tu TV.", Toast.LENGTH_LONG).show();
-                            Intent settingsIntent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-                            settingsIntent.setData(Uri.parse("package:" + context.getPackageName()));
-                            context.startActivity(settingsIntent);
-                            return;
-                        }
+                        + "\n\n¿Querés actualizar la aplicación ahora?");
+
+        if (BuildConfig.IS_PLAY_STORE) {
+            builder.setPositiveButton("Actualizar", (dialog, which) -> {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
+        } else {
+            builder.setPositiveButton("Actualizar", (dialog, which) -> {
+                // Verificar y solicitar permisos para fuentes desconocidas antes de descargar (Android 8.0+)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (!context.getPackageManager().canRequestPackageInstalls()) {
+                        Toast.makeText(context, "Por favor, habilitá la instalación para Tv Paraguay Mundial en los ajustes de tu TV.", Toast.LENGTH_LONG).show();
+                        Intent settingsIntent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                        settingsIntent.setData(Uri.parse("package:" + context.getPackageName()));
+                        context.startActivity(settingsIntent);
+                        return;
                     }
-                    startApkDownload(apkUrl);
-                })
-                .setNegativeButton("Más tarde", null)
+                }
+                startApkDownload(apkUrl);
+            });
+        }
+
+        builder.setNegativeButton("Más tarde", null)
                 .show();
     }
 

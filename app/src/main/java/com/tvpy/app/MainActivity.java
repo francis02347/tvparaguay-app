@@ -131,10 +131,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // ─── Verificar actualizaciones OTA (Solo variante de sitio web) ──
-        if (!BuildConfig.IS_PLAY_STORE) {
-            new UpdateManager(this).checkForUpdates();
-        }
+        // ─── Verificar actualizaciones OTA ──
+        new UpdateManager(this).checkForUpdates();
 
         // ── Modo selección / eliminación ──────────────────────────────
         adapter.setSelectionListener(count -> {
