@@ -455,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startTutorialArrowBouncing() {
-        View arrowView = findViewById(R.id.tvTutorialArrow);
+        View arrowView = findViewById(R.id.ivTutorialArrow);
         if (arrowView == null) return;
         
         arrowView.clearAnimation();
