@@ -1,6 +1,6 @@
 {
-  "versionCode": 68,
-  "versionName": "1.70",
+  "versionCode": 69,
+  "versionName": "1.71",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Redirección automática al reproductor del primer canal de la lista al completar con éxito cualquier importación de canales."
+  "releaseNotes": "Corrección de superposición visual: ahora la lista de canales se recorta correctamente al desplazarse y no se superpone sobre los botones de la cabecera."
 }

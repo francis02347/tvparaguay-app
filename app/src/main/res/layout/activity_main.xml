@@ -142,7 +142,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:clipToPadding="false" />
+                android:clipToPadding="true"
+                android:clipChildren="true" />
 
             <TextView
                 android:id="@+id/tvNoResults"
