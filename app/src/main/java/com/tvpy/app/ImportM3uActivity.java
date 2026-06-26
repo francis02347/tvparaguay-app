@@ -289,8 +289,17 @@ public class ImportM3uActivity extends AppCompatActivity {
         setLoading(true, "Procesando canales...");
 
         executor.execute(() -> {
-            // Pasar el nombre del país como fallback para canales sin tvg-country
-            List<Channel> parsed = M3uParser.parse(content, countryName);
+            List<Channel> parsedList = M3uParser.parse(content, countryName);
+            if ("Recomendados".equals(countryName)) {
+                List<Channel> filtered = new java.util.ArrayList<>();
+                for (Channel ch : parsedList) {
+                    if (RecommendedChannels.NAMES.contains(ch.getName())) {
+                        filtered.add(ch);
+                    }
+                }
+                parsedList = filtered;
+            }
+            final List<Channel> parsed = parsedList;
 
             handler.post(() -> {
                 setLoading(false, null);
