@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.FrameLayout;
+import android.view.MotionEvent;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -91,6 +93,7 @@ public class ImportM3uActivity extends AppCompatActivity {
             if (ChannelStore.loadM3uChannels(this).isEmpty()) {
                 btnLoadRecommended.setText("🔥  Cargar Canales Recomendados (Empezar Aquí)  🔥");
                 startPulseAnimation(btnLoadRecommended);
+                setupSpotlightOverlay(btnLoadRecommended);
             }
         }
 
@@ -359,5 +362,115 @@ public class ImportM3uActivity extends AppCompatActivity {
         android.animation.AnimatorSet animatorSet = new android.animation.AnimatorSet();
         animatorSet.playTogether(scaleX, scaleY);
         animatorSet.start();
+    }
+
+    private void setupSpotlightOverlay(final Button targetButton) {
+        final FrameLayout overlay = findViewById(R.id.layoutSpotlightOverlay);
+        if (overlay == null || targetButton == null) return;
+
+        overlay.setVisibility(View.VISIBLE);
+
+        // Enlazar el botón de destino con el visualizador del spotlight
+        SpotlightView spotlightView = findViewById(R.id.spotlightView);
+        if (spotlightView != null) {
+            spotlightView.setTargetView(targetButton);
+        }
+
+        // Posicionar dinámicamente la tarjeta de instrucciones debajo del botón recortado
+        final View spotlightContent = findViewById(R.id.layoutSpotlightContent);
+        if (spotlightContent != null) {
+            targetButton.post(new Runnable() {
+                @Override
+                public void run() {
+                    int[] loc = new int[2];
+                    targetButton.getLocationInWindow(loc);
+                    
+                    int[] overlayLoc = new int[2];
+                    overlay.getLocationInWindow(overlayLoc);
+                    
+                    int relativeY = loc[1] - overlayLoc[1];
+                    int targetHeight = targetButton.getHeight();
+                    
+                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) spotlightContent.getLayoutParams();
+                    float density = getResources().getDisplayMetrics().density;
+                    params.topMargin = (int) (relativeY + targetHeight + (10 * density));
+                    spotlightContent.setLayoutParams(params);
+                }
+            });
+        }
+
+        // Iniciar la animación de la flecha indicadora
+        View spotlightArrow = findViewById(R.id.ivSpotlightArrow);
+        if (spotlightArrow != null) {
+            startSpotlightArrowAnimation(spotlightArrow);
+        }
+
+        // Manejar eventos táctiles (el toque en el recorte realiza clic en el botón, el resto cancela el spotlight)
+        overlay.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    int[] loc = new int[2];
+                    targetButton.getLocationInWindow(loc);
+                    float x = event.getRawX();
+                    float y = event.getRawY();
+                    
+                    float density = getResources().getDisplayMetrics().density;
+                    float padding = 4 * density;
+                    float left = loc[0] - padding;
+                    float top = loc[1] - padding;
+                    float right = loc[0] + targetButton.getWidth() + padding;
+                    float bottom = loc[1] + targetButton.getHeight() + padding;
+                    
+                    if (x >= left && x <= right && y >= top && y <= bottom) {
+                        // Clic dentro del área de recorte del botón
+                        dismissSpotlight(overlay);
+                        targetButton.performClick();
+                    } else {
+                        // Clic fuera del recorte (cerrar ayuda)
+                        dismissSpotlight(overlay);
+                    }
+                }
+                return true; // Consumir evento táctil
+            }
+        });
+
+        // Ocultar ayuda automáticamente después de 4.5 segundos
+        overlay.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dismissSpotlight(overlay);
+            }
+        }, 4500);
+    }
+
+    private void startSpotlightArrowAnimation(View arrowView) {
+        if (arrowView == null) return;
+        arrowView.clearAnimation();
+        float density = getResources().getDisplayMetrics().density;
+        float bounceY = -8 * density;
+        
+        android.animation.ObjectAnimator animY = android.animation.ObjectAnimator.ofFloat(
+            arrowView, "translationY", 0f, bounceY, 0f
+        );
+        animY.setDuration(800);
+        animY.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        animY.start();
+    }
+
+    private void dismissSpotlight(final View overlay) {
+        if (overlay == null || overlay.getVisibility() == View.GONE) return;
+        
+        overlay.animate()
+            .alpha(0f)
+            .setDuration(350)
+            .withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    overlay.setVisibility(View.GONE);
+                    overlay.setAlpha(1f); // Restaurar opacidad para futuros inicios
+                }
+            })
+            .start();
     }
 }
