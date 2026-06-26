@@ -1,19 +1,20 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="100dp"
-    android:height="100dp"
+    android:width="120dp"
+    android:height="120dp"
     android:viewportWidth="100"
     android:viewportHeight="100">
     <!-- El cuerpo curvo de la flecha -->
     <path
-        android:pathData="M 60,85 C 60,60 52,38 32,25"
+        android:pathData="M 68,82 C 68,54 56,34 37,24"
         android:strokeColor="#3B82F6"
-        android:strokeWidth="3.5"
+        android:strokeWidth="4"
         android:strokeLineCap="round" />
-    <!-- La punta de la flecha apuntando arriba-izquierda -->
+    <!-- La punta de la flecha (triángulo relleno) apuntando arriba-izquierda -->
     <path
-        android:pathData="M 23,32 L 32,25 L 34,37"
+        android:pathData="M 32,21 L 49,22 L 38,38 Z"
+        android:fillColor="#3B82F6"
         android:strokeColor="#3B82F6"
-        android:strokeWidth="3.5"
+        android:strokeWidth="1.5"
         android:strokeLineJoin="round"
         android:strokeLineCap="round" />
 </vector>

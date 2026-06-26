@@ -460,14 +460,26 @@ public class MainActivity extends AppCompatActivity {
         
         arrowView.clearAnimation();
         float density = getResources().getDisplayMetrics().density;
-        float bounceDistance = -8 * density;
         
-        android.animation.ObjectAnimator animator = android.animation.ObjectAnimator.ofFloat(
-            arrowView, "translationY", 0f, bounceDistance, 0f
+        // Animación diagonal siguiendo el ángulo de la flecha
+        float bounceX = -12 * density; // se mueve a la izquierda
+        float bounceY = -12 * density; // se mueve hacia arriba
+        
+        android.animation.ObjectAnimator animX = android.animation.ObjectAnimator.ofFloat(
+            arrowView, "translationX", 0f, bounceX, 0f
         );
-        animator.setDuration(1200);
-        animator.setRepeatCount(android.animation.ValueAnimator.INFINITE);
-        animator.start();
+        android.animation.ObjectAnimator animY = android.animation.ObjectAnimator.ofFloat(
+            arrowView, "translationY", 0f, bounceY, 0f
+        );
+        
+        animX.setDuration(1200);
+        animY.setDuration(1200);
+        animX.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        animY.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        
+        android.animation.AnimatorSet animatorSet = new android.animation.AnimatorSet();
+        animatorSet.playTogether(animX, animY);
+        animatorSet.start();
     }
 
     // ─── Barra alfabética (puntitos + popup flotante) ────────────────────────
