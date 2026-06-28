@@ -11,6 +11,9 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
+import android.media.session.MediaSession;
+import android.media.session.PlaybackState;
+import android.media.MediaMetadata;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
@@ -36,6 +39,7 @@ public class BackgroundAudioService extends Service {
     private AudioManager audioManager;
     private AudioFocusRequest audioFocusRequest;
     private AudioManager.OnAudioFocusChangeListener audioFocusChangeListener;
+    private MediaSession mediaSession;
 
     private String channelName;
     private String streamUrl;
@@ -46,6 +50,10 @@ public class BackgroundAudioService extends Service {
         super.onCreate();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         setupAudioFocus();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mediaSession = new MediaSession(this, "TVParaguay");
+            mediaSession.setActive(true);
+        }
     }
 
     @Override
@@ -64,6 +72,8 @@ public class BackgroundAudioService extends Service {
             rawUrl = intent.getStringExtra("raw_url");
         }
         if (channelName == null) channelName = "Transmisión en Vivo";
+
+        updateMediaSession();
 
         Notification notification = buildNotification();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -93,14 +103,44 @@ public class BackgroundAudioService extends Service {
                 // Foco perdido temporalmente (ej: notificación o tono de llamada)
                 if (player != null) {
                     player.pause();
+                    updatePlaybackState(android.media.session.PlaybackState.STATE_PAUSED);
                 }
             } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                 // Foco recuperado
                 if (player != null) {
                     player.play();
+                    updatePlaybackState(android.media.session.PlaybackState.STATE_PLAYING);
                 }
             }
         };
+    }
+
+    private void updateMediaSession() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mediaSession != null) {
+            android.media.MediaMetadata.Builder metadataBuilder = new android.media.MediaMetadata.Builder()
+                    .putString(android.media.MediaMetadata.METADATA_KEY_TITLE, channelName)
+                    .putString(android.media.MediaMetadata.METADATA_KEY_ARTIST, "TV Paraguay");
+            mediaSession.setMetadata(metadataBuilder.build());
+
+            android.media.session.PlaybackState.Builder stateBuilder = new android.media.session.PlaybackState.Builder()
+                    .setActions(android.media.session.PlaybackState.ACTION_PLAY |
+                                android.media.session.PlaybackState.ACTION_PAUSE |
+                                android.media.session.PlaybackState.ACTION_STOP)
+                    .setState(android.media.session.PlaybackState.STATE_PLAYING,
+                              android.media.session.PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+            mediaSession.setPlaybackState(stateBuilder.build());
+        }
+    }
+
+    private void updatePlaybackState(int state) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mediaSession != null) {
+            android.media.session.PlaybackState.Builder stateBuilder = new android.media.session.PlaybackState.Builder()
+                    .setActions(android.media.session.PlaybackState.ACTION_PLAY |
+                                android.media.session.PlaybackState.ACTION_PAUSE |
+                                android.media.session.PlaybackState.ACTION_STOP)
+                    .setState(state, android.media.session.PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+            mediaSession.setPlaybackState(stateBuilder.build());
+        }
     }
 
     private boolean requestAudioFocus() {
@@ -240,6 +280,11 @@ public class BackgroundAudioService extends Service {
             player.release();
             player = null;
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mediaSession != null) {
+            mediaSession.setActive(false);
+            mediaSession.release();
+            mediaSession = null;
+        }
         stopForeground(true);
     }
 
@@ -284,14 +329,35 @@ public class BackgroundAudioService extends Service {
             iconRes = getResources().getIdentifier("ic_launcher", "mipmap", getPackageName());
         }
 
-        return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Escuchando en segundo plano")
-                .setContentText(channelName)
+        Notification.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder = new Notification.Builder(this, CHANNEL_ID);
+        } else {
+            builder = new Notification.Builder(this);
+        }
+
+        builder.setContentTitle(channelName)
+                .setContentText("Reproduciendo en segundo plano")
                 .setSmallIcon(iconRes)
                 .setContentIntent(pendingIntent)
-                .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Detener", stopPendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .build();
+                .setColorized(true)
+                .setColor(0xFF00F2FE) // brand primary color
+                .setVisibility(Notification.VISIBILITY_PUBLIC);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            builder.addAction(new Notification.Action.Builder(
+                    android.R.drawable.ic_menu_close_clear_cancel, "Detener", stopPendingIntent).build());
+        } else {
+            builder.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Detener", stopPendingIntent);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mediaSession != null) {
+            builder.setStyle(new Notification.MediaStyle()
+                    .setMediaSession(mediaSession.getSessionToken())
+                    .setShowActionsInCompactView(0));
+        }
+
+        return builder.build();
     }
 
     @Nullable

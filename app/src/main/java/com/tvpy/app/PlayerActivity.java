@@ -271,6 +271,7 @@ public class PlayerActivity extends AppCompatActivity {
                     hideErrorScreen();
                     autoRetryCount = 0;
                     player.play();
+                    updatePipParams();
                 } else if (state == Player.STATE_ENDED) {
                     loadChannel(currentIndex);
                 } else if (state == Player.STATE_IDLE) {
@@ -957,11 +958,70 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
+    private void updatePipParams() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PictureInPictureParams.Builder builder = new PictureInPictureParams.Builder();
+            builder.setAspectRatio(new Rational(16, 9));
+
+            // Configurar setSourceRectHint para una transición fluida (Android 8.0+)
+            android.graphics.Rect rect = new android.graphics.Rect();
+            playerView.getGlobalVisibleRect(rect);
+            builder.setSourceRectHint(rect);
+
+            // Habilitar autoEnterEnabled para ingresar a PiP automáticamente en Android 12+ (Home / Recents)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                builder.setAutoEnterEnabled(true);
+            }
+
+            // Se muestra el botón "Solo Audio" si no es Play Store, o si la función premium está habilitada en Play Store
+            if (!BuildConfig.IS_PLAY_STORE || ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) {
+                Intent broadcastIntent = new Intent("ACTION_BACKGROUND_AUDIO");
+                broadcastIntent.setPackage(getPackageName());
+                
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                        this, 
+                        0, 
+                        broadcastIntent, 
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                );
+
+                int iconRes = getResources().getIdentifier("ic_headphones", "drawable", getPackageName());
+                if (iconRes == 0) {
+                    iconRes = android.R.drawable.ic_lock_silent_mode;
+                }
+                Icon icon = Icon.createWithResource(this, iconRes);
+                
+                RemoteAction remoteAction = new RemoteAction(
+                        icon,
+                        "Solo Audio",
+                        "Escuchar en segundo plano",
+                        pendingIntent
+                );
+
+                java.util.List<RemoteAction> actions = new java.util.ArrayList<>();
+                actions.add(remoteAction);
+                builder.setActions(actions);
+            }
+
+            setPictureInPictureParams(builder.build());
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.O)
     private void enterPipModeCustom() {
         PictureInPictureParams.Builder builder = new PictureInPictureParams.Builder();
         Rational aspectRatio = new Rational(16, 9);
         builder.setAspectRatio(aspectRatio);
+
+        // Configurar setSourceRectHint para una transición fluida (Android 8.0+)
+        android.graphics.Rect rect = new android.graphics.Rect();
+        playerView.getGlobalVisibleRect(rect);
+        builder.setSourceRectHint(rect);
+
+        // Habilitar autoEnterEnabled para ingresar a PiP automáticamente en Android 12+ (Home / Recents)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            builder.setAutoEnterEnabled(true);
+        }
 
         // Se muestra el botón "Solo Audio" si no es Play Store, o si la función premium está habilitada en Play Store
         if (!BuildConfig.IS_PLAY_STORE || ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) {
@@ -1095,6 +1155,7 @@ public class PlayerActivity extends AppCompatActivity {
         if (player != null && player.getPlaybackState() == Player.STATE_READY) {
             player.play();
         }
+        updatePipParams();
     }
 
     @Override
