@@ -126,7 +126,7 @@ https://5eaccbab48461.streamlock.net:1936/dancefm_1/dancefm_1/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Del Rey TV
 https://video.hostingcaaguazu.com:19360/delreytv/delreytv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Deportes TVC (1080p)
-http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTYXmD-MOS3u5IUkeXPpBt80/m3u8
+http://190.11.225.124:5000/live/deportes_tvc_hd/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Radio TV",Dismar Radio TV
 https://rds3.desdeparaguay.net/dismartv/dismartv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Lifestyle",Divinity (1080p)
@@ -145,8 +145,7 @@ https://tv.wracanal10.com:3025/live/elsoltvlive.m3u8
 https://cloudtv.streaming.com.py/lenguasdesenas/lenguasdesenas/chunklist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Enlace (720p)
 https://livecdn.enlace.plus/enlace/smil:enlace-hd.smil/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Public;Sports",Esport3 (1080p) [Not 24/7]
-https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/master.m3u8
+
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",EWTN Spain & Latin America (720p)
 https://cdn3.wowza.com/1/SmVrQmZCUXZhVDgz/b3J3MFJv/hls/live/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Exitosa TV (720p) [Not 24/7]
@@ -168,9 +167,9 @@ https://aegis-cloudfront-1.tubi.video/8d9284ec-c451-4e51-a1d4-d16e5c8972af/index
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Francia" group-title="Noticias",France 24 Español
 youtube://@France24_es
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Deportes",FS1 (Estados Unidos)
-http://41.223.30.230/FOXSPORTS1/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="General",GAMTV.cr (720p)
-https://v2.azulstream.com:8081/gamtv/gamtv/index.m3u8
+http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8
+
+
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Gen
 desdeparaguay://gentv
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",GO TV
@@ -193,8 +192,7 @@ https://videoserver.tmcreativos.com:19360/abbftuhxxs/abbftuhxxs.m3u8
 https://juicex.nz/hls/mystream.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",KandelaTV (480p)
 https://streamtv.intervenhosting.net:3718/live/kandelamedioslive.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Undefined",Kpop Mix (720p)
-https://cloud.tvomix.com/KPOPMIX/index.m3u8
+
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",KSCE Vida Cristiana (360p)
 https://2-fss-2.streamhoster.com/pl_120/200226-1449024-1/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",La Cantina Memorias (480p) [Geo-blocked]
@@ -274,7 +272,7 @@ http://www.coninfo.net:1935/tvlink/live/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Norte Informativo TV (240p)
 https://videohd.live:19360/8076/8076.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Noticias",Noticias Telemundo
-https://nbcu-telemundoflorida-firetv.amagi.tv/playlist.m3u8
+https://xumo-drct-ch835-ekq0p.fast.nbcuni.com/live/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Noticiero 90 Minutos (1080p)
 https://play.cdn.enetres.net/621B146D29C541AFB1507809F038F471021/021/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",NOW 70s (720p)
@@ -391,14 +389,13 @@ https://rtvelivestream.rtve.es/rtvesec/24h/24h_main_dvr.m3u8
 https://rtvelivestream.rtve.es/rtvesec/la1/la1_main_dvr.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",San JosÃ© TV (1080p)
 https://rtmp.info/sanjosetv/envivo/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Siembra TV (720p)
-https://streamunoapp.com:3809/live/siembratvlive.m3u8
+
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Noticias",Sky News (Inglés)
 youtube://@skynews
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Smithsonian Channel (Español)
 https://jmp2.uk/plu-63a084934734f30007457b2c.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",SNT
-https://d2qsan2ut81n2k.cloudfront.net/live/2e1f1b6a-9d03-4194-8559-2eabe61a1555/ts:abr.m3u8
+https://alba-py-snt-snt.stream.mediatiquestream.com/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Sol MÃºsica (720p)
 https://d2glyu450vvghm.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-21u4g5cjglv02/sm.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",SOY Plancha TV (720p)

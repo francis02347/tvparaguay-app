@@ -29,6 +29,13 @@ import android.content.res.Configuration;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
+import androidx.annotation.NonNull;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
@@ -48,6 +55,9 @@ import java.util.List;
 
 @OptIn(markerClass = UnstableApi.class)
 public class PlayerActivity extends AppCompatActivity {
+
+    // Cambiar a true una vez que configures AdMob y quieras activar la función premium
+    private static final boolean ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE = false;
 
     // ─── Vistas ──────────────────────────────────────────────────────────────
     private PlayerView playerView;
@@ -84,6 +94,12 @@ public class PlayerActivity extends AppCompatActivity {
     private String activeReferer;
     private String activeUserAgent;
 
+    // AdMob y Reproducción en Segundo Plano Premium
+    private RewardedAd rewardedAd;
+    private boolean isLoadingAd = false;
+    private boolean pendingUnlockBgAudio = false;
+    private android.app.AlertDialog adLoadingDialog;
+
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable hideOverlayRunnable;
     private Runnable hideTopBarRunnable;
@@ -104,6 +120,10 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
         enterImmersiveMode();
         checkNotificationPermission();
+
+        if (BuildConfig.IS_PLAY_STORE && ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) {
+            loadRewardedAd();
+        }
 
         channelList  = ChannelSession.getChannels();
         currentIndex = ChannelSession.getStartIndex();
@@ -493,7 +513,7 @@ public class PlayerActivity extends AppCompatActivity {
                         String resolvedUrl = null;
                         while (matcher.find()) {
                             String found = matcher.group(1);
-                            if (found.contains("rds3gen") && found.contains("k=")) {
+                            if (found.contains("desdeparaguay.net") && found.contains("k=")) {
                                 resolvedUrl = found;
                                 break;
                             }
@@ -943,7 +963,8 @@ public class PlayerActivity extends AppCompatActivity {
         Rational aspectRatio = new Rational(16, 9);
         builder.setAspectRatio(aspectRatio);
 
-        if (!BuildConfig.IS_PLAY_STORE) {
+        // Se muestra el botón "Solo Audio" si no es Play Store, o si la función premium está habilitada en Play Store
+        if (!BuildConfig.IS_PLAY_STORE || ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) {
             Intent broadcastIntent = new Intent("ACTION_BACKGROUND_AUDIO");
             broadcastIntent.setPackage(getPackageName());
             
@@ -1002,6 +1023,21 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void startBackgroundAudio() {
+        if (BuildConfig.IS_PLAY_STORE) {
+            if (!ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) {
+                // Característica desactivada temporalmente en Play Store
+                return;
+            }
+            if (!isBackgroundAudioUnlocked()) {
+                pendingUnlockBgAudio = true;
+                // Regresar a pantalla completa para mostrar el anuncio
+                Intent resumeIntent = new Intent(this, PlayerActivity.class);
+                resumeIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(resumeIntent);
+                return;
+            }
+        }
+
         if (currentIndex < 0 || currentIndex >= channelList.size()) return;
         Channel currentChannel = channelList.get(currentIndex);
         
@@ -1045,6 +1081,10 @@ public class PlayerActivity extends AppCompatActivity {
             if (overlayContainer != null) overlayContainer.setVisibility(View.GONE);
         } else {
             enterImmersiveMode();
+            if (pendingUnlockBgAudio) {
+                pendingUnlockBgAudio = false;
+                showUnlockDialog();
+            }
         }
     }
 
@@ -1070,7 +1110,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void checkNotificationPermission() {
-        if (BuildConfig.IS_PLAY_STORE) return; // No se requiere permiso de notificación en Play Store
+        if (BuildConfig.IS_PLAY_STORE && !ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) return; // No se requiere permiso de notificación en Play Store si está desactivado el segundo plano
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
                     != android.content.pm.PackageManager.PERMISSION_GRANTED) {
@@ -1138,6 +1178,151 @@ public class PlayerActivity extends AppCompatActivity {
                     dataSource.close();
                 }
             };
+        }
+    }
+
+    private boolean isBackgroundAudioUnlocked() {
+        if (!BuildConfig.IS_PLAY_STORE) return true;
+        android.content.SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        long unlockedUntil = prefs.getLong("bg_audio_unlocked_until", 0);
+        return System.currentTimeMillis() < unlockedUntil;
+    }
+
+    private void loadRewardedAd() {
+        if (!BuildConfig.IS_PLAY_STORE) return;
+        if (rewardedAd != null || isLoadingAd) return;
+
+        isLoadingAd = true;
+        AdRequest adRequest = new AdRequest.Builder().build();
+        // ID de anuncio bonificado de prueba oficial de Google
+        String adUnitId = "ca-app-pub-3940256099942544/5224354917";
+
+        RewardedAd.load(this, adUnitId, adRequest, new RewardedAdLoadCallback() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                rewardedAd = null;
+                isLoadingAd = false;
+            }
+
+            @Override
+            public void onAdLoaded(@NonNull RewardedAd ad) {
+                rewardedAd = ad;
+                isLoadingAd = false;
+            }
+        });
+    }
+
+    private void showUnlockDialog() {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Reproducción en Segundo Plano")
+                .setMessage("Esta es una característica Premium.\n\nPara desbloquear la reproducción en segundo plano (audio con la pantalla apagada) gratis por las próximas 24 horas, puedes ver un breve anuncio de video.")
+                .setPositiveButton("Ver Video", (dialog, which) -> {
+                    if (rewardedAd != null) {
+                        showRewardedAd();
+                    } else {
+                        // El anuncio no está cargado, lo cargamos mostrando un diálogo de carga
+                        showAdLoadingDialog();
+                        // Intentar cargar
+                        AdRequest adRequest = new AdRequest.Builder().build();
+                        String adUnitId = "ca-app-pub-3940256099942544/5224354917";
+                        isLoadingAd = true;
+                        RewardedAd.load(PlayerActivity.this, adUnitId, adRequest, new RewardedAdLoadCallback() {
+                            @Override
+                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                isLoadingAd = false;
+                                dismissAdLoadingDialog();
+                                android.widget.Toast.makeText(PlayerActivity.this, "No se pudo cargar el anuncio. Intenta de nuevo más tarde.", android.widget.Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onAdLoaded(@NonNull RewardedAd ad) {
+                                isLoadingAd = false;
+                                rewardedAd = ad;
+                                dismissAdLoadingDialog();
+                                showRewardedAd();
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton("Ahora no", null)
+                .setCancelable(true)
+                .show();
+    }
+
+    private void showRewardedAd() {
+        if (rewardedAd != null) {
+            rewardedAd.show(this, new OnUserEarnedRewardListener() {
+                @Override
+                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                    unlockBackgroundAudio();
+                }
+            });
+            rewardedAd = null;
+            loadRewardedAd();
+        }
+    }
+
+    private void unlockBackgroundAudio() {
+        android.content.SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        long unlockTime = System.currentTimeMillis() + (24 * 60 * 60 * 1000); // 24 horas
+        prefs.edit().putLong("bg_audio_unlocked_until", unlockTime).apply();
+
+        android.widget.Toast.makeText(this, "🎉 ¡Segundo plano desbloqueado por 24 horas!", android.widget.Toast.LENGTH_LONG).show();
+
+        // Verificar permisos de notificación
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                androidx.core.app.ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                        102
+                );
+                return;
+            }
+        }
+        startBackgroundAudio();
+    }
+
+    private void showAdLoadingDialog() {
+        if (adLoadingDialog == null) {
+            android.widget.ProgressBar progressBar = new android.widget.ProgressBar(this);
+            progressBar.setIndeterminate(true);
+            
+            android.widget.FrameLayout container = new android.widget.FrameLayout(this);
+            android.widget.FrameLayout.LayoutParams params = new android.widget.FrameLayout.LayoutParams(
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            params.gravity = android.view.Gravity.CENTER;
+            int padding = (int) (16 * getResources().getDisplayMetrics().density);
+            container.setPadding(padding, padding, padding, padding);
+            container.addView(progressBar, params);
+
+            adLoadingDialog = new android.app.AlertDialog.Builder(this)
+                    .setTitle("Cargando anuncio...")
+                    .setMessage("Por favor, espera un momento.")
+                    .setView(container)
+                    .setCancelable(false)
+                    .create();
+        }
+        adLoadingDialog.show();
+    }
+
+    private void dismissAdLoadingDialog() {
+        if (adLoadingDialog != null && adLoadingDialog.isShowing()) {
+            adLoadingDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 102) {
+            if (grantResults.length > 0 && grantResults[0] != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                android.widget.Toast.makeText(this, "💡 Sin el permiso de notificaciones, no verás los controles para detener el audio.", android.widget.Toast.LENGTH_LONG).show();
+            }
+            startBackgroundAudio();
         }
     }
 }
