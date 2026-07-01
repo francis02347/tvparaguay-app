@@ -467,7 +467,7 @@ https://cdn.global.elektamedia.com/live/c7eds/Totalmusic_Concerts/SA_LIVE_hls_en
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Totalmusic Dance (720p)
 https://cdn.global.elektamedia.com/live/c7eds/Totalmusic_Dance/SA_LIVE_hls_enc/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Trece
-dailymotion://k4nLYiNrBX8W5jDbSlM?referer=https://trece.com.py/&embedder=https://trece.com.py/
+dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Trece España (1080p)
 http://92.176.119.180:2095/play/a179
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Radio TV",Tropicalia 93.9 FM
@@ -499,7 +499,7 @@ https://live.enhdtv.com:8081/8190/tracks-v1a1/mono.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Undefined",UMTV (1080p) [Not 24/7]
 https://60417ddeaf0d9.streamlock.net/montemorelos/videomontemorelos/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Unicanal
-dailymotion://k1mHLKycOlKgo3Db5GI?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/
+dailymotion://k3C8CLhvjDCJadHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",UnionTV
 https://tigocloud.desdeparaguay.net/800tv/800tv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Radio TV",UniRadio TV
