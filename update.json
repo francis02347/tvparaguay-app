@@ -1,6 +1,6 @@
 {
-  "versionCode": 72,
-  "versionName": "1.74",
+  "versionCode": 73,
+  "versionName": "1.75",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
   "releaseNotes": "Integración de Guía de Programación EPG y nuevo banner informativo satelital."
 }
