@@ -67,8 +67,8 @@ public class UpdateManager {
                         : pInfo.versionCode;
                 final String localVersionName = pInfo.versionName;
                 
-                // 2. Descargar archivo JSON remoto
-                URL url = new URL(UPDATE_JSON_URL);
+                // 2. Descargar archivo JSON remoto con cache-buster
+                URL url = new URL(UPDATE_JSON_URL + "?t=" + System.currentTimeMillis());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setConnectTimeout(10000);
                 conn.setReadTimeout(15000);
