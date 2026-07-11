@@ -757,6 +757,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void showTopBarBriefly() {
         if (hideTopBarRunnable != null) handler.removeCallbacks(hideTopBarRunnable);
+        topBar.animate().cancel();
         topBar.setVisibility(View.VISIBLE);
         topBar.animate().alpha(1f).setDuration(200).start();
         if (channelList != null && currentIndex < channelList.size()) {
@@ -770,10 +771,12 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void hideTopBarNow() {
+        topBar.animate().cancel();
         topBar.animate().alpha(0f).setDuration(400)
             .withEndAction(() -> topBar.setVisibility(View.GONE)).start();
         if (layoutEpgBanner != null && layoutEpgBanner.getVisibility() == View.VISIBLE) {
             if (hideEpgRunnable != null) handler.removeCallbacks(hideEpgRunnable);
+            layoutEpgBanner.animate().cancel();
             layoutEpgBanner.animate().alpha(0f).setDuration(400)
                 .withEndAction(() -> layoutEpgBanner.setVisibility(View.GONE)).start();
         }
@@ -889,6 +892,7 @@ public class PlayerActivity extends AppCompatActivity {
     private void showChannelOverlay(Channel ch, int index) {
         if (layoutEpgBanner == null) {
             if (hideOverlayRunnable != null) handler.removeCallbacks(hideOverlayRunnable);
+            overlayContainer.animate().cancel();
             overlayEmoji.setText(ch.getEmoji());
             overlayName.setText(ChannelDeduplicator.cleanName(ch.getName()));
             overlayCategory.setText(ch.getCategory());
@@ -908,6 +912,7 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         if (hideEpgRunnable != null) handler.removeCallbacks(hideEpgRunnable);
+        layoutEpgBanner.animate().cancel();
 
         epgChannelEmoji.setText(ch.getEmoji());
         epgChannelName.setText(ChannelDeduplicator.cleanName(ch.getName()));
