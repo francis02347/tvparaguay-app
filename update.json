@@ -1,6 +1,6 @@
 {
-  "versionCode": 71,
-  "versionName": "1.73",
+  "versionCode": 72,
+  "versionName": "1.74",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Exclusión de reproducción en segundo plano para Google Play Store: la función de audio en segundo plano se restringe únicamente al canal de distribución directa (Web)."
+  "releaseNotes": "Integración de Guía de Programación EPG y nuevo banner informativo satelital."
 }
