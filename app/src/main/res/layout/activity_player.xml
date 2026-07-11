@@ -178,6 +178,121 @@
     </LinearLayout>
 
     <!-- ═══════════════════════════════════════════════════
+         BANNER EPG INFERIOR (Estilo TV Satelital)
+    ═══════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/layoutEpgBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/epg_banner_bg"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <!-- Fila Superior: Nombre del Canal, Emoji, Horario y Progreso -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:id="@+id/epgChannelEmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginEnd="8dp"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/epgChannelName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:id="@+id/epgCurrentTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textColor="#A0AEC0"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Fila Media: Programa Actual y Progreso -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:id="@+id/epgCurrentShowTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#00F2FE"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:ellipsize="end"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/epgCurrentShowTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#A0AEC0"
+                android:textSize="12sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- Barra de Progreso del Programa Actual -->
+        <ProgressBar
+            android:id="@+id/epgProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:progressDrawable="@drawable/epg_progress_drawable"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Fila Inferior: Próximo Programa -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/epgNextShowTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:ellipsize="end"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/epgNextShowTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <!-- ═══════════════════════════════════════════════════
          BARRA SUPERIOR (se muestra al tocar, se oculta sola)
          Contiene: ← volver | nombre canal | ❤ favorito
     ═══════════════════════════════════════════════════ -->

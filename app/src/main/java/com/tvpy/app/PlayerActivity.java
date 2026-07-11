@@ -26,6 +26,9 @@ import android.app.RemoteAction;
 import android.app.PendingIntent;
 import android.annotation.TargetApi;
 import android.content.res.Configuration;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
@@ -71,6 +74,14 @@ public class PlayerActivity extends AppCompatActivity {
 
     private View overlayContainer;
     private TextView overlayEmoji, overlayName, overlayCategory, overlayHint;
+
+    // EPG UI
+    private View layoutEpgBanner;
+    private TextView epgChannelEmoji, epgChannelName, epgCurrentTime;
+    private TextView epgCurrentShowTitle, epgCurrentShowTime;
+    private android.widget.ProgressBar epgProgressBar;
+    private TextView epgNextShowTitle, epgNextShowTime;
+    private Runnable hideEpgRunnable;
     private View errorScreen;
     private TextView tvErrorChannelName;
     private android.widget.Button btnRetry;
@@ -148,6 +159,16 @@ public class PlayerActivity extends AppCompatActivity {
         overlayName        = findViewById(R.id.overlayName);
         overlayCategory    = findViewById(R.id.overlayCategory);
         overlayHint        = findViewById(R.id.overlayHint);
+
+        layoutEpgBanner     = findViewById(R.id.layoutEpgBanner);
+        epgChannelEmoji     = findViewById(R.id.epgChannelEmoji);
+        epgChannelName      = findViewById(R.id.epgChannelName);
+        epgCurrentTime      = findViewById(R.id.epgCurrentTime);
+        epgCurrentShowTitle = findViewById(R.id.epgCurrentShowTitle);
+        epgCurrentShowTime  = findViewById(R.id.epgCurrentShowTime);
+        epgProgressBar      = findViewById(R.id.epgProgressBar);
+        epgNextShowTitle    = findViewById(R.id.epgNextShowTitle);
+        epgNextShowTime     = findViewById(R.id.epgNextShowTime);
         errorScreen        = findViewById(R.id.errorScreen);
         tvErrorChannelName = findViewById(R.id.tvErrorChannelName);
         btnRetry           = findViewById(R.id.btnRetry);
@@ -739,7 +760,9 @@ public class PlayerActivity extends AppCompatActivity {
         topBar.setVisibility(View.VISIBLE);
         topBar.animate().alpha(1f).setDuration(200).start();
         if (channelList != null && currentIndex < channelList.size()) {
-            updateFavoriteButton(channelList.get(currentIndex).getUrl());
+            Channel ch = channelList.get(currentIndex);
+            updateFavoriteButton(ch.getUrl());
+            showChannelOverlay(ch, currentIndex);
         }
         btnFavorite.requestFocus();
         hideTopBarRunnable = this::hideTopBarNow;
@@ -749,6 +772,11 @@ public class PlayerActivity extends AppCompatActivity {
     private void hideTopBarNow() {
         topBar.animate().alpha(0f).setDuration(400)
             .withEndAction(() -> topBar.setVisibility(View.GONE)).start();
+        if (layoutEpgBanner != null && layoutEpgBanner.getVisibility() == View.VISIBLE) {
+            if (hideEpgRunnable != null) handler.removeCallbacks(hideEpgRunnable);
+            layoutEpgBanner.animate().alpha(0f).setDuration(400)
+                .withEndAction(() -> layoutEpgBanner.setVisibility(View.GONE)).start();
+        }
     }
 
     private void showSidePanel() {
@@ -853,23 +881,88 @@ public class PlayerActivity extends AppCompatActivity {
         return uiModeManager != null && uiModeManager.getCurrentModeType() == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
     }
 
+    private String formatEpgTime(long timeMs) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return sdf.format(new Date(timeMs));
+    }
+
     private void showChannelOverlay(Channel ch, int index) {
-        if (hideOverlayRunnable != null) handler.removeCallbacks(hideOverlayRunnable);
-        overlayEmoji.setText(ch.getEmoji());
-        overlayName.setText(ChannelDeduplicator.cleanName(ch.getName()));
-        overlayCategory.setText(ch.getCategory());
-        if (channelList.size() > 1) {
-            int prev = index > 0 ? index - 1 : channelList.size() - 1;
-            int next = index < channelList.size() - 1 ? index + 1 : 0;
-            overlayHint.setText("◀ " + ChannelDeduplicator.cleanName(channelList.get(prev).getName())
-                + "   |   " + ChannelDeduplicator.cleanName(channelList.get(next).getName()) + " ▶");
-        } else overlayHint.setText("");
-        overlayContainer.setVisibility(View.VISIBLE);
-        overlayContainer.setAlpha(1f);
-        hideOverlayRunnable = () ->
-            overlayContainer.animate().alpha(0f).setDuration(400)
-                .withEndAction(() -> overlayContainer.setVisibility(View.GONE)).start();
-        handler.postDelayed(hideOverlayRunnable, OVERLAY_DURATION_MS);
+        if (layoutEpgBanner == null) {
+            if (hideOverlayRunnable != null) handler.removeCallbacks(hideOverlayRunnable);
+            overlayEmoji.setText(ch.getEmoji());
+            overlayName.setText(ChannelDeduplicator.cleanName(ch.getName()));
+            overlayCategory.setText(ch.getCategory());
+            if (channelList.size() > 1) {
+                int prev = index > 0 ? index - 1 : channelList.size() - 1;
+                int next = index < channelList.size() - 1 ? index + 1 : 0;
+                overlayHint.setText("◀ " + ChannelDeduplicator.cleanName(channelList.get(prev).getName())
+                    + "   |   " + ChannelDeduplicator.cleanName(channelList.get(next).getName()) + " ▶");
+            } else overlayHint.setText("");
+            overlayContainer.setVisibility(View.VISIBLE);
+            overlayContainer.setAlpha(1f);
+            hideOverlayRunnable = () ->
+                overlayContainer.animate().alpha(0f).setDuration(400)
+                    .withEndAction(() -> overlayContainer.setVisibility(View.GONE)).start();
+            handler.postDelayed(hideOverlayRunnable, OVERLAY_DURATION_MS);
+            return;
+        }
+
+        if (hideEpgRunnable != null) handler.removeCallbacks(hideEpgRunnable);
+
+        epgChannelEmoji.setText(ch.getEmoji());
+        epgChannelName.setText(ChannelDeduplicator.cleanName(ch.getName()));
+
+        // Hora actual
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        epgCurrentTime.setText(timeFormat.format(new Date()));
+
+        // Obtener programas
+        EpgManager.Program currentProg = EpgManager.getCurrentProgram(ch.getName());
+        EpgManager.Program nextProg = EpgManager.getNextProgram(ch.getName());
+
+        if (currentProg != null) {
+            epgCurrentShowTitle.setText(currentProg.title);
+            epgCurrentShowTime.setText(formatEpgTime(currentProg.startTime) + " - " + formatEpgTime(currentProg.endTime));
+
+            long duration = currentProg.endTime - currentProg.startTime;
+            long elapsed = System.currentTimeMillis() - currentProg.startTime;
+            if (duration > 0 && elapsed >= 0) {
+                epgProgressBar.setMax(100);
+                int progress = (int) (elapsed * 100 / duration);
+                epgProgressBar.setProgress(Math.min(progress, 100));
+                epgProgressBar.setVisibility(View.VISIBLE);
+            } else {
+                epgProgressBar.setVisibility(View.GONE);
+            }
+        } else {
+            epgCurrentShowTitle.setText("Programación en Vivo");
+            epgCurrentShowTime.setText("");
+            epgProgressBar.setVisibility(View.GONE);
+        }
+
+        if (nextProg != null) {
+            epgNextShowTitle.setText("Próximo: " + nextProg.title);
+            epgNextShowTime.setText(formatEpgTime(nextProg.startTime));
+        } else {
+            if (channelList.size() > 1) {
+                int prev = index > 0 ? index - 1 : channelList.size() - 1;
+                int next = index < channelList.size() - 1 ? index + 1 : 0;
+                epgNextShowTitle.setText("◀ " + ChannelDeduplicator.cleanName(channelList.get(prev).getName())
+                    + "   |   " + ChannelDeduplicator.cleanName(channelList.get(next).getName()) + " ▶");
+            } else {
+                epgNextShowTitle.setText("Desliza hacia arriba/abajo para cambiar de canal");
+            }
+            epgNextShowTime.setText("");
+        }
+
+        layoutEpgBanner.setVisibility(View.VISIBLE);
+        layoutEpgBanner.setAlpha(1f);
+
+        hideEpgRunnable = () -> {
+            layoutEpgBanner.animate().alpha(0f).setDuration(400)
+                .withEndAction(() -> layoutEpgBanner.setVisibility(View.GONE)).start();
+        };
+        handler.postDelayed(hideEpgRunnable, OVERLAY_DURATION_MS);
     }
 
     @Override

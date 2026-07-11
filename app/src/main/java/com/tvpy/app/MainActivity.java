@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.Executors;
+import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        EpgManager.fetchEpgAsync(this);
 
         recyclerView  = findViewById(R.id.recyclerView);
         searchBar     = findViewById(R.id.searchBar);
@@ -159,6 +162,10 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void afterTextChanged(Editable s) { applyFilter(); }
         });
+
+        if (BuildConfig.IS_PLAY_STORE) {
+            MobileAds.initialize(this, status -> {});
+        }
 
         checkNotificationPermission();
     }
