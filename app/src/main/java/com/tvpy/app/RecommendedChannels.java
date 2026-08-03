@@ -15,6 +15,7 @@ public class RecommendedChannels {
         "América TV Argentina",
         "Andalucía Cocina (1080p)",
         "Antena Uno RadioVideo (360p)",
+        "Azteca Deportes Network",
         "Azteca Internacional (México)",
         "Bruno Masi TV",
         "C9N",

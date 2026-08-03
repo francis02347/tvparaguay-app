@@ -1,6 +1,6 @@
 {
-  "versionCode": 81,
-  "versionName": "1.83",
+  "versionCode": 82,
+  "versionName": "1.84",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Integración del canal deportivo principal ESPN (Señal Principal)."
+  "releaseNotes": "Integración del canal Azteca Deportes Network."
 }
