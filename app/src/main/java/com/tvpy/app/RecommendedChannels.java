@@ -28,6 +28,8 @@ public class RecommendedChannels {
         "Dance FM (720p)",
         "Deportes TVC (1080p)",
         "E40",
+        "ESPN 3",
+        "ESPN 4",
         "ESPN Deportes",
         "ESPN8: The Ocho",
         "Euronews en Español",
