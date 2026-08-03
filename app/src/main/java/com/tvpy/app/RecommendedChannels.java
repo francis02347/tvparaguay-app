@@ -28,6 +28,7 @@ public class RecommendedChannels {
         "Dance FM (720p)",
         "Deportes TVC (1080p)",
         "E40",
+        "ESPN (Señal Principal)",
         "ESPN 3",
         "ESPN 4",
         "ESPN Deportes",

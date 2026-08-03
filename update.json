@@ -1,6 +1,6 @@
 {
-  "versionCode": 80,
-  "versionName": "1.82",
+  "versionCode": 81,
+  "versionName": "1.83",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Integración de nuevos canales deportivos premium: ESPN 3 y ESPN 4."
+  "releaseNotes": "Integración del canal deportivo principal ESPN (Señal Principal)."
 }
