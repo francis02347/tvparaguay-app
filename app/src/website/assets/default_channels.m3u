@@ -147,6 +147,8 @@ https://tv.wracanal10.com:3025/live/elsoltvlive.m3u8
 https://cloudtv.streaming.com.py/lenguasdesenas/lenguasdesenas/chunklist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Enlace (720p)
 https://livecdn.enlace.plus/enlace/smil:enlace-hd.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",ESPN8: The Ocho
+https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",ESPN Deportes
 http://40.160.24.58/ESPN_DEPORTES/index.m3u8
 
@@ -402,6 +404,8 @@ https://rtmp.info/sanjosetv/envivo/playlist.m3u8
 
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Noticias",Sky News (Inglés)
 https://xumo-drct-skynews-nc91a.fast.nbcuni.com/live/master.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Sports",Sky Sports F1
+https://xemzi.short.gy/2000005
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Smithsonian Channel (Español)
 https://jmp2.uk/plu-63a084934734f30007457b2c.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",SNT

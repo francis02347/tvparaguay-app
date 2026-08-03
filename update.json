@@ -1,6 +1,6 @@
 {
-  "versionCode": 78,
-  "versionName": "1.80",
+  "versionCode": 79,
+  "versionName": "1.81",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Integración de nuevos canales: Caracol TV (Colombia), Euronews en Español, Red Bull TV (Español) y Runtime Cine y Series."
+  "releaseNotes": "Integración de nuevos canales deportivos: Sky Sports F1 y ESPN8: The Ocho."
 }
