@@ -165,7 +165,7 @@ https://video2.makrodigital.com/fmmundo/fmmundo/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Entretenimiento",FOX (Estados Unidos)
 https://aegis-cloudfront-1.tubi.video/8d9284ec-c451-4e51-a1d4-d16e5c8972af/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Francia" group-title="Noticias",France 24 Español
-youtube://@France24_es
+https://live.france24.com/hls/live/2037220-b/F24_ES_HI_HLS/master_5000.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Deportes",FS1 (Estados Unidos)
 http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8
 
@@ -174,10 +174,10 @@ http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8
 desdeparaguay://gentv
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",GO TV
 https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Gol Classics (1080p)
-https://d71gqtnep83vb.cloudfront.net/gol_classics/gol_classics.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",GolTV Latinoamérica
+http://177.234.249.178:8888/GOLTV/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",HEi Now
-https://copacogen.desdeparaguay.net/heitv/heitv_py_alta/playlist.m3u8?admin=nacion
+desdeparaguay://heitv
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Infinita TV (1080p)
 https://s2.tvdatta.com:3753/hybrid/play.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="General",Informe TV (1080p) [Not 24/7]
@@ -207,8 +207,8 @@ https://ss2.tvrdomi.com:1936/lamiatv/lamiatv/playlist.m3u8
 https://vs20.live.opencaster.com/lasalvaciondelalmatv_dfc663c0/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",La Voz de Maria (720p)
 https://live.lavozdemaria.com:3436/live/lavozdemarialive.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",LaLiga TV
-http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTZID4SFOqZLZ81NguVP-JxM/m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Golazo Network
+https://jmp2.uk/plu-63a0e33a45264d000850ed7e.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="México" group-title="Entretenimiento",Las Estrellas (México) [Geo-blocked]
 https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Latele
@@ -240,7 +240,7 @@ https://byecableiptvnew3.ddns.net/ENVIVOMIGENTE/video.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Mision ELTV (720p)
 https://rd.tvabierta.net/live/misioneltv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",MiTV
-https://rds3.desdeparaguay.net/mitv/mitv/playlist.m3u8
+desdeparaguay://mitv
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Monte Maria (1080p)
 https://5ca9af4645e15.streamlock.net/montemaria/videomontemaria/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",Monumental TV
@@ -259,8 +259,6 @@ https://video.hostingcaaguazu.com:19360/nandeportetepe/nandeportetepe.m3u8
 https://copacogen.desdeparaguay.net/nandejaraneetv/nandejaraneetv/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",Nanduti
 https://zn1tf.desdeparaguay.net/nandutitv/nandutitv_alta/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Entretenimiento",NASA TV
-youtube://user/NASATelevision
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",NatureTime (Español)
 https://jmp2.uk/plu-681ba2729624e6275efe0044.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",NCTV (1080p)
@@ -386,16 +384,16 @@ https://rt-esp.rttv.com/live/rtesp/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Noticias",RTVE Canal 24 Horas
 https://rtvelivestream.rtve.es/rtvesec/24h/24h_main_dvr.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Entretenimiento",RTVE La 1
-https://rtvelivestream.rtve.es/rtvesec/la1/la1_main_dvr.m3u8
+https://ztnr.rtve.es/ztnr/1694255.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",San JosÃ© TV (1080p)
 https://rtmp.info/sanjosetv/envivo/playlist.m3u8
 
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Noticias",Sky News (Inglés)
-youtube://@skynews
+https://xumo-drct-skynews-nc91a.fast.nbcuni.com/live/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Smithsonian Channel (Español)
 https://jmp2.uk/plu-63a084934734f30007457b2c.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",SNT
-https://alba-py-snt-snt.stream.mediatiquestream.com/index.m3u8
+https://d3epa8orr2qy3m.cloudfront.net/ts:abr.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Sol MÃºsica (720p)
 https://d2glyu450vvghm.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-21u4g5cjglv02/sm.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",SOY Plancha TV (720p)
@@ -429,9 +427,9 @@ http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/1596.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Tele Dominicana TV (720p)
 https://vdopanel.jlahozconsulting.com/p/3417/hybrid/play.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Teledeporte (1080p)
-https://rtvelivestream.rtve.es/rtvesec/tdp/tdp_main_dvr.m3u8
+https://ztnr.rtve.es/ztnr/1694263.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento",Telefe Internacional (Argentina)
-https://stream.arcast.com.ar/c7nq/ngrp:c7nq_all/playlist.m3u8
+http://200.91.32.158:8080/telefehdvalle/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Telefuturo
 https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Entretenimiento",Telemundo (Estados Unidos)
@@ -471,7 +469,7 @@ dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https:/
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Trece España (1080p)
 http://92.176.119.180:2095/play/a179
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Radio TV",Tropicalia 93.9 FM
-http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/67.m3u8
+desdeparaguay://tropicalia
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",TSi (720p) [Not 24/7]
 https://mdstrm.com/live-stream-playlist/6287fdc9303e3008289ab711.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",TV Aire

@@ -1,6 +1,6 @@
 {
-  "versionCode": 75,
-  "versionName": "1.77",
+  "versionCode": 76,
+  "versionName": "1.78",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Integración de Guía de Programación EPG y nuevo banner informativo satelital."
+  "releaseNotes": "Reparación y actualización de transmisiones de canales (Sky News, SNT, RTVE, Telefe, Tropicalia, HEi, etc.)."
 }

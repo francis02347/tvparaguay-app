@@ -593,11 +593,11 @@ public class PlayerActivity extends AppCompatActivity {
                         reader.close();
 
                         String html = sb.toString();
-                        String hlsUrl = extractValue(html, "\"hlsManifestUrl\"");
+                        String hlsUrl = extractValue(html, "hlsManifestUrl");
                         
                         if (hlsUrl == null || hlsUrl.isEmpty()) {
                             // Try fallback: extract videoId and fetch watch page
-                            String videoId = extractValue(html, "\"videoId\"");
+                            String videoId = extractValue(html, "videoId");
                             if (videoId != null && !videoId.isEmpty()) {
                                 String watchUrlStr = "https://www.youtube.com/watch?v=" + videoId;
                                 java.net.URL watchUrl = new java.net.URL(watchUrlStr);
@@ -617,7 +617,7 @@ public class PlayerActivity extends AppCompatActivity {
                                         watchSb.append(watchLine).append("\n");
                                     }
                                     watchReader.close();
-                                    hlsUrl = extractValue(watchSb.toString(), "\"hlsManifestUrl\"");
+                                    hlsUrl = extractValue(watchSb.toString(), "hlsManifestUrl");
                                 }
                             }
                         }
@@ -662,15 +662,26 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private static String extractValue(String html, String key) {
-        int index = html.indexOf(key);
+        String cleanKey = key.replace("\"", "");
+        int index = html.indexOf(cleanKey);
         if (index >= 0) {
-            int colonIndex = html.indexOf(":", index + key.length());
+            int colonIndex = html.indexOf(":", index + cleanKey.length());
             if (colonIndex >= 0) {
                 int startQuote = html.indexOf("\"", colonIndex + 1);
-                if (startQuote >= 0 && startQuote < colonIndex + 10) {
-                    int endQuote = html.indexOf("\"", startQuote + 1);
-                    if (endQuote > startQuote) {
-                        return html.substring(startQuote + 1, endQuote);
+                int startQuoteSingle = html.indexOf("'", colonIndex + 1);
+                int start = -1;
+                char quoteChar = '"';
+                if (startQuote >= 0 && (startQuoteSingle < 0 || startQuote < startQuoteSingle)) {
+                    start = startQuote;
+                    quoteChar = '"';
+                } else if (startQuoteSingle >= 0) {
+                    start = startQuoteSingle;
+                    quoteChar = '\'';
+                }
+                if (start >= 0 && start < colonIndex + 15) {
+                    int end = html.indexOf(String.valueOf(quoteChar), start + 1);
+                    if (end > start) {
+                        return html.substring(start + 1, end);
                     }
                 }
             }
