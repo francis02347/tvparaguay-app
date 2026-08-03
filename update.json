@@ -1,6 +1,6 @@
 {
-  "versionCode": 76,
-  "versionName": "1.78",
+  "versionCode": 77,
+  "versionName": "1.79",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Reparación y actualización de transmisiones de canales (Sky News, SNT, RTVE, Telefe, Tropicalia, HEi, etc.)."
+  "releaseNotes": "Habilitación de los nuevos canales deportivos (ESPN Deportes, Real Madrid TV, GolTV, Golazo Network) en la lista de permitidos."
 }
