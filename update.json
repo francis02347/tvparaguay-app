@@ -1,6 +1,6 @@
 {
-  "versionCode": 83,
-  "versionName": "1.85",
+  "versionCode": 84,
+  "versionName": "1.86",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Depuración y limpieza de canales a petición del usuario."
+  "releaseNotes": "Habilitación de ajustes de visibilidad de canales (Sky Sports F1)."
 }

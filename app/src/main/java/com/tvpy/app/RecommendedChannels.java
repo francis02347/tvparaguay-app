@@ -70,7 +70,6 @@ public class RecommendedChannels {
         "Runtime Cine y Series",
         "SNT",
         "Sky News (Inglés)",
-        "Sky Sports F1",
         "Smithsonian Channel (Español)",
         "Stingray Classica (1080p)",
         "Stingray Greatest Holiday Hits",
