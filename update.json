@@ -1,6 +1,6 @@
 {
-  "versionCode": 82,
-  "versionName": "1.84",
+  "versionCode": 83,
+  "versionName": "1.85",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Integración del canal Azteca Deportes Network."
+  "releaseNotes": "Depuración y limpieza de canales a petición del usuario."
 }

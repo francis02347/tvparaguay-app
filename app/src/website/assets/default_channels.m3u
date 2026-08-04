@@ -29,8 +29,6 @@ https://5e50264bd6766.streamlock.net/mexiquense2/videomexiquense2/playlist.m3u8
 https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Cooking",Andalucía Cocina (1080p)
 https://cloud.fastchannel.es/mic/manifiest/hls/acocina/acocina.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Undefined",Antena Uno RadioVideo (360p)
-https://tvdatta.com:3578/live/antenaunolive.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Atacama Noticias (720p) [Not 24/7]
 https://v2.tustreaming.cl/atacamanoticias/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",ATV+ (720p)
@@ -51,8 +49,6 @@ https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8
 https://s.emisoras.tv:8081/bendicionchannel/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Bethel TV (720p)
 https://alfa.betheltv.tv/srt/3_abr/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Bruno Masi TV
-https://rds3.desdeparaguay.net/brunomasitv/brunomasitv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",BTA TV (720p)
 https://cloud.fastchannel.es/manifiest/hls/prog9/btatv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",C9N
@@ -71,8 +67,6 @@ https://ztnr.rtve.es/ztnr/4952053.m3u8
 https://stream-gtlc.telecentro.net.ar/hls/canal26hls/main.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Canal 26 TV IAP (1080p)
 https://vdo.tecnoservix.stream:3899/live/canal26tvlive.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="México" group-title="Entretenimiento",Canal 5 (Televisa) (México)
-http://45.5.119.43:4000/play/a05o/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Canal 5 TV Max
 https://video.wilohosting.com:19360/tvmax/tvmax.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Canal 8 C&amp;C Producciones
@@ -119,8 +113,6 @@ https://live.obslivestream.com/conecta2/index.m3u8
 https://unlimited6-cl.dps.live/cm/cm.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Cosmos TV
 https://video.hostingcaaguazu.com:19360/cosmostv/cosmostv.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Crimen & Historia (Español)
-https://jmp2.uk/plu-64ddcbb14c5ed80008fad416.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Cristovision (720p)
 https://5fc584f3f19c9.streamlock.net/cristovision/videocristovision/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Religioso",Cáritas TV
@@ -155,8 +147,6 @@ http://181.78.197.59:8000/play/a07z/index.m3u8
 http://190.83.2.182:8090/ESPN3/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 4
 http://181.78.197.59:8000/play/a07n/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",ESPN Deportes
-http://40.160.24.58/ESPN_DEPORTES/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",ESPN8: The Ocho
 https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8
 
@@ -255,8 +245,6 @@ https://eu1.servers10.com:8081/8214/index.m3u8
 https://byecableiptvnew3.ddns.net/ENVIVOMIGENTE/video.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Mision ELTV (720p)
 https://rd.tvabierta.net/live/misioneltv.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",MiTV
-desdeparaguay://mitv
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Monte Maria (1080p)
 https://5ca9af4645e15.streamlock.net/montemaria/videomontemaria/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",Monumental TV
@@ -401,8 +389,6 @@ https://alba-py-rqp-rqp.stream.mediatiquestream.com/index.m3u8
 https://live.obslivestream.com/selvatv/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Rusia" group-title="Noticias",RT en Español
 https://rt-esp.rttv.com/live/rtesp/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Noticias",RTVE Canal 24 Horas
-https://rtvelivestream.rtve.es/rtvesec/24h/24h_main_dvr.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Entretenimiento",RTVE La 1
 https://ztnr.rtve.es/ztnr/1694255.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Entretenimiento",Runtime Cine y Series
@@ -492,8 +478,6 @@ https://cdn.global.elektamedia.com/live/c7eds/Totalmusic_Dance/SA_LIVE_hls_enc/m
 dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Trece España (1080p)
 http://92.176.119.180:2095/play/a179
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Radio TV",Tropicalia 93.9 FM
-desdeparaguay://tropicalia
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",TSi (720p) [Not 24/7]
 https://mdstrm.com/live-stream-playlist/6287fdc9303e3008289ab711.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",TV Aire
