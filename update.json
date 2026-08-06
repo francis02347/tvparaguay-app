@@ -1,6 +1,6 @@
 {
-  "versionCode": 84,
-  "versionName": "1.86",
+  "versionCode": 85,
+  "versionName": "1.87",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Habilitación de ajustes de visibilidad de canales (Sky Sports F1)."
+  "releaseNotes": "Adición de nuevos canales de aviación, pesca y documentales de industrias."
 }
