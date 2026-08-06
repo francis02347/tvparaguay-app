@@ -1,6 +1,6 @@
 {
-  "versionCode": 85,
-  "versionName": "1.87",
+  "versionCode": 86,
+  "versionName": "1.88",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición de nuevos canales de aviación, pesca y documentales de industrias."
+  "releaseNotes": "Integración de nuevos canales de documentales en español (Historia, Historia y Vida, Pluto TV Documentales)."
 }

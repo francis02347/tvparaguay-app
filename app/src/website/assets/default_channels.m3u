@@ -183,6 +183,10 @@ http://177.234.249.178:8888/GOLTV/index.m3u8
 https://jmp2.uk/plu-63a0e33a45264d000850ed7e.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",HEi Now
 desdeparaguay://heitv
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Documentales",Historia (España)
+https://d1k3vzh2ivy22k.cloudfront.net/Historia1080.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Documentales",Historia y Vida
+https://jmp2.uk/plu-67517f923a61d40008c451f0.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",History 2 (Latinoamérica)
 http://181.119.66.28:8081/HISTORY-2/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",History Channel (Latinoamérica)
@@ -321,6 +325,8 @@ https://live-evg8.tv360.bitel.com.pe/bitel/planeatvSRT/playlist.m3u8
 https://vcp.myplaytv.com/glowtv/glowtv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Pluto TV Animales (Español)
 https://jmp2.uk/plu-600ae6a78d801e0007117d21.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Pluto TV Documentales (Español)
+https://jmp2.uk/plu-5ddc503ac7ef120009b101a2.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Pluto TV Historia (Español)
 https://jmp2.uk/plu-61cd7b49543066000713b620.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Pluto TV Naturaleza (Español)
