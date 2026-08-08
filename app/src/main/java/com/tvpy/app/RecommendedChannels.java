@@ -60,7 +60,6 @@ public class RecommendedChannels {
         "Noticias Telemundo",
         "Paraguay TV",
         "Paravisión",
-        "Planea TV (Aviación/Viajes)",
         "Pluto TV Animales (Español)",
         "Pluto TV Documentales (Español)",
         "Pluto TV Historia (Español)",
