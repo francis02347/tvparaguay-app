@@ -1,6 +1,6 @@
 {
-  "versionCode": 87,
-  "versionName": "1.89",
+  "versionCode": 88,
+  "versionName": "1.90",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Remoción del canal Planea TV."
+  "releaseNotes": "Adición y actualización de enlaces funcionales de Tigo Sports (Bolivia, Guatemala, Tigo Sports+)."
 }
