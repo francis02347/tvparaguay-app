@@ -1,6 +1,6 @@
 {
-  "versionCode": 88,
-  "versionName": "1.90",
+  "versionCode": 89,
+  "versionName": "1.91",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición y actualización de enlaces funcionales de Tigo Sports (Bolivia, Guatemala, Tigo Sports+)."
+  "releaseNotes": "Adición del canal Chilevisión (CHV)."
 }

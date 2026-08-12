@@ -20,6 +20,7 @@ public class RecommendedChannels {
         "CBN Español (1080p)",
         "Canal Pro",
         "Caracol TV (Colombia)",
+        "Chilevisión (Chile)",
         "Claro Sports",
         "DW en Español",
         "Dance FM (720p)",
