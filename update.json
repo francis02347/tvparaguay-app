@@ -1,6 +1,6 @@
 {
-  "versionCode": 99,
-  "versionName": "2.01",
+  "versionCode": 100,
+  "versionName": "2.02",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición de canales documentales: National Geographic (Español) y Nat Geo Wild (Español)."
+  "releaseNotes": "Adición de canales Discovery en español: Discovery Channel, Discovery Kids, Investigation Discovery (ID), Discovery Home & Health y Discovery World."
 }
