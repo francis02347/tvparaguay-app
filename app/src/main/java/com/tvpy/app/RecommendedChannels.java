@@ -107,6 +107,7 @@ public class RecommendedChannels {
         "Tennis Channel (Internacional)",
         "Terra Mater WILD (Inglés)",
         "The Fishing & Hunting Channel",
+        "Tigo Sports (Paraguay)",
         "Top Gear (24/7)",
         "Totalmusic (1080p)",
         "Totalmusic 2000s (720p)",
