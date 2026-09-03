@@ -1,6 +1,6 @@
 {
-  "versionCode": 89,
-  "versionName": "1.91",
+  "versionCode": 90,
+  "versionName": "1.92",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición del canal Chilevisión (CHV)."
+  "releaseNotes": "Reparación de la señal en vivo de C9N."
 }
