@@ -47,6 +47,8 @@ https://cloud.fastchannel.es/manifiest/hls/prog9/btatv.m3u8
 https://videostream.shockmedia.com.ar:19360/beatsradio/beatsradio.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Bendicion Channel (720p)
 https://s.emisoras.tv:8081/bendicionchannel/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Music",Best of Dance TV (1080p)
+https://m1b2.worldcast.tv/dancetelevisionone/dancetelevisionone.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Bethel TV (720p)
 https://alfa.betheltv.tv/srt/3_abr/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",C9N
@@ -105,6 +107,8 @@ http://181.119.185.32:8000/play/a026/index.m3u8?hls
 https://s.emisoras.tv:8081/cholutecatv/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deporte",Claro Sports
 https://dai.google.com/linear/hls/event/_OKWx76jT7mivD6d-25QAw/master.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Music",Clubbing TV (720p)
+https://a-cdn.klowdtv.com/live3/clubbingtv_720p/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Conecta TV (720p)
 https://stream8.mexiserver.com:19360/conectatvx/conectatvx.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Conecta2TV (720p) [Not 24/7]
@@ -121,6 +125,10 @@ https://rds3.desdeparaguay.net/caritastv/caritastv/playlist.m3u8
 https://dwamdstream104.akamaized.net/hls/live/2015530/dwstream104/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Dance FM (720p)
 https://5eaccbab48461.streamlock.net:1936/dancefm_1/dancefm_1/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Music",DanceTV Deep House (1080p)
+https://m1b2.worldcast.tv/dancetelevisiontwo/dancetelevisiontwo.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Music",DanceTV Techno Warehouse (720p)
+https://m2b2.worldcast.tv:7443/dancetelevisionthree/dancetelevisionthree.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Del Rey TV
 https://video.hostingcaaguazu.com:19360/delreytv/delreytv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Deportes TVC (1080p)
@@ -367,6 +375,8 @@ https://video.wilohosting.com:19360/radiociudadtv/radiociudadtv.m3u8
 https://www.streaming507.net:19360/videoradiohogar/videoradiohogar.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Radio Imagen 105.1 FM (720p) [Not 24/7]
 https://streaming.imagenfm105-1.com/hls/stream.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Music",Radio Ibiza TV (720p)
+https://5929b138b139d.streamlock.net/RadioIbizaTV/livestream/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Radio Isla TV (720p)
 https://59a564764e2b6.streamlock.net/palestra/palestra/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Radio Javan TV (1080p)
