@@ -167,6 +167,16 @@ http://181.78.197.59:8000/play/a06a/index.m3u8
 http://181.78.197.59:8000/play/a09l/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",ESPN8: The Ocho
 https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN (Brasil)
+https://cdn-5.nxplay.com.br/ESPN/tracks-v2a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 2 (Brasil)
+https://cdn-5.nxplay.com.br/ESPN_2/tracks-v2a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 3 (Brasil)
+https://cdn-5.nxplay.com.br/ESPN_3/tracks-v2a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 4 (Brasil)
+https://cdn-5.nxplay.com.br/ESPN_4/tracks-v2a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN Extra (Brasil)
+http://hls1.sua.tv/live/espnextrafhd/s.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",EWTN Spain & Latin America (720p)
 https://cdn3.wowza.com/1/SmVrQmZCUXZhVDgz/b3J3MFJv/hls/live/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Ebenezer TV (1080p)

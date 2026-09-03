@@ -1,6 +1,6 @@
 {
-  "versionCode": 101,
-  "versionName": "2.03",
+  "versionCode": 102,
+  "versionName": "2.04",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Reparación de la señal de Top Gear (24/7): actualización a stream CloudFront multirresolución H.264/AAC de alta compatibilidad."
+  "releaseNotes": "Adición de canales deportivos en portugués: suite completa de ESPN Brasil (ESPN, ESPN 2, ESPN 3, ESPN 4 y ESPN Extra)."
 }
