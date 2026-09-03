@@ -1,6 +1,6 @@
 {
-  "versionCode": 94,
-  "versionName": "1.96",
+  "versionCode": 95,
+  "versionName": "1.97",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Eliminación del canal Dance FM."
+  "releaseNotes": "Adición de canales deportivos: ESPN 2, ESPN 5, ESPN 6, ESPN 7 y ESPN Premium."
 }

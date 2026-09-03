@@ -143,10 +143,20 @@ https://copacotf.desdeparaguay.net/e40tv/e40tv_py_alta/playlist.m3u8?admin=tvacc
 https://627bb251f23c7.streamlock.net:444/EBNTELEVISION/EBNTELEVISION/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN (Señal Principal)
 http://181.78.197.59:8000/play/a07z/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 2
+http://181.78.197.59:8000/play/a080/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 3
 http://190.83.2.182:8090/ESPN3/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 4
 http://181.78.197.59:8000/play/a07n/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 5
+http://181.78.197.59:8000/play/a074/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 6
+http://181.78.197.59:8000/play/a08c/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 7
+http://181.78.197.59:8000/play/a06a/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN Premium
+http://181.78.197.59:8000/play/a09l/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",ESPN8: The Ocho
 https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",EWTN Spain & Latin America (720p)
