@@ -25,7 +25,6 @@ public class RecommendedChannels {
         "Claro Sports",
         "Clubbing TV (720p)",
         "DW en Español",
-        "Dance FM (720p)",
         "DanceTV Deep House (1080p)",
         "DanceTV Techno Warehouse (720p)",
         "Deportes TVC (1080p)",

@@ -1,6 +1,6 @@
 {
-  "versionCode": 93,
-  "versionName": "1.95",
+  "versionCode": 94,
+  "versionName": "1.96",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición de canales de música electrónica y festivales: Clubbing TV, Best of Dance TV, DanceTV Deep House, DanceTV Techno Warehouse y Radio Ibiza TV."
+  "releaseNotes": "Eliminación del canal Dance FM."
 }
