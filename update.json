@@ -1,6 +1,6 @@
 {
-  "versionCode": 97,
-  "versionName": "1.99",
+  "versionCode": 98,
+  "versionName": "2.00",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición de la señal en vivo oficial de Tigo Sports (Paraguay) en Full HD."
+  "releaseNotes": "Adición de canales deportivos en español: Fox Sports 1, Fox Sports 2, Fox Sports 3 y Fox Deportes."
 }
