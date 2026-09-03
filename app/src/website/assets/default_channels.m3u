@@ -145,6 +145,16 @@ http://187.245.231.226:8000/play/a0q1/index.m3u8
 https://rds3.desdeparaguay.net/dismartv/dismartv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Lifestyle",Divinity (1080p)
 http://92.176.119.180:2095/play/a1g1
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DSports (DirecTV Sports)
+http://187.102.208.209:8000/play/a09n/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DSports 2
+http://187.102.208.209:8000/play/a0bq/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DSports+
+http://38.199.5.160:8000/play/a09q/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DSports Fight
+http://38.210.3.64:8090/play/a0p8/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DSports Motor
+http://38.210.3.64:8090/play/a0p7/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",E40
 https://copacotf.desdeparaguay.net/e40tv/e40tv_py_alta/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",EBN TelevisiÃ³n (720p)
