@@ -1,6 +1,6 @@
 {
-  "versionCode": 103,
-  "versionName": "2.05",
+  "versionCode": 104,
+  "versionName": "2.06",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición de canales DirecTV Sports: suite completa de DSports (DSports, DSports 2, DSports+, DSports Motor y DSports Fight)."
+  "releaseNotes": "Reparación de señales: National Geographic y Nat Geo Wild actualizados a transmisiones Full HD 1080p H.264 estables y de alta compatibilidad."
 }
