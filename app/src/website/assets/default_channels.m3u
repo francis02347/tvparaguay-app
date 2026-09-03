@@ -100,7 +100,7 @@ https://stream.arcast.com.ar/canal7catamarca/ngrp:canal7catamarca_all/playlist.m
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",CetelmÃ³n TV (404p)
 http://player.cetelmon.tv/protecteddfd43c2f3a8b41f3f28582bf8993aca6/992_high.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Chile" group-title="General",Chilevisión (Chile)
-http://15.204.246.24:8080/CHVHD/index.m3u8
+http://181.119.185.32:8000/play/a026/index.m3u8?hls
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Choluteca TV (1080p)
 https://s.emisoras.tv:8081/cholutecatv/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deporte",Claro Sports
@@ -126,7 +126,7 @@ https://video.hostingcaaguazu.com:19360/delreytv/delreytv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Deportes TVC (1080p)
 http://190.11.225.124:5000/live/deportes_tvc_hd/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Documentales",Discovery Turbo (Estados Unidos)
-https://gpuserver3.tier1streams.com/MOTORTREND/index.m3u8
+http://181.119.177.253:8000/play/a04k/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Radio TV",Dismar Radio TV
 https://rds3.desdeparaguay.net/dismartv/dismartv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Lifestyle",Divinity (1080p)
@@ -291,8 +291,6 @@ https://jmp2.uk/plu-681ba2729624e6275efe0044.m3u8
 https://live.enhdtv.com:19360/nexthd/nexthd.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Norte Informativo TV (240p)
 https://videohd.live:19360/8076/8076.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Noticias",Noticias Telemundo
-https://xumo-drct-ch835-ekq0p.fast.nbcuni.com/live/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Noticiero 90 Minutos (1080p)
 https://play.cdn.enetres.net/621B146D29C541AFB1507809F038F471021/021/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music;Religious",Nueva Vida TV (720p)
@@ -512,7 +510,7 @@ http://92.176.119.180:2095/play/a179
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",TyC Sports (1080p)
 https://amg26268-amg26268c14-freelivesports-emea-10267.playouts.now.amagi.tv/ts-us-e2-n2/playlist/amg26268-sportsstudio-tycsports-freelivesportsemea/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",TyC Sports USA
-http://45.170.130.224:8000/play/a020/index.m3u8
+http://45.181.87.106/TYCSPORTSHD/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Culture;Education;News",UMSA TVU LP (720p)
 https://live.enhdtv.com:8081/8190/tracks-v1a1/mono.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Undefined",UMTV (1080p) [Not 24/7]
@@ -536,7 +534,7 @@ https://tigocloud.desdeparaguay.net/venusmedia/venusmedia/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Vevo Latino (1080p)
 https://amg00056-amg00056c13-rakuten-es-3246.playouts.now.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Vevo Pop (1080p)
-https://d128y56w6v2kax.cloudfront.net/playlist/amg00056-vevotv-vevopopau-samsungau/playlist.m3u8
+https://amg00056-amg00056c6-rakuten-uk-3235.playouts.now.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Video Tour Channel (480p) [Not 24/7]
 http://k4.usastreams.com/videotour/videotour/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Radio TV",Villa Elisa Radio TV

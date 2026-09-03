@@ -58,7 +58,6 @@ public class RecommendedChannels {
         "NPY",
         "NatureTime (Español)",
         "Next HD",
-        "Noticias Telemundo",
         "Paraguay TV",
         "Paravisión",
         "Pluto TV Animales (Español)",
