@@ -1,6 +1,6 @@
 {
-  "versionCode": 100,
-  "versionName": "2.02",
+  "versionCode": 101,
+  "versionName": "2.03",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición de canales Discovery en español: Discovery Channel, Discovery Kids, Investigation Discovery (ID), Discovery Home & Health y Discovery World."
+  "releaseNotes": "Reparación de la señal de Top Gear (24/7): actualización a stream CloudFront multirresolución H.264/AAC de alta compatibilidad."
 }
