@@ -1,6 +1,6 @@
 {
-  "versionCode": 98,
-  "versionName": "2.00",
+  "versionCode": 99,
+  "versionName": "2.01",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición de canales deportivos en español: Fox Sports 1, Fox Sports 2, Fox Sports 3 y Fox Deportes."
+  "releaseNotes": "Adición de canales documentales: National Geographic (Español) y Nat Geo Wild (Español)."
 }

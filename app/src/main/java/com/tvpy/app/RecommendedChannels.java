@@ -70,6 +70,8 @@ public class RecommendedChannels {
         "NOW 90s00s (1080p)",
         "NOW Rock (1080p)",
         "NPY",
+        "Nat Geo Wild (Español)",
+        "National Geographic (Español)",
         "NatureTime (Español)",
         "Next HD",
         "Paraguay TV",
