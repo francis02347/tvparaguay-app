@@ -94,7 +94,7 @@ https://6110f70ea8d0e.streamlock.net/1689/1689/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="General",Caoba TV Radio (720p) [Not 24/7]
 https://host.streamingnation.live:3940/live/caobatvlive.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Colombia" group-title="Entretenimiento",Caracol TV (Colombia)
-http://45.171.108.253:8888/CARACOL/index.m3u8
+http://177.234.249.178:8888/CARACOL/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="General",Cartago Medios TV (720p) [Not 24/7]
 https://acceso.mediosdecostarica.com:3511/stream/play.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Culture;News",Catamarca TV (720p)

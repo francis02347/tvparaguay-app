@@ -1,6 +1,6 @@
 {
-  "versionCode": 104,
-  "versionName": "2.06",
+  "versionCode": 105,
+  "versionName": "2.07",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Reparación de señales: National Geographic y Nat Geo Wild actualizados a transmisiones Full HD 1080p H.264 estables y de alta compatibilidad."
+  "releaseNotes": "Reparación de la señal de Caracol TV (Colombia): actualización a stream H.264/AAC de alta velocidad y estabilidad."
 }
