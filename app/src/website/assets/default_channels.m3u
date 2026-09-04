@@ -127,6 +127,16 @@ https://dwamdstream104.akamaized.net/hls/live/2015530/dwstream104/index.m3u8
 https://m1b2.worldcast.tv/dancetelevisiontwo/dancetelevisiontwo.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Music",DanceTV Techno Warehouse (720p)
 https://m2b2.worldcast.tv:7443/dancetelevisionthree/dancetelevisionthree.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 1
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31830/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 2
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31832/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DAZN Combat
+https://jmp2.uk/plu-64d626ac9b414d000820e2fc.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN F1
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31834/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN LaLiga
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31856/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Del Rey TV
 https://video.hostingcaaguazu.com:19360/delreytv/delreytv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Deportes TVC (1080p)

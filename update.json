@@ -1,6 +1,6 @@
 {
-  "versionCode": 105,
-  "versionName": "2.07",
+  "versionCode": 106,
+  "versionName": "2.08",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Reparación de la señal de Caracol TV (Colombia): actualización a stream H.264/AAC de alta velocidad y estabilidad."
+  "releaseNotes": "Adición de canales deportivos DAZN: DAZN LaLiga, DAZN F1, DAZN 1, DAZN 2 y DAZN Combat en Full HD 1080p."
 }
