@@ -31,6 +31,10 @@ https://video.hostingcaaguazu.com:19360/almayatv/almayatv.m3u8
 https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Cooking",Andalucía Cocina (1080p)
 https://cloud.fastchannel.es/mic/manifiest/hls/acocina/acocina.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Arena Sport 1
+https://kusnadipepenk.github.io/ntn/arns1.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Arena Sport 2
+https://kusnadipepenk.github.io/ntn/arns2.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",Atacama Noticias (720p) [Not 24/7]
 https://v2.tustreaming.cl/atacamanoticias/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Avang TV (1080p)

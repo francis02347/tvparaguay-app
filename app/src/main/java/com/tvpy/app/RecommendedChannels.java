@@ -14,6 +14,8 @@ public class RecommendedChannels {
         "ABC-TV Paraguay",
         "América TV Argentina",
         "Andalucía Cocina (1080p)",
+        "Arena Sport 1",
+        "Arena Sport 2",
         "Azteca Deportes Network",
         "Azteca Internacional (México)",
         "Best of Dance TV (1080p)",

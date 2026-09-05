@@ -1,6 +1,6 @@
 {
-  "versionCode": 106,
-  "versionName": "2.08",
+  "versionCode": 107,
+  "versionName": "2.09",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Adición de canales deportivos DAZN: DAZN LaLiga, DAZN F1, DAZN 1, DAZN 2 y DAZN Combat en Full HD 1080p."
+  "releaseNotes": "Adición de canales deportivos europeos: Arena Sport 1 y Arena Sport 2 (Full HD 1080p)."
 }
