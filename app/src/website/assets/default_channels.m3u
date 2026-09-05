@@ -45,6 +45,8 @@ https://s1.abntelevision.com/avivamientoabr/stream/avivamientohd/avivamientohd/p
 http://181.119.66.28:8081/AZTECA-DEPORTES-HD/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="México" group-title="Entretenimiento",Azteca Internacional (México)
 https://azt-mun.otteravision.com/azt/mun/mun.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",beIN Sports XTRA en Español
+https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",BTA TV (720p)
 https://cloud.fastchannel.es/manifiest/hls/prog9/btatv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Beats Radio (480p)
@@ -135,6 +137,10 @@ https://m2b2.worldcast.tv:7443/dancetelevisionthree/dancetelevisionthree.m3u8
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31830/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 2
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31832/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 3 Bar HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31861/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 4 Bar HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31862/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DAZN Combat
 https://jmp2.uk/plu-64d626ac9b414d000820e2fc.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN F1
@@ -305,6 +311,16 @@ https://cloud2.streaminglivehd.com:1936/liratv/liratv/playlist.m3u8
 https://5ca3e84a76d30.streamlock.net/tvlobo/videotvlobo/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Luz Divina TV [Not 24/7]
 https://tv.wracanal10.com:3776/live/luzdivinatvlive.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",M+ LaLiga TV HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31853/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",M+ LaLiga TV 2 HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31854/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",M+ Liga de Campeones HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31842/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",M+ Liga de Campeones 2 HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31860/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",M+ Vamos HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31867/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="News",M95 TelevisiÃ³n Marbella (1080p) [Not 24/7]
 https://limited2.todostreaming.es/live/m95-livestream.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",MTNA TV
