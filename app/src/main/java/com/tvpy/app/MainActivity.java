@@ -53,31 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
     private String activeCountry = "Todos";
     private boolean showingFavorites = false;
-    private boolean showingMundial = false;
     private String activeGenre = "";
     private android.animation.AnimatorSet tutorialAnimatorSet;
 
     private static final String ALL  = "Todos";
     private static final String FAVS = "❤️";
-
-    private static final Set<String> MUNDIAL_CHANNELS = new HashSet<>(Arrays.asList(
-        "Azteca Internacional (México)",
-        "Canal 5 (Televisa) (México)",
-        "FOX (Estados Unidos)",
-        "FS1 (Estados Unidos)",
-        "Gen",
-        "Las Estrellas (México) [Geo-blocked]",
-        "Popu TV",
-        "RTVE Canal 24 Horas",
-        "RTVE La 1",
-        "Teledeporte",
-        "Telefe Internacional (Argentina)",
-        "Telemundo (Estados Unidos)",
-        "Trece",
-        "TV Globo Bahia (Brasil)",
-        "Unicanal",
-        "Universo (Estados Unidos)"
-    ));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,16 +295,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // ─── Chips fila 1: Todos | ❤️ | países ────────────────────────────────────
+    // ─── Chips fila 1: Todos | ❤️ | géneros | países ──────────────────────────
 
     private void buildFilterChips() {
         filterChipsContainer.removeAllViews();
 
         // 1. Chip "Todos"
-        boolean isTodosSelected = !showingFavorites && !showingMundial && ALL.equals(activeCountry) && activeGenre.isEmpty();
+        boolean isTodosSelected = !showingFavorites && ALL.equals(activeCountry) && activeGenre.isEmpty();
         addFilterChip(ALL, isTodosSelected, v -> {
             showingFavorites = false;
-            showingMundial = false;
             activeCountry = ALL;
             activeGenre = "";
             buildFilterChips();
@@ -334,43 +313,13 @@ public class MainActivity extends AppCompatActivity {
         // 2. Chip "❤️" (Favoritos)
         addFilterChip(FAVS, showingFavorites, v -> {
             showingFavorites = true;
-            showingMundial = false;
             activeCountry = ALL;
             activeGenre = "";
             buildFilterChips();
             applyFilter();
         });
 
-        // 2b. Chip "🏆 Mundial 2026"
-        addFilterChip("🏆 Mundial 2026", showingMundial, v -> {
-            showingFavorites = false;
-            showingMundial = true;
-            activeCountry = ALL;
-            activeGenre = "";
-            buildFilterChips();
-            applyFilter();
-        });
-
-        // 3. Chips de Países
-        Set<String> countries = new LinkedHashSet<>();
-        for (Channel ch : allChannels) {
-            if (ch.getCountry() != null && !ch.getCountry().isEmpty()) {
-                countries.add(ch.getCountry());
-            }
-        }
-        for (String co : countries) {
-            boolean isCountrySelected = !showingFavorites && !showingMundial && co.equals(activeCountry) && activeGenre.isEmpty();
-            addFilterChip(co, isCountrySelected, v -> {
-                showingFavorites = false;
-                showingMundial = false;
-                activeCountry = co;
-                activeGenre = "";
-                buildFilterChips();
-                applyFilter();
-            });
-        }
-
-        // 4. Chips de Géneros
+        // 3. Chips de Géneros
         Set<String> genres = new LinkedHashSet<>();
         for (Channel ch : allChannels) {
             if (ch.getCategory() != null && !ch.getCategory().isEmpty()) {
@@ -378,12 +327,29 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         for (String genre : genres) {
-            boolean isGenreSelected = !showingFavorites && !showingMundial && ALL.equals(activeCountry) && genre.equals(activeGenre);
+            boolean isGenreSelected = !showingFavorites && ALL.equals(activeCountry) && genre.equals(activeGenre);
             addFilterChip(genre, isGenreSelected, v -> {
                 showingFavorites = false;
-                showingMundial = false;
                 activeCountry = ALL;
                 activeGenre = genre;
+                buildFilterChips();
+                applyFilter();
+            });
+        }
+
+        // 4. Chips de Países
+        Set<String> countries = new LinkedHashSet<>();
+        for (Channel ch : allChannels) {
+            if (ch.getCountry() != null && !ch.getCountry().isEmpty()) {
+                countries.add(ch.getCountry());
+            }
+        }
+        for (String co : countries) {
+            boolean isCountrySelected = !showingFavorites && co.equals(activeCountry) && activeGenre.isEmpty();
+            addFilterChip(co, isCountrySelected, v -> {
+                showingFavorites = false;
+                activeCountry = co;
+                activeGenre = "";
                 buildFilterChips();
                 applyFilter();
             });
@@ -448,12 +414,8 @@ public class MainActivity extends AppCompatActivity {
                                  || activeCountry.equals(ch.getCountry());
             boolean matchGenre   = activeGenre.isEmpty()
                                  || activeGenre.equals(ch.getCategory());
-            String cleanName = ChannelDeduplicator.cleanName(ch.getName());
-            boolean matchMundial = !showingMundial
-                                 || MUNDIAL_CHANNELS.contains(cleanName)
-                                 || MUNDIAL_CHANNELS.contains(ch.getName());
 
-            if (matchSearch && matchFav && matchCountry && matchGenre && matchMundial) filteredChannels.add(ch);
+            if (matchSearch && matchFav && matchCountry && matchGenre) filteredChannels.add(ch);
         }
 
         adapter.updateChannels(filteredChannels, favUrls);
