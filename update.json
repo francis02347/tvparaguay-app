@@ -1,6 +1,6 @@
 {
   "versionCode": 111,
   "versionName": "2.13",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Reproducción en segundo plano automática al apagar la pantalla: el audio sigue escuchándose de fondo con la pantalla bloqueada o apagada."
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.13/app-website-release.apk",
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.13."
 }
