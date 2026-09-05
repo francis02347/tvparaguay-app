@@ -31,6 +31,13 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 @androidx.media3.common.util.UnstableApi
 public class BackgroundAudioService extends Service {
 
+    public static volatile boolean isRunning = false;
+    public static volatile boolean wasStoppedByUser = false;
+
+    public static boolean isRunning() {
+        return isRunning;
+    }
+
     private static final String CHANNEL_ID = "BackgroundAudioChannel";
     private static final int NOTIFICATION_ID = 999;
     public static final String ACTION_STOP = "ACTION_STOP";
@@ -44,6 +51,7 @@ public class BackgroundAudioService extends Service {
     private String channelName;
     private String streamUrl;
     private String rawUrl;
+    private int channelIndex = -1;
 
     @Override
     public void onCreate() {
@@ -59,10 +67,15 @@ public class BackgroundAudioService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && ACTION_STOP.equals(intent.getAction())) {
+            wasStoppedByUser = true;
+            isRunning = false;
             stopPlayback();
             stopSelf();
             return START_NOT_STICKY;
         }
+
+        wasStoppedByUser = false;
+        isRunning = true;
 
         // Promover a primer plano de inmediato para evitar el crash ForegroundServiceDidNotStartInTimeException
         createNotificationChannel();
@@ -70,6 +83,7 @@ public class BackgroundAudioService extends Service {
             channelName = intent.getStringExtra("channel_name");
             streamUrl = intent.getStringExtra("stream_url");
             rawUrl = intent.getStringExtra("raw_url");
+            channelIndex = intent.getIntExtra("channel_index", -1);
         }
         if (channelName == null) channelName = "Transmisión en Vivo";
 
@@ -96,6 +110,7 @@ public class BackgroundAudioService extends Service {
         audioFocusChangeListener = focusChange -> {
             if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                 // Foco perdido de forma permanente (ej: se abre otro reproductor)
+                isRunning = false;
                 stopPlayback();
                 stopSelf();
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
@@ -258,23 +273,41 @@ public class BackgroundAudioService extends Service {
             player.setMediaItem(mediaItem);
             player.prepare();
             player.play();
+            isRunning = true;
 
             player.addListener(new Player.Listener() {
                 @Override
+                public void onPlaybackStateChanged(int playbackState) {
+                    if (playbackState == Player.STATE_READY) {
+                        isRunning = true;
+                    }
+                }
+
+                @Override
+                public void onIsPlayingChanged(boolean isPlayingNow) {
+                    if (isPlayingNow) {
+                        isRunning = true;
+                    }
+                }
+
+                @Override
                 public void onPlayerError(androidx.media3.common.PlaybackException error) {
                     error.printStackTrace();
+                    isRunning = false;
                     stopPlayback();
                     stopSelf();
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
+            isRunning = false;
             stopPlayback();
             stopSelf();
         }
     }
 
     private void stopPlayback() {
+        isRunning = false;
         abandonAudioFocus();
         if (player != null) {
             player.release();
@@ -316,6 +349,9 @@ public class BackgroundAudioService extends Service {
         // Al hacer click en la notificación, vuelve a la reproducción del canal
         Intent notificationIntent = new Intent(this, PlayerActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        if (channelIndex >= 0) {
+            notificationIntent.putExtra("channel_index", channelIndex);
+        }
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
                 0,
@@ -368,6 +404,7 @@ public class BackgroundAudioService extends Service {
 
     @Override
     public void onDestroy() {
+        isRunning = false;
         stopPlayback();
         super.onDestroy();
     }

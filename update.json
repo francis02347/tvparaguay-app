@@ -1,6 +1,6 @@
 {
-  "versionCode": 110,
-  "versionName": "2.12",
+  "versionCode": 111,
+  "versionName": "2.13",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Añadidos canales Studio 29 y Westv on Streaming; corrección de la señal auténtica e independiente de DSports+."
+  "releaseNotes": "Reproducción en segundo plano automática al apagar la pantalla: el audio sigue escuchándose de fondo con la pantalla bloqueada o apagada."
 }

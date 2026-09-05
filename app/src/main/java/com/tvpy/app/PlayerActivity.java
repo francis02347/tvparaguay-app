@@ -26,6 +26,8 @@ import android.app.RemoteAction;
 import android.app.PendingIntent;
 import android.annotation.TargetApi;
 import android.content.res.Configuration;
+import android.os.PowerManager;
+import android.app.KeyguardManager;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Date;
@@ -100,6 +102,9 @@ public class PlayerActivity extends AppCompatActivity {
     private GestureDetector gestureDetector;
     private MapHeaderDataSourceFactory dataSourceFactory;
     private BroadcastReceiver backgroundAudioReceiver;
+    private BroadcastReceiver screenReceiver;
+    private volatile boolean isScreenOffAudioActive = false;
+    private volatile boolean wasPlayingBeforePause = false;
     private String activeStreamUrl;
     private String activeCookie;
     private String activeReferer;
@@ -145,6 +150,12 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         stopService(new Intent(this, BackgroundAudioService.class));
+        BackgroundAudioService.isRunning = false;
+
+        int intentIndex = getIntent().getIntExtra("channel_index", -1);
+        if (intentIndex >= 0 && channelList != null && intentIndex < channelList.size()) {
+            currentIndex = intentIndex;
+        }
 
         playerView         = findViewById(R.id.playerView);
         loadingContainer   = findViewById(R.id.loadingContainer);
@@ -260,6 +271,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         setupPlayer();
         registerBackgroundAudioReceiver();
+        registerScreenReceiver();
         if (!channelList.isEmpty()) loadChannel(currentIndex);
     }
 
@@ -302,6 +314,16 @@ public class PlayerActivity extends AppCompatActivity {
 
             @Override
             public void onPlayerError(PlaybackException error) {
+                if (error != null && error.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
+                    if (player != null) {
+                        try {
+                            player.seekToDefaultPosition();
+                            player.prepare();
+                            player.play();
+                            return;
+                        } catch (Exception ignored) {}
+                    }
+                }
                 hideLoading();
                 String name = channelList != null && currentIndex < channelList.size()
                         ? channelList.get(currentIndex).getName() : "";
@@ -1024,7 +1046,10 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) enterImmersiveMode();
+        if (hasFocus) {
+            enterImmersiveMode();
+            restorePlaybackFromScreenOff();
+        }
     }
 
     @Override
@@ -1039,20 +1064,38 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        boolean isPip = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            isPip = isInPictureInPictureMode();
-        }
-        if (!isPip) {
-            if (player != null) player.pause();
-            anim1.pause(); anim2.pause(); anim3.pause();
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOff = (pm != null && !pm.isInteractive());
+
+        wasPlayingBeforePause = (player != null && (
+                player.isPlaying() ||
+                (player.getPlayWhenReady() && (player.getPlaybackState() == Player.STATE_READY || player.getPlaybackState() == Player.STATE_BUFFERING))
+        ));
+
+        if (isScreenOff) {
+            handleScreenOff();
+        } else {
+            boolean isPip = false;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                isPip = isInPictureInPictureMode();
+            }
+            if (!isPip) {
+                if (player != null) player.pause();
+                anim1.pause(); anim2.pause(); anim3.pause();
+            }
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (player != null) {
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOff = (pm != null && !pm.isInteractive());
+        if (isScreenOff && !isScreenOffAudioActive) {
+            handleScreenOff();
+        }
+        if (!isScreenOffAudioActive && player != null) {
             player.pause();
         }
     }
@@ -1186,23 +1229,119 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void unregisterBackgroundAudioReceiver() {
         if (backgroundAudioReceiver != null) {
-            unregisterReceiver(backgroundAudioReceiver);
+            try {
+                unregisterReceiver(backgroundAudioReceiver);
+            } catch (Exception ignored) {}
             backgroundAudioReceiver = null;
         }
     }
 
+    private void registerScreenReceiver() {
+        if (screenReceiver == null) {
+            screenReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (intent == null) return;
+                    String action = intent.getAction();
+                    if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                        handleScreenOff();
+                    } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
+                        restorePlaybackFromScreenOff();
+                    }
+                }
+            };
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_USER_PRESENT);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(screenReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(screenReceiver, filter);
+            }
+        }
+    }
+
+    private void unregisterScreenReceiver() {
+        if (screenReceiver != null) {
+            try {
+                unregisterReceiver(screenReceiver);
+            } catch (Exception ignored) {}
+            screenReceiver = null;
+        }
+    }
+
+    private synchronized void handleScreenOff() {
+        if (isScreenOffAudioActive) return;
+        if (player == null) return;
+
+        boolean isPlaying = player.isPlaying()
+                || (player.getPlayWhenReady() && (player.getPlaybackState() == Player.STATE_READY || player.getPlaybackState() == Player.STATE_BUFFERING))
+                || wasPlayingBeforePause;
+
+        if (!isPlaying) return;
+
+        if (BuildConfig.IS_PLAY_STORE) {
+            if (!ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) return;
+            if (!isBackgroundAudioUnlocked()) return;
+        }
+
+        if (currentIndex < 0 || currentIndex >= channelList.size()) return;
+
+        isScreenOffAudioActive = true;
+        try {
+            player.pause();
+        } catch (Exception ignored) {}
+
+        startBackgroundAudioService(false);
+    }
+
+    private synchronized void restorePlaybackFromScreenOff() {
+        KeyguardManager km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        if (km != null && km.isKeyguardLocked()) {
+            return;
+        }
+
+        if (BackgroundAudioService.isRunning() || isScreenOffAudioActive) {
+            isScreenOffAudioActive = false;
+            wasPlayingBeforePause = false;
+
+            boolean wasStoppedByUser = BackgroundAudioService.wasStoppedByUser;
+            BackgroundAudioService.wasStoppedByUser = false;
+
+            try {
+                stopService(new Intent(this, BackgroundAudioService.class));
+            } catch (Exception ignored) {}
+            BackgroundAudioService.isRunning = false;
+
+            if (!wasStoppedByUser && player != null) {
+                try {
+                    if (player.isCurrentMediaItemLive()) {
+                        player.seekToDefaultPosition();
+                    }
+                } catch (Exception ignored) {}
+                player.play();
+            }
+        }
+    }
+
     private void startBackgroundAudio() {
+        startBackgroundAudioService(true);
+    }
+
+    private void startBackgroundAudioService(boolean finishActivity) {
         if (BuildConfig.IS_PLAY_STORE) {
             if (!ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) {
                 // Característica desactivada temporalmente en Play Store
                 return;
             }
             if (!isBackgroundAudioUnlocked()) {
-                pendingUnlockBgAudio = true;
-                // Regresar a pantalla completa para mostrar el anuncio
-                Intent resumeIntent = new Intent(this, PlayerActivity.class);
-                resumeIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(resumeIntent);
+                if (finishActivity) {
+                    pendingUnlockBgAudio = true;
+                    // Regresar a pantalla completa para mostrar el anuncio
+                    Intent resumeIntent = new Intent(this, PlayerActivity.class);
+                    resumeIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(resumeIntent);
+                }
                 return;
             }
         }
@@ -1220,6 +1359,7 @@ public class PlayerActivity extends AppCompatActivity {
         
         Intent serviceIntent = new Intent(this, BackgroundAudioService.class);
         serviceIntent.putExtra("channel_name", currentChannel.getName());
+        serviceIntent.putExtra("channel_index", currentIndex);
         serviceIntent.putExtra("stream_url", playUrl);
         serviceIntent.putExtra("raw_url", currentChannel.getUrl());
         if (activeCookie != null) {
@@ -1232,13 +1372,31 @@ public class PlayerActivity extends AppCompatActivity {
             serviceIntent.putExtra("user_agent", activeUserAgent);
         }
         
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent);
+            } else {
+                startService(serviceIntent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
-        finish();
+        if (finishActivity) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (intent != null) {
+            int intentIndex = intent.getIntExtra("channel_index", -1);
+            if (intentIndex >= 0 && channelList != null && intentIndex < channelList.size() && intentIndex != currentIndex) {
+                loadChannel(intentIndex);
+            }
+        }
     }
 
     @Override
@@ -1261,7 +1419,8 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         enterImmersiveMode();
-        if (player != null && player.getPlaybackState() == Player.STATE_READY) {
+        restorePlaybackFromScreenOff();
+        if (!isScreenOffAudioActive && player != null && player.getPlaybackState() == Player.STATE_READY && !BackgroundAudioService.wasStoppedByUser) {
             player.play();
         }
         updatePipParams();
@@ -1272,6 +1431,7 @@ public class PlayerActivity extends AppCompatActivity {
         handler.removeCallbacksAndMessages(null);
         anim1.cancel(); anim2.cancel(); anim3.cancel();
         unregisterBackgroundAudioReceiver();
+        unregisterScreenReceiver();
         if (player != null) {
             player.release();
             player = null;
