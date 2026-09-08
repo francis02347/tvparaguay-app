@@ -1,35 +1,51 @@
 package com.tvpy.app;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
- * Contiene la lista de nombres de los canales recomendados que
- * se muestran en la página de inicio de la versión web de la app.
+ * Contiene la lista de canales recomendados y su orden prioritario,
+ * sincronizado exactamente con la versión web de la plataforma (TVV.LAT).
  */
 public class RecommendedChannels {
-    public static final Set<String> NAMES = new HashSet<>(Arrays.asList(
+
+    public static final List<String> ORDERED_NAMES = Arrays.asList(
+        "SNT",
+        "Telefuturo",
+        "Trece",
+        "Unicanal",
+        "Latele",
+        "C9N",
+        "NPY",
         "A24 Argentina",
-        "ABC-TV Paraguay",
         "América TV Argentina",
-        "Andalucía Cocina (1080p)",
+        "El Garage TV (Argentina)",
+        "Gen",
+        "TV Pública (Argentina)",
+        "Telefe Internacional (Argentina)",
+        "Paravisión",
+        "E40",
+        "Monumental TV",
+        "Ñandutí",
+        "ABC-TV Paraguay",
+        "Canal Pro",
+        "HEi Now",
+        "Next HD",
+        "Paraguay TV",
+        "Popu TV",
+        "Productiva TV",
+        "Red Digital",
+        "Tigo Sports (Paraguay)",
+        "Venus Media",
         "Arena Sport 1",
         "Arena Sport 2",
         "Azteca Deportes Network",
-        "Azteca Internacional (México)",
         "beIN Sports XTRA en Español",
-        "Best of Dance TV (1080p)",
-        "C9N",
-        "CBN Español (1080p)",
-        "Canal Pro",
-        "Caracol TV (Colombia)",
-        "Chilevisión (Chile)",
         "Claro Sports",
-        "Clubbing TV (720p)",
-        "DW en Español",
-        "DanceTV Deep House (1080p)",
-        "DanceTV Techno Warehouse (720p)",
         "DAZN 1",
         "DAZN 2",
         "DAZN 3 Bar HD",
@@ -38,16 +54,9 @@ public class RecommendedChannels {
         "DAZN F1",
         "DAZN LaLiga",
         "Deportes TVC (1080p)",
-        "Discovery Channel (Español)",
-        "Discovery Home & Health (Español)",
-        "Discovery Kids (Español)",
-        "Discovery Turbo (Estados Unidos)",
-        "Discovery World (Español)",
         "DSports (DirecTV Sports)",
         "DSports 2",
         "DSports+",
-        "El Garage TV (Argentina)",
-        "E40",
         "ESPN (Brasil)",
         "ESPN (Señal Principal)",
         "ESPN 2",
@@ -62,9 +71,6 @@ public class RecommendedChannels {
         "ESPN Extra (Brasil)",
         "ESPN Premium",
         "ESPN8: The Ocho",
-        "Euronews en Español",
-        "EWTN Spain & Latin America (720p)",
-        "Enlace (720p)",
         "FIFA+ Spain (720p)",
         "FOX (Estados Unidos)",
         "Fox Deportes",
@@ -72,57 +78,40 @@ public class RecommendedChannels {
         "Fox Sports 2",
         "Fox Sports 3",
         "FS1 (Estados Unidos)",
-        "Farra Play (720p) [Not 24/7]",
-        "France 24 Español",
-        "Gen",
         "Golazo Network",
         "GolTV Latinoamérica",
-        "HEi Now",
-        "Historia (España)",
-        "Historia y Vida",
-        "History 2 (Latinoamérica)",
-        "History Channel (Latinoamérica)",
-        "Investigation Discovery (ID) (Español)",
         "ITV Deportes (720p)",
-        "Las Estrellas (México) [Geo-blocked]",
-        "Latele",
         "M+ LaLiga TV HD",
         "M+ LaLiga TV 2 HD",
         "M+ Liga de Campeones HD",
         "M+ Liga de Campeones 2 HD",
         "M+ Vamos HD",
-        "Monumental TV",
         "Motorvision TV (Español)",
+        "Rally TV (Internacional)",
+        "Real Madrid TV",
+        "Red Bull TV (Español)",
+        "SuperTennis (Italia)",
+        "Teledeporte (1080p)",
+        "Tennis Channel (Internacional)",
+        "TyC Sports",
+        "Waypoint TV (Estados Unidos)",
+        "beIN Sports XTRA en Español (1080p)",
+        "DW en Español",
+        "Euronews en Español",
+        "France 24 Español",
+        "RDN (1080p) [Not 24/7]",
+        "RT en Español",
+        "Sky News (Inglés)",
+        "Best of Dance TV (1080p)",
+        "Clubbing TV (720p)",
+        "DanceTV Deep House (1080p)",
+        "DanceTV Techno Warehouse (720p)",
+        "Farra Play (720p) [Not 24/7]",
         "NOW 70s (720p)",
         "NOW 80s (1080p)",
         "NOW 90s00s (1080p)",
         "NOW Rock (1080p)",
-        "NPY",
-        "Nat Geo Wild (Español)",
-        "National Geographic (Español)",
-        "NatureTime (Español)",
-        "Next HD",
-        "Paraguay TV",
-        "Paravisión",
-        "Pluto TV Animales (Español)",
-        "Pluto TV Documentales (Español)",
-        "Pluto TV Historia (Español)",
-        "Pluto TV Naturaleza (Español)",
-        "Popu TV",
-        "Productiva TV",
         "Radio Ibiza TV (720p)",
-        "RDN (1080p) [Not 24/7]",
-        "RT Documentary (Internacional)",
-        "RT en Español",
-        "RTVE La 1",
-        "Rally TV (Internacional)",
-        "Real Madrid TV",
-        "Red Bull TV (Español)",
-        "Red Digital",
-        "Runtime Cine y Series",
-        "SNT",
-        "Sky News (Inglés)",
-        "Smithsonian Channel (Español)",
         "Stingray Classica (1080p)",
         "Stingray Greatest Holiday Hits",
         "Stingray Karaoke (1080p)",
@@ -131,36 +120,76 @@ public class RecommendedChannels {
         "Stingray Today's Latin Pop (1080p)",
         "Stingray Urban Beat (1080p)",
         "Studio 29",
-        "SuperTennis (Italia)",
-        "Supermúsica TV (720p)",
-        "TV Globo Bahia (Brasil)",
-        "TV Pública (Argentina)",
-        "Teledeporte (1080p)",
-        "Telefe Internacional (Argentina)",
-        "Telefuturo",
-        "Telemundo (Estados Unidos)",
-        "Tennis Channel (Internacional)",
-        "Terra Mater WILD (Inglés)",
-        "The Fishing & Hunting Channel",
-        "Tigo Sports (Paraguay)",
-        "Top Gear (24/7)",
         "Totalmusic (1080p)",
         "Totalmusic 2000s (720p)",
         "Totalmusic 80s (720p)",
         "Totalmusic Concerts (720p)",
         "Totalmusic Dance (720p)",
-        "Trece",
-        "TyC Sports (1080p)",
-        "TyC Sports USA",
-        "Unicanal",
-        "Universo (Estados Unidos)",
-        "Venus Media",
         "Vevo Latino (1080p)",
         "Vevo Pop (1080p)",
-        "Waypoint TV (Estados Unidos)",
+        "Andalucía Cocina (1080p)",
+        "Azteca Internacional (México)",
+        "CBN Español (1080p)",
+        "Caracol TV (Colombia)",
+        "Chilevisión (Chile)",
+        "Discovery Channel (Español)",
+        "Discovery Home & Health (Español)",
+        "Discovery Kids (Español)",
+        "Discovery Turbo (Estados Unidos)",
+        "Discovery World (Español)",
+        "EWTN Spain & Latin America (720p)",
+        "Enlace (720p)",
+        "Historia (España)",
+        "Historia y Vida",
+        "History 2 (Latinoamérica)",
+        "History Channel (Latinoamérica)",
+        "Investigation Discovery (ID) (Español)",
+        "Las Estrellas (México) [Geo-blocked]",
+        "Nat Geo Wild (Español)",
+        "National Geographic (Español)",
+        "NatureTime (Español)",
+        "Pluto TV Animales (Español)",
+        "Pluto TV Documentales (Español)",
+        "Pluto TV Historia (Español)",
+        "Pluto TV Naturaleza (Español)",
+        "RT Documentary (Internacional)",
+        "RTVE La 1",
+        "Runtime Cine y Series",
+        "Smithsonian Channel (Español)",
+        "TV Globo Bahia (Brasil)",
+        "Telemundo (Estados Unidos)",
+        "Terra Mater WILD (Inglés)",
+        "The Fishing & Hunting Channel",
+        "Top Gear (24/7)",
+        "Universo (Estados Unidos)",
         "Westv on Streaming",
-        "WildEarth (Inglés - Safaris en vivo)",
-        "beIN Sports XTRA en Español (1080p)",
-        "Ñandutí"
-    ));
+        "WildEarth (Inglés - Safaris en vivo)"
+    );
+
+    public static final Set<String> NAMES = new HashSet<>(ORDERED_NAMES);
+
+    private static final Map<String, Integer> ORDER_MAP = new HashMap<>();
+
+    static {
+        for (int i = 0; i < ORDERED_NAMES.size(); i++) {
+            ORDER_MAP.put(ORDERED_NAMES.get(i).toLowerCase().trim(), i);
+        }
+    }
+
+    /**
+     * Devuelve el índice de orden (0 a 149) del canal según la versión web.
+     * Si no pertenece a la lista web (ej. canales de listas M3U personalizadas),
+     * devuelve Integer.MAX_VALUE para posicionarlo al final.
+     */
+    public static int getOrderIndex(String channelName) {
+        if (channelName == null) return Integer.MAX_VALUE;
+        String normalized = channelName.toLowerCase().trim();
+        Integer idx = ORDER_MAP.get(normalized);
+        if (idx != null) return idx;
+
+        // Intentar buscando sin sufijo de resolución/calidad (ej: "SNT (1080p)" -> "snt")
+        String clean = ChannelDeduplicator.cleanName(channelName).toLowerCase().trim();
+        idx = ORDER_MAP.get(clean);
+        return idx != null ? idx : Integer.MAX_VALUE;
+    }
 }

@@ -283,9 +283,15 @@ public class MainActivity extends AppCompatActivity {
         // Eliminar duplicados de calidad (ej: "GO TV" y "GO TV (1080p)" → queda el mejor)
         allChannels = ChannelDeduplicator.deduplicate(allChannels);
 
-        // Ordenar toda la lista combinada alfabéticamente por nombre
-        allChannels.sort((a, b) ->
-            a.getName().compareToIgnoreCase(b.getName()));
+        // Ordenar con prioridad al orden de la versión web (1 a 150), y custom M3U al final
+        allChannels.sort((a, b) -> {
+            int orderA = RecommendedChannels.getOrderIndex(a.getName());
+            int orderB = RecommendedChannels.getOrderIndex(b.getName());
+            if (orderA != orderB) {
+                return Integer.compare(orderA, orderB);
+            }
+            return a.getName().compareToIgnoreCase(b.getName());
+        });
 
         if (!m3u.isEmpty()) {
             tvM3uBadge.setVisibility(View.VISIBLE);

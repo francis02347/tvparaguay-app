@@ -50,6 +50,7 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.datasource.DataSpec;
 import androidx.media3.datasource.TransferListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -285,7 +286,13 @@ public class PlayerActivity extends AppCompatActivity {
     // ─── ExoPlayer ────────────────────────────────────────────────────────────
 
     private void setupPlayer() {
-        DataSource.Factory baseFactory = new DefaultDataSource.Factory(this);
+        DefaultHttpDataSource.Factory httpDataSourceFactory = new DefaultHttpDataSource.Factory()
+                .setUserAgent("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
+                .setAllowCrossProtocolRedirects(true)
+                .setConnectTimeoutMs(15000)
+                .setReadTimeoutMs(15000);
+
+        DataSource.Factory baseFactory = new DefaultDataSource.Factory(this, httpDataSourceFactory);
         dataSourceFactory = new MapHeaderDataSourceFactory(baseFactory);
 
         player = new ExoPlayer.Builder(this)

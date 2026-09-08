@@ -20,6 +20,14 @@ public class SplashActivity extends AppCompatActivity {
                 allChannels.addAll(ChannelData.getChannels(this));
                 allChannels.addAll(ChannelStore.loadM3uChannels(this));
                 allChannels = ChannelDeduplicator.deduplicate(allChannels);
+                allChannels.sort((a, b) -> {
+                    int orderA = RecommendedChannels.getOrderIndex(a.getName());
+                    int orderB = RecommendedChannels.getOrderIndex(b.getName());
+                    if (orderA != orderB) {
+                        return Integer.compare(orderA, orderB);
+                    }
+                    return a.getName().compareToIgnoreCase(b.getName());
+                });
 
                 int lastIndex = -1;
                 for (int i = 0; i < allChannels.size(); i++) {
