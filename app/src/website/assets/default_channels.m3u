@@ -6,7 +6,7 @@ https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/playlist.m3u8?
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Trece
 dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Unicanal
-dailymotion://k3C8CLhvjDCJadHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/
+dailymotion://k41tDnJts45CTVHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Latele
 https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",C9N
@@ -14,15 +14,15 @@ https://d174axghh54kh0.cloudfront.net/ts:abr.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",NPY
 https://copacogen.desdeparaguay.net/npy/npy_py_alta/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Noticias",A24 Argentina
-https://g1.vxral-hor.transport.edge-access.net/a15/ngrp:a24-100056_all/a24-100056.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36
+https://g1.vxral-hor.transport.edge-access.net/a15/ngrp:a24-100056_all/a24-100056.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento",América TV Argentina
-https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36
+https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Deportes",El Garage TV (Argentina)
 https://stream1.sersat.com/hls/garagetv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Gen
 desdeparaguay://gentv
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="General",TV Pública (Argentina)
-https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36
+https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento",Telefe Internacional (Argentina)
 http://200.91.32.158:8080/telefehdvalle/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Paravisión

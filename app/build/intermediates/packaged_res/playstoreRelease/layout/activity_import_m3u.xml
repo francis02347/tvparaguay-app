@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark">
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_gradient">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +23,7 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="8dp"
-            android:background="@color/header_bg">
+            android:background="@drawable/header_glass_bg">
 
             <ImageButton
                 android:id="@+id/btnBack"
@@ -56,6 +63,43 @@
                 android:layout_marginBottom="20dp" />
 
             <!-- ══════════════════════════════════════
+                 SECCIÓN: CANALES RECOMENDADOS (Sabor Play Store)
+            ══════════════════════════════════════ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✨  Canales Recomendados"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Instalá automáticamente la lista de canales recomendada del Sabor Web"
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/btnLoadRecommended"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:text="🚀  Cargar Canales Recomendados"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_gradient_bg"
+                app:backgroundTint="@null"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Divisor -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1E293B"
+                android:layout_marginBottom="20dp" />
+
+            <!-- ══════════════════════════════════════
                  SECCIÓN: IMPORTAR POR PAÍS
             ══════════════════════════════════════ -->
             <TextView
@@ -71,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tocá un país para importar todos sus canales desde iptv-org"
-                android:textColor="#AAAAAA"
+                android:textColor="#94A3B8"
                 android:textSize="12sp"
                 android:layout_marginBottom="12dp" />
 
@@ -108,7 +152,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222233"
+                android:background="#1E293B"
                 android:layout_marginBottom="20dp" />
 
             <!-- ══════════════════════════════════════
@@ -127,7 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pegá la URL de cualquier archivo .m3u"
-                android:textColor="#AAAAAA"
+                android:textColor="#94A3B8"
                 android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
 
@@ -151,7 +195,8 @@
                 android:layout_height="46dp"
                 android:text="⬇️  Descargar e importar"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/accent"
+                android:background="@drawable/btn_gradient_bg"
+                app:backgroundTint="@null"
                 android:layout_marginBottom="20dp" />
 
 
@@ -159,7 +204,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222233"
+                android:background="#1E293B"
                 android:layout_marginBottom="20dp" />
 
             <!-- ══════════════════════════════════════
@@ -178,7 +223,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Seleccioná un archivo .m3u o .m3u8 desde tu dispositivo"
-                android:textColor="#AAAAAA"
+                android:textColor="#94A3B8"
                 android:textSize="12sp"
                 android:layout_marginBottom="10dp" />
 
@@ -188,14 +233,15 @@
                 android:layout_height="46dp"
                 android:text="📁  Elegir archivo .m3u"
                 android:textColor="@color/white"
-                android:backgroundTint="#1565C0"
+                android:background="@drawable/btn_secondary_bg"
+                app:backgroundTint="@null"
                 android:layout_marginBottom="20dp" />
 
             <!-- Divisor -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222233"
+                android:background="#1E293B"
                 android:layout_marginBottom="20dp" />
 
             <!-- ══════════════════════════════════════
@@ -231,14 +277,15 @@
                 android:layout_height="46dp"
                 android:text="✅  Procesar lista pegada"
                 android:textColor="@color/white"
-                android:backgroundTint="#2E7D32"
+                android:background="@drawable/btn_secondary_bg"
+                app:backgroundTint="@null"
                 android:layout_marginBottom="20dp" />
 
             <!-- Divisor -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222233"
+                android:background="#1E293B"
                 android:layout_marginBottom="20dp" />
 
             <!-- Borrar todo -->
@@ -248,9 +295,142 @@
                 android:layout_height="46dp"
                 android:text="🗑️  Borrar todos los canales M3U"
                 android:textColor="@color/white"
-                android:backgroundTint="#7B0000"
+                android:background="@drawable/btn_danger_bg"
+                app:backgroundTint="@null"
                 android:layout_marginBottom="16dp" />
 
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
+
+    <!-- Contenedor del Spotlight Overlay para guiar el primer inicio -->
+    <FrameLayout
+        android:id="@+id/layoutSpotlightOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <com.tvpy.app.SpotlightView
+            android:id="@+id/spotlightView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/layoutSpotlightContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="20dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <ImageView
+                android:id="@+id/ivSpotlightArrow"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/ic_straight_arrow_up"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/tutorial_card_bg"
+                android:padding="16dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✨ Empezá por acá ✨"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Presioná este botón para activar al instante\ntodos los canales recomendados de la app."
+                    android:textColor="#E2E8F0"
+                    android:textSize="12sp"
+                    android:gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Overlay de Éxito en Pantalla Completa -->
+    <FrameLayout
+        android:id="@+id/layoutSuccessOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E6090F19"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp"
+            android:background="@drawable/tutorial_card_bg"
+            android:elevation="8dp">
+
+            <!-- Checkmark animado o grande -->
+            <TextView
+                android:id="@+id/tvSuccessIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎉"
+                android:textSize="54sp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/tvSuccessTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¡Importación Exitosa!"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvSuccessDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Los canales recomendados se cargaron correctamente."
+                android:textColor="#94A3B8"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:layout_marginBottom="24dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ProgressBar
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:indeterminateTint="#3B82F6"
+                    android:layout_marginEnd="10dp" />
+
+                <TextView
+                    android:id="@+id/tvSuccessRedirect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Redirigiendo al inicio..."
+                    android:textColor="#E2E8F0"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

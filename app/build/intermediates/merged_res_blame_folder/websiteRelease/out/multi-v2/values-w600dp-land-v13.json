@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.tvpy.app-mergeWebsiteReleaseResources-34:/values-w600dp-land-v13/values-w600dp-land-v13.xml",
+            "outputFile": "com.tvpy.app-mergeWebsiteReleaseResources-2:/values-w600dp-land-v13/values-w600dp-land-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Francisco\\.gradle\\caches\\transforms-3\\99dc24b8086e9e02f60cbc0643cdc897\\transformed\\material-1.11.0\\res\\values-w600dp-land-v13\\values-w600dp-land-v13.xml",
+                    "source": "D:\\GradleCache\\.gradle\\caches\\transforms-3\\99dc24b8086e9e02f60cbc0643cdc897\\transformed\\material-1.11.0\\res\\values-w600dp-land-v13\\values-w600dp-land-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

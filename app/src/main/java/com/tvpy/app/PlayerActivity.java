@@ -458,66 +458,137 @@ public class PlayerActivity extends AppCompatActivity {
                         }
                     }
 
-                    String metadataUrl = "https://www.dailymotion.com/player/metadata/video/" + videoId;
-                    if (embedder != null && !embedder.isEmpty()) {
-                        metadataUrl += "?embedder=" + Uri.encode(embedder);
+                    // Candidate video IDs to attempt in order
+                    java.util.List<String> videoCandidates = new java.util.ArrayList<>();
+                    videoCandidates.add(videoId);
+
+                    String chNameLower = ch.getName() != null ? ch.getName().toLowerCase() : "";
+                    if (chNameLower.contains("trece")) {
+                        if (!videoId.equals("k1bgQZHbBKPqXOHczd4")) videoCandidates.add("k1bgQZHbBKPqXOHczd4");
+                        if (!videoId.equals("k1mHLKycOlKgo3Db5GI")) videoCandidates.add("k1mHLKycOlKgo3Db5GI");
+                    } else if (chNameLower.contains("unicanal")) {
+                        if (!videoId.equals("k41tDnJts45CTVHcyD4")) videoCandidates.add("k41tDnJts45CTVHcyD4");
+                        if (!videoId.equals("k3C8CLhvjDCJadHcyD4")) videoCandidates.add("k3C8CLhvjDCJadHcyD4");
                     }
 
-                    java.net.URL url = new java.net.URL(metadataUrl);
-                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                    conn.setRequestProperty("Referer", referer);
-                    conn.setConnectTimeout(5000);
-                    conn.setReadTimeout(5000);
-
-                    int responseCode = conn.getResponseCode();
-                    if (responseCode == 200) {
-                        // Extract cookies
-                        StringBuilder cookieBuilder = new StringBuilder();
-                        java.util.List<String> cookieHeaders = conn.getHeaderFields().get("Set-Cookie");
-                        if (cookieHeaders != null) {
-                            for (String cookie : cookieHeaders) {
-                                int semiIdx = cookie.indexOf(';');
-                                String pair = (semiIdx >= 0) ? cookie.substring(0, semiIdx) : cookie;
-                                if (cookieBuilder.length() > 0) {
-                                    cookieBuilder.append("; ");
-                                }
-                                cookieBuilder.append(pair);
-                            }
+                    for (String candidateId : videoCandidates) {
+                        String metadataUrl = "https://www.dailymotion.com/player/metadata/video/" + candidateId;
+                        if (embedder != null && !embedder.isEmpty()) {
+                            metadataUrl += "?embedder=" + Uri.encode(embedder);
                         }
-                        final String cookieStr = cookieBuilder.toString();
 
-                        java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(), "UTF-8"));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = in.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        in.close();
+                        java.net.URL url = new java.net.URL(metadataUrl);
+                        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("GET");
+                        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                        conn.setRequestProperty("Referer", referer);
+                        conn.setConnectTimeout(12000);
+                        conn.setReadTimeout(12000);
 
-                        org.json.JSONObject json = new org.json.JSONObject(sb.toString());
-                        org.json.JSONObject qualities = json.optJSONObject("qualities");
-                        if (qualities != null) {
-                            org.json.JSONArray autoArray = qualities.optJSONArray("auto");
-                            if (autoArray != null && autoArray.length() > 0) {
-                                org.json.JSONObject autoObj = autoArray.getJSONObject(0);
-                                final String streamUrl = autoObj.optString("url");
-                                if (streamUrl != null && !streamUrl.isEmpty()) {
-                                    final String finalReferer = referer;
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            playResolvedUrl(streamUrl, cookieStr, finalReferer, ch);
+                        int responseCode = conn.getResponseCode();
+                        if (responseCode == 200) {
+                            // Extract cookies case-insensitively
+                            StringBuilder cookieBuilder = new StringBuilder();
+                            for (java.util.Map.Entry<String, java.util.List<String>> entry : conn.getHeaderFields().entrySet()) {
+                                if ("set-cookie".equalsIgnoreCase(entry.getKey()) && entry.getValue() != null) {
+                                    for (String cookie : entry.getValue()) {
+                                        int semiIdx = cookie.indexOf(';');
+                                        String pair = (semiIdx >= 0) ? cookie.substring(0, semiIdx) : cookie;
+                                        if (cookieBuilder.length() > 0) {
+                                            cookieBuilder.append("; ");
                                         }
-                                    });
-                                    return;
+                                        cookieBuilder.append(pair.trim());
+                                    }
+                                }
+                            }
+                            final String cookieStr = cookieBuilder.toString();
+
+                            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(), "UTF-8"));
+                            StringBuilder sb = new StringBuilder();
+                            String line;
+                            while ((line = in.readLine()) != null) {
+                                sb.append(line);
+                            }
+                            in.close();
+
+                            org.json.JSONObject json = new org.json.JSONObject(sb.toString());
+                            org.json.JSONObject qualities = json.optJSONObject("qualities");
+                            if (qualities != null) {
+                                org.json.JSONArray autoArray = qualities.optJSONArray("auto");
+                                if (autoArray != null && autoArray.length() > 0) {
+                                    org.json.JSONObject autoObj = autoArray.getJSONObject(0);
+                                    String masterStreamUrl = autoObj.optString("url");
+                                    if (masterStreamUrl != null && !masterStreamUrl.isEmpty()) {
+                                        String finalPlayUrl = masterStreamUrl;
+
+                                        // Pre-resolución: intentar obtener la variante HLS directa de dmcdn.net
+                                        // para evitar que ExoPlayer requiera validar Cloudflare/tokens en cdndirector
+                                        if (masterStreamUrl.contains("cdndirector.dailymotion.com")) {
+                                            try {
+                                                java.net.URL m3u8Url = new java.net.URL(masterStreamUrl);
+                                                java.net.HttpURLConnection m3u8Conn = (java.net.HttpURLConnection) m3u8Url.openConnection();
+                                                m3u8Conn.setRequestMethod("GET");
+                                                m3u8Conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                                                m3u8Conn.setRequestProperty("Referer", referer);
+                                                if (!cookieStr.isEmpty()) {
+                                                    m3u8Conn.setRequestProperty("Cookie", cookieStr);
+                                                }
+                                                m3u8Conn.setConnectTimeout(8000);
+                                                m3u8Conn.setReadTimeout(8000);
+
+                                                if (m3u8Conn.getResponseCode() == 200) {
+                                                    java.io.BufferedReader m3u8Reader = new java.io.BufferedReader(new java.io.InputStreamReader(m3u8Conn.getInputStream(), "UTF-8"));
+                                                    String m3u8Line;
+                                                    java.util.List<String> variants = new java.util.ArrayList<>();
+                                                    while ((m3u8Line = m3u8Reader.readLine()) != null) {
+                                                        String trimmed = m3u8Line.trim();
+                                                        if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
+                                                            variants.add(trimmed);
+                                                        }
+                                                    }
+                                                    m3u8Reader.close();
+
+                                                    if (!variants.isEmpty()) {
+                                                        String bestVariant = variants.get(0);
+                                                        for (String v : variants) {
+                                                            if (v.contains("live-480") || v.contains("live-720")) {
+                                                                bestVariant = v;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (bestVariant.startsWith("http")) {
+                                                            finalPlayUrl = bestVariant;
+                                                        }
+                                                    }
+                                                }
+                                            } catch (Exception ePre) {
+                                                ePre.printStackTrace();
+                                            }
+                                        }
+
+                                        final String streamToPlay = finalPlayUrl;
+                                        final String finalReferer = referer;
+                                        handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                playResolvedUrl(streamToPlay, cookieStr, finalReferer, ch);
+                                            }
+                                        });
+                                        return;
+                                    }
                                 }
                             }
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+
+                // Fallback automático para ABC TV a su transmisión oficial de YouTube
+                String chName = ch.getName() != null ? ch.getName().toLowerCase() : "";
+                if (chName.contains("abc") || videoIdInput.contains("kQRS6ZAjGuMkByE4Mtc")) {
+                    resolveYouTubeAndPlay("@ABCParaguay", ch);
+                    return;
                 }
 
                 handler.post(new Runnable() {
@@ -722,11 +793,11 @@ public class PlayerActivity extends AppCompatActivity {
         activeStreamUrl = streamUrl;
         activeCookie = cookieStr;
         activeReferer = referer;
-        activeUserAgent = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36";
+        activeUserAgent = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
 
         if (dataSourceFactory != null) {
             java.util.Map<String, String> headers = new java.util.HashMap<>();
-            headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36");
+            headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
             if (referer != null && !referer.isEmpty()) {
                 headers.put("Referer", referer);
             }

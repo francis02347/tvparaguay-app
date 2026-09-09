@@ -237,7 +237,7 @@ public class BackgroundAudioService extends Service {
                 userAgent = intent.getStringExtra("user_agent");
             }
             if (userAgent == null || userAgent.isEmpty()) {
-                userAgent = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/112.0.0.0 Mobile Safari/537.36";
+                userAgent = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
             }
 
             // 3. Crear DataSource.Factory con soporte de headers
