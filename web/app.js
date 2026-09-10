@@ -82,7 +82,11 @@
         // Error
         errorBox: document.getElementById('player-error'),
         btnRetry: document.getElementById('btn-retry-channel'),
-        btnErrorBack: document.getElementById('btn-error-back')
+        btnErrorBack: document.getElementById('btn-error-back'),
+
+        // Banner Desmutear (Autoplay silenciado)
+        unmuteBanner: document.getElementById('unmute-banner'),
+        btnUnmute: document.getElementById('btn-unmute')
     };
 
     // ==========================================================================
@@ -94,6 +98,11 @@
         startClock();
         setupEventListeners();
         await loadChannels();
+
+        // Auto-reproducción al entrar a tvv.lat: sintonizar automáticamente el canal 1
+        if (state.channels && state.channels.length > 0) {
+            playChannel(state.channels[0]);
+        }
     }
 
     // ==========================================================================
@@ -357,15 +366,15 @@
         if (Hls.isSupported()) {
             state.hls = new Hls({
                 enableWorker: true,              // Demuxing en hilo secundario Web Worker (sin lag en la UI móvil)
-                lowLatencyMode: true,            // Baja latencia: sincronización ágil
-                backBufferLength: 15,            // Buffer posterior reducido para cuidar RAM en celulares
-                maxBufferLength: 10,             // Buffer inicial reducido a 10s (arranque ultra veloz)
-                maxMaxBufferLength: 20,          // Tope de buffer para no saturar memoria
-                maxBufferSize: 30 * 1000 * 1000, // 30MB límite
-                liveSyncDurationCount: 1,        // ¡ARRANQUE INMEDIATO CON EL 1ER SEGMENTO! (antes esperaba 3)
-                liveMaxLatencyDurationCount: 6,
+                lowLatencyMode: false,           // Desactivar baja latencia agresiva para transmisiones deportivas de alto bitrate (evita tirones en ESPN)
+                backBufferLength: 20,            // Buffer posterior saludable
+                maxBufferLength: 30,             // Buffer inicial de 30s hacia adelante (absorbe variaciones de red y proxy)
+                maxMaxBufferLength: 60,          // Tope de buffer amplio para máxima estabilidad
+                maxBufferSize: 60 * 1000 * 1000, // 60MB límite de memoria de buffer
+                liveSyncDurationCount: 3,        // Margen de seguridad de 3 segmentos (~9s) para cero micro-cortes
+                liveMaxLatencyDurationCount: 8,
                 maxBufferHole: 0.5,              // Tolerancia adecuada para huecos de PTS/DTS
-                highBufferWatchdogPeriod: 2,
+                highBufferWatchdogPeriod: 3,
                 nudgeOffset: 0.1,
                 nudgeMaxRetry: 5,
                 maxFragLookUpTolerance: 0.25,
@@ -400,7 +409,12 @@
             state.hls.on(Hls.Events.MANIFEST_PARSED, function () {
                 onPlaybackStarted();
                 dom.video.play().catch(e => {
-                    console.log('Autoplay bloqueado por el navegador:', e);
+                    console.log('Autoplay con sonido bloqueado por navegador, intentando silenciado:', e);
+                    // Si el navegador bloqueó la reproducción automática con audio:
+                    dom.video.muted = true;
+                    dom.video.play().then(() => {
+                        if (dom.unmuteBanner) dom.unmuteBanner.classList.remove('hidden');
+                    }).catch(() => {});
                 });
             });
 
@@ -472,7 +486,13 @@
             dom.video.src = streamUrl;
             dom.video.addEventListener('loadedmetadata', function () {
                 onPlaybackStarted();
-                dom.video.play().catch(e => console.log('Autoplay nativo:', e));
+                dom.video.play().catch(e => {
+                    console.log('Autoplay nativo con sonido bloqueado, intentando silenciado:', e);
+                    dom.video.muted = true;
+                    dom.video.play().then(() => {
+                        if (dom.unmuteBanner) dom.unmuteBanner.classList.remove('hidden');
+                    }).catch(() => {});
+                });
             }, { once: true });
 
             dom.video.addEventListener('error', function () {
@@ -500,54 +520,118 @@
         }
     }
 
+    function handleUnmute() {
+        if (dom.video) {
+            dom.video.muted = false;
+        }
+        if (dom.unmuteBanner) {
+            dom.unmuteBanner.classList.add('hidden');
+        }
+    }
+
     function closePlayer(fromPopstate = false) {
+        try {
+            // 1. Salir inmediatamente de pantalla completa si estaba activa (previene congelamiento en móviles)
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        } catch (e) {}
+
+        // 2. Limpiar todos los temporizadores activos
         if (state.prefetchTimer) {
             clearTimeout(state.prefetchTimer);
             state.prefetchTimer = null;
         }
-        if (state.isDrawerOpen) {
-            closeChannelsDrawer();
+        if (state.playbackTimeout) {
+            clearTimeout(state.playbackTimeout);
+            state.playbackTimeout = null;
         }
-        document.body.classList.remove('mobile-playing');
+        if (state.hudTimer) {
+            clearTimeout(state.hudTimer);
+            state.hudTimer = null;
+        }
 
+        // 3. Cerrar drawer de canales si estaba abierto
+        if (state.isDrawerOpen) {
+            try {
+                closeChannelsDrawer();
+            } catch (e) {}
+        }
+
+        // 4. Desbloquear scroll y viewport inmediatamente
+        try {
+            document.body.classList.remove('mobile-playing');
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        } catch (e) {}
+
+        // 5. Ocultar modal del reproductor y cuadros flotantes
+        try {
+            dom.playerModal.classList.add('hidden');
+            dom.errorBox.classList.add('hidden');
+            dom.loader.classList.add('hidden');
+            if (dom.unmuteBanner) dom.unmuteBanner.classList.add('hidden');
+            dom.hud.classList.remove('autohidden');
+        } catch (e) {}
+
+        // 6. Restaurar estados lógicos
+        state.isPlaying = false;
+        state.focusedZone = 'grid';
+
+        // 7. Navegar atrás en el historial del navegador si corresponde
         if (!fromPopstate && history.state && history.state.playerOpen) {
             try {
                 history.back();
             } catch (e) {}
         }
 
-        if (state.playbackTimeout) {
-            clearTimeout(state.playbackTimeout);
-            state.playbackTimeout = null;
-        }
-
+        // 8. Desconectar iframe si estaba en uso
         if (dom.iframe) {
-            dom.iframe.removeAttribute('src');
-            dom.iframe.classList.add('hidden');
+            try {
+                dom.iframe.src = 'about:blank';
+                dom.iframe.removeAttribute('src');
+                dom.iframe.classList.add('hidden');
+            } catch (e) {}
         }
 
-        dom.video.classList.remove('hidden');
-        dom.video.onplaying = null;
-
+        // 9. Destruir Hls de forma segura
         if (state.hls) {
-            state.hls.destroy();
+            try {
+                state.hls.destroy();
+            } catch (e) {}
             state.hls = null;
         }
-        dom.video.pause();
-        dom.video.removeAttribute('src');
-        dom.video.load();
 
-        dom.playerModal.classList.add('hidden');
-        state.isPlaying = false;
-        state.focusedZone = 'grid';
+        // 10. Desconectar video limpiamente SIN disparar evento de error
+        try {
+            dom.video.onplaying = null;
+            dom.video.onerror = null;
+            dom.video.pause();
+            dom.video.src = '';
+            dom.video.removeAttribute('src');
+            dom.video.classList.remove('hidden');
+        } catch (e) {}
 
-        // Restaurar foco al canal actual en la grilla
-        if (state.currentChannel) {
-            const idx = state.filteredChannels.findIndex(c => c.name === state.currentChannel.name);
-            if (idx !== -1) {
-                setFocusOnGridItem(idx);
-            }
+        // 11. Quitar foco retenido dentro del modal cerrado
+        if (document.activeElement && dom.playerModal.contains(document.activeElement)) {
+            try {
+                document.activeElement.blur();
+            } catch (e) {}
         }
+
+        // 12. Restaurar foco al canal actual en la grilla sin desplazamiento forzado brusco
+        try {
+            if (state.currentChannel) {
+                const idx = state.filteredChannels.findIndex(c => c.name === state.currentChannel.name);
+                if (idx !== -1) {
+                    setFocusOnGridItem(idx, false);
+                }
+            }
+        } catch (e) {}
     }
 
     function handleStreamFatalError(customMsg) {
@@ -809,8 +893,11 @@
     function setupEventListeners() {
         window.addEventListener('keydown', handleSmartTvKeydown);
 
-        // Controles HUD: Solo se activan cuando el HUD está visible
-        dom.btnClosePlayer.addEventListener('click', wrapHudAction(() => closePlayer(false)));
+        // Controles HUD: btnClosePlayer cierra directamente sin reabrir HUD
+        dom.btnClosePlayer.addEventListener('click', (e) => {
+            if (e) e.stopPropagation();
+            closePlayer(false);
+        });
         dom.btnPlayPause.addEventListener('click', wrapHudAction(togglePlayPause));
         dom.btnNext.addEventListener('click', wrapHudAction(nextChannel));
         dom.btnPrev.addEventListener('click', wrapHudAction(prevChannel));
@@ -822,6 +909,14 @@
         dom.btnFullscreen.addEventListener('click', wrapHudAction(toggleFullscreen));
         document.addEventListener('fullscreenchange', updateFullscreenIcon);
         document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+
+        // Botón para desmutear transmisión si el navegador bloqueó audio
+        if (dom.btnUnmute) {
+            dom.btnUnmute.addEventListener('click', (e) => {
+                if (e) e.stopPropagation();
+                handleUnmute();
+            });
+        }
 
         // Categorías del Drawer
         if (dom.drawerCategories) {
@@ -856,6 +951,12 @@
         function handleScreenTap(e) {
             if (e.target.closest('#player-error')) return;
             if (e.target.closest('#player-channels-drawer')) return;
+            if (e.target.closest('#btn-unmute')) return;
+
+            // Si el video arrancó silenciado y el usuario toca la pantalla, activar sonido
+            if (dom.video && dom.video.muted && dom.unmuteBanner && !dom.unmuteBanner.classList.contains('hidden')) {
+                handleUnmute();
+            }
 
             // Si la lista de canales está abierta y se toca fuera de ella, se cierra
             if (state.isDrawerOpen) {
@@ -951,6 +1052,11 @@
 
         // 2. EN MODO REPRODUCTOR
         if (state.isPlaying) {
+            // Si el video arrancó silenciado por política del navegador, cualquier tecla activa el audio
+            if (dom.video && dom.video.muted && dom.unmuteBanner && !dom.unmuteBanner.classList.contains('hidden')) {
+                handleUnmute();
+            }
+
             // NAVEGACIÓN DENTRO DEL DRAWER DE CANALES
             if (state.isDrawerOpen) {
                 switch (key) {
@@ -1185,7 +1291,7 @@
         setFocusOnGridItem(nextIndex);
     }
 
-    function setFocusOnGridItem(index) {
+    function setFocusOnGridItem(index, smoothScroll = true) {
         const cards = dom.grid.querySelectorAll('.channel-card');
         if (index < 0 || index >= cards.length) return;
 
@@ -1194,13 +1300,19 @@
         state.focusedIndex = index;
         const target = cards[index];
         target.classList.add('focused');
-        target.focus();
+        try {
+            target.focus({ preventScroll: true });
+        } catch (e) {
+            target.focus();
+        }
 
-        target.scrollIntoView({
-            block: 'nearest',
-            inline: 'nearest',
-            behavior: 'smooth'
-        });
+        if (smoothScroll) {
+            target.scrollIntoView({
+                block: 'nearest',
+                inline: 'nearest',
+                behavior: 'smooth'
+            });
+        }
     }
 
     function triggerCurrentFocus() {

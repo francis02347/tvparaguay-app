@@ -46,6 +46,7 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 import androidx.media3.datasource.DataSource;
@@ -87,6 +88,7 @@ public class PlayerActivity extends AppCompatActivity {
     private Runnable hideEpgRunnable;
     private View errorScreen;
     private TextView tvErrorChannelName;
+    private TextView tvErrorDiagnostics;
     private android.widget.Button btnRetry;
     private int autoRetryCount = 0;
     private Runnable autoRetryRunnable;
@@ -183,6 +185,7 @@ public class PlayerActivity extends AppCompatActivity {
         epgNextShowTime     = findViewById(R.id.epgNextShowTime);
         errorScreen        = findViewById(R.id.errorScreen);
         tvErrorChannelName = findViewById(R.id.tvErrorChannelName);
+        tvErrorDiagnostics = findViewById(R.id.tvErrorDiagnostics);
         btnRetry           = findViewById(R.id.btnRetry);
         sidePanel          = findViewById(R.id.sidePanel);
         rvSideChannels     = findViewById(R.id.rvSideChannels);
@@ -287,6 +290,10 @@ public class PlayerActivity extends AppCompatActivity {
     // ─── ExoPlayer ────────────────────────────────────────────────────────────
 
     private void setupPlayer() {
+        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this)
+                .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+                .setEnableDecoderFallback(true);
+
         DefaultHttpDataSource.Factory httpDataSourceFactory = new DefaultHttpDataSource.Factory()
                 .setUserAgent("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
                 .setAllowCrossProtocolRedirects(true)
@@ -296,7 +303,7 @@ public class PlayerActivity extends AppCompatActivity {
         DataSource.Factory baseFactory = new DefaultDataSource.Factory(this, httpDataSourceFactory);
         dataSourceFactory = new MapHeaderDataSourceFactory(baseFactory);
 
-        player = new ExoPlayer.Builder(this)
+        player = new ExoPlayer.Builder(this, renderersFactory)
                 .setMediaSourceFactory(new DefaultMediaSourceFactory(dataSourceFactory))
                 .build();
 
@@ -335,7 +342,7 @@ public class PlayerActivity extends AppCompatActivity {
                 hideLoading();
                 String name = channelList != null && currentIndex < channelList.size()
                         ? channelList.get(currentIndex).getName() : "";
-                showErrorScreen(name);
+                showErrorScreen(name, null, error);
             }
         });
     }
@@ -414,7 +421,7 @@ public class PlayerActivity extends AppCompatActivity {
                 || cleanUrl.startsWith("rtsp://");
 
         if (!validScheme || cleanUrl.isEmpty()) {
-            showErrorScreen(ch.getName());
+            showErrorScreen(ch.getName(), "Protocolo o URL no válida: " + cleanUrl, null);
             return;
         }
 
@@ -427,7 +434,7 @@ public class PlayerActivity extends AppCompatActivity {
             player.setPlayWhenReady(true);
         } catch (Exception e) {
             hideLoading();
-            showErrorScreen(ch.getName());
+            showErrorScreen(ch.getName(), "Error al preparar reproductor: " + e.getMessage(), null);
         }
     }
 
@@ -947,11 +954,58 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void showErrorScreen(String name) {
+        showErrorScreen(name, null, null);
+    }
+
+    private void showErrorScreen(String name, String customReason, PlaybackException error) {
         hideLoading();
         tvErrorChannelName.setText(ChannelDeduplicator.cleanName(name));
         errorScreen.setVisibility(View.VISIBLE);
         if (hideOverlayRunnable != null) handler.removeCallbacks(hideOverlayRunnable);
         overlayContainer.setVisibility(View.GONE);
+
+        if (tvErrorDiagnostics != null) {
+            StringBuilder diag = new StringBuilder();
+            if (error != null) {
+                diag.append("Código: ").append(error.getErrorCodeName()).append(" (").append(error.errorCode).append(")\n");
+                Throwable cause = error.getCause();
+                if (cause != null) {
+                    diag.append("Causa: ").append(cause.getClass().getSimpleName())
+                        .append(": ").append(cause.getMessage() != null ? cause.getMessage() : "Sin detalle").append("\n");
+                    if (cause.getCause() != null && cause.getCause() != cause) {
+                        diag.append("Origen: ").append(cause.getCause().getClass().getSimpleName())
+                            .append(": ").append(cause.getCause().getMessage()).append("\n");
+                    }
+                } else if (error.getMessage() != null) {
+                    diag.append("Detalle: ").append(error.getMessage()).append("\n");
+                }
+            } else if (customReason != null && !customReason.isEmpty()) {
+                diag.append("Diagnóstico: ").append(customReason).append("\n");
+            }
+
+            if (activeStreamUrl != null && !activeStreamUrl.isEmpty()) {
+                String maskedUrl = activeStreamUrl;
+                if (maskedUrl.length() > 65) {
+                    maskedUrl = maskedUrl.substring(0, 35) + "..." + maskedUrl.substring(maskedUrl.length() - 25);
+                }
+                diag.append("Stream: ").append(maskedUrl).append("\n");
+            }
+
+            try {
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss", java.util.Locale.getDefault());
+                String systemTime = sdf.format(new java.util.Date());
+                diag.append("Dispositivo: ").append(android.os.Build.MANUFACTURER).append(" ").append(android.os.Build.MODEL)
+                    .append(" | Android ").append(android.os.Build.VERSION.RELEASE)
+                    .append(" (API ").append(android.os.Build.VERSION.SDK_INT).append(")\n");
+                diag.append("Fecha/Hora TV: ").append(systemTime);
+            } catch (Exception ignored) {}
+
+            tvErrorDiagnostics.setText(diag.toString());
+            tvErrorDiagnostics.setVisibility(View.VISIBLE);
+        }
+
+        android.util.Log.e("TVPy_Diagnostics", "Fallo al reproducir canal: " + name + 
+                " | error: " + (error != null ? error.getErrorCodeName() : customReason));
 
         if (isTelevision()) {
             startAutomaticRetry();
@@ -962,9 +1016,15 @@ public class PlayerActivity extends AppCompatActivity {
         if (autoRetryRunnable != null) {
             handler.removeCallbacks(autoRetryRunnable);
         }
+        if (autoRetryCount >= 3) {
+            if (btnRetry != null) {
+                btnRetry.setText("Intentar de nuevo");
+            }
+            return;
+        }
         autoRetryCount++;
         if (btnRetry != null) {
-            btnRetry.setText("Reintentando... (" + autoRetryCount + ")");
+            btnRetry.setText("Reintentando... (" + autoRetryCount + "/3)");
         }
         autoRetryRunnable = new Runnable() {
             @Override
@@ -982,6 +1042,9 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void hideErrorScreen() {
         errorScreen.setVisibility(View.GONE);
+        if (tvErrorDiagnostics != null) {
+            tvErrorDiagnostics.setVisibility(View.GONE);
+        }
         if (autoRetryRunnable != null) {
             handler.removeCallbacks(autoRetryRunnable);
             autoRetryRunnable = null;

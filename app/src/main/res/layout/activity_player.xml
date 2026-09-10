@@ -111,7 +111,21 @@
             android:textSize="13sp"
             android:gravity="center"
             android:lineSpacingMultiplier="1.5"
-            android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tvErrorDiagnostics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFB84D"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:fontFamily="monospace"
+            android:lineSpacingMultiplier="1.2"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnRetry"
