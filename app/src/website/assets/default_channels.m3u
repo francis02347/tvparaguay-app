@@ -87,12 +87,18 @@ http://187.102.208.209:8000/play/a0bq/index.m3u8
 http://200.60.97.100:28888/play/a0c9/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN (Brasil)
 https://cdn-5.nxplay.com.br/ESPN/tracks-v2a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN (Argentina)
+http://181.209.38.115:8000/play/a00b/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN (Señal Principal)
 http://181.78.197.59:8000/play/a07z/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN 2 (Argentina)
+http://181.209.38.115:8000/play/a02z/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 2
 http://181.78.197.59:8000/play/a080/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 2 (Brasil)
 https://cdn-5.nxplay.com.br/ESPN_2/tracks-v2a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN 3 (Argentina)
+http://181.209.38.115:8000/play/a00d/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 3
 http://181.78.197.59:8000/play/a081/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 3 (Brasil)
@@ -110,7 +116,7 @@ http://181.78.197.59:8000/play/a06a/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN Extra (Brasil)
 http://hls1.sua.tv/live/espnextrafhd/s.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN Premium
-http://181.78.197.59:8000/play/a09l/index.m3u8
+http://181.209.38.115:8000/play/a00f/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",ESPN8: The Ocho
 https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",FIFA+ Spain (720p)
@@ -125,6 +131,8 @@ http://181.209.38.115:8000/play/a00g/index.m3u8
 http://181.209.38.115:8000/play/a00h/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Fox Sports 3
 http://181.209.38.115:8000/play/a00i/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Deportes",TNT Sports
+http://181.209.38.115:8000/play/a00j/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Deportes",FS1 (Estados Unidos)
 http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Golazo Network
@@ -157,8 +165,8 @@ https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c
 https://ztnr.rtve.es/ztnr/1694263.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Tennis Channel (Internacional)
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischnlintl-lggb/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",TyC Sports
-https://amg26268-amg26268c14-freelivesports-emea-10267.playouts.now.amagi.tv/ts-us-e2-n2/playlist/amg26268-sportsstudio-tycsports-freelivesportsemea/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",TyC Sports
+http://181.209.38.115:8000/play/a00k/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",Waypoint TV (Estados Unidos)
 https://waypoint-waypointtv-firetv.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",beIN Sports XTRA en Español (1080p)

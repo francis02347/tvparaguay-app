@@ -28,9 +28,16 @@ node_modules/
 dist/
 package-lock.json
 package.json
-main.js
-app.js
-index.html
-style.css
+/main.js
+/app.js
+/index.html
+/style.css
 electron-app/
 reloj_backup/
+
+# Cloudflare Wrangler & Archivos Temporales Web
+.wrangler/
+tvv_web.zip
+probar_web_local.bat
+projects_registry.json
+Canales.pdf

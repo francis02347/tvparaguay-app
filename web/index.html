@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TV Paraguay — Televisión en Vivo (tvv.lat)</title>
+    <meta name="description" content="Mira canales de televisión en vivo de Paraguay e internacionales gratis desde tu Smart TV, celular o PC.">
+    <meta name="theme-color" content="#08080C">
+
+    <!-- PWA Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>">
+
+    <!-- Conexión anticipada a CDNs de streaming (Acelera carga en celulares) -->
+    <link rel="preconnect" href="https://copacogen.desdeparaguay.net" crossorigin>
+    <link rel="preconnect" href="https://copacotf.desdeparaguay.net" crossorigin>
+    <link rel="preconnect" href="https://d3epa8orr2qy3m.cloudfront.net" crossorigin>
+    <link rel="preconnect" href="https://d174axghh54kh0.cloudfront.net" crossorigin>
+    <link rel="dns-prefetch" href="https://copacogen.desdeparaguay.net">
+    <link rel="dns-prefetch" href="https://copacotf.desdeparaguay.net">
+    <link rel="dns-prefetch" href="https://d3epa8orr2qy3m.cloudfront.net">
+    <link rel="dns-prefetch" href="https://d174axghh54kh0.cloudfront.net">
+
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Hls.js para reproducción universal de streams m3u8 -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <!-- Estilos de la aplicación -->
+    <link rel="stylesheet" href="styles.css?v=3.8.9">
+</head>
+<body>
+    <!-- FONDO AMBIENTAL -->
+    <div class="glow-orb glow-top-left"></div>
+    <div class="glow-orb glow-bottom-right"></div>
+
+    <!-- PANTALLA PRINCIPAL: MENÚ DE SELECCIÓN (10-FOOT UI PARA SMART TV) -->
+    <div id="app" class="app-container">
+        
+        <!-- HEADER SUPERIOR -->
+        <header class="tv-header">
+            <div class="header-left">
+                <div class="brand-logo" id="brand-logo">
+                    <span class="logo-icon">📺</span>
+                    <span class="logo-title">TVV<span class="accent-dot">.LAT</span></span>
+                </div>
+                <div class="live-pill">
+                    <span class="pulse-dot"></span> EN VIVO
+                </div>
+                <div class="version-pill" id="app-version" title="Versión de la plataforma">v3.8</div>
+                <div class="update-pill" id="app-update-time" title="Hora de última actualización">Hora de última actualización 19:51</div>
+            </div>
+
+            <div class="header-center">
+                <!-- GUÍA RÁPIDA DE CONTROL REMOTO -->
+                <div class="remote-legend" title="Controles para Smart TV">
+                    <span class="key-badge">◀ ▶ ▲ ▼</span> <span class="legend-text">Navegar</span>
+                    <span class="key-badge">OK</span> <span class="legend-text">Ver Canal</span>
+                    <span class="key-badge">0-9</span> <span class="legend-text">Canal Directo</span>
+                    <span class="key-badge">VOLVER</span> <span class="legend-text">Salir</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="channel-counter" id="channel-counter">150 Canales</div>
+                <div class="clock-display" id="clock-display">--:--</div>
+            </div>
+        </header>
+
+        <!-- BARRA DE CATEGORÍAS (NAVEGABLE CON FLECHAS) -->
+        <nav class="categories-bar" id="categories-bar">
+            <button class="cat-pill active focusable" data-category="all" tabindex="0">Todos</button>
+            <button class="cat-pill focusable" data-category="Nacionales (Paraguay)" tabindex="0">🇵🇾 Paraguay</button>
+            <button class="cat-pill focusable" data-category="Deportes" tabindex="0">⚽ Deportes</button>
+            <button class="cat-pill focusable" data-category="Noticias" tabindex="0">📰 Noticias</button>
+            <button class="cat-pill focusable" data-category="Música & Radio" tabindex="0">🎵 Música & Radio</button>
+            <button class="cat-pill focusable" data-category="Internacionales" tabindex="0">🌎 Internacional</button>
+            <button class="cat-pill focusable" data-category="favorites" tabindex="0">⭐ Favoritos</button>
+        </nav>
+
+        <!-- GRID PRINCIPAL DE CANALES -->
+        <main class="content-area">
+            <div class="section-header">
+                <h2 class="section-title" id="current-section-title">Canales Disponibles</h2>
+                <div class="quick-instructions">Presiona <b>OK</b> en el control para reproducir en pantalla completa</div>
+            </div>
+
+            <!-- CONTENEDOR DE TARJETAS DE CANALES -->
+            <div class="channels-grid" id="channels-grid">
+                <!-- Se rellena dinámicamente mediante app.js -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Cargando guía de canales en vivo...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- INDICADOR NUMÉRICO EN PANTALLA (Para cuando presionas números en el control) -->
+    <div id="numeric-overlay" class="numeric-overlay hidden">
+        <span class="numeric-title">CANAL</span>
+        <span class="numeric-digits" id="numeric-digits">1</span>
+    </div>
+
+    <!-- REPRODUCTOR DE VIDEO A PANTALLA COMPLETA -->
+    <div id="player-modal" class="player-modal hidden">
+        <div class="player-wrapper" id="player-wrapper">
+            <video id="tv-video" class="tv-video" playsinline></video>
+            <iframe id="tv-iframe" class="tv-video hidden" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+            
+            <!-- SPINNER DE CARGA DEL STREAM -->
+            <div id="player-loader" class="player-loader">
+                <div class="loader-channel-badge" id="loader-channel-badge">
+                    <span class="loader-badge-ch" id="loader-badge-ch">CH 01</span>
+                    <span class="loader-badge-name" id="loader-badge-name">Canal</span>
+                </div>
+                <div class="spinner-container">
+                    <div class="spinner"></div>
+                    <div class="spinner-glow"></div>
+                </div>
+                <div class="loader-text" id="loader-text">Sintonizando señal en vivo...</div>
+            </div>
+
+            <!-- OVERLAY HUD INFORMATIVO DEL CANAL (ESTILO YOUTUBE) -->
+            <div id="player-hud" class="player-hud">
+                <div class="hud-top">
+                    <button id="btn-close-player" class="yt-hud-btn focusable" tabindex="0" title="Volver a lista de canales (Atrás / Esc)">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                        <span class="back-text-full">Canales</span>
+                    </button>
+                    <div class="hud-top-right">
+                        <button id="btn-toggle-favorite" class="yt-hud-btn yt-hud-btn-circle focusable" tabindex="0" title="Guardar en Favoritos">
+                            <svg id="icon-fav-svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                        </button>
+                        <div class="hud-live-tag">
+                            <span class="pulse-dot"></span> <span class="live-text-full">TRANSMISIÓN EN VIVO</span><span class="live-text-short">EN VIVO</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTROLES CENTRALES ESTILO YOUTUBE -->
+                <div class="hud-center">
+                    <div class="yt-controls-row">
+                        <button id="btn-prev-channel" class="yt-btn-round yt-btn-secondary focusable" tabindex="0" title="Canal anterior (◀)">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                                <path d="M6 6h2v12H6zm12 12V6l-8.5 6 8.5 6z"/>
+                            </svg>
+                        </button>
+                        <button id="btn-rewind-10" class="yt-btn-round yt-btn-secondary focusable" tabindex="0" title="Retroceder 10 segundos">
+                            <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
+                                <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                                <text x="12" y="14.5" font-family="system-ui, -apple-system, sans-serif" font-size="6.5" font-weight="800" text-anchor="middle" fill="currentColor">10</text>
+                            </svg>
+                        </button>
+                        <button id="btn-play-pause" class="yt-btn-round yt-btn-play focusable" tabindex="0" title="Pausar / Reanudar (OK / Espacio)">
+                            <svg id="icon-play-pause-svg" viewBox="0 0 24 24" width="42" height="42" fill="currentColor">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
+                        <button id="btn-forward-10" class="yt-btn-round yt-btn-secondary focusable" tabindex="0" title="Adelantar 10 segundos">
+                            <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
+                                <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/>
+                                <text x="12" y="14.5" font-family="system-ui, -apple-system, sans-serif" font-size="6.5" font-weight="800" text-anchor="middle" fill="currentColor">10</text>
+                            </svg>
+                        </button>
+                        <button id="btn-next-channel" class="yt-btn-round yt-btn-secondary focusable" tabindex="0" title="Canal siguiente (▶)">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                                <path d="m6 18 8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hud-bottom">
+                    <div class="hud-channel-info" id="hud-channel-info" role="button" tabindex="0" title="Toca para abrir lista de canales">
+                        <span class="hud-channel-num" id="hud-channel-num">CH 01</span>
+                        <h1 class="hud-channel-name" id="hud-channel-name">Nombre del Canal</h1>
+                        <span class="hud-channel-cat" id="hud-channel-cat">Nacionales</span>
+                    </div>
+                    <div class="hud-bottom-right">
+                        <button id="btn-open-channel-list" class="yt-hud-btn yt-hud-btn-list focusable" tabindex="0" title="Ver lista de canales (L)">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                            </svg>
+                            <span class="btn-list-label">Lista</span>
+                        </button>
+                        <button id="btn-fullscreen" class="yt-hud-btn yt-hud-btn-circle focusable" tabindex="0" title="Pantalla completa (Enter)">
+                            <svg id="icon-fullscreen-svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL DESPLEGABLE GUÍA DE CANALES (DRAWER EN REPRODUCCIÓN) -->
+            <div id="player-channels-drawer" class="player-channels-drawer hidden" role="dialog" aria-label="Guía de canales">
+                <div class="drawer-header">
+                    <div class="drawer-title-group">
+                        <span class="drawer-icon">📋</span>
+                        <h2 class="drawer-title">Lista de Canales</h2>
+                        <span class="drawer-counter" id="drawer-counter">150</span>
+                    </div>
+                    <button id="btn-close-drawer" class="drawer-close-btn focusable" tabindex="0" title="Cerrar lista (Esc)">✕</button>
+                </div>
+
+                <!-- CATEGORÍAS DENTRO DEL DRAWER -->
+                <div class="drawer-categories-bar" id="drawer-categories">
+                    <button class="drawer-cat-pill active focusable" data-category="all" tabindex="0">📺 Todos</button>
+                    <button class="drawer-cat-pill focusable" data-category="Nacionales (Paraguay)" tabindex="0">🇵🇾 Paraguay</button>
+                    <button class="drawer-cat-pill focusable" data-category="Deportes" tabindex="0">⚽ Deportes</button>
+                    <button class="drawer-cat-pill focusable" data-category="Noticias" tabindex="0">📰 Noticias</button>
+                    <button class="drawer-cat-pill focusable" data-category="Internacionales" tabindex="0">🌎 Internacionales</button>
+                    <button class="drawer-cat-pill focusable" data-category="Música" tabindex="0">🎵 Música</button>
+                    <button class="drawer-cat-pill focusable" data-category="Variedades" tabindex="0">🍿 Variedades</button>
+                    <button class="drawer-cat-pill focusable" data-category="favorites" tabindex="0">⭐ Favoritos</button>
+                </div>
+
+                <!-- LISTA DE CANALES CON SCROLL -->
+                <div class="drawer-channels-list" id="drawer-channels-list" role="list">
+                    <!-- Inyectado dinámicamente con app.js -->
+                </div>
+            </div>
+
+            <!-- MENSAJE DE ERROR / REINTENTO -->
+            <div id="player-error" class="player-error hidden">
+                <div class="error-icon">⚠️</div>
+                <h3 id="error-title">Señal temporalmente no disponible</h3>
+                <p id="error-msg">El canal puede estar en corte o con geobloqueo en este momento.</p>
+                <div class="error-actions">
+                    <button id="btn-retry-channel" class="btn-primary focusable" tabindex="0">Reintentar Conexión</button>
+                    <button id="btn-error-back" class="btn-secondary focusable" tabindex="0">Elegir Otro Canal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BARRA DE NAVEGACIÓN INFERIOR PARA MÓVIL (ESTILO APP NATIVA) -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+        <button class="mobile-nav-btn active" data-category="all">
+            <span class="nav-icon">📺</span>
+            <span class="nav-label">Todos</span>
+        </button>
+        <button class="mobile-nav-btn" data-category="Nacionales (Paraguay)">
+            <span class="nav-icon">🇵🇾</span>
+            <span class="nav-label">Paraguay</span>
+        </button>
+        <button class="mobile-nav-btn" data-category="Deportes">
+            <span class="nav-icon">⚽</span>
+            <span class="nav-label">Deportes</span>
+        </button>
+        <button class="mobile-nav-btn" data-category="Noticias">
+            <span class="nav-icon">📰</span>
+            <span class="nav-label">Noticias</span>
+        </button>
+        <button class="mobile-nav-btn" data-category="favorites">
+            <span class="nav-icon">⭐</span>
+            <span class="nav-label">Favoritos</span>
+        </button>
+    </nav>
+
+    <!-- SCRIPT PRINCIPAL -->
+    <script src="app.js?v=3.8.9"></script>
+</body>
+</html>
