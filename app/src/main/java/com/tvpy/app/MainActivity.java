@@ -256,9 +256,17 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (isDifferent) {
-                            java.io.FileWriter writer = new java.io.FileWriter(cacheFile);
+                            java.io.File tempFile = new java.io.File(getFilesDir(), "default_channels_cached.m3u.tmp");
+                            java.io.FileWriter writer = new java.io.FileWriter(tempFile);
                             writer.write(newM3u);
                             writer.close();
+
+                            if (tempFile.exists() && tempFile.length() > 0) {
+                                if (cacheFile.exists()) {
+                                    cacheFile.delete();
+                                }
+                                tempFile.renameTo(cacheFile);
+                            }
 
                             new Handler(Looper.getMainLooper()).post(() -> {
                                 loadAllChannels();

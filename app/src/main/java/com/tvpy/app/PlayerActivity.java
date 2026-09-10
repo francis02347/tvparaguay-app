@@ -277,6 +277,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void finishAndGoHome() {
+        wasPlayingBeforePause = false;
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
@@ -992,7 +993,21 @@ public class PlayerActivity extends AppCompatActivity {
 
     private boolean isTelevision() {
         android.app.UiModeManager uiModeManager = (android.app.UiModeManager) getSystemService(UI_MODE_SERVICE);
-        return uiModeManager != null && uiModeManager.getCurrentModeType() == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
+        if (uiModeManager != null && uiModeManager.getCurrentModeType() == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION) {
+            return true;
+        }
+        android.content.pm.PackageManager pm = getPackageManager();
+        if (pm != null) {
+            if (pm.hasSystemFeature(android.content.pm.PackageManager.FEATURE_LEANBACK)
+                    || pm.hasSystemFeature(android.content.pm.PackageManager.FEATURE_TELEVISION)) {
+                return true;
+            }
+            // TV Boxes genéricas AOSP (sin pantalla táctil)
+            if (!pm.hasSystemFeature(android.content.pm.PackageManager.FEATURE_TOUCHSCREEN)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String formatEpgTime(long timeMs) {
@@ -1143,6 +1158,13 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+        if (isTelevision()) {
+            wasPlayingBeforePause = false;
+            if (player != null) player.pause();
+            anim1.pause(); anim2.pause(); anim3.pause();
+            return;
+        }
+
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         boolean isScreenOff = (pm != null && !pm.isInteractive());
 
@@ -1168,6 +1190,13 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        if (isTelevision()) {
+            wasPlayingBeforePause = false;
+            if (player != null) {
+                player.pause();
+            }
+            return;
+        }
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         boolean isScreenOff = (pm != null && !pm.isInteractive());
         if (isScreenOff && !isScreenOffAudioActive) {
@@ -1315,6 +1344,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void registerScreenReceiver() {
+        if (isTelevision()) return;
         if (screenReceiver == null) {
             screenReceiver = new BroadcastReceiver() {
                 @Override
@@ -1349,6 +1379,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private synchronized void handleScreenOff() {
+        if (isTelevision()) return;
         if (isScreenOffAudioActive) return;
         if (player == null) return;
 
@@ -1506,6 +1537,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        wasPlayingBeforePause = false;
         handler.removeCallbacksAndMessages(null);
         anim1.cancel(); anim2.cancel(); anim3.cancel();
         unregisterBackgroundAudioReceiver();

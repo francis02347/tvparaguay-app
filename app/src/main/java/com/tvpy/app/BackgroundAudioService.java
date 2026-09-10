@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
@@ -256,10 +257,10 @@ public class BackgroundAudioService extends Service {
                     .setMediaSourceFactory(new DefaultMediaSourceFactory(baseFactory))
                     .build();
 
-            // Evitar que el reproductor intente reproducir video
+            // Evitar que el reproductor intente reproducir video y consuma decodificadores de hardware
             player.setTrackSelectionParameters(
                     player.getTrackSelectionParameters().buildUpon()
-                            .setViewportSizeToPhysicalDisplaySize(this, false)
+                            .setTrackTypeDisabled(C.TRACK_TYPE_VIDEO, true)
                             .build()
             );
 

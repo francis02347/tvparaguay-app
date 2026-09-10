@@ -55,6 +55,31 @@ public class ChannelData {
                 }
             }
         }
+
+        if (channels.isEmpty()) {
+            // Fallback a assets si la caché estuviera corrupta o vacía
+            try {
+                java.io.InputStream is = context.getAssets().open("default_channels.m3u");
+                java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(is, "UTF-8"));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                reader.close();
+                String fallbackContent = sb.toString();
+                if (!fallbackContent.isEmpty()) {
+                    List<Channel> parsed = M3uParser.parse(fallbackContent);
+                    for (Channel ch : parsed) {
+                        if (RecommendedChannels.NAMES.contains(ch.getName())) {
+                            channels.add(ch);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         
         return channels;
     }
