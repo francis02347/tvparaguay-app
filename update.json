@@ -1,6 +1,6 @@
 {
-  "versionCode": 115,
-  "versionName": "2.17",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.17/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.17."
+  "versionCode": 116,
+  "versionName": "2.18",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
+  "releaseNotes": "Modo de diagnóstico en pantalla para TV Box y respaldo automático con decodificadores por software."
 }
