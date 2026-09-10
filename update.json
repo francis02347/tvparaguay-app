@@ -1,6 +1,6 @@
 {
   "versionCode": 115,
   "versionName": "2.17",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/raw/main/releases/app-website-release.apk",
-  "releaseNotes": "Nuevas transmisiones deportivas: ESPN Argentina, ESPN 2 y 3 Argentina, TNT Sports y señal oficial en HD de TyC Sports."
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.17/app-website-release.apk",
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.17."
 }
