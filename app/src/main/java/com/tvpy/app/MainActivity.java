@@ -221,10 +221,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkRemoteChannels() {
         if (BuildConfig.IS_PLAY_STORE) return;
+        if (PlayerActivity.isPlayerActive) return;
 
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
+                if (PlayerActivity.isPlayerActive) return;
                 URL url = new URL("https://raw.githubusercontent.com/francis02347/tvparaguay-app/refs/heads/main/app/src/website/assets/default_channels.m3u");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setConnectTimeout(10000);

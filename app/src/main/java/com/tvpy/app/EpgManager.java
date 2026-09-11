@@ -72,15 +72,23 @@ public class EpgManager {
      * Inicia la descarga y procesamiento del EPG en segundo plano.
      */
     public static void fetchEpgAsync(final Context context) {
+        if (PlayerActivity.isPlayerActive) {
+            Log.d(TAG, "Reproductor activo, omitiendo descarga de EPG para priorizar streaming.");
+            return;
+        }
+
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
+                if (PlayerActivity.isPlayerActive) return;
+
                 long now = System.currentTimeMillis();
                 File cacheFile = new File(context.getCacheDir(), CACHE_FILE_NAME);
 
                 // 1. Verificar si la caché local es válida
                 boolean useCache = cacheFile.exists() && (now - cacheFile.lastModified() < CACHE_EXPIRY_MS);
                 if (!useCache) {
+                    if (PlayerActivity.isPlayerActive) return;
                     Log.d(TAG, "Descargando EPG desde URL remota...");
                     HttpURLConnection conn = (HttpURLConnection) new URL(EPG_URL).openConnection();
                     conn.setConnectTimeout(15000);
@@ -93,6 +101,10 @@ public class EpgManager {
                             byte[] buffer = new byte[8192];
                             int read;
                             while ((read = is.read(buffer)) != -1) {
+                                if (PlayerActivity.isPlayerActive) {
+                                    conn.disconnect();
+                                    return;
+                                }
                                 fos.write(buffer, 0, read);
                             }
                         }
@@ -104,7 +116,7 @@ public class EpgManager {
                 }
 
                 // 2. Parsear el archivo XML
-                if (cacheFile.exists()) {
+                if (cacheFile.exists() && !PlayerActivity.isPlayerActive) {
                     Log.d(TAG, "Procesando archivo EPG...");
                     parseEpgXml(cacheFile);
                     isLoaded = true;
@@ -121,8 +133,8 @@ public class EpgManager {
      */
     private static void parseEpgXml(File file) throws Exception {
         Map<String, List<Program>> tempData = new ConcurrentHashMap<>();
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss Z", Locale.US);
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        SimpleDateFormat fallbackFormat = new SimpleDateFormat("yyyyMMddHHmmss Z", Locale.US);
+        fallbackFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         long now = System.currentTimeMillis();
         // Guardamos hasta 36 horas a futuro
@@ -139,8 +151,13 @@ public class EpgManager {
             String currentTag = null;
             String title = null;
             String desc = null;
+            int counter = 0;
 
             while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (counter++ % 100 == 0 && PlayerActivity.isPlayerActive) {
+                    // Detener si el usuario abre el reproductor para no quitar recursos
+                    return;
+                }
                 if (eventType == XmlPullParser.START_TAG) {
                     currentTag = parser.getName();
                     if ("programme".equals(currentTag)) {
@@ -161,12 +178,9 @@ public class EpgManager {
                     if ("programme".equals(tag)) {
                         if (currentChannel != null && title != null && startAttr != null && stopAttr != null) {
                             try {
-                                Date startDate = format.parse(startAttr);
-                                Date stopDate = format.parse(stopAttr);
-                                if (startDate != null && stopDate != null) {
-                                    long startMs = startDate.getTime();
-                                    long stopMs = stopDate.getTime();
-
+                                long startMs = parseXmltvDateFast(startAttr, fallbackFormat);
+                                long stopMs = parseXmltvDateFast(stopAttr, fallbackFormat);
+                                if (startMs > 0 && stopMs > 0) {
                                     // Filtrar programas antiguos o demasiado lejanos en el futuro
                                     if (stopMs >= now && startMs <= timeLimit) {
                                         List<Program> list = tempData.get(currentChannel);
@@ -177,7 +191,7 @@ public class EpgManager {
                                         list.add(new Program(title, desc != null ? desc : "", startMs, stopMs));
                                     }
                                 }
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                                 // Ignorar errores de formato de fecha individuales
                             }
                         }
@@ -200,6 +214,43 @@ public class EpgManager {
 
         epgData.clear();
         epgData.putAll(tempData);
+    }
+
+    private static long parseXmltvDateFast(String s, SimpleDateFormat fallback) {
+        if (s == null || s.length() < 14) return -1;
+        try {
+            int year = Integer.parseInt(s.substring(0, 4));
+            int month = Integer.parseInt(s.substring(4, 6)) - 1;
+            int day = Integer.parseInt(s.substring(6, 8));
+            int hour = Integer.parseInt(s.substring(8, 10));
+            int min = Integer.parseInt(s.substring(10, 12));
+            int sec = Integer.parseInt(s.substring(12, 14));
+
+            java.util.Calendar cal = java.util.Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            cal.clear();
+            cal.set(year, month, day, hour, min, sec);
+
+            // Ajuste si contiene offset de zona horaria (ej: +0000 o -0300)
+            if (s.length() >= 19) {
+                char sign = s.charAt(15);
+                int tzHour = Integer.parseInt(s.substring(16, 18));
+                int tzMin = Integer.parseInt(s.substring(18, 20));
+                int offsetMs = (tzHour * 60 + tzMin) * 60 * 1000;
+                if (sign == '+') {
+                    cal.add(java.util.Calendar.MILLISECOND, -offsetMs);
+                } else if (sign == '-') {
+                    cal.add(java.util.Calendar.MILLISECOND, offsetMs);
+                }
+            }
+            return cal.getTimeInMillis();
+        } catch (Exception e) {
+            try {
+                Date d = fallback.parse(s);
+                return d != null ? d.getTime() : -1;
+            } catch (Exception ignored) {
+                return -1;
+            }
+        }
     }
 
     /**

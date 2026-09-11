@@ -77,6 +77,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private TextView tvChannelName;
     private View topBar;
+    private TextView btnQuality;
     private TextView btnFavorite;
 
     private View overlayContainer;
@@ -102,6 +103,11 @@ public class PlayerActivity extends AppCompatActivity {
     private ChannelAdapter sideAdapter;
 
     // ─── Estado ───────────────────────────────────────────────────────────────
+    public static volatile boolean isPlayerActive = false;
+    private static final String PREFS_NAME = "tvpy_prefs";
+    private static final String PREF_KEY_QUALITY_MODE = "pref_quality_fluid_mode";
+    private boolean isFluidMode = true;
+
     private ExoPlayer player;
     private List<Channel> channelList;
     private int currentIndex = 0;
@@ -170,6 +176,7 @@ public class PlayerActivity extends AppCompatActivity {
         dot3               = findViewById(R.id.dot3);
         tvChannelName      = findViewById(R.id.tvChannelName);
         topBar             = findViewById(R.id.topBar);
+        btnQuality         = findViewById(R.id.btnQuality);
         btnFavorite        = findViewById(R.id.btnFavorite);
         overlayContainer   = findViewById(R.id.overlayContainer);
         overlayEmoji       = findViewById(R.id.overlayEmoji);
@@ -241,6 +248,25 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
+        android.content.SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if (prefs.contains(PREF_KEY_QUALITY_MODE)) {
+            isFluidMode = prefs.getBoolean(PREF_KEY_QUALITY_MODE, true);
+        } else {
+            isFluidMode = isTvBoxOrTelevision();
+        }
+        updateQualityButtonUi();
+
+        if (btnQuality != null) {
+            btnQuality.setOnClickListener(v -> toggleQualityMode());
+            btnQuality.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    v.animate().scaleX(1.15f).scaleY(1.15f).setDuration(150).start();
+                } else {
+                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                }
+            });
+        }
+
         // Gestos (tap → topBar; fling → navegar)
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -295,17 +321,18 @@ public class PlayerActivity extends AppCompatActivity {
     private void setupPlayer() {
         DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this)
                 .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
-                .setEnableDecoderFallback(true);
+                .setEnableDecoderFallback(true)
+                .setAllowedVideoJoiningTimeMs(5000);
 
         // Control de búfer optimizado para TV Box y transmisiones en vivo:
-        // Reduce el búfer máximo a 20s (en vez de 50s por defecto), liberando memoria RAM
-        // y evitando pausas de recolección de basura (Garbage Collector) y saturación de Wi-Fi.
+        // Evita saturar la memoria y otorga un margen seguro (2.5s inicio, 15-30s búfer)
+        // para absorber micro-interrupciones y fluctuaciones de Wi-Fi.
         DefaultLoadControl loadControl = new DefaultLoadControl.Builder()
                 .setBufferDurationsMs(
-                        8_000,  // minBufferMs: 8 seg
-                        20_000, // maxBufferMs: 20 seg
-                        1_200,  // bufferForPlaybackMs: 1.2 seg (arranque veloz)
-                        2_500   // bufferForPlaybackAfterRebufferMs: 2.5 seg
+                        15_000, // minBufferMs: 15 seg
+                        30_000, // maxBufferMs: 30 seg
+                        2_500,  // bufferForPlaybackMs: 2.5 seg (arranque seguro sin cortes)
+                        4_000   // bufferForPlaybackAfterRebufferMs: 4.0 seg
                 )
                 .setPrioritizeTimeOverSizeThresholds(true)
                 .setBackBuffer(0, false) // 0s de backbuffer para liberar memoria de inmediato
@@ -325,15 +352,7 @@ public class PlayerActivity extends AppCompatActivity {
                 .setLoadControl(loadControl)
                 .build();
 
-        // Parámetros de selección de pistas de video para evitar saturar decodificadores modestos
-        TrackSelectionParameters.Builder trackParams = player.getTrackSelectionParameters().buildUpon()
-                .setForceHighestSupportedBitrate(false);
-
-        if (isTelevision()) {
-            trackParams.setMaxVideoSize(1920, 1080)
-                       .setMaxVideoFrameRate(60);
-        }
-        player.setTrackSelectionParameters(trackParams.build());
+        applyVideoTrackParameters();
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
         playerView.setPlayer(player);
@@ -456,7 +475,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         try {
             Uri uri = Uri.parse(cleanUrl);
-            MediaItem mediaItem = MediaItem.fromUri(uri);
+            MediaItem mediaItem = createLiveMediaItem(uri);
             player.stop();
             player.setMediaItem(mediaItem);
             player.prepare();
@@ -845,7 +864,7 @@ public class PlayerActivity extends AppCompatActivity {
         }
         try {
             Uri uri = Uri.parse(streamUrl);
-            MediaItem mediaItem = MediaItem.fromUri(uri);
+            MediaItem mediaItem = createLiveMediaItem(uri);
             player.stop();
             player.setMediaItem(mediaItem);
             player.prepare();
@@ -1036,7 +1055,7 @@ public class PlayerActivity extends AppCompatActivity {
         android.util.Log.e("TVPy_Diagnostics", "Fallo al reproducir canal: " + name + 
                 " | error: " + (error != null ? error.getErrorCodeName() : customReason));
 
-        if (isTelevision()) {
+        if (isTvBoxOrTelevision()) {
             startAutomaticRetry();
         }
     }
@@ -1100,6 +1119,81 @@ public class PlayerActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private boolean isTvBoxOrTelevision() {
+        if (isTelevision()) return true;
+        String model = (Build.MODEL != null ? Build.MODEL : "").toLowerCase();
+        String product = (Build.PRODUCT != null ? Build.PRODUCT : "").toLowerCase();
+        String device = (Build.DEVICE != null ? Build.DEVICE : "").toLowerCase();
+        String mfg = (Build.MANUFACTURER != null ? Build.MANUFACTURER : "").toLowerCase();
+
+        if (model.contains("box") || model.contains("tv") || model.contains("tanix")
+                || model.contains("mxq") || model.contains("x96") || model.contains("h96")
+                || model.contains("t95") || model.contains("tx6") || model.contains("stick")
+                || product.contains("box") || product.contains("tv") || product.contains("tanix")
+                || device.contains("box") || device.contains("tv")
+                || mfg.contains("rockchip") || mfg.contains("allwinner") || mfg.contains("amlogic")) {
+            return true;
+        }
+
+        android.content.pm.PackageManager pm = getPackageManager();
+        if (pm != null && !pm.hasSystemFeature(android.content.pm.PackageManager.FEATURE_TOUCHSCREEN)) {
+            return true;
+        }
+        return false;
+    }
+
+    private void toggleQualityMode() {
+        isFluidMode = !isFluidMode;
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit().putBoolean(PREF_KEY_QUALITY_MODE, isFluidMode).apply();
+        updateQualityButtonUi();
+        applyVideoTrackParameters();
+        String msg = isFluidMode ? "⚡ Modo Fluido (720p / 30fps) activado" : "💎 Modo HD (1080p / 60fps) activado";
+        android.widget.Toast.makeText(this, msg, android.widget.Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateQualityButtonUi() {
+        if (btnQuality == null) return;
+        if (isFluidMode) {
+            btnQuality.setText("⚡ 720p Fluido");
+            btnQuality.setTextColor(android.graphics.Color.parseColor("#00F2FE"));
+        } else {
+            btnQuality.setText("💎 1080p HD");
+            btnQuality.setTextColor(android.graphics.Color.parseColor("#FFD700"));
+        }
+    }
+
+    private void applyVideoTrackParameters() {
+        if (player == null) return;
+        TrackSelectionParameters.Builder trackParams = player.getTrackSelectionParameters().buildUpon()
+                .setForceHighestSupportedBitrate(false);
+
+        if (isFluidMode) {
+            // Modo Fluido: limita a 720p y 30fps para decodificación ultra ligera y fluida sin saturar la TV Box
+            trackParams.setMaxVideoSize(1280, 720)
+                       .setMaxVideoFrameRate(30);
+        } else {
+            // Modo Máxima Calidad: permite hasta 1080p 60fps
+            trackParams.setMaxVideoSize(1920, 1080)
+                       .setMaxVideoFrameRate(60);
+        }
+        player.setTrackSelectionParameters(trackParams.build());
+    }
+
+    private MediaItem createLiveMediaItem(Uri uri) {
+        MediaItem.LiveConfiguration liveConfig = new MediaItem.LiveConfiguration.Builder()
+                .setMaxPlaybackSpeed(1.00f)
+                .setMinPlaybackSpeed(1.00f)
+                .setTargetOffsetMs(8000)
+                .setMinOffsetMs(4000)
+                .setMaxOffsetMs(15000)
+                .build();
+
+        return new MediaItem.Builder()
+                .setUri(uri)
+                .setLiveConfiguration(liveConfig)
+                .build();
     }
 
     private String formatEpgTime(long timeMs) {
@@ -1249,8 +1343,9 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        isPlayerActive = false;
 
-        if (isTelevision()) {
+        if (isTvBoxOrTelevision()) {
             wasPlayingBeforePause = false;
             if (player != null) player.pause();
             anim1.pause(); anim2.pause(); anim3.pause();
@@ -1282,7 +1377,8 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (isTelevision()) {
+        isPlayerActive = false;
+        if (isTvBoxOrTelevision()) {
             wasPlayingBeforePause = false;
             if (player != null) {
                 player.pause();
@@ -1303,7 +1399,7 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!isTelevision() && player != null && player.isPlaying()) {
+            if (!isTvBoxOrTelevision() && player != null && player.isPlaying()) {
                 enterPipModeCustom();
             }
         }
@@ -1436,7 +1532,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void registerScreenReceiver() {
-        if (isTelevision()) return;
+        if (isTvBoxOrTelevision()) return;
         if (screenReceiver == null) {
             screenReceiver = new BroadcastReceiver() {
                 @Override
@@ -1471,7 +1567,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private synchronized void handleScreenOff() {
-        if (isTelevision()) return;
+        if (isTvBoxOrTelevision()) return;
         if (isScreenOffAudioActive) return;
         if (player == null) return;
 
@@ -1619,6 +1715,7 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        isPlayerActive = true;
         enterImmersiveMode();
         restorePlaybackFromScreenOff();
         if (!isScreenOffAudioActive && player != null && player.getPlaybackState() == Player.STATE_READY && !BackgroundAudioService.wasStoppedByUser) {
@@ -1629,6 +1726,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        isPlayerActive = false;
         wasPlayingBeforePause = false;
         handler.removeCallbacksAndMessages(null);
         anim1.cancel(); anim2.cancel(); anim3.cancel();
