@@ -59,6 +59,9 @@ import androidx.media3.datasource.DataSpec;
 import androidx.media3.datasource.TransferListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.media3.common.Format;
+import androidx.media3.exoplayer.DecoderReuseEvaluation;
+import androidx.media3.exoplayer.analytics.AnalyticsListener;
 import androidx.media3.ui.PlayerView;
 
 import java.util.List;
@@ -78,7 +81,21 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView tvChannelName;
     private View topBar;
     private TextView btnQuality;
+    private TextView btnDiagnostics;
     private TextView btnFavorite;
+
+    // Diagnóstico en tiempo real (Stats for Nerds)
+    private View diagOverlay;
+    private TextView tvDiagStats;
+    private int totalDroppedFrames = 0;
+    private String activeDecoderName = "Detectando...";
+    private int currentFormatWidth = 0;
+    private int currentFormatHeight = 0;
+    private float currentFormatFps = 0f;
+    private long currentFormatBitrate = 0;
+    private long lastEstimatedBitrate = 0;
+    private final Handler diagHandler = new Handler(Looper.getMainLooper());
+    private Runnable diagUpdateRunnable;
 
     private View overlayContainer;
     private TextView overlayEmoji, overlayName, overlayCategory, overlayHint;
@@ -177,7 +194,10 @@ public class PlayerActivity extends AppCompatActivity {
         tvChannelName      = findViewById(R.id.tvChannelName);
         topBar             = findViewById(R.id.topBar);
         btnQuality         = findViewById(R.id.btnQuality);
+        btnDiagnostics     = findViewById(R.id.btnDiagnostics);
         btnFavorite        = findViewById(R.id.btnFavorite);
+        diagOverlay        = findViewById(R.id.diagOverlay);
+        tvDiagStats        = findViewById(R.id.tvDiagStats);
         overlayContainer   = findViewById(R.id.overlayContainer);
         overlayEmoji       = findViewById(R.id.overlayEmoji);
         overlayName        = findViewById(R.id.overlayName);
@@ -265,6 +285,21 @@ public class PlayerActivity extends AppCompatActivity {
                     v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
                 }
             });
+        }
+
+        if (btnDiagnostics != null) {
+            btnDiagnostics.setOnClickListener(v -> toggleDiagnostics());
+            btnDiagnostics.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    v.animate().scaleX(1.15f).scaleY(1.15f).setDuration(150).start();
+                } else {
+                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                }
+            });
+        }
+
+        if (diagOverlay != null) {
+            diagOverlay.setOnClickListener(v -> toggleDiagnostics());
         }
 
         // Gestos (tap → topBar; fling → navegar)
@@ -355,9 +390,44 @@ public class PlayerActivity extends AppCompatActivity {
         applyVideoTrackParameters();
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
+        player.addAnalyticsListener(new AnalyticsListener() {
+            @Override
+            public void onDroppedVideoFrames(EventTime eventTime, int droppedFrames, long elapsedMs) {
+                totalDroppedFrames += droppedFrames;
+            }
+
+            @Override
+            public void onVideoDecoderInitialized(EventTime eventTime, String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+                activeDecoderName = decoderName;
+            }
+
+            @Override
+            public void onVideoInputFormatChanged(EventTime eventTime, Format format, @Nullable DecoderReuseEvaluation decoderReuseEvaluation) {
+                if (format != null) {
+                    currentFormatWidth = format.width;
+                    currentFormatHeight = format.height;
+                    currentFormatFps = format.frameRate;
+                    currentFormatBitrate = format.bitrate;
+                }
+            }
+
+            @Override
+            public void onBandwidthEstimate(EventTime eventTime, int totalLoadTimeMs, long totalBytesLoaded, long bitrateEstimate) {
+                lastEstimatedBitrate = bitrateEstimate;
+            }
+        });
+
         playerView.setPlayer(player);
 
         player.addListener(new Player.Listener() {
+            @Override
+            public void onVideoSizeChanged(androidx.media3.common.VideoSize videoSize) {
+                if (videoSize != null && videoSize.width > 0) {
+                    currentFormatWidth = videoSize.width;
+                    currentFormatHeight = videoSize.height;
+                }
+            }
+
             @Override
             public void onPlaybackStateChanged(int state) {
                 if (state == Player.STATE_BUFFERING) {
@@ -404,6 +474,16 @@ public class PlayerActivity extends AppCompatActivity {
 
         hideErrorScreen();
         tvChannelName.setText(ChannelDeduplicator.cleanName(ch.getName()));
+
+        totalDroppedFrames = 0;
+        activeDecoderName = "Detectando...";
+        currentFormatWidth = 0;
+        currentFormatHeight = 0;
+        currentFormatFps = 0f;
+        currentFormatBitrate = 0;
+        if (diagOverlay != null && diagOverlay.getVisibility() == View.VISIBLE) {
+            updateDiagnosticsHUD();
+        }
 
         showLoading();
         showChannelOverlay(ch, index);
@@ -932,9 +1012,141 @@ public class PlayerActivity extends AppCompatActivity {
             updateFavoriteButton(ch.getUrl());
             showChannelOverlay(ch, currentIndex);
         }
-        btnFavorite.requestFocus();
+        if (btnQuality != null) {
+            btnQuality.requestFocus();
+        } else if (btnFavorite != null) {
+            btnFavorite.requestFocus();
+        }
         hideTopBarRunnable = this::hideTopBarNow;
         handler.postDelayed(hideTopBarRunnable, TOPBAR_AUTOHIDE_MS);
+    }
+
+    private void showTopBarWithFocusOnQuality() {
+        if (topBar == null) return;
+        if (hideTopBarRunnable != null) handler.removeCallbacks(hideTopBarRunnable);
+        topBar.animate().cancel();
+        topBar.setVisibility(View.VISIBLE);
+        topBar.animate().alpha(1f).setDuration(200).start();
+        if (channelList != null && currentIndex < channelList.size()) {
+            Channel ch = channelList.get(currentIndex);
+            updateFavoriteButton(ch.getUrl());
+            showChannelOverlay(ch, currentIndex);
+        }
+        if (btnQuality != null) {
+            btnQuality.requestFocus();
+        } else if (btnFavorite != null) {
+            btnFavorite.requestFocus();
+        }
+        hideTopBarRunnable = this::hideTopBarNow;
+        handler.postDelayed(hideTopBarRunnable, 6000);
+    }
+
+    private void startDiagUpdates() {
+        if (diagUpdateRunnable == null) {
+            diagUpdateRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (diagOverlay != null && diagOverlay.getVisibility() == View.VISIBLE) {
+                        updateDiagnosticsHUD();
+                        diagHandler.postDelayed(this, 1000);
+                    }
+                }
+            };
+        }
+        diagHandler.removeCallbacks(diagUpdateRunnable);
+        diagHandler.postDelayed(diagUpdateRunnable, 1000);
+    }
+
+    private void stopDiagUpdates() {
+        if (diagUpdateRunnable != null) {
+            diagHandler.removeCallbacks(diagUpdateRunnable);
+        }
+    }
+
+    private void toggleDiagnostics() {
+        if (diagOverlay == null) return;
+        if (diagOverlay.getVisibility() == View.VISIBLE) {
+            diagOverlay.setVisibility(View.GONE);
+            stopDiagUpdates();
+            if (btnDiagnostics != null) {
+                btnDiagnostics.setTextColor(android.graphics.Color.parseColor("#94A3B8"));
+            }
+        } else {
+            diagOverlay.setVisibility(View.VISIBLE);
+            if (btnDiagnostics != null) {
+                btnDiagnostics.setTextColor(android.graphics.Color.parseColor("#00F2FE"));
+            }
+            updateDiagnosticsHUD();
+            startDiagUpdates();
+        }
+    }
+
+    private void updateDiagnosticsHUD() {
+        if (diagOverlay == null || tvDiagStats == null || diagOverlay.getVisibility() != View.VISIBLE) return;
+
+        Channel ch = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size())
+                ? channelList.get(currentIndex) : null;
+        String channelName = ch != null ? ch.getName() : "Desconocido";
+        String channelUrl = ch != null ? ch.getUrl() : "";
+        String protocol = "Directo (HLS/TS)";
+        if (channelUrl.contains(".m3u8")) protocol = "HLS (.m3u8)";
+        else if (channelUrl.contains(".mpd")) protocol = "DASH (.mpd)";
+        else if (channelUrl.startsWith("dailymotion://")) protocol = "Dailymotion";
+        else if (channelUrl.startsWith("desdeparaguay://")) protocol = "DesdeParaguay";
+
+        int resW = currentFormatWidth;
+        int resH = currentFormatHeight;
+        float fps = currentFormatFps;
+        if (resW <= 0 && player != null) {
+            androidx.media3.common.VideoSize vs = player.getVideoSize();
+            if (vs != null && vs.width > 0) {
+                resW = vs.width;
+                resH = vs.height;
+            }
+        }
+
+        String resStr = (resW > 0 && resH > 0) ? (resW + "x" + resH) : "Detectando...";
+        String fpsStr = fps > 0 ? String.format(Locale.US, "%.1f FPS", fps) : "N/A";
+
+        // Cuadros perdidos (Dropped Frames)
+        String droppedStatus = totalDroppedFrames > 100 ? "⚠️ CRÍTICO" : (totalDroppedFrames > 20 ? "⚠️ ALTO" : "✅ NORMAL");
+        String droppedStr = totalDroppedFrames + " frames (" + droppedStatus + ")";
+
+        // Decodificador
+        String dec = activeDecoderName;
+        String decType = "";
+        String lowerDec = dec.toLowerCase(Locale.ROOT);
+        if (lowerDec.contains("c2.android") || lowerDec.contains("google") || lowerDec.contains("sw")) {
+            decType = " [SW por Software - LENTO]";
+        } else if (!dec.equals("Detectando...")) {
+            decType = " [HW Acelerado por Hardware]";
+        }
+
+        // Búfer cargado
+        long bufMs = player != null ? player.getTotalBufferedDuration() : 0;
+        float bufSec = bufMs / 1000f;
+
+        // Bitrate
+        long br = currentFormatBitrate > 0 ? currentFormatBitrate : lastEstimatedBitrate;
+        String brStr = br > 0 ? String.format(Locale.US, "%.2f Mbps", br / 1_000_000f) : "Adaptativo";
+
+        // Memoria JVM
+        Runtime rt = Runtime.getRuntime();
+        long usedMemMb = (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024);
+        long maxMemMb = rt.maxMemory() / (1024 * 1024);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("📺 Canal: ").append(ChannelDeduplicator.cleanName(channelName)).append("\n");
+        sb.append("🌐 Formato: ").append(protocol).append("\n");
+        sb.append("📐 Resolución: ").append(resStr).append(" @ ").append(fpsStr).append("\n");
+        sb.append("🎞️ Cuadros perdidos: ").append(droppedStr).append("\n");
+        sb.append("⚙️ Decodificador: ").append(dec).append(decType).append("\n");
+        sb.append("📊 Tasa de bits: ").append(brStr).append("\n");
+        sb.append("⏱️ Búfer cargado: ").append(String.format(Locale.US, "%.1fs", bufSec)).append("\n");
+        sb.append("⚡ Calidad seleccionada: ").append(isFluidMode ? "720p Fluido" : "1080p HD").append("\n");
+        sb.append("🧠 Memoria RAM app: ").append(usedMemMb).append(" MB / ").append(maxMemMb).append(" MB");
+
+        tvDiagStats.setText(sb.toString());
     }
 
     private void hideTopBarNow() {
@@ -1149,6 +1361,9 @@ public class PlayerActivity extends AppCompatActivity {
         getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit().putBoolean(PREF_KEY_QUALITY_MODE, isFluidMode).apply();
         updateQualityButtonUi();
         applyVideoTrackParameters();
+        if (diagOverlay != null && diagOverlay.getVisibility() == View.VISIBLE) {
+            updateDiagnosticsHUD();
+        }
         String msg = isFluidMode ? "⚡ Modo Fluido (720p / 30fps) activado" : "💎 Modo HD (1080p / 60fps) activado";
         android.widget.Toast.makeText(this, msg, android.widget.Toast.LENGTH_SHORT).show();
     }
@@ -1284,6 +1499,10 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+        if (event.getAction() == android.view.KeyEvent.ACTION_DOWN) {
+            event.startTracking();
+        }
+
         if (isSidePanelVisible()) {
             if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
                 hideSidePanel();
@@ -1293,27 +1512,69 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+            if (diagOverlay != null && diagOverlay.getVisibility() == View.VISIBLE) {
+                toggleDiagnostics();
+                return true;
+            }
+            if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
+                hideTopBarNow();
+                return true;
+            }
             finishAndGoHome();
             return true;
         }
 
         switch (keyCode) {
+            case android.view.KeyEvent.KEYCODE_INFO:
+            case android.view.KeyEvent.KEYCODE_PROG_BLUE:
+            case android.view.KeyEvent.KEYCODE_GUIDE:
+                toggleDiagnostics();
+                return true;
+
+            case android.view.KeyEvent.KEYCODE_MENU:
+                if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
+                    hideTopBarNow();
+                } else {
+                    showTopBarWithFocusOnQuality();
+                }
+                return true;
+
             case android.view.KeyEvent.KEYCODE_DPAD_LEFT:
             case android.view.KeyEvent.KEYCODE_DPAD_DOWN:
             case android.view.KeyEvent.KEYCODE_CHANNEL_DOWN:
+                if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
+                    return super.onKeyDown(keyCode, event);
+                }
                 navigateToChannel(currentIndex - 1);
                 return true;
+
             case android.view.KeyEvent.KEYCODE_DPAD_RIGHT:
             case android.view.KeyEvent.KEYCODE_DPAD_UP:
             case android.view.KeyEvent.KEYCODE_CHANNEL_UP:
+                if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
+                    return super.onKeyDown(keyCode, event);
+                }
                 navigateToChannel(currentIndex + 1);
                 return true;
+
             case android.view.KeyEvent.KEYCODE_DPAD_CENTER:
             case android.view.KeyEvent.KEYCODE_ENTER:
+                if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
+                    return super.onKeyDown(keyCode, event);
+                }
                 showSidePanel();
                 return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, android.view.KeyEvent event) {
+        if (keyCode == android.view.KeyEvent.KEYCODE_DPAD_CENTER || keyCode == android.view.KeyEvent.KEYCODE_ENTER) {
+            toggleDiagnostics();
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
     }
 
     @Override
@@ -1333,7 +1594,9 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isSidePanelVisible()) {
+        if (diagOverlay != null && diagOverlay.getVisibility() == View.VISIBLE) {
+            toggleDiagnostics();
+        } else if (isSidePanelVisible()) {
             hideSidePanel();
         } else {
             finishAndGoHome();
@@ -1344,6 +1607,7 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         isPlayerActive = false;
+        stopDiagUpdates();
 
         if (isTvBoxOrTelevision()) {
             wasPlayingBeforePause = false;
@@ -1718,6 +1982,10 @@ public class PlayerActivity extends AppCompatActivity {
         isPlayerActive = true;
         enterImmersiveMode();
         restorePlaybackFromScreenOff();
+        if (diagOverlay != null && diagOverlay.getVisibility() == View.VISIBLE) {
+            updateDiagnosticsHUD();
+            startDiagUpdates();
+        }
         if (!isScreenOffAudioActive && player != null && player.getPlaybackState() == Player.STATE_READY && !BackgroundAudioService.wasStoppedByUser) {
             player.play();
         }
@@ -1728,6 +1996,7 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onDestroy() {
         isPlayerActive = false;
         wasPlayingBeforePause = false;
+        stopDiagUpdates();
         handler.removeCallbacksAndMessages(null);
         anim1.cancel(); anim2.cancel(); anim3.cancel();
         unregisterBackgroundAudioReceiver();

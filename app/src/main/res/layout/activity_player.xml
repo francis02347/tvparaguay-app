@@ -349,7 +349,7 @@
             android:id="@+id/btnQuality"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="8dp"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             android:text="⚡ 720p"
@@ -361,6 +361,24 @@
             android:focusable="true"
             android:clickable="true"
             android:contentDescription="Calidad de video" />
+
+        <!-- Botón de Diagnóstico / Stats en Vivo -->
+        <TextView
+            android:id="@+id/btnDiagnostics"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginEnd="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="📊 Stats"
+            android:textColor="#94A3B8"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="@drawable/badge_bg"
+            android:focusable="true"
+            android:clickable="true"
+            android:contentDescription="Diagnóstico de video" />
 
         <!-- Botón corazón favorito -->
         <TextView
@@ -375,6 +393,56 @@
             android:clickable="true"
             android:contentDescription="Favorito" />
 
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════════════════════════
+         HUD DE DIAGNÓSTICO EN VIVO (Stats for Nerds)
+    ═══════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/diagOverlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="64dp"
+        android:layout_marginStart="20dp"
+        android:background="#E60B0F19"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:elevation="12dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📊 DIAGNÓSTICO EN TIEMPO REAL"
+                android:textColor="#00F2FE"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  (INFO / MENU para alternar)"
+                android:textColor="#64748B"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvDiagStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#E2E8F0"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:lineSpacingExtra="3dp"
+            android:text="Cargando estadísticas..." />
     </LinearLayout>
 
     <!-- ═══════════════════════════════════════════════════
