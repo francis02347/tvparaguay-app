@@ -2,5 +2,5 @@
   "versionCode": 118,
   "versionName": "2.20",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.20/app-website-release.apk",
-  "releaseNotes": "v2.20: Solución definitiva a transmisiones trabadas en TV Box: velocidad en vivo fija 1.0x sin saltos, modo fluido 720p/30fps con selector interactivo, búfer ampliado y suspensión de tareas en segundo plano."
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.20."
 }
