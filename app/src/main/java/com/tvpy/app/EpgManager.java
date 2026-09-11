@@ -74,6 +74,7 @@ public class EpgManager {
     public static void fetchEpgAsync(final Context context) {
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
+                android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
                 long now = System.currentTimeMillis();
                 File cacheFile = new File(context.getCacheDir(), CACHE_FILE_NAME);
 

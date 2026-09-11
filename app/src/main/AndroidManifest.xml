@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TVParaguay"
         android:usesCleartextTraffic="true"
-        android:hardwareAccelerated="true">
+        android:hardwareAccelerated="true"
+        android:largeHeap="true">
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
+                android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
                 URL url = new URL("https://raw.githubusercontent.com/francis02347/tvparaguay-app/refs/heads/main/app/src/website/assets/default_channels.m3u");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setConnectTimeout(10000);

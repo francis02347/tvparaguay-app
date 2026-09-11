@@ -42,10 +42,13 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
+import androidx.media3.common.TrackSelectionParameters;
 import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.DefaultLoadControl;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
@@ -294,6 +297,20 @@ public class PlayerActivity extends AppCompatActivity {
                 .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
                 .setEnableDecoderFallback(true);
 
+        // Control de búfer optimizado para TV Box y transmisiones en vivo:
+        // Reduce el búfer máximo a 20s (en vez de 50s por defecto), liberando memoria RAM
+        // y evitando pausas de recolección de basura (Garbage Collector) y saturación de Wi-Fi.
+        DefaultLoadControl loadControl = new DefaultLoadControl.Builder()
+                .setBufferDurationsMs(
+                        8_000,  // minBufferMs: 8 seg
+                        20_000, // maxBufferMs: 20 seg
+                        1_200,  // bufferForPlaybackMs: 1.2 seg (arranque veloz)
+                        2_500   // bufferForPlaybackAfterRebufferMs: 2.5 seg
+                )
+                .setPrioritizeTimeOverSizeThresholds(true)
+                .setBackBuffer(0, false) // 0s de backbuffer para liberar memoria de inmediato
+                .build();
+
         DefaultHttpDataSource.Factory httpDataSourceFactory = new DefaultHttpDataSource.Factory()
                 .setUserAgent("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
                 .setAllowCrossProtocolRedirects(true)
@@ -305,7 +322,19 @@ public class PlayerActivity extends AppCompatActivity {
 
         player = new ExoPlayer.Builder(this, renderersFactory)
                 .setMediaSourceFactory(new DefaultMediaSourceFactory(dataSourceFactory))
+                .setLoadControl(loadControl)
                 .build();
+
+        // Parámetros de selección de pistas de video para evitar saturar decodificadores modestos
+        TrackSelectionParameters.Builder trackParams = player.getTrackSelectionParameters().buildUpon()
+                .setForceHighestSupportedBitrate(false);
+
+        if (isTelevision()) {
+            trackParams.setMaxVideoSize(1920, 1080)
+                       .setMaxVideoFrameRate(60);
+        }
+        player.setTrackSelectionParameters(trackParams.build());
+        player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
         playerView.setPlayer(player);
 
