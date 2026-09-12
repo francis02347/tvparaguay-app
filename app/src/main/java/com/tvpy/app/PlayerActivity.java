@@ -328,14 +328,14 @@ public class PlayerActivity extends AppCompatActivity {
                 .setAllowedVideoJoiningTimeMs(5000);
 
         // Control de búfer optimizado para TV Box y transmisiones en vivo:
-        // Evita saturar la memoria y otorga un margen seguro (2.5s inicio, 15-30s búfer)
-        // para absorber micro-interrupciones y fluctuaciones de Wi-Fi.
+        // Adaptado a segmentos HLS de 2 a 6 segundos para evitar hambruna de búfer
+        // en listas de reproducción cortas (8-12s).
         DefaultLoadControl loadControl = new DefaultLoadControl.Builder()
                 .setBufferDurationsMs(
-                        15_000, // minBufferMs: 15 seg
-                        30_000, // maxBufferMs: 30 seg
-                        2_500,  // bufferForPlaybackMs: 2.5 seg (arranque seguro sin cortes)
-                        4_000   // bufferForPlaybackAfterRebufferMs: 4.0 seg
+                        4_000,  // minBufferMs: 4.0 seg (evita congelamientos en listas cortas de 8-11s)
+                        15_000, // maxBufferMs: 15 seg
+                        1_000,  // bufferForPlaybackMs: 1.0 seg (arranque inmediato sin retraso)
+                        2_000   // bufferForPlaybackAfterRebufferMs: 2.0 seg
                 )
                 .setPrioritizeTimeOverSizeThresholds(true)
                 .setBackBuffer(0, false) // 0s de backbuffer para liberar memoria de inmediato
@@ -1209,12 +1209,12 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private MediaItem createLiveMediaItem(Uri uri) {
+        // Configuración de sincronización en vivo adaptativa:
+        // Permite micro-ajustes naturales de velocidad (0.96x - 1.04x) para absorber fluctuaciones de red
+        // sin vaciar el búfer ni provocar cortes abruptos.
         MediaItem.LiveConfiguration liveConfig = new MediaItem.LiveConfiguration.Builder()
-                .setMaxPlaybackSpeed(1.00f)
-                .setMinPlaybackSpeed(1.00f)
-                .setTargetOffsetMs(8000)
-                .setMinOffsetMs(4000)
-                .setMaxOffsetMs(15000)
+                .setMaxPlaybackSpeed(1.04f)
+                .setMinPlaybackSpeed(0.96f)
                 .build();
 
         return new MediaItem.Builder()
