@@ -1,6 +1,6 @@
 {
-  "versionCode": 121,
-  "versionName": "2.23",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.23/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.23."
+  "versionCode": 122,
+  "versionName": "2.24",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.24/app-website-release.apk",
+  "releaseNotes": "Versión 2.24: Señales auténticas de ESPN Cono Sur / Argentina (H.264/AAC), organización de señales ESPN México por separado y optimización de TyC Sports."
 }
