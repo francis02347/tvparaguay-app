@@ -29,6 +29,13 @@ public class ChannelStore {
                 obj.put("category", ch.getCategory());
                 obj.put("country", ch.getCountry());
                 obj.put("color", ch.getBackgroundColor());
+                if (ch.getBackupUrls() != null && !ch.getBackupUrls().isEmpty()) {
+                    JSONArray backupsArr = new JSONArray();
+                    for (String b : ch.getBackupUrls()) {
+                        backupsArr.put(b);
+                    }
+                    obj.put("backups", backupsArr);
+                }
                 arr.put(obj);
             }
             SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -47,12 +54,20 @@ public class ChannelStore {
             JSONArray arr = new JSONArray(json);
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
+                List<String> backups = new ArrayList<>();
+                JSONArray backupsArr = obj.optJSONArray("backups");
+                if (backupsArr != null) {
+                    for (int j = 0; j < backupsArr.length(); j++) {
+                        backups.add(backupsArr.getString(j));
+                    }
+                }
                 channels.add(new Channel(
                         obj.getString("name"),
                         obj.getString("url"),
                         obj.getString("emoji"),
                         obj.getString("category"),
                         obj.optString("country", ""),
+                        backups,
                         obj.getInt("color")
                 ));
             }

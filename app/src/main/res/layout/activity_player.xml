@@ -344,6 +344,25 @@
             android:ellipsize="end"
             android:maxLines="1" />
 
+        <!-- Botón Selector de Señal (Señal 1 / Señal 2) -->
+        <TextView
+            android:id="@+id/btnSignal"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginEnd="8dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="📡 Señal 1"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="@drawable/badge_bg"
+            android:focusable="true"
+            android:clickable="true"
+            android:visibility="gone"
+            android:contentDescription="Cambiar señal de transmisión" />
+
         <!-- Botón de Modo Fluido / Calidad de Video -->
         <TextView
             android:id="@+id/btnQuality"

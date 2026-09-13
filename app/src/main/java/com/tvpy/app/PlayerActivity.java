@@ -80,8 +80,11 @@ public class PlayerActivity extends AppCompatActivity {
 
     private TextView tvChannelName;
     private View topBar;
+    private TextView btnSignal;
     private TextView btnQuality;
     private TextView btnFavorite;
+    private int activeSignalIndex = 0;
+    private int triedSignalsCount = 0;
 
     private View overlayContainer;
     private TextView overlayEmoji, overlayName, overlayCategory, overlayHint;
@@ -179,6 +182,7 @@ public class PlayerActivity extends AppCompatActivity {
         dot3               = findViewById(R.id.dot3);
         tvChannelName      = findViewById(R.id.tvChannelName);
         topBar             = findViewById(R.id.topBar);
+        btnSignal          = findViewById(R.id.btnSignal);
         btnQuality         = findViewById(R.id.btnQuality);
         btnFavorite        = findViewById(R.id.btnFavorite);
         overlayContainer   = findViewById(R.id.overlayContainer);
@@ -202,6 +206,17 @@ public class PlayerActivity extends AppCompatActivity {
         btnRetry           = findViewById(R.id.btnRetry);
         sidePanel          = findViewById(R.id.sidePanel);
         rvSideChannels     = findViewById(R.id.rvSideChannels);
+
+        if (btnSignal != null) {
+            btnSignal.setOnClickListener(v -> showSignalSelectionDialog());
+            btnSignal.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    v.animate().scaleX(1.15f).scaleY(1.15f).setDuration(150).start();
+                } else {
+                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                }
+            });
+        }
 
         if (rvSideChannels != null) {
             rvSideChannels.setLayoutManager(new LinearLayoutManager(this));
@@ -239,7 +254,10 @@ public class PlayerActivity extends AppCompatActivity {
                 handler.removeCallbacks(autoRetryRunnable);
                 autoRetryRunnable = null;
             }
-            loadChannel(currentIndex);
+            triedSignalsCount = 0;
+            showLoading();
+            hideErrorScreen();
+            playSignal(activeSignalIndex);
         });
 
         btnFavorite.setOnClickListener(v -> toggleFavorite());
@@ -390,10 +408,7 @@ public class PlayerActivity extends AppCompatActivity {
                         } catch (Exception ignored) {}
                     }
                 }
-                hideLoading();
-                String name = channelList != null && currentIndex < channelList.size()
-                        ? channelList.get(currentIndex).getName() : "";
-                showErrorScreen(name, null, error);
+                handleSignalFailure(null, error);
             }
         });
     }
@@ -403,8 +418,6 @@ public class PlayerActivity extends AppCompatActivity {
         currentIndex = index;
         Channel ch = channelList.get(index);
 
-        LastChannelManager.saveLastChannel(this, ch.getUrl());
-
         hideErrorScreen();
         tvChannelName.setText(ChannelDeduplicator.cleanName(ch.getName()));
 
@@ -412,8 +425,50 @@ public class PlayerActivity extends AppCompatActivity {
         showChannelOverlay(ch, index);
         updateFavoriteButton(ch.getUrl());
 
-        String rawUrl = ch.getUrl();
+        List<String> allUrls = ch.getAllUrls();
+        int totalSignals = allUrls.size();
+
+        // Recuperar preferencia guardada en memoria para este canal
+        int prefIndex = SignalPreferenceManager.getPreferredSignalIndex(this, ch.getName());
+        if (prefIndex < 0 || prefIndex >= totalSignals) {
+            prefIndex = 0;
+        }
+        activeSignalIndex = prefIndex;
+        triedSignalsCount = 0;
+        updateSignalButtonUi(totalSignals, activeSignalIndex);
+
+        playSignal(activeSignalIndex);
+    }
+
+    private void updateSignalButtonUi(int totalSignals, int currentSignal) {
+        if (btnSignal == null) return;
+        if (totalSignals > 1) {
+            btnSignal.setVisibility(View.VISIBLE);
+            btnSignal.setText("📡 Señal " + (currentSignal + 1));
+        } else {
+            btnSignal.setVisibility(View.GONE);
+        }
+    }
+
+    private void playSignal(int signalIndex) {
+        if (channelList == null || currentIndex < 0 || currentIndex >= channelList.size()) return;
+        Channel ch = channelList.get(currentIndex);
+        List<String> allUrls = ch.getAllUrls();
+        if (allUrls.isEmpty()) {
+            showErrorScreen(ch.getName(), "No hay señales disponibles", null);
+            return;
+        }
+
+        if (signalIndex < 0 || signalIndex >= allUrls.size()) {
+            signalIndex = 0;
+        }
+        activeSignalIndex = signalIndex;
+        updateSignalButtonUi(allUrls.size(), activeSignalIndex);
+
+        String rawUrl = allUrls.get(signalIndex);
         if (rawUrl == null) rawUrl = "";
+
+        LastChannelManager.saveLastChannel(this, ch.getUrl());
 
         String cleanUrl = rawUrl;
         java.util.Map<String, String> headers = new java.util.HashMap<>();
@@ -472,7 +527,7 @@ public class PlayerActivity extends AppCompatActivity {
                 || cleanUrl.startsWith("rtsp://");
 
         if (!validScheme || cleanUrl.isEmpty()) {
-            showErrorScreen(ch.getName(), "Protocolo o URL no válida: " + cleanUrl, null);
+            handleSignalFailure("Protocolo o URL no válida: " + cleanUrl, null);
             return;
         }
 
@@ -484,9 +539,74 @@ public class PlayerActivity extends AppCompatActivity {
             player.prepare();
             player.setPlayWhenReady(true);
         } catch (Exception e) {
-            hideLoading();
-            showErrorScreen(ch.getName(), "Error al preparar reproductor: " + e.getMessage(), null);
+            handleSignalFailure("Error al preparar reproductor: " + e.getMessage(), null);
         }
+    }
+
+    private void handleSignalFailure(String diagnostics, PlaybackException error) {
+        if (channelList == null || currentIndex < 0 || currentIndex >= channelList.size()) return;
+        Channel ch = channelList.get(currentIndex);
+        List<String> allUrls = ch.getAllUrls();
+        int totalSignals = allUrls.size();
+
+        triedSignalsCount++;
+        if (totalSignals > 1 && triedSignalsCount < totalSignals) {
+            int prevSignal = activeSignalIndex;
+            activeSignalIndex = (activeSignalIndex + 1) % totalSignals;
+            updateSignalButtonUi(totalSignals, activeSignalIndex);
+
+            showLoading();
+            android.widget.Toast.makeText(
+                PlayerActivity.this,
+                "⚠️ Señal " + (prevSignal + 1) + " caída. Conectando a Señal " + (activeSignalIndex + 1) + "...",
+                android.widget.Toast.LENGTH_SHORT
+            ).show();
+
+            handler.postDelayed(() -> playSignal(activeSignalIndex), 600);
+            return;
+        }
+
+        hideLoading();
+        showErrorScreen(ch.getName(), diagnostics, error);
+    }
+
+    private void showSignalSelectionDialog() {
+        if (channelList == null || currentIndex < 0 || currentIndex >= channelList.size()) return;
+        Channel ch = channelList.get(currentIndex);
+        List<String> allUrls = ch.getAllUrls();
+        if (allUrls.size() <= 1) return;
+
+        int savedPref = SignalPreferenceManager.getPreferredSignalIndex(this, ch.getName());
+        String[] items = new String[allUrls.size()];
+        for (int i = 0; i < allUrls.size(); i++) {
+            StringBuilder label = new StringBuilder("📡 Señal ").append(i + 1);
+            if (i == 0) {
+                label.append(" (Principal)");
+            } else {
+                label.append(" (Alternativa)");
+            }
+            if (i == savedPref) {
+                label.append(" ★ [Predeterminada]");
+            }
+            items[i] = label.toString();
+        }
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Seleccionar Señal (" + ChannelDeduplicator.cleanName(ch.getName()) + ")")
+            .setSingleChoiceItems(items, activeSignalIndex, (dialog, which) -> {
+                dialog.dismiss();
+                SignalPreferenceManager.setPreferredSignalIndex(this, ch.getName(), which);
+                android.widget.Toast.makeText(
+                    this,
+                    "Señal " + (which + 1) + " guardada como predeterminada",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show();
+                triedSignalsCount = 0;
+                showLoading();
+                playSignal(which);
+            })
+            .setNegativeButton("Cancelar", null)
+            .show();
     }
 
     private void resolveDailymotionAndPlay(final String videoIdInput, final Channel ch) {
@@ -653,8 +773,7 @@ public class PlayerActivity extends AppCompatActivity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        hideLoading();
-                        showErrorScreen(ch.getName());
+                        handleSignalFailure("Fallo al resolver transmisión Dailymotion", null);
                     }
                 });
             }
@@ -719,8 +838,7 @@ public class PlayerActivity extends AppCompatActivity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        hideLoading();
-                        showErrorScreen(ch.getName());
+                        handleSignalFailure("Fallo al resolver transmisión DesdeParaguay", null);
                     }
                 });
             }
@@ -812,8 +930,7 @@ public class PlayerActivity extends AppCompatActivity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        hideLoading();
-                        showErrorScreen(ch.getName());
+                        handleSignalFailure("Fallo al resolver transmisión YouTube", null);
                     }
                 });
             }
@@ -873,8 +990,7 @@ public class PlayerActivity extends AppCompatActivity {
             player.prepare();
             player.setPlayWhenReady(true);
         } catch (Exception e) {
-            hideLoading();
-            showErrorScreen(ch.getName());
+            handleSignalFailure("Error al reproducir: " + e.getMessage(), null);
         }
     }
 

@@ -7,15 +7,26 @@ public class Channel {
     private String category;
     private String country;      // ← nuevo campo
     private int backgroundColor;
+    private java.util.List<String> backupUrls = new java.util.ArrayList<>();
 
-    // Constructor completo (con país)
-    public Channel(String name, String url, String emoji, String category, String country, int backgroundColor) {
+    // Constructor completo con señales de respaldo
+    public Channel(String name, String url, String emoji, String category, String country, java.util.List<String> backupUrls, int backgroundColor) {
         this.name = name;
         this.url = url;
         this.emoji = emoji;
         this.category = sanitizeCategory(category);
         this.country = country != null ? country : "";
         this.backgroundColor = backgroundColor;
+        if (backupUrls != null) {
+            for (String b : backupUrls) {
+                addBackupUrl(b);
+            }
+        }
+    }
+
+    // Constructor completo (con país)
+    public Channel(String name, String url, String emoji, String category, String country, int backgroundColor) {
+        this(name, url, emoji, category, country, null, backgroundColor);
     }
 
     // Constructor legacy sin país (compatibilidad con ChannelData existente)
@@ -207,4 +218,40 @@ public class Channel {
     public String getCategory()       { return category; }
     public String getCountry()        { return country; }
     public int    getBackgroundColor(){ return backgroundColor; }
+
+    public java.util.List<String> getBackupUrls() {
+        return new java.util.ArrayList<>(backupUrls);
+    }
+
+    public void addBackupUrl(String backupUrl) {
+        if (backupUrl == null) return;
+        String trimmed = backupUrl.trim();
+        if (!trimmed.isEmpty() && !trimmed.equals(this.url) && !backupUrls.contains(trimmed)) {
+            backupUrls.add(trimmed);
+        }
+    }
+
+    public void addBackupUrls(java.util.List<String> urls) {
+        if (urls == null) return;
+        for (String u : urls) {
+            addBackupUrl(u);
+        }
+    }
+
+    public java.util.List<String> getAllUrls() {
+        java.util.List<String> all = new java.util.ArrayList<>();
+        if (url != null && !url.trim().isEmpty()) {
+            all.add(url.trim());
+        }
+        for (String b : backupUrls) {
+            if (b != null && !b.trim().isEmpty() && !all.contains(b.trim())) {
+                all.add(b.trim());
+            }
+        }
+        return all;
+    }
+
+    public int getUrlCount() {
+        return getAllUrls().size();
+    }
 }

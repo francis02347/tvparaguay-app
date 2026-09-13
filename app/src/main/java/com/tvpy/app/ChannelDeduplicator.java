@@ -56,6 +56,7 @@ public class ChannelDeduplicator {
                 byUrl.put(url, ch);
             } else {
                 Channel existing = byUrl.get(url);
+                existing.addBackupUrls(ch.getBackupUrls());
                 boolean existingCorrupt = existing.getName().contains("Ã");
                 boolean newCorrupt = ch.getName().contains("Ã");
                 if (existingCorrupt && !newCorrupt) {
@@ -80,7 +81,12 @@ public class ChannelDeduplicator {
             } else {
                 Channel current = best.get(baseName);
                 if (qualityScore(ch.getName()) > qualityScore(current.getName())) {
+                    ch.addBackupUrl(current.getUrl());
+                    ch.addBackupUrls(current.getBackupUrls());
                     best.put(baseName, ch);
+                } else {
+                    current.addBackupUrl(ch.getUrl());
+                    current.addBackupUrls(ch.getBackupUrls());
                 }
             }
         }

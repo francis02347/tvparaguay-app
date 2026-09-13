@@ -24,6 +24,7 @@ public class M3uParser {
         int colorIdx = 0;
 
         String name = null, category = "General", emoji = "📺", country = "";
+        List<String> currentBackupUrls = new ArrayList<>();
 
         for (String raw : lines) {
             String line = raw.trim();
@@ -40,6 +41,17 @@ public class M3uParser {
                 country = extractAttr(line, "tvg-country");
                 if (country.isEmpty()) country = defaultCountry;
 
+                String backupUrlAttr = extractAttr(line, "backup-url");
+                currentBackupUrls = new ArrayList<>();
+                if (!backupUrlAttr.isEmpty()) {
+                    String[] parts = backupUrlAttr.split("\\|");
+                    for (String p : parts) {
+                        if (!p.trim().isEmpty()) {
+                            currentBackupUrls.add(p.trim());
+                        }
+                    }
+                }
+
                 if (category.contains(";")) {
                     String[] parts = category.split(";");
                     if (parts.length > 0) {
@@ -53,10 +65,11 @@ public class M3uParser {
 
             } else if (!line.startsWith("#") && !line.isEmpty() && name != null) {
                 channels.add(new Channel(
-                    name, line, emoji, category, country,
+                    name, line, emoji, category, country, currentBackupUrls,
                     COLORS[colorIdx++ % COLORS.length]
                 ));
                 name = null; category = "General"; country = ""; emoji = "📺";
+                currentBackupUrls = new ArrayList<>();
             }
         }
         return channels;

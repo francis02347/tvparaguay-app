@@ -59,7 +59,7 @@
     },
     {
       "name": "A24 Argentina",
-      "url": "https://g1.vxral-hor.transport.edge-access.net/a15/ngrp:a24-100056_all/a24-100056.m3u8",
+      "url": "https://g1.vxral-hor.transport.edge-access.net/a15/ngrp:a24-100056_all/a24-100056.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
       "raw_url": "https://g1.vxral-hor.transport.edge-access.net/a15/ngrp:a24-100056_all/a24-100056.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
       "logo": "",
       "category": "Nacionales (Paraguay)",
@@ -67,7 +67,7 @@
     },
     {
       "name": "América TV Argentina",
-      "url": "https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8",
+      "url": "https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
       "raw_url": "https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
       "logo": "",
       "category": "Nacionales (Paraguay)",
@@ -91,7 +91,7 @@
     },
     {
       "name": "TV Pública (Argentina)",
-      "url": "https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8",
+      "url": "https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
       "raw_url": "https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
       "logo": "",
       "category": "Nacionales (Paraguay)",
@@ -219,16 +219,16 @@
     },
     {
       "name": "Arena Sport 1",
-      "url": "http://88.212.15.19/live/test_arenasport/playlist.m3u8",
-      "raw_url": "http://88.212.15.19/live/test_arenasport/playlist.m3u8",
+      "url": "https://kusnadipepenk.github.io/ntn/arns1.m3u8",
+      "raw_url": "https://kusnadipepenk.github.io/ntn/arns1.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 28
     },
     {
       "name": "Arena Sport 2",
-      "url": "http://88.212.15.19/live/test_arenasport_dva/playlist.m3u8",
-      "raw_url": "http://88.212.15.19/live/test_arenasport_dva/playlist.m3u8",
+      "url": "https://kusnadipepenk.github.io/ntn/arns2.m3u8",
+      "raw_url": "https://kusnadipepenk.github.io/ntn/arns2.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 29
@@ -315,8 +315,8 @@
     },
     {
       "name": "Deportes TVC (1080p)",
-      "url": "https://streaming.onnethn.com/DEPORTES_TVC/playlist.m3u8",
-      "raw_url": "https://streaming.onnethn.com/DEPORTES_TVC/playlist.m3u8",
+      "url": "http://190.11.225.124:5000/live/deportes_tvc_hd/playlist.m3u8",
+      "raw_url": "http://190.11.225.124:5000/live/deportes_tvc_hd/playlist.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 40
@@ -355,8 +355,8 @@
     },
     {
       "name": "ESPN (Argentina)",
-      "url": "http://181.209.38.115:8000/play/a00b/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a00b/index.m3u8",
+      "url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
+      "raw_url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 45
@@ -371,8 +371,8 @@
     },
     {
       "name": "ESPN 2 (Argentina)",
-      "url": "http://181.209.38.115:8000/play/a02z/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a02z/index.m3u8",
+      "url": "http://181.78.197.59:8000/play/a080/index.m3u8",
+      "raw_url": "http://181.78.197.59:8000/play/a080/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 47
@@ -395,8 +395,8 @@
     },
     {
       "name": "ESPN 3 (Argentina)",
-      "url": "http://181.209.38.115:8000/play/a00d/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a00d/index.m3u8",
+      "url": "http://181.78.197.59:8000/play/a081/index.m3u8",
+      "raw_url": "http://181.78.197.59:8000/play/a081/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 50
@@ -467,8 +467,8 @@
     },
     {
       "name": "ESPN Premium",
-      "url": "http://181.209.38.115:8000/play/a00f/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a00f/index.m3u8",
+      "url": "http://181.78.197.59:8000/play/a09l/index.m3u8",
+      "raw_url": "http://181.78.197.59:8000/play/a09l/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 59
@@ -667,8 +667,8 @@
     },
     {
       "name": "TyC Sports",
-      "url": "https://amg26268-amg26268c14-freelivesports-emea-10267.playouts.now.amagi.tv/ts-us-e2-n2/playlist/amg26268-sportsstudio-tycsports-freelivesportsemea/playlist.m3u8",
-      "raw_url": "https://amg26268-amg26268c14-freelivesports-emea-10267.playouts.now.amagi.tv/ts-us-e2-n2/playlist/amg26268-sportsstudio-tycsports-freelivesportsemea/playlist.m3u8",
+      "url": "http://38.44.109.41:8003/play/a02l/index.m3u8",
+      "raw_url": "http://38.44.109.41:8003/play/a02l/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 84
