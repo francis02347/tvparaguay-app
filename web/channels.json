@@ -355,8 +355,8 @@
     },
     {
       "name": "ESPN (Argentina)",
-      "url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
-      "raw_url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
+      "url": "http://181.209.38.115:8000/play/a00b/index.m3u8",
+      "raw_url": "http://181.209.38.115:8000/play/a00b/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 45
@@ -371,8 +371,8 @@
     },
     {
       "name": "ESPN 2 (Argentina)",
-      "url": "http://181.78.197.59:8000/play/a080/index.m3u8",
-      "raw_url": "http://181.78.197.59:8000/play/a080/index.m3u8",
+      "url": "http://181.209.38.115:8000/play/a02z/index.m3u8",
+      "raw_url": "http://181.209.38.115:8000/play/a02z/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 47
@@ -395,8 +395,8 @@
     },
     {
       "name": "ESPN 3 (Argentina)",
-      "url": "http://181.78.197.59:8000/play/a081/index.m3u8",
-      "raw_url": "http://181.78.197.59:8000/play/a081/index.m3u8",
+      "url": "http://181.209.38.115:8000/play/a00d/index.m3u8",
+      "raw_url": "http://181.209.38.115:8000/play/a00d/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 50
@@ -467,8 +467,8 @@
     },
     {
       "name": "ESPN Premium",
-      "url": "http://181.78.197.59:8000/play/a09l/index.m3u8",
-      "raw_url": "http://181.78.197.59:8000/play/a09l/index.m3u8",
+      "url": "http://181.209.38.115:8000/play/a00f/index.m3u8",
+      "raw_url": "http://181.209.38.115:8000/play/a00f/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 59
