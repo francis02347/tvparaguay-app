@@ -85,35 +85,35 @@ http://187.102.208.209:8000/play/a09n/index.m3u8
 http://200.60.97.100:28888/play/a0c8/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DSports+
 http://200.60.97.100:28888/play/a0c9/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN (Brasil)
-https://cdn-5.nxplay.com.br/ESPN/tracks-v2a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports" backup-url="https://cdn-5.nxplay.com.br/ESPN/tracks-v2a1/mono.m3u8",ESPN (Brasil)
+https://cdn-5.nxplay.com.br/ESPN/tracks-v3a1/mono.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN (Argentina)
 http://181.209.38.115:8000/play/a00b/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN (Señal Principal)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0hc/index.m3u8|http://45.170.130.224:8000/play/a04l/index.m3u8",ESPN (Señal Principal)
 http://181.78.197.59:8000/play/a07z/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN 2 (Argentina)
 http://181.209.38.115:8000/play/a02z/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 2
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0gd/index.m3u8|http://45.170.130.224:8000/play/a01x/index.m3u8",ESPN 2
 http://181.78.197.59:8000/play/a080/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 2 (Brasil)
-https://cdn-5.nxplay.com.br/ESPN_2/tracks-v2a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports" backup-url="https://cdn-5.nxplay.com.br/ESPN_2/tracks-v2a1/mono.m3u8",ESPN 2 (Brasil)
+https://cdn-5.nxplay.com.br/ESPN_2/tracks-v3a1/mono.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN 3 (Argentina)
 http://181.209.38.115:8000/play/a00d/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 3
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0gq/index.m3u8|http://45.170.130.224:8000/play/a03s/index.m3u8",ESPN 3
 http://181.78.197.59:8000/play/a081/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 3 (Brasil)
-https://cdn-5.nxplay.com.br/ESPN_3/tracks-v2a1/mono.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 4
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports" backup-url="https://cdn-5.nxplay.com.br/ESPN_3/tracks-v2a1/mono.m3u8",ESPN 3 (Brasil)
+https://cdn-5.nxplay.com.br/ESPN_3/tracks-v3a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0i4/index.m3u8|http://45.170.130.224:8000/play/a01w/index.m3u8",ESPN 4
 http://181.78.197.59:8000/play/a07n/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 4 (Brasil)
-https://cdn-5.nxplay.com.br/ESPN_4/tracks-v2a1/mono.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 5
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports" backup-url="https://cdn-5.nxplay.com.br/ESPN_4/tracks-v2a1/mono.m3u8",ESPN 4 (Brasil)
+https://cdn-5.nxplay.com.br/ESPN_4/tracks-v3a1/mono.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0ge/index.m3u8|http://38.44.109.41:8003/play/a0g0/index.m3u8",ESPN 5
 http://181.78.197.59:8000/play/a074/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 6
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0g7/index.m3u8|http://38.44.109.41:8003/play/a0gm/index.m3u8",ESPN 6
 http://181.78.197.59:8000/play/a08c/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports",ESPN 7
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0hx/index.m3u8|http://38.44.109.41:8003/play/a0ci/index.m3u8",ESPN 7
 http://181.78.197.59:8000/play/a06a/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN Extra (Brasil)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports" backup-url="http://hls1.sua.tv/live/espnextrahd/s.m3u8",ESPN Extra (Brasil)
 http://hls1.sua.tv/live/espnextrafhd/s.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN Premium
 http://181.209.38.115:8000/play/a00f/index.m3u8

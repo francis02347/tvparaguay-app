@@ -1,6 +1,6 @@
 {
-  "versionCode": 126,
-  "versionName": "2.28",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.28/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.28."
+  "versionCode": 127,
+  "versionName": "2.29",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.29/app-website-release.apk",
+  "releaseNotes": "v2.29: Nuevas señales de respaldo verificadas y optimización de menor lag/buffering para ESPN Brasil y ESPN México."
 }
