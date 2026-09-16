@@ -5,8 +5,8 @@ https://d3epa8orr2qy3m.cloudfront.net/ts:abr.m3u8
 https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_baja/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Trece
 dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Unicanal
-dailymotion://k41tDnJts45CTVHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="http://45.170.130.224:8000/play/a03o/index.m3u8|dailymotion://k41tDnJts45CTVHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/",Unicanal
+http://45.170.130.224:8000/play/a04y/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Latele
 https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",C9N
@@ -23,8 +23,8 @@ https://stream1.sersat.com/hls/garagetv.m3u8
 desdeparaguay://gentv
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="General",TV Pública (Argentina)
 https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento",Telefe Internacional (Argentina)
-http://200.91.32.158:8080/telefehdvalle/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento" backup-url="http://45.170.130.224:8000/play/a03n/index.m3u8",Telefe Internacional (Argentina)
+http://38.44.109.41:8003/play/a0ev/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Paravisión
 http://45.170.130.224:8000/play/a032/index.m3u8?hls
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",E40

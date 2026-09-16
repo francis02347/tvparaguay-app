@@ -650,6 +650,14 @@ public class PlayerActivity extends AppCompatActivity {
                         if (!videoId.equals("k3C8CLhvjDCJadHcyD4")) videoCandidates.add("k3C8CLhvjDCJadHcyD4");
                     }
 
+                    String origin = null;
+                    if (referer != null && !referer.isEmpty()) {
+                        try {
+                            Uri u = Uri.parse(referer);
+                            origin = u.getScheme() + "://" + u.getHost();
+                        } catch (Exception ignored) {}
+                    }
+
                     for (String candidateId : videoCandidates) {
                         String metadataUrl = "https://www.dailymotion.com/player/metadata/video/" + candidateId;
                         if (embedder != null && !embedder.isEmpty()) {
@@ -661,6 +669,9 @@ public class PlayerActivity extends AppCompatActivity {
                         conn.setRequestMethod("GET");
                         conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
                         conn.setRequestProperty("Referer", referer);
+                        if (origin != null && !origin.isEmpty()) {
+                            conn.setRequestProperty("Origin", origin);
+                        }
                         conn.setConnectTimeout(12000);
                         conn.setReadTimeout(12000);
 
@@ -709,6 +720,9 @@ public class PlayerActivity extends AppCompatActivity {
                                                 m3u8Conn.setRequestMethod("GET");
                                                 m3u8Conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
                                                 m3u8Conn.setRequestProperty("Referer", referer);
+                                                if (origin != null && !origin.isEmpty()) {
+                                                    m3u8Conn.setRequestProperty("Origin", origin);
+                                                }
                                                 if (!cookieStr.isEmpty()) {
                                                     m3u8Conn.setRequestProperty("Cookie", cookieStr);
                                                 }
@@ -730,10 +744,14 @@ public class PlayerActivity extends AppCompatActivity {
                                                     if (!variants.isEmpty()) {
                                                         String bestVariant = variants.get(0);
                                                         for (String v : variants) {
-                                                            if (v.contains("live-480") || v.contains("live-720")) {
+                                                            if (v.contains("live-480") || v.contains("live-720") || v.contains("live-1080")) {
                                                                 bestVariant = v;
                                                                 break;
                                                             }
+                                                        }
+                                                        int hashIdx = bestVariant.indexOf('#');
+                                                        if (hashIdx >= 0) {
+                                                            bestVariant = bestVariant.substring(0, hashIdx);
                                                         }
                                                         if (bestVariant.startsWith("http")) {
                                                             finalPlayUrl = bestVariant;
@@ -763,12 +781,6 @@ public class PlayerActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                // Fallback automático para ABC TV a su transmisión oficial de YouTube
-                String chName = ch.getName() != null ? ch.getName().toLowerCase() : "";
-                if (chName.contains("abc") || videoIdInput.contains("kQRS6ZAjGuMkByE4Mtc")) {
-                    resolveYouTubeAndPlay("@ABCParaguay", ch);
-                    return;
-                }
 
                 handler.post(new Runnable() {
                     @Override
@@ -976,6 +988,11 @@ public class PlayerActivity extends AppCompatActivity {
             headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
             if (referer != null && !referer.isEmpty()) {
                 headers.put("Referer", referer);
+                try {
+                    Uri u = Uri.parse(referer);
+                    String origin = u.getScheme() + "://" + u.getHost();
+                    headers.put("Origin", origin);
+                } catch (Exception ignored) {}
             }
             if (cookieStr != null && !cookieStr.isEmpty()) {
                 headers.put("Cookie", cookieStr);
