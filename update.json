@@ -1,6 +1,6 @@
 {
-  "versionCode": 127,
-  "versionName": "2.29",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.29/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.29."
+  "versionCode": 128,
+  "versionName": "2.30",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.30/app-website-release.apk",
+  "releaseNotes": "v2.30: Reparación integral de TyC Sports (Señal oficial HD nativa en 1080p a 60fps con dos señales de respaldo de alta velocidad)."
 }

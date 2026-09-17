@@ -165,8 +165,8 @@ https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c
 https://ztnr.rtve.es/ztnr/1694263.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Tennis Channel (Internacional)
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischnlintl-lggb/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" backup-url="http://45.170.130.224:8000/play/a020/index.m3u8" group-title="Sports",TyC Sports
-http://38.44.109.41:8003/play/a02l/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" backup-url="http://200.60.97.100:28888/play/a01c/index.m3u8|http://45.170.130.224:8000/play/a020/index.m3u8" group-title="Sports",TyC Sports
+http://181.209.38.115:8000/play/a00k/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",Waypoint TV (Estados Unidos)
 https://waypoint-waypointtv-firetv.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",beIN Sports XTRA en Español (1080p)
@@ -620,7 +620,7 @@ https://cnn.hostlagarto.com/televida/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Trece España (1080p)
 http://92.176.119.180:2095/play/a179
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",TyC Sports USA
-http://45.181.87.106/TYCSPORTSHD/index.m3u8
+http://200.60.97.100:28888/play/a01c/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Culture;Education;News",UMSA TVU LP (720p)
 https://live.enhdtv.com:8081/8190/tracks-v1a1/mono.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Undefined",UMTV (1080p) [Not 24/7]
