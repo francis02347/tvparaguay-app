@@ -219,19 +219,21 @@
     },
     {
       "name": "Arena Sport 1",
-      "url": "https://kusnadipepenk.github.io/ntn/arns1.m3u8",
-      "raw_url": "https://kusnadipepenk.github.io/ntn/arns1.m3u8",
+      "url": "http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1515.m3u8",
+      "raw_url": "http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1515.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 28
+      "number": 28,
+      "backup_url": "http://88.212.15.19/live/test_arenasport/playlist.m3u8"
     },
     {
       "name": "Arena Sport 2",
-      "url": "https://kusnadipepenk.github.io/ntn/arns2.m3u8",
-      "raw_url": "https://kusnadipepenk.github.io/ntn/arns2.m3u8",
+      "url": "http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1514.m3u8",
+      "raw_url": "http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1514.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 29
+      "number": 29,
+      "backup_url": "http://88.212.15.19/live/test_arenasport_dva/playlist.m3u8"
     },
     {
       "name": "Azteca Deportes Network",

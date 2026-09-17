@@ -1,6 +1,6 @@
 {
-  "versionCode": 128,
-  "versionName": "2.30",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.30/app-website-release.apk",
-  "releaseNotes": "v2.30: Reparación integral de TyC Sports (Señal oficial HD nativa en 1080p a 60fps con dos señales de respaldo de alta velocidad)."
+  "versionCode": 129,
+  "versionName": "2.31",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.31/app-website-release.apk",
+  "releaseNotes": "v2.31: Reparación integral de Arena Sport 1 y Arena Sport 2 en Full HD 1080p con señales de respaldo; eliminación del selector de calidad no funcional para reproducción nativa directa."
 }

@@ -81,7 +81,6 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView tvChannelName;
     private View topBar;
     private TextView btnSignal;
-    private TextView btnQuality;
     private TextView btnFavorite;
     private int activeSignalIndex = 0;
     private int triedSignalsCount = 0;
@@ -111,8 +110,6 @@ public class PlayerActivity extends AppCompatActivity {
     // ─── Estado ───────────────────────────────────────────────────────────────
     public static volatile boolean isPlayerActive = false;
     private static final String PREFS_NAME = "tvpy_prefs";
-    private static final String PREF_KEY_QUALITY_MODE = "pref_quality_fluid_mode";
-    private boolean isFluidMode = true;
 
     private ExoPlayer player;
     private List<Channel> channelList;
@@ -183,7 +180,6 @@ public class PlayerActivity extends AppCompatActivity {
         tvChannelName      = findViewById(R.id.tvChannelName);
         topBar             = findViewById(R.id.topBar);
         btnSignal          = findViewById(R.id.btnSignal);
-        btnQuality         = findViewById(R.id.btnQuality);
         btnFavorite        = findViewById(R.id.btnFavorite);
         overlayContainer   = findViewById(R.id.overlayContainer);
         overlayEmoji       = findViewById(R.id.overlayEmoji);
@@ -269,24 +265,6 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        android.content.SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if (prefs.contains(PREF_KEY_QUALITY_MODE)) {
-            isFluidMode = prefs.getBoolean(PREF_KEY_QUALITY_MODE, true);
-        } else {
-            isFluidMode = isTvBoxOrTelevision();
-        }
-        updateQualityButtonUi();
-
-        if (btnQuality != null) {
-            btnQuality.setOnClickListener(v -> toggleQualityMode());
-            btnQuality.setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus) {
-                    v.animate().scaleX(1.15f).scaleY(1.15f).setDuration(150).start();
-                } else {
-                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
-                }
-            });
-        }
 
         // Gestos (tap → topBar; fling → navegar)
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
@@ -373,7 +351,6 @@ public class PlayerActivity extends AppCompatActivity {
                 .setLoadControl(loadControl)
                 .build();
 
-        applyVideoTrackParameters();
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
         playerView.setPlayer(player);
@@ -1068,8 +1045,8 @@ public class PlayerActivity extends AppCompatActivity {
             updateFavoriteButton(ch.getUrl());
             showChannelOverlay(ch, currentIndex);
         }
-        if (btnQuality != null) {
-            btnQuality.requestFocus();
+        if (btnSignal != null && btnSignal.getVisibility() == View.VISIBLE) {
+            btnSignal.requestFocus();
         } else if (btnFavorite != null) {
             btnFavorite.requestFocus();
         }
@@ -1077,7 +1054,7 @@ public class PlayerActivity extends AppCompatActivity {
         handler.postDelayed(hideTopBarRunnable, TOPBAR_AUTOHIDE_MS);
     }
 
-    private void showTopBarWithFocusOnQuality() {
+    private void showTopBarWithFocus() {
         if (topBar == null) return;
         if (hideTopBarRunnable != null) handler.removeCallbacks(hideTopBarRunnable);
         topBar.animate().cancel();
@@ -1088,8 +1065,8 @@ public class PlayerActivity extends AppCompatActivity {
             updateFavoriteButton(ch.getUrl());
             showChannelOverlay(ch, currentIndex);
         }
-        if (btnQuality != null) {
-            btnQuality.requestFocus();
+        if (btnSignal != null && btnSignal.getVisibility() == View.VISIBLE) {
+            btnSignal.requestFocus();
         } else if (btnFavorite != null) {
             btnFavorite.requestFocus();
         }
@@ -1304,43 +1281,6 @@ public class PlayerActivity extends AppCompatActivity {
         return false;
     }
 
-    private void toggleQualityMode() {
-        isFluidMode = !isFluidMode;
-        getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit().putBoolean(PREF_KEY_QUALITY_MODE, isFluidMode).apply();
-        updateQualityButtonUi();
-        applyVideoTrackParameters();
-        String msg = isFluidMode ? "⚡ Modo Fluido (720p / 30fps) activado" : "💎 Modo HD (1080p / 60fps) activado";
-        android.widget.Toast.makeText(this, msg, android.widget.Toast.LENGTH_SHORT).show();
-    }
-
-    private void updateQualityButtonUi() {
-        if (btnQuality == null) return;
-        if (isFluidMode) {
-            btnQuality.setText("⚡ 720p Fluido");
-            btnQuality.setTextColor(android.graphics.Color.parseColor("#00F2FE"));
-        } else {
-            btnQuality.setText("💎 1080p HD");
-            btnQuality.setTextColor(android.graphics.Color.parseColor("#FFD700"));
-        }
-    }
-
-    private void applyVideoTrackParameters() {
-        if (player == null) return;
-        TrackSelectionParameters.Builder trackParams = player.getTrackSelectionParameters().buildUpon()
-                .setForceHighestSupportedBitrate(false);
-
-        if (isFluidMode) {
-            // Modo Fluido: limita a 720p y 30fps para decodificación ultra ligera y fluida sin saturar la TV Box
-            trackParams.setMaxVideoSize(1280, 720)
-                       .setMaxVideoFrameRate(30);
-        } else {
-            // Modo Máxima Calidad: permite hasta 1080p 60fps
-            trackParams.setMaxVideoSize(1920, 1080)
-                       .setMaxVideoFrameRate(60);
-        }
-        player.setTrackSelectionParameters(trackParams.build());
-    }
-
     private MediaItem createLiveMediaItem(Uri uri) {
         // Configuración de sincronización en vivo adaptativa:
         // Permite micro-ajustes naturales de velocidad (0.96x - 1.04x) para absorber fluctuaciones de red
@@ -1470,7 +1410,7 @@ public class PlayerActivity extends AppCompatActivity {
                 if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
                     hideTopBarNow();
                 } else {
-                    showTopBarWithFocusOnQuality();
+                    showTopBarWithFocus();
                 }
                 return true;
 

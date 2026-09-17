@@ -53,10 +53,10 @@ https://video.hostingcaaguazu.com:19360/reddigitalsanpedro/reddigitalsanpedro.m3
 https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Venus Media
 https://tigocloud.desdeparaguay.net/venusmedia/venusmedia/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Arena Sport 1
-https://kusnadipepenk.github.io/ntn/arns1.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Arena Sport 2
-https://kusnadipepenk.github.io/ntn/arns2.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes" backup-url="http://88.212.15.19/live/test_arenasport/playlist.m3u8",Arena Sport 1
+http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1515.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes" backup-url="http://88.212.15.19/live/test_arenasport_dva/playlist.m3u8",Arena Sport 2
+http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1514.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="México" group-title="Sports",Azteca Deportes Network
 http://181.119.66.28:8081/AZTECA-DEPORTES-HD/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",beIN Sports XTRA en Español
