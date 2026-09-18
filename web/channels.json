@@ -1,5 +1,5 @@
 {
-  "total": 154,
+  "total": 155,
   "channels": [
     {
       "name": "SNT",
@@ -207,7 +207,16 @@
       "raw_url": "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
-      "number": 26
+      "number": 26,
+      "backup_url": "http://45.170.130.224:8000/play/a04k/index.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/novasports001/playlist.m3u8"
+    },
+    {
+      "name": "Tigo Sports+ (Solo Eventos)",
+      "url": "http://45.170.130.224:8000/play/a04i/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a04i/index.m3u8",
+      "logo": "",
+      "category": "Nacionales (Paraguay)",
+      "number": 27
     },
     {
       "name": "Venus Media",
@@ -215,7 +224,7 @@
       "raw_url": "https://tigocloud.desdeparaguay.net/venusmedia/venusmedia/playlist.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
-      "number": 27
+      "number": 28
     },
     {
       "name": "Arena Sport 1",
@@ -223,7 +232,7 @@
       "raw_url": "http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1515.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 28,
+      "number": 29,
       "backup_url": "http://88.212.15.19/live/test_arenasport/playlist.m3u8"
     },
     {
@@ -232,7 +241,7 @@
       "raw_url": "http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1514.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 29,
+      "number": 30,
       "backup_url": "http://88.212.15.19/live/test_arenasport_dva/playlist.m3u8"
     },
     {
@@ -241,7 +250,7 @@
       "raw_url": "http://181.119.66.28:8081/AZTECA-DEPORTES-HD/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 30
+      "number": 31
     },
     {
       "name": "beIN Sports XTRA en Español",
@@ -249,7 +258,7 @@
       "raw_url": "https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 31
+      "number": 32
     },
     {
       "name": "Claro Sports",
@@ -257,7 +266,7 @@
       "raw_url": "https://dai.google.com/linear/hls/event/_OKWx76jT7mivD6d-25QAw/master.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 32
+      "number": 33
     },
     {
       "name": "DAZN 1",
@@ -265,7 +274,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31830/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 33
+      "number": 34
     },
     {
       "name": "DAZN 2",
@@ -273,7 +282,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31832/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 34
+      "number": 35
     },
     {
       "name": "DAZN 3 Bar HD",
@@ -281,7 +290,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31861/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 35
+      "number": 36
     },
     {
       "name": "DAZN 4 Bar HD",
@@ -289,7 +298,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31862/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 36
+      "number": 37
     },
     {
       "name": "DAZN Combat",
@@ -297,7 +306,7 @@
       "raw_url": "https://jmp2.uk/plu-64d626ac9b414d000820e2fc.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 37
+      "number": 38
     },
     {
       "name": "DAZN F1",
@@ -305,7 +314,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31834/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 38
+      "number": 39
     },
     {
       "name": "DAZN LaLiga",
@@ -313,7 +322,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31856/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 39
+      "number": 40
     },
     {
       "name": "Deportes TVC (1080p)",
@@ -321,7 +330,7 @@
       "raw_url": "http://190.11.225.124:5000/live/deportes_tvc_hd/playlist.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 40
+      "number": 41
     },
     {
       "name": "DSports (DirecTV Sports)",
@@ -329,7 +338,7 @@
       "raw_url": "http://187.102.208.209:8000/play/a09n/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 41
+      "number": 42
     },
     {
       "name": "DSports 2",
@@ -337,7 +346,7 @@
       "raw_url": "http://200.60.97.100:28888/play/a0c8/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 42
+      "number": 43
     },
     {
       "name": "DSports+",
@@ -345,7 +354,7 @@
       "raw_url": "http://200.60.97.100:28888/play/a0c9/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 43
+      "number": 44
     },
     {
       "name": "ESPN (Brasil)",
@@ -353,7 +362,7 @@
       "raw_url": "https://cdn-5.nxplay.com.br/ESPN/tracks-v3a1/mono.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 44,
+      "number": 45,
       "backup_url": "https://cdn-5.nxplay.com.br/ESPN/tracks-v2a1/mono.m3u8"
     },
     {
@@ -362,7 +371,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a00b/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 45
+      "number": 46
     },
     {
       "name": "ESPN (Señal Principal)",
@@ -370,7 +379,7 @@
       "raw_url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 46,
+      "number": 47,
       "backup_url": "http://38.44.109.41:8003/play/a0hc/index.m3u8|http://45.170.130.224:8000/play/a04l/index.m3u8"
     },
     {
@@ -379,7 +388,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a02z/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 47
+      "number": 48
     },
     {
       "name": "ESPN 2",
@@ -387,7 +396,7 @@
       "raw_url": "http://181.78.197.59:8000/play/a080/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 48,
+      "number": 49,
       "backup_url": "http://38.44.109.41:8003/play/a0gd/index.m3u8|http://45.170.130.224:8000/play/a01x/index.m3u8"
     },
     {
@@ -396,7 +405,7 @@
       "raw_url": "https://cdn-5.nxplay.com.br/ESPN_2/tracks-v3a1/mono.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 49,
+      "number": 50,
       "backup_url": "https://cdn-5.nxplay.com.br/ESPN_2/tracks-v2a1/mono.m3u8"
     },
     {
@@ -405,7 +414,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a00d/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 50
+      "number": 51
     },
     {
       "name": "ESPN 3",
@@ -413,7 +422,7 @@
       "raw_url": "http://181.78.197.59:8000/play/a081/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 51,
+      "number": 52,
       "backup_url": "http://38.44.109.41:8003/play/a0gq/index.m3u8|http://45.170.130.224:8000/play/a03s/index.m3u8"
     },
     {
@@ -422,7 +431,7 @@
       "raw_url": "https://cdn-5.nxplay.com.br/ESPN_3/tracks-v3a1/mono.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 52,
+      "number": 53,
       "backup_url": "https://cdn-5.nxplay.com.br/ESPN_3/tracks-v2a1/mono.m3u8"
     },
     {
@@ -431,7 +440,7 @@
       "raw_url": "http://181.78.197.59:8000/play/a07n/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 53,
+      "number": 54,
       "backup_url": "http://38.44.109.41:8003/play/a0i4/index.m3u8|http://45.170.130.224:8000/play/a01w/index.m3u8"
     },
     {
@@ -440,7 +449,7 @@
       "raw_url": "https://cdn-5.nxplay.com.br/ESPN_4/tracks-v3a1/mono.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 54,
+      "number": 55,
       "backup_url": "https://cdn-5.nxplay.com.br/ESPN_4/tracks-v2a1/mono.m3u8"
     },
     {
@@ -449,7 +458,7 @@
       "raw_url": "http://181.78.197.59:8000/play/a074/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 55,
+      "number": 56,
       "backup_url": "http://38.44.109.41:8003/play/a0ge/index.m3u8|http://38.44.109.41:8003/play/a0g0/index.m3u8"
     },
     {
@@ -458,7 +467,7 @@
       "raw_url": "http://181.78.197.59:8000/play/a08c/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 56,
+      "number": 57,
       "backup_url": "http://38.44.109.41:8003/play/a0g7/index.m3u8|http://38.44.109.41:8003/play/a0gm/index.m3u8"
     },
     {
@@ -467,7 +476,7 @@
       "raw_url": "http://181.78.197.59:8000/play/a06a/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 57,
+      "number": 58,
       "backup_url": "http://38.44.109.41:8003/play/a0hx/index.m3u8|http://38.44.109.41:8003/play/a0ci/index.m3u8"
     },
     {
@@ -476,7 +485,7 @@
       "raw_url": "http://hls1.sua.tv/live/espnextrafhd/s.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 58,
+      "number": 59,
       "backup_url": "http://hls1.sua.tv/live/espnextrahd/s.m3u8"
     },
     {
@@ -485,7 +494,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a00f/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 59
+      "number": 60
     },
     {
       "name": "ESPN8: The Ocho",
@@ -493,7 +502,7 @@
       "raw_url": "https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 60
+      "number": 61
     },
     {
       "name": "FIFA+ Spain (720p)",
@@ -501,7 +510,7 @@
       "raw_url": "https://d63fabad.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWVzX0ZJRkFQbHVzU3BhbmlzaF9ITFM/playlist.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 61
+      "number": 62
     },
     {
       "name": "FOX (Estados Unidos)",
@@ -509,7 +518,7 @@
       "raw_url": "https://aegis-cloudfront-1.tubi.video/8d9284ec-c451-4e51-a1d4-d16e5c8972af/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 62
+      "number": 63
     },
     {
       "name": "Fox Deportes",
@@ -517,7 +526,7 @@
       "raw_url": "http://23.237.104.106:8080/USA_FOX_DEPORTES/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 63
+      "number": 64
     },
     {
       "name": "Fox Sports 1",
@@ -525,7 +534,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a00g/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 64
+      "number": 65
     },
     {
       "name": "Fox Sports 2",
@@ -533,7 +542,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a00h/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 65
+      "number": 66
     },
     {
       "name": "Fox Sports 3",
@@ -541,7 +550,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a00i/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 66
+      "number": 67
     },
     {
       "name": "TNT Sports",
@@ -549,7 +558,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a00j/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 67
+      "number": 68
     },
     {
       "name": "FS1 (Estados Unidos)",
@@ -557,7 +566,7 @@
       "raw_url": "http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 68
+      "number": 69
     },
     {
       "name": "Golazo Network",
@@ -565,7 +574,7 @@
       "raw_url": "https://jmp2.uk/plu-63a0e33a45264d000850ed7e.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 69
+      "number": 70
     },
     {
       "name": "GolTV Latinoamérica",
@@ -573,7 +582,7 @@
       "raw_url": "http://177.234.249.178:8888/GOLTV/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 70
+      "number": 71
     },
     {
       "name": "ITV Deportes (720p)",
@@ -581,7 +590,7 @@
       "raw_url": "https://thm-it-roku.otteravision.com/thm/it/it.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 71
+      "number": 72
     },
     {
       "name": "M+ LaLiga TV HD",
@@ -589,7 +598,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31853/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 72
+      "number": 73
     },
     {
       "name": "M+ LaLiga TV 2 HD",
@@ -597,7 +606,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31854/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 73
+      "number": 74
     },
     {
       "name": "M+ Liga de Campeones HD",
@@ -605,7 +614,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31842/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 74
+      "number": 75
     },
     {
       "name": "M+ Liga de Campeones 2 HD",
@@ -613,7 +622,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31860/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 75
+      "number": 76
     },
     {
       "name": "M+ Vamos HD",
@@ -621,7 +630,7 @@
       "raw_url": "http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31867/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 76
+      "number": 77
     },
     {
       "name": "Motorvision TV (Español)",
@@ -629,7 +638,7 @@
       "raw_url": "https://mvg-mv-xumo.otteravision.com/mvg/mv/mv.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 77
+      "number": 78
     },
     {
       "name": "Rally TV (Internacional)",
@@ -637,7 +646,7 @@
       "raw_url": "https://rally-tv-live.akamaized.net/hls/live/2117704/RallyTV-Pri/master.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 78
+      "number": 79
     },
     {
       "name": "Real Madrid TV",
@@ -645,7 +654,7 @@
       "raw_url": "https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 79
+      "number": 80
     },
     {
       "name": "Red Bull TV (Español)",
@@ -653,7 +662,7 @@
       "raw_url": "https://886bd3fbc782459f8de7555d32d7e9ce.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-957-WORBLATAMESFAST-WHALETVPLUS/957/whaletvplus/hls/master/playlist.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 80
+      "number": 81
     },
     {
       "name": "SuperTennis (Italia)",
@@ -661,7 +670,7 @@
       "raw_url": "https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c0-16/restreamer/outgest/aa3673f1-e178-44a9-a947-ef41db73211a/manifest.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 81
+      "number": 82
     },
     {
       "name": "Teledeporte (1080p)",
@@ -669,7 +678,7 @@
       "raw_url": "https://ztnr.rtve.es/ztnr/1694263.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 82
+      "number": 83
     },
     {
       "name": "Tennis Channel (Internacional)",
@@ -677,7 +686,7 @@
       "raw_url": "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischnlintl-lggb/playlist.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 83
+      "number": 84
     },
     {
       "name": "TyC Sports",
@@ -685,7 +694,7 @@
       "raw_url": "http://181.209.38.115:8000/play/a00k/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 84,
+      "number": 85,
       "backup_url": "http://200.60.97.100:28888/play/a01c/index.m3u8|http://45.170.130.224:8000/play/a020/index.m3u8"
     },
     {
@@ -694,7 +703,7 @@
       "raw_url": "https://waypoint-waypointtv-firetv.amagi.tv/playlist.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 85
+      "number": 86
     },
     {
       "name": "beIN Sports XTRA en Español (1080p)",
@@ -702,7 +711,7 @@
       "raw_url": "https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 86
+      "number": 87
     },
     {
       "name": "DW en Español",
@@ -710,7 +719,7 @@
       "raw_url": "https://dwamdstream104.akamaized.net/hls/live/2015530/dwstream104/index.m3u8",
       "logo": "",
       "category": "Noticias",
-      "number": 87
+      "number": 88
     },
     {
       "name": "Euronews en Español",
@@ -718,7 +727,7 @@
       "raw_url": "https://jmp2.uk/plu-60d3583ef310610007fb02b1.m3u8",
       "logo": "",
       "category": "Noticias",
-      "number": 88
+      "number": 89
     },
     {
       "name": "France 24 Español",
@@ -726,7 +735,7 @@
       "raw_url": "https://live.france24.com/hls/live/2037220-b/F24_ES_HI_HLS/master_5000.m3u8",
       "logo": "",
       "category": "Noticias",
-      "number": 89
+      "number": 90
     },
     {
       "name": "RDN (1080p) [Not 24/7]",
@@ -734,7 +743,7 @@
       "raw_url": "https://edge.essastream.com/rdntv/tracks-v1a1/mono.m3u8",
       "logo": "",
       "category": "Noticias",
-      "number": 90
+      "number": 91
     },
     {
       "name": "RT en Español",
@@ -742,7 +751,7 @@
       "raw_url": "https://rt-esp.rttv.com/live/rtesp/playlist.m3u8",
       "logo": "",
       "category": "Noticias",
-      "number": 91
+      "number": 92
     },
     {
       "name": "Sky News (Inglés)",
@@ -750,7 +759,7 @@
       "raw_url": "https://xumo-drct-skynews-nc91a.fast.nbcuni.com/live/master.m3u8",
       "logo": "",
       "category": "Noticias",
-      "number": 92
+      "number": 93
     },
     {
       "name": "Best of Dance TV (1080p)",
@@ -758,7 +767,7 @@
       "raw_url": "https://m1b2.worldcast.tv/dancetelevisionone/dancetelevisionone.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 93
+      "number": 94
     },
     {
       "name": "Clubbing TV (720p)",
@@ -766,7 +775,7 @@
       "raw_url": "https://a-cdn.klowdtv.com/live3/clubbingtv_720p/playlist.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 94
+      "number": 95
     },
     {
       "name": "DanceTV Deep House (1080p)",
@@ -774,7 +783,7 @@
       "raw_url": "https://m1b2.worldcast.tv/dancetelevisiontwo/dancetelevisiontwo.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 95
+      "number": 96
     },
     {
       "name": "DanceTV Techno Warehouse (720p)",
@@ -782,7 +791,7 @@
       "raw_url": "https://m2b2.worldcast.tv:7443/dancetelevisionthree/dancetelevisionthree.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 96
+      "number": 97
     },
     {
       "name": "Farra Play (720p) [Not 24/7]",
@@ -790,7 +799,7 @@
       "raw_url": "http://159.203.148.226/live/farra.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 97
+      "number": 98
     },
     {
       "name": "NOW 70s (720p)",
@@ -798,7 +807,7 @@
       "raw_url": "https://lightning-now70s-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-lightning-now70s-rakuten/CDN/playlist.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 98
+      "number": 99
     },
     {
       "name": "NOW 80s (1080p)",
@@ -806,7 +815,7 @@
       "raw_url": "https://lightning-now80s-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-lightning-now80s-rakuten/CDN/playlist.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 99
+      "number": 100
     },
     {
       "name": "NOW 90s00s (1080p)",
@@ -814,7 +823,7 @@
       "raw_url": "https://amg01076-amg01076c19-rakuten-gb-8653.playouts.now.amagi.tv/playlist/amg01076-lightning-now90s00s-rakutengb/playlist.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 100
+      "number": 101
     },
     {
       "name": "NOW Rock (1080p)",
@@ -822,7 +831,7 @@
       "raw_url": "https://lightning-now90s-samsungnz.amagi.tv/playlist.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 101
+      "number": 102
     },
     {
       "name": "Radio Ibiza TV (720p)",
@@ -830,7 +839,7 @@
       "raw_url": "https://5929b138b139d.streamlock.net/RadioIbizaTV/livestream/playlist.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 102
+      "number": 103
     },
     {
       "name": "Stingray Classica (1080p)",
@@ -838,7 +847,7 @@
       "raw_url": "https://lotus.stingray.com/manifest/classica-cla008-montreal/samsungtvplus/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 103
+      "number": 104
     },
     {
       "name": "Stingray Greatest Holiday Hits",
@@ -846,7 +855,7 @@
       "raw_url": "https://d39g1vxj2ef6in.cloudfront.net/v1/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-rakuten-stitched/54947915-6504-4548-aaef-eabd451f8607/1.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 104
+      "number": 105
     },
     {
       "name": "Stingray Karaoke (1080p)",
@@ -854,7 +863,7 @@
       "raw_url": "https://lotus.stingray.com/manifest/karaoke-kar000-montreal/samsungtvplus/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 105
+      "number": 106
     },
     {
       "name": "Stingray Naturescape (1080p)",
@@ -862,7 +871,7 @@
       "raw_url": "https://lotus.stingray.com/manifest/naturescape-a003-montreal/samsungtvplus/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 106
+      "number": 107
     },
     {
       "name": "Stingray Romance Latino (1080p)",
@@ -870,7 +879,7 @@
       "raw_url": "https://lotus.stingray.com/manifest/ose-202ads-montreal/samsungtvplus/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 107
+      "number": 108
     },
     {
       "name": "Stingray Today's Latin Pop (1080p)",
@@ -878,7 +887,7 @@
       "raw_url": "https://lotus.stingray.com/manifest/ose-190ads-montreal/samsungtvplus/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 108
+      "number": 109
     },
     {
       "name": "Stingray Urban Beat (1080p)",
@@ -886,7 +895,7 @@
       "raw_url": "https://lotus.stingray.com/manifest/ose-133ads-montreal/samsungtvplus/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 109
+      "number": 110
     },
     {
       "name": "Studio 29",
@@ -894,7 +903,7 @@
       "raw_url": "http://38.210.3.64:8090/play/a0p7/index.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 110
+      "number": 111
     },
     {
       "name": "Totalmusic (1080p)",
@@ -902,7 +911,7 @@
       "raw_url": "https://cdn.global.elektamedia.com/live/c7eds/Totalmusic/SA_LIVE_hls_enc/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 111
+      "number": 112
     },
     {
       "name": "Totalmusic 2000s (720p)",
@@ -910,7 +919,7 @@
       "raw_url": "https://cdn.global.elektamedia.com/live/c7eds/Totalmusic_00s/SA_LIVE_hls_enc/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 112
+      "number": 113
     },
     {
       "name": "Totalmusic 80s (720p)",
@@ -918,7 +927,7 @@
       "raw_url": "https://cdn.global.elektamedia.com/live/c7eds/Totalmusic_80s/SA_LIVE_hls_enc/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 113
+      "number": 114
     },
     {
       "name": "Totalmusic Concerts (720p)",
@@ -926,7 +935,7 @@
       "raw_url": "https://cdn.global.elektamedia.com/live/c7eds/Totalmusic_Concerts/SA_LIVE_hls_enc/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 114
+      "number": 115
     },
     {
       "name": "Totalmusic Dance (720p)",
@@ -934,7 +943,7 @@
       "raw_url": "https://cdn.global.elektamedia.com/live/c7eds/Totalmusic_Dance/SA_LIVE_hls_enc/master.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 115
+      "number": 116
     },
     {
       "name": "Vevo Latino (1080p)",
@@ -942,7 +951,7 @@
       "raw_url": "https://amg00056-amg00056c13-rakuten-es-3246.playouts.now.amagi.tv/playlist.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 116
+      "number": 117
     },
     {
       "name": "Vevo Pop (1080p)",
@@ -950,7 +959,7 @@
       "raw_url": "https://amg00056-amg00056c6-rakuten-uk-3235.playouts.now.amagi.tv/playlist.m3u8",
       "logo": "",
       "category": "Música & Radio",
-      "number": 117
+      "number": 118
     },
     {
       "name": "Andalucía Cocina (1080p)",
@@ -958,7 +967,7 @@
       "raw_url": "https://cloud.fastchannel.es/mic/manifiest/hls/acocina/acocina.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 118
+      "number": 119
     },
     {
       "name": "Azteca Internacional (México)",
@@ -966,7 +975,7 @@
       "raw_url": "https://azt-mun.otteravision.com/azt/mun/mun.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 119
+      "number": 120
     },
     {
       "name": "CBN Español (1080p)",
@@ -974,7 +983,7 @@
       "raw_url": "https://fastly.live.brightcove.com/6383462549112/us-east-1/734546207001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoiczFpM3ZpLmVncmVzcy50N2M3emwiLCJhY2NvdW50X2lkIjoiNzM0NTQ2MjA3MDAxIiwiZWhuIjoiZmFzdGx5LmxpdmUuYnJpZ2h0Y292ZS5jb20iLCJpc3MiOiJibGl2ZS1wbGF5YmFjay1zb3VyY2UtYXBpIiwic3ViIjoicGF0aG1hcHRva2VuIiwiYXVkIjpbIjczNDU0NjIwNzAwMSJdLCJqdGkiOiI2MzgzNDYyNTQ5MTEyIn0.g04lznsvgqgIXQt2ZH0H_tWtIeTsMgGjVORsjOJ0T6U/playlist-hls.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 120
+      "number": 121
     },
     {
       "name": "Caracol TV (Colombia)",
@@ -982,7 +991,7 @@
       "raw_url": "http://177.234.249.178:8888/CARACOL/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 121
+      "number": 122
     },
     {
       "name": "Chilevisión (Chile)",
@@ -990,7 +999,7 @@
       "raw_url": "http://181.119.185.32:8000/play/a026/index.m3u8?hls",
       "logo": "",
       "category": "Internacionales",
-      "number": 122
+      "number": 123
     },
     {
       "name": "Discovery Channel (Español)",
@@ -998,7 +1007,7 @@
       "raw_url": "http://190.108.93.180:8000/play/a03u/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 123
+      "number": 124
     },
     {
       "name": "Discovery Home & Health (Español)",
@@ -1006,7 +1015,7 @@
       "raw_url": "http://187.245.231.226:8000/play/a0u5/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 124
+      "number": 125
     },
     {
       "name": "Discovery Kids (Español)",
@@ -1014,7 +1023,7 @@
       "raw_url": "http://190.108.93.180:8000/play/a05s/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 125
+      "number": 126
     },
     {
       "name": "Discovery Turbo (Estados Unidos)",
@@ -1022,7 +1031,7 @@
       "raw_url": "http://181.119.177.253:8000/play/a04k/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 126
+      "number": 127
     },
     {
       "name": "Discovery World (Español)",
@@ -1030,7 +1039,7 @@
       "raw_url": "http://187.245.231.226:8000/play/a0q1/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 127
+      "number": 128
     },
     {
       "name": "EWTN Spain & Latin America (720p)",
@@ -1038,7 +1047,7 @@
       "raw_url": "https://cdn3.wowza.com/1/SmVrQmZCUXZhVDgz/b3J3MFJv/hls/live/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 128
+      "number": 129
     },
     {
       "name": "Enlace (720p)",
@@ -1046,7 +1055,7 @@
       "raw_url": "https://livecdn.enlace.plus/enlace/smil:enlace-hd.smil/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 129
+      "number": 130
     },
     {
       "name": "Historia (España)",
@@ -1054,7 +1063,7 @@
       "raw_url": "https://d1k3vzh2ivy22k.cloudfront.net/Historia1080.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 130
+      "number": 131
     },
     {
       "name": "Historia y Vida",
@@ -1062,7 +1071,7 @@
       "raw_url": "https://jmp2.uk/plu-67517f923a61d40008c451f0.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 131
+      "number": 132
     },
     {
       "name": "History 2 (Latinoamérica)",
@@ -1070,7 +1079,7 @@
       "raw_url": "http://45.177.114.114/HISTORY_2/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 132
+      "number": 133
     },
     {
       "name": "History Channel (Latinoamérica)",
@@ -1078,7 +1087,7 @@
       "raw_url": "http://45.177.114.114/HISTORY/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 133
+      "number": 134
     },
     {
       "name": "Investigation Discovery (ID) (Español)",
@@ -1086,7 +1095,7 @@
       "raw_url": "http://187.245.231.226:8000/play/a0q4/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 134
+      "number": 135
     },
     {
       "name": "Las Estrellas (México) [Geo-blocked]",
@@ -1094,7 +1103,7 @@
       "raw_url": "https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 135
+      "number": 136
     },
     {
       "name": "Nat Geo Wild (Español)",
@@ -1102,7 +1111,7 @@
       "raw_url": "http://187.102.208.209:8000/play/a08z/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 136
+      "number": 137
     },
     {
       "name": "National Geographic (Español)",
@@ -1110,7 +1119,7 @@
       "raw_url": "http://190.93.224.42/NAT-GEO/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 137
+      "number": 138
     },
     {
       "name": "NatureTime (Español)",
@@ -1118,7 +1127,7 @@
       "raw_url": "https://jmp2.uk/plu-681ba2729624e6275efe0044.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 138
+      "number": 139
     },
     {
       "name": "Pluto TV Animales (Español)",
@@ -1126,7 +1135,7 @@
       "raw_url": "https://jmp2.uk/plu-600ae6a78d801e0007117d21.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 139
+      "number": 140
     },
     {
       "name": "Pluto TV Documentales (Español)",
@@ -1134,7 +1143,7 @@
       "raw_url": "https://jmp2.uk/plu-5ddc503ac7ef120009b101a2.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 140
+      "number": 141
     },
     {
       "name": "Pluto TV Historia (Español)",
@@ -1142,7 +1151,7 @@
       "raw_url": "https://jmp2.uk/plu-61cd7b49543066000713b620.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 141
+      "number": 142
     },
     {
       "name": "Pluto TV Naturaleza (Español)",
@@ -1150,7 +1159,7 @@
       "raw_url": "https://jmp2.uk/plu-5dd85eac039bba0009e86d1d.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 142
+      "number": 143
     },
     {
       "name": "RT Documentary (Internacional)",
@@ -1158,7 +1167,7 @@
       "raw_url": "https://rt-rtd.rttv.com/live/rtdoc/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 143
+      "number": 144
     },
     {
       "name": "RTVE La 1",
@@ -1166,7 +1175,7 @@
       "raw_url": "https://ztnr.rtve.es/ztnr/1694255.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 144
+      "number": 145
     },
     {
       "name": "Runtime Cine y Series",
@@ -1174,7 +1183,7 @@
       "raw_url": "https://run-rt-uh-roku.otteravision.com/run/rt_uh/rt_uh.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 145
+      "number": 146
     },
     {
       "name": "Smithsonian Channel (Español)",
@@ -1182,7 +1191,7 @@
       "raw_url": "https://jmp2.uk/plu-63a084934734f30007457b2c.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 146
+      "number": 147
     },
     {
       "name": "TV Globo Bahia (Brasil)",
@@ -1190,7 +1199,7 @@
       "raw_url": "http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 147
+      "number": 148
     },
     {
       "name": "Telemundo (Estados Unidos)",
@@ -1198,7 +1207,7 @@
       "raw_url": "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 148
+      "number": 149
     },
     {
       "name": "Terra Mater WILD (Inglés)",
@@ -1206,7 +1215,7 @@
       "raw_url": "https://53ff3982.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmxheHhUVi1ldV9UZXJyYU1hdGVyV2lsZF9ITFM/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 149
+      "number": 150
     },
     {
       "name": "The Fishing & Hunting Channel",
@@ -1214,7 +1223,7 @@
       "raw_url": "http://88.212.15.19/live/test_fishing_hunting/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 150
+      "number": 151
     },
     {
       "name": "Top Gear (24/7)",
@@ -1222,7 +1231,7 @@
       "raw_url": "https://aegis-cloudfront-1.tubi.video/33ccaca5-a666-4b28-8578-55a9ab9f06d5/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 151
+      "number": 152
     },
     {
       "name": "Universo (Estados Unidos)",
@@ -1230,7 +1239,7 @@
       "raw_url": "http://187.102.210.46/universo/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 152
+      "number": 153
     },
     {
       "name": "Westv on Streaming",
@@ -1238,7 +1247,7 @@
       "raw_url": "http://38.210.3.64:8090/play/a0p8/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 153
+      "number": 154
     },
     {
       "name": "WildEarth (Inglés - Safaris en vivo)",
@@ -1246,7 +1255,7 @@
       "raw_url": "https://dqga3jatxofgx.cloudfront.net/WildEarth.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 154
+      "number": 155
     }
   ],
   "categories": [

@@ -64,6 +64,7 @@ public class EpgManager {
         if (clean.equals("c9n")) return "C9N.py";
         if (clean.contains("la tele") || clean.equals("latele")) return "latele.py";
         if (clean.contains("paraguay tv")) return "Paraguay TV.py";
+        if (clean.contains("tigo sports+")) return null;
         if (clean.contains("tigo sports")) return "Tigo Sports.py";
         return null;
     }

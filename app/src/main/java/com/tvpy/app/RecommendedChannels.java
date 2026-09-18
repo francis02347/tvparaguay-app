@@ -40,6 +40,7 @@ public class RecommendedChannels {
         "Productiva TV",
         "Red Digital",
         "Tigo Sports (Paraguay)",
+        "Tigo Sports+ (Solo Eventos)",
         "Venus Media",
         "Arena Sport 1",
         "Arena Sport 2",
