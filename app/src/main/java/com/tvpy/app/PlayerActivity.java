@@ -52,6 +52,8 @@ import androidx.media3.exoplayer.DefaultLoadControl;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
+import androidx.media3.exoplayer.upstream.DefaultLoadErrorHandlingPolicy;
+import androidx.media3.exoplayer.upstream.LoadErrorHandlingPolicy;
 import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.datasource.DefaultHttpDataSource;
@@ -121,6 +123,18 @@ public class PlayerActivity extends AppCompatActivity {
     private volatile boolean isScreenOffAudioActive = false;
     private volatile boolean wasPlayingBeforePause = false;
     private String activeStreamUrl;
+    private boolean hasInitialPlaybackStarted = false;
+    private final Runnable bufferingDebounceRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (player != null && player.getPlaybackState() == Player.STATE_BUFFERING) {
+                if (loadingContainer != null) {
+                    loadingContainer.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                }
+                showLoadingInternal();
+            }
+        }
+    };
     private String activeCookie;
     private String activeReferer;
     private String activeUserAgent;
@@ -323,31 +337,42 @@ public class PlayerActivity extends AppCompatActivity {
                 .setEnableDecoderFallback(true)
                 .setAllowedVideoJoiningTimeMs(5000);
 
-        // Control de búfer optimizado para TV Box y transmisiones en vivo:
-        // Adaptado a segmentos HLS de 2 a 6 segundos para evitar hambruna de búfer
-        // en listas de reproducción cortas (8-12s).
+        // Control de búfer Modo Estable: 35s de búfer máximo y 12s mínimo en RAM
+        // para absorber fluctuaciones de red e interrupciones sin congelar la imagen.
         DefaultLoadControl loadControl = new DefaultLoadControl.Builder()
                 .setBufferDurationsMs(
-                        4_000,  // minBufferMs: 4.0 seg (evita congelamientos en listas cortas de 8-11s)
-                        15_000, // maxBufferMs: 15 seg
-                        1_000,  // bufferForPlaybackMs: 1.0 seg (arranque inmediato sin retraso)
-                        2_000   // bufferForPlaybackAfterRebufferMs: 2.0 seg
+                        12_000, // minBufferMs: 12.0 seg (colchón sólido en RAM)
+                        35_000, // maxBufferMs: 35.0 seg (más de medio minuto de búfer)
+                        1_500,  // bufferForPlaybackMs: 1.5 seg (arranque inicial rápido)
+                        4_000   // bufferForPlaybackAfterRebufferMs: 4.0 seg (reanudación firme post corte)
                 )
                 .setPrioritizeTimeOverSizeThresholds(true)
-                .setBackBuffer(0, false) // 0s de backbuffer para liberar memoria de inmediato
+                .setBackBuffer(10_000, true) // 10s de backbuffer para estabilidad
                 .build();
 
+        // Timeouts más ágiles (6s en vez de 15s) para detectar y reintentar segmentos caídos de inmediato
         DefaultHttpDataSource.Factory httpDataSourceFactory = new DefaultHttpDataSource.Factory()
                 .setUserAgent("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
                 .setAllowCrossProtocolRedirects(true)
-                .setConnectTimeoutMs(15000)
-                .setReadTimeoutMs(15000);
+                .setConnectTimeoutMs(6000)
+                .setReadTimeoutMs(6000);
 
         DataSource.Factory baseFactory = new DefaultDataSource.Factory(this, httpDataSourceFactory);
         dataSourceFactory = new MapHeaderDataSourceFactory(baseFactory);
 
+        // Política de reintentos ágiles en segundo plano sin detener reproducción
+        DefaultLoadErrorHandlingPolicy loadErrorHandlingPolicy = new DefaultLoadErrorHandlingPolicy(5) {
+            @Override
+            public long getRetryDelayMsFor(LoadErrorInfo loadErrorInfo) {
+                return Math.min(1200, Math.max(400, loadErrorInfo.errorCount * 300));
+            }
+        };
+
+        DefaultMediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(dataSourceFactory)
+                .setLoadErrorHandlingPolicy(loadErrorHandlingPolicy);
+
         player = new ExoPlayer.Builder(this, renderersFactory)
-                .setMediaSourceFactory(new DefaultMediaSourceFactory(dataSourceFactory))
+                .setMediaSourceFactory(mediaSourceFactory)
                 .setLoadControl(loadControl)
                 .build();
 
@@ -359,22 +384,32 @@ public class PlayerActivity extends AppCompatActivity {
             @Override
             public void onPlaybackStateChanged(int state) {
                 if (state == Player.STATE_BUFFERING) {
-                    showLoading();
+                    if (!hasInitialPlaybackStarted) {
+                        showInitialLoading();
+                    } else {
+                        handler.removeCallbacks(bufferingDebounceRunnable);
+                        handler.postDelayed(bufferingDebounceRunnable, 700);
+                    }
                 } else if (state == Player.STATE_READY) {
+                    handler.removeCallbacks(bufferingDebounceRunnable);
+                    hasInitialPlaybackStarted = true;
                     hideLoading();
                     hideErrorScreen();
                     autoRetryCount = 0;
                     player.play();
                     updatePipParams();
                 } else if (state == Player.STATE_ENDED) {
+                    handler.removeCallbacks(bufferingDebounceRunnable);
                     loadChannel(currentIndex);
                 } else if (state == Player.STATE_IDLE) {
+                    handler.removeCallbacks(bufferingDebounceRunnable);
                     hideLoading();
                 }
             }
 
             @Override
             public void onPlayerError(PlaybackException error) {
+                handler.removeCallbacks(bufferingDebounceRunnable);
                 if (error != null && error.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
                     if (player != null) {
                         try {
@@ -393,6 +428,7 @@ public class PlayerActivity extends AppCompatActivity {
     private void loadChannel(int index) {
         if (channelList == null || index < 0 || index >= channelList.size()) return;
         currentIndex = index;
+        hasInitialPlaybackStarted = false;
         Channel ch = channelList.get(index);
 
         hideErrorScreen();
@@ -429,6 +465,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void playSignal(int signalIndex) {
         if (channelList == null || currentIndex < 0 || currentIndex >= channelList.size()) return;
+        hasInitialPlaybackStarted = false;
         Channel ch = channelList.get(currentIndex);
         List<String> allUrls = ch.getAllUrls();
         if (allUrls.isEmpty()) {
@@ -1008,18 +1045,39 @@ public class PlayerActivity extends AppCompatActivity {
         btnFavorite.setText(isFav ? "❤️" : "🤍");
     }
 
+    private void showInitialLoading() {
+        if (loadingContainer != null) {
+            loadingContainer.setBackgroundColor(0xCC080A10);
+        }
+        showLoadingInternal();
+    }
+
+    private void showLoadingInternal() {
+        if (loadingContainer != null) {
+            loadingContainer.setVisibility(View.VISIBLE);
+        }
+        if (anim1 != null && !anim1.isRunning()) anim1.start();
+        if (anim2 != null && !anim2.isRunning()) anim2.start();
+        if (anim3 != null && !anim3.isRunning()) anim3.start();
+    }
+
     private void showLoading() {
-        loadingContainer.setVisibility(View.VISIBLE);
-        if (!anim1.isRunning()) anim1.start();
-        if (!anim2.isRunning()) anim2.start();
-        if (!anim3.isRunning()) anim3.start();
+        showInitialLoading();
     }
 
     private void hideLoading() {
-        loadingContainer.setVisibility(View.GONE);
-        anim1.cancel(); anim2.cancel(); anim3.cancel();
-        dot1.setTranslationY(0); dot2.setTranslationY(0); dot3.setTranslationY(0);
-        dot1.setAlpha(1f); dot2.setAlpha(1f); dot3.setAlpha(1f);
+        if (bufferingDebounceRunnable != null) {
+            handler.removeCallbacks(bufferingDebounceRunnable);
+        }
+        if (loadingContainer != null) {
+            loadingContainer.setVisibility(View.GONE);
+        }
+        if (anim1 != null) anim1.cancel();
+        if (anim2 != null) anim2.cancel();
+        if (anim3 != null) anim3.cancel();
+        if (dot1 != null) { dot1.setTranslationY(0); dot1.setAlpha(1f); }
+        if (dot2 != null) { dot2.setTranslationY(0); dot2.setAlpha(1f); }
+        if (dot3 != null) { dot3.setTranslationY(0); dot3.setAlpha(1f); }
     }
 
     private void enterImmersiveMode() {
@@ -1290,12 +1348,14 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private MediaItem createLiveMediaItem(Uri uri) {
-        // Configuración de sincronización en vivo adaptativa:
-        // Permite micro-ajustes naturales de velocidad (0.96x - 1.04x) para absorber fluctuaciones de red
-        // sin vaciar el búfer ni provocar cortes abruptos.
+        // Modo Estable por defecto: holgura intencional de 14s y micro-ajustes suaves de velocidad
+        // para garantizar reproducción fluida y continua sin micro-cortes ni tirones.
         MediaItem.LiveConfiguration liveConfig = new MediaItem.LiveConfiguration.Builder()
+                .setTargetOffsetMs(14_000)  // 14 segundos de distancia del borde en vivo (colchón protector)
+                .setMinOffsetMs(4_000)      // Mínimo 4s de distancia
+                .setMaxOffsetMs(30_000)     // Máximo 30s de retraso
                 .setMaxPlaybackSpeed(1.04f)
-                .setMinPlaybackSpeed(0.96f)
+                .setMinPlaybackSpeed(0.97f)
                 .build();
 
         return new MediaItem.Builder()
