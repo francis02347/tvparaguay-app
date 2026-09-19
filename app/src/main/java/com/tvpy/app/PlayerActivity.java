@@ -742,10 +742,11 @@ public class PlayerActivity extends AppCompatActivity {
 
                                         final String streamToPlay = finalPlayUrl;
                                         final String finalReferer = referer;
+                                        final String dmUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
                                         handler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                playResolvedUrl(streamToPlay, cookieStr, finalReferer, ch);
+                                                playResolvedUrl(streamToPlay, cookieStr, finalReferer, ch, dmUserAgent);
                                             }
                                         });
                                         return;
@@ -955,14 +956,21 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void playResolvedUrl(String streamUrl, String cookieStr, String referer, Channel ch) {
+        playResolvedUrl(streamUrl, cookieStr, referer, ch, null);
+    }
+
+    private void playResolvedUrl(String streamUrl, String cookieStr, String referer, Channel ch, String customUserAgent) {
         activeStreamUrl = streamUrl;
         activeCookie = cookieStr;
         activeReferer = referer;
-        activeUserAgent = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
+        String ua = (customUserAgent != null && !customUserAgent.isEmpty())
+                ? customUserAgent
+                : "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
+        activeUserAgent = ua;
 
         if (dataSourceFactory != null) {
             java.util.Map<String, String> headers = new java.util.HashMap<>();
-            headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
+            headers.put("User-Agent", ua);
             if (referer != null && !referer.isEmpty()) {
                 headers.put("Referer", referer);
                 try {
@@ -1383,6 +1391,27 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean dispatchKeyEvent(android.view.KeyEvent event) {
+        if (event.getKeyCode() == android.view.KeyEvent.KEYCODE_BACK) {
+            if (event.getAction() == android.view.KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+                if (isSidePanelVisible()) {
+                    hideSidePanel();
+                    return true;
+                }
+                if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
+                    hideTopBarNow();
+                    return true;
+                }
+                finishAndGoHome();
+                return true;
+            } else if (event.getAction() == android.view.KeyEvent.ACTION_UP) {
+                return true;
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
         if (event.getAction() == android.view.KeyEvent.ACTION_DOWN) {
             event.startTracking();
@@ -1462,6 +1491,8 @@ public class PlayerActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (isSidePanelVisible()) {
             hideSidePanel();
+        } else if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
+            hideTopBarNow();
         } else {
             finishAndGoHome();
         }

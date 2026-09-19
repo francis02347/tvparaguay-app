@@ -23,10 +23,10 @@ https://stream1.sersat.com/hls/garagetv.m3u8
 desdeparaguay://gentv
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="General",TV Pública (Argentina)
 https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento" backup-url="http://45.170.130.224:8000/play/a03n/index.m3u8",Telefe Internacional (Argentina)
-http://38.44.109.41:8003/play/a0ev/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Paravisión
-http://45.170.130.224:8000/play/a032/index.m3u8?hls
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento" backup-url="http://38.44.109.41:8003/play/a0ev/index.m3u8",Telefe Internacional (Argentina)
+http://45.170.130.224:8000/play/a03n/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="http://45.170.130.224:8000/play/a032/index.m3u8?hls",Paravisión
+http://45.170.130.224:8000/play/a032/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",E40
 https://copacotf.desdeparaguay.net/e40tv/e40tv_py_alta/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",Monumental TV
@@ -41,7 +41,7 @@ https://www.desde-paraguay.com/pro.m3u8
 desdeparaguay://heitv
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Next HD
 https://live.enhdtv.com:19360/nexthd/nexthd.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Paraguay TV
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="https://www.desde-paraguay.com/pro.m3u8",Paraguay TV
 https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Popu TV
 desdeparaguay://universotv
@@ -81,7 +81,7 @@ http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31834/index.m3u8
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31856/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Deportes TVC (1080p)
 http://190.11.225.124:5000/live/deportes_tvc_hd/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DSports (DirecTV Sports)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes" backup-url="http://187.102.208.209:8000/play/a0bq/index.m3u8",DSports (DirecTV Sports)
 http://187.102.208.209:8000/play/a09n/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",DSports 2
 http://200.60.97.100:28888/play/a0c8/index.m3u8
@@ -113,8 +113,8 @@ https://cdn-5.nxplay.com.br/ESPN_4/tracks-v3a1/mono.m3u8
 http://181.78.197.59:8000/play/a074/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0g7/index.m3u8|http://38.44.109.41:8003/play/a0gm/index.m3u8",ESPN 6
 http://181.78.197.59:8000/play/a08c/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0hx/index.m3u8|http://38.44.109.41:8003/play/a0ci/index.m3u8",ESPN 7
-http://181.78.197.59:8000/play/a06a/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://181.78.197.59:8000/play/a06a/index.m3u8|http://38.44.109.41:8003/play/a0hx/index.m3u8",ESPN 7
+http://45.170.130.224:8000/play/a027/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports" backup-url="http://hls1.sua.tv/live/espnextrahd/s.m3u8",ESPN Extra (Brasil)
 http://hls1.sua.tv/live/espnextrafhd/s.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports",ESPN Premium
@@ -163,8 +163,8 @@ https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8
 https://886bd3fbc782459f8de7555d32d7e9ce.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-957-WORBLATAMESFAST-WHALETVPLUS/957/whaletvplus/hls/master/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Italia" group-title="Deportes",SuperTennis (Italia)
 https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c0-16/restreamer/outgest/aa3673f1-e178-44a9-a947-ef41db73211a/manifest.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Teledeporte (1080p)
-https://ztnr.rtve.es/ztnr/1694263.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports" backup-url="https://rtve01p.origin.c21livecloud.com/live-origin/tdp-hls/bitrate_1.m3u8",Teledeporte (1080p)
+https://rtve01p.origin.c21livecloud.com/live-origin/tdp-hls/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Tennis Channel (Internacional)
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischnlintl-lggb/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" backup-url="http://200.60.97.100:28888/play/a01c/index.m3u8|http://45.170.130.224:8000/play/a020/index.m3u8" group-title="Sports",TyC Sports
@@ -241,12 +241,12 @@ https://cloud.fastchannel.es/mic/manifiest/hls/acocina/acocina.m3u8
 https://azt-mun.otteravision.com/azt/mun/mun.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",CBN Español (1080p)
 https://fastly.live.brightcove.com/6383462549112/us-east-1/734546207001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoiczFpM3ZpLmVncmVzcy50N2M3emwiLCJhY2NvdW50X2lkIjoiNzM0NTQ2MjA3MDAxIiwiZWhuIjoiZmFzdGx5LmxpdmUuYnJpZ2h0Y292ZS5jb20iLCJpc3MiOiJibGl2ZS1wbGF5YmFjay1zb3VyY2UtYXBpIiwic3ViIjoicGF0aG1hcHRva2VuIiwiYXVkIjpbIjczNDU0NjIwNzAwMSJdLCJqdGkiOiI2MzgzNDYyNTQ5MTEyIn0.g04lznsvgqgIXQt2ZH0H_tWtIeTsMgGjVORsjOJ0T6U/playlist-hls.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Colombia" group-title="Entretenimiento",Caracol TV (Colombia)
-http://177.234.249.178:8888/CARACOL/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Colombia" group-title="Entretenimiento" backup-url="http://181.78.14.26:4000/play/a00c/index.m3u8",Caracol TV (Colombia)
+http://181.78.14.26:4000/play/a00d/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Chile" group-title="General",Chilevisión (Chile)
 http://181.119.185.32:8000/play/a026/index.m3u8?hls
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Discovery Channel (Español)
-http://190.108.93.180:8000/play/a03u/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales" backup-url="http://190.108.93.180:8000/play/a03u/index.m3u8",Discovery Channel (Español)
+http://187.245.231.226:8000/play/a0q0/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Discovery Home & Health (Español)
 http://187.245.231.226:8000/play/a0u5/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Discovery Kids (Español)
@@ -263,16 +263,16 @@ https://livecdn.enlace.plus/enlace/smil:enlace-hd.smil/playlist.m3u8
 https://d1k3vzh2ivy22k.cloudfront.net/Historia1080.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Documentales",Historia y Vida
 https://jmp2.uk/plu-67517f923a61d40008c451f0.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",History 2 (Latinoamérica)
-http://45.177.114.114/HISTORY_2/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",History Channel (Latinoamérica)
-http://45.177.114.114/HISTORY/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales" backup-url="http://190.93.224.42/HISTORY-2/index.m3u8",History 2 (Latinoamérica)
+http://187.102.208.209:8000/play/a06b/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales" backup-url="http://190.93.224.42/HISTORY/index.m3u8",History Channel (Latinoamérica)
+http://187.102.208.209:8000/play/a08y/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Investigation Discovery (ID) (Español)
 http://187.245.231.226:8000/play/a0q4/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="México" group-title="Entretenimiento",Las Estrellas (México) [Geo-blocked]
 https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Nat Geo Wild (Español)
-http://187.102.208.209:8000/play/a08z/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales" backup-url="http://187.102.208.209:8000/play/a08z/index.m3u8",Nat Geo Wild (Español)
+http://88.212.15.29/live/test_ngw/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",National Geographic (Español)
 http://190.93.224.42/NAT-GEO/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",NatureTime (Español)
@@ -287,8 +287,8 @@ https://jmp2.uk/plu-61cd7b49543066000713b620.m3u8
 https://jmp2.uk/plu-5dd85eac039bba0009e86d1d.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",RT Documentary (Internacional)
 https://rt-rtd.rttv.com/live/rtdoc/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Entretenimiento",RTVE La 1
-https://ztnr.rtve.es/ztnr/1694255.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Entretenimiento" backup-url="https://ztnr.rtve.es/ztnr/1694255.m3u8",RTVE La 1
+http://45.170.130.224:8000/play/a016/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Entretenimiento",Runtime Cine y Series
 https://run-rt-uh-roku.otteravision.com/run/rt_uh/rt_uh.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Smithsonian Channel (Español)

@@ -99,19 +99,21 @@
     },
     {
       "name": "Telefe Internacional (Argentina)",
-      "url": "http://38.44.109.41:8003/play/a0ev/index.m3u8",
-      "raw_url": "http://38.44.109.41:8003/play/a0ev/index.m3u8",
+      "url": "http://45.170.130.224:8000/play/a03n/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a03n/index.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
-      "number": 13
+      "number": 13,
+      "backup_url": "http://38.44.109.41:8003/play/a0ev/index.m3u8"
     },
     {
       "name": "Paravisión",
-      "url": "http://45.170.130.224:8000/play/a032/index.m3u8?hls",
-      "raw_url": "http://45.170.130.224:8000/play/a032/index.m3u8?hls",
+      "url": "http://45.170.130.224:8000/play/a032/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a032/index.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
-      "number": 14
+      "number": 14,
+      "backup_url": "http://45.170.130.224:8000/play/a032/index.m3u8?hls"
     },
     {
       "name": "E40",
@@ -175,7 +177,8 @@
       "raw_url": "https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
-      "number": 22
+      "number": 22,
+      "backup_url": "https://www.desde-paraguay.com/pro.m3u8"
     },
     {
       "name": "Popu TV",
@@ -338,7 +341,8 @@
       "raw_url": "http://187.102.208.209:8000/play/a09n/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 42
+      "number": 42,
+      "backup_url": "http://187.102.208.209:8000/play/a0bq/index.m3u8"
     },
     {
       "name": "DSports 2",
@@ -472,12 +476,12 @@
     },
     {
       "name": "ESPN 7",
-      "url": "http://181.78.197.59:8000/play/a06a/index.m3u8",
-      "raw_url": "http://181.78.197.59:8000/play/a06a/index.m3u8",
+      "url": "http://45.170.130.224:8000/play/a027/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a027/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 58,
-      "backup_url": "http://38.44.109.41:8003/play/a0hx/index.m3u8|http://38.44.109.41:8003/play/a0ci/index.m3u8"
+      "backup_url": "http://181.78.197.59:8000/play/a06a/index.m3u8|http://38.44.109.41:8003/play/a0hx/index.m3u8"
     },
     {
       "name": "ESPN Extra (Brasil)",
@@ -674,11 +678,12 @@
     },
     {
       "name": "Teledeporte (1080p)",
-      "url": "https://ztnr.rtve.es/ztnr/1694263.m3u8",
-      "raw_url": "https://ztnr.rtve.es/ztnr/1694263.m3u8",
+      "url": "https://rtve01p.origin.c21livecloud.com/live-origin/tdp-hls/master.m3u8",
+      "raw_url": "https://rtve01p.origin.c21livecloud.com/live-origin/tdp-hls/master.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 83
+      "number": 83,
+      "backup_url": "https://rtve01p.origin.c21livecloud.com/live-origin/tdp-hls/bitrate_1.m3u8"
     },
     {
       "name": "Tennis Channel (Internacional)",
@@ -987,11 +992,12 @@
     },
     {
       "name": "Caracol TV (Colombia)",
-      "url": "http://177.234.249.178:8888/CARACOL/index.m3u8",
-      "raw_url": "http://177.234.249.178:8888/CARACOL/index.m3u8",
+      "url": "http://181.78.14.26:4000/play/a00d/index.m3u8",
+      "raw_url": "http://181.78.14.26:4000/play/a00d/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 122
+      "number": 122,
+      "backup_url": "http://181.78.14.26:4000/play/a00c/index.m3u8"
     },
     {
       "name": "Chilevisión (Chile)",
@@ -1003,11 +1009,12 @@
     },
     {
       "name": "Discovery Channel (Español)",
-      "url": "http://190.108.93.180:8000/play/a03u/index.m3u8",
-      "raw_url": "http://190.108.93.180:8000/play/a03u/index.m3u8",
+      "url": "http://187.245.231.226:8000/play/a0q0/index.m3u8",
+      "raw_url": "http://187.245.231.226:8000/play/a0q0/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 124
+      "number": 124,
+      "backup_url": "http://190.108.93.180:8000/play/a03u/index.m3u8"
     },
     {
       "name": "Discovery Home & Health (Español)",
@@ -1075,19 +1082,21 @@
     },
     {
       "name": "History 2 (Latinoamérica)",
-      "url": "http://45.177.114.114/HISTORY_2/index.m3u8",
-      "raw_url": "http://45.177.114.114/HISTORY_2/index.m3u8",
+      "url": "http://187.102.208.209:8000/play/a06b/index.m3u8",
+      "raw_url": "http://187.102.208.209:8000/play/a06b/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 133
+      "number": 133,
+      "backup_url": "http://190.93.224.42/HISTORY-2/index.m3u8"
     },
     {
       "name": "History Channel (Latinoamérica)",
-      "url": "http://45.177.114.114/HISTORY/index.m3u8",
-      "raw_url": "http://45.177.114.114/HISTORY/index.m3u8",
+      "url": "http://187.102.208.209:8000/play/a08y/index.m3u8",
+      "raw_url": "http://187.102.208.209:8000/play/a08y/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 134
+      "number": 134,
+      "backup_url": "http://190.93.224.42/HISTORY/index.m3u8"
     },
     {
       "name": "Investigation Discovery (ID) (Español)",
@@ -1107,11 +1116,12 @@
     },
     {
       "name": "Nat Geo Wild (Español)",
-      "url": "http://187.102.208.209:8000/play/a08z/index.m3u8",
-      "raw_url": "http://187.102.208.209:8000/play/a08z/index.m3u8",
+      "url": "http://88.212.15.29/live/test_ngw/playlist.m3u8",
+      "raw_url": "http://88.212.15.29/live/test_ngw/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 137
+      "number": 137,
+      "backup_url": "http://187.102.208.209:8000/play/a08z/index.m3u8"
     },
     {
       "name": "National Geographic (Español)",
@@ -1171,11 +1181,12 @@
     },
     {
       "name": "RTVE La 1",
-      "url": "https://ztnr.rtve.es/ztnr/1694255.m3u8",
-      "raw_url": "https://ztnr.rtve.es/ztnr/1694255.m3u8",
+      "url": "http://45.170.130.224:8000/play/a016/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a016/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 145
+      "number": 145,
+      "backup_url": "https://ztnr.rtve.es/ztnr/1694255.m3u8"
     },
     {
       "name": "Runtime Cine y Series",
