@@ -255,6 +255,8 @@ http://190.108.93.180:8000/play/a05s/index.m3u8
 http://181.119.177.253:8000/play/a04k/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Discovery World (Español)
 http://187.245.231.226:8000/play/a0q1/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales" backup-url="http://187.102.208.209:8000/play/a0a5/index.m3u8|http://190.60.39.220:8000/play/a05r/index.m3u8",Discovery TLC (Español)
+http://45.170.130.224:8000/play/a024/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",EWTN Spain & Latin America (720p)
 https://cdn3.wowza.com/1/SmVrQmZCUXZhVDgz/b3J3MFJv/hls/live/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",Enlace (720p)

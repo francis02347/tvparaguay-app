@@ -142,6 +142,7 @@ public class RecommendedChannels {
         "Discovery Kids (Español)",
         "Discovery Turbo (Estados Unidos)",
         "Discovery World (Español)",
+        "Discovery TLC (Español)",
         "EWTN Spain & Latin America (720p)",
         "Enlace (720p)",
         "Historia (España)",
