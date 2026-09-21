@@ -404,7 +404,8 @@ public class PlayerActivity extends AppCompatActivity {
                                 MimeTypes.AUDIO_E_AC3
                         )
                         .setTunnelingEnabled(false)
-                        .setExceedAudioCapabilitiesIfNecessary(true)
+                        .setExceedRendererCapabilitiesIfNecessary(true)
+                        .setExceedAudioConstraintsIfNecessary(true)
         );
 
         player = new ExoPlayer.Builder(this, renderersFactory)
@@ -865,7 +866,7 @@ public class PlayerActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (which >= 0 && which < options.size()) {
                         AudioTrackOption chosen = options.get(which);
-                        TrackSelectionOverride override = new TrackSelectionOverride(chosen.trackGroup, chosen.trackIndexInGroup);
+                        TrackSelectionOverride override = new TrackSelectionOverride(chosen.trackGroup, java.util.Collections.singletonList(chosen.trackIndexInGroup));
                         player.setTrackSelectionParameters(
                                 player.getTrackSelectionParameters()
                                         .buildUpon()
