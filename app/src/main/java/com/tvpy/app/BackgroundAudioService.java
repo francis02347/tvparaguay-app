@@ -257,6 +257,12 @@ public class BackgroundAudioService extends Service {
                     .setMediaSourceFactory(new DefaultMediaSourceFactory(baseFactory))
                     .build();
 
+            androidx.media3.common.AudioAttributes media3AudioAttributes = new androidx.media3.common.AudioAttributes.Builder()
+                    .setUsage(C.USAGE_MEDIA)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+                    .build();
+            player.setAudioAttributes(media3AudioAttributes, true);
+
             // Evitar que el reproductor intente reproducir video y consuma decodificadores de hardware
             player.setTrackSelectionParameters(
                     player.getTrackSelectionParameters().buildUpon()

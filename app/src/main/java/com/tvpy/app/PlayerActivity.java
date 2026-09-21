@@ -42,16 +42,23 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.media3.common.AudioAttributes;
 import androidx.media3.common.C;
+import androidx.media3.common.Format;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.MimeTypes;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
+import androidx.media3.common.TrackGroup;
+import androidx.media3.common.TrackSelectionOverride;
 import androidx.media3.common.TrackSelectionParameters;
+import androidx.media3.common.Tracks;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.DefaultLoadControl;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
 import androidx.media3.exoplayer.upstream.DefaultLoadErrorHandlingPolicy;
 import androidx.media3.exoplayer.upstream.LoadErrorHandlingPolicy;
 import androidx.media3.datasource.DataSource;
@@ -61,10 +68,10 @@ import androidx.media3.datasource.DataSpec;
 import androidx.media3.datasource.TransferListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.media3.common.Format;
 import androidx.media3.exoplayer.DecoderReuseEvaluation;
 import androidx.media3.exoplayer.analytics.AnalyticsListener;
 import androidx.media3.ui.PlayerView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -83,9 +90,12 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView tvChannelName;
     private View topBar;
     private TextView btnSignal;
+    private TextView btnAudioTrack;
     private TextView btnFavorite;
     private int activeSignalIndex = 0;
     private int triedSignalsCount = 0;
+    private DefaultTrackSelector trackSelector;
+    private boolean audioCompatibilityWarningShown = false;
 
     private View overlayContainer;
     private TextView overlayEmoji, overlayName, overlayCategory, overlayHint;
@@ -194,6 +204,7 @@ public class PlayerActivity extends AppCompatActivity {
         tvChannelName      = findViewById(R.id.tvChannelName);
         topBar             = findViewById(R.id.topBar);
         btnSignal          = findViewById(R.id.btnSignal);
+        btnAudioTrack      = findViewById(R.id.btnAudioTrack);
         btnFavorite        = findViewById(R.id.btnFavorite);
         overlayContainer   = findViewById(R.id.overlayContainer);
         overlayEmoji       = findViewById(R.id.overlayEmoji);
@@ -220,6 +231,17 @@ public class PlayerActivity extends AppCompatActivity {
         if (btnSignal != null) {
             btnSignal.setOnClickListener(v -> showSignalSelectionDialog());
             btnSignal.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    v.animate().scaleX(1.15f).scaleY(1.15f).setDuration(150).start();
+                } else {
+                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                }
+            });
+        }
+
+        if (btnAudioTrack != null) {
+            btnAudioTrack.setOnClickListener(v -> showAudioTrackSelectionDialog());
+            btnAudioTrack.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
                     v.animate().scaleX(1.15f).scaleY(1.15f).setDuration(150).start();
                 } else {
@@ -371,10 +393,31 @@ public class PlayerActivity extends AppCompatActivity {
         DefaultMediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(dataSourceFactory)
                 .setLoadErrorHandlingPolicy(loadErrorHandlingPolicy);
 
+        trackSelector = new DefaultTrackSelector(this);
+        trackSelector.setParameters(
+                trackSelector.buildUponParameters()
+                        .setPreferredAudioMimeTypes(
+                                MimeTypes.AUDIO_AAC,
+                                MimeTypes.AUDIO_MPEG,
+                                MimeTypes.AUDIO_MP4,
+                                MimeTypes.AUDIO_AC3,
+                                MimeTypes.AUDIO_E_AC3
+                        )
+                        .setTunnelingEnabled(false)
+                        .setExceedAudioCapabilitiesIfNecessary(true)
+        );
+
         player = new ExoPlayer.Builder(this, renderersFactory)
+                .setTrackSelector(trackSelector)
                 .setMediaSourceFactory(mediaSourceFactory)
                 .setLoadControl(loadControl)
                 .build();
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(C.USAGE_MEDIA)
+                .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+                .build();
+        player.setAudioAttributes(audioAttributes, true);
 
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
@@ -408,6 +451,12 @@ public class PlayerActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onTracksChanged(@NonNull Tracks tracks) {
+                updateAudioTrackButtonUi(tracks);
+                checkAudioCompatibility(tracks);
+            }
+
+            @Override
             public void onPlayerError(PlaybackException error) {
                 handler.removeCallbacks(bufferingDebounceRunnable);
                 if (error != null && error.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
@@ -429,6 +478,20 @@ public class PlayerActivity extends AppCompatActivity {
         if (channelList == null || index < 0 || index >= channelList.size()) return;
         currentIndex = index;
         hasInitialPlaybackStarted = false;
+        audioCompatibilityWarningShown = false;
+        if (btnAudioTrack != null) {
+            btnAudioTrack.setVisibility(View.GONE);
+        }
+        if (player != null) {
+            try {
+                player.setTrackSelectionParameters(
+                        player.getTrackSelectionParameters()
+                                .buildUpon()
+                                .clearOverridesOfType(C.TRACK_TYPE_AUDIO)
+                                .build()
+                );
+            } catch (Exception ignored) {}
+        }
         Channel ch = channelList.get(index);
 
         hideErrorScreen();
@@ -466,6 +529,10 @@ public class PlayerActivity extends AppCompatActivity {
     private void playSignal(int signalIndex) {
         if (channelList == null || currentIndex < 0 || currentIndex >= channelList.size()) return;
         hasInitialPlaybackStarted = false;
+        audioCompatibilityWarningShown = false;
+        if (btnAudioTrack != null) {
+            btnAudioTrack.setVisibility(View.GONE);
+        }
         Channel ch = channelList.get(currentIndex);
         List<String> allUrls = ch.getAllUrls();
         if (allUrls.isEmpty()) {
@@ -621,6 +688,195 @@ public class PlayerActivity extends AppCompatActivity {
             })
             .setNegativeButton("Cancelar", null)
             .show();
+    }
+
+    private void updateAudioTrackButtonUi(@NonNull Tracks tracks) {
+        if (btnAudioTrack == null) return;
+
+        int audioTracksTotal = 0;
+        String activeTrackName = null;
+
+        for (Tracks.Group group : tracks.getGroups()) {
+            if (group.getType() == C.TRACK_TYPE_AUDIO) {
+                for (int i = 0; i < group.length; i++) {
+                    audioTracksTotal++;
+                    if (group.isTrackSelected(i)) {
+                        Format format = group.getTrackFormat(i);
+                        activeTrackName = formatAudioTrackShortLabel(format, audioTracksTotal);
+                    }
+                }
+            }
+        }
+
+        if (audioTracksTotal > 1) {
+            btnAudioTrack.setVisibility(View.VISIBLE);
+            btnAudioTrack.setText(activeTrackName != null ? "🔊 " + activeTrackName : "🔊 Audio (" + audioTracksTotal + ")");
+        } else {
+            btnAudioTrack.setVisibility(View.GONE);
+        }
+    }
+
+    private String formatAudioTrackShortLabel(Format format, int trackIndex) {
+        String lang = format.language;
+        if (lang != null && !lang.isEmpty() && !"und".equalsIgnoreCase(lang)) {
+            return lang.toUpperCase(Locale.ROOT);
+        }
+        String codec = formatCodecName(format.sampleMimeType);
+        return codec.isEmpty() ? "Pista " + trackIndex : codec;
+    }
+
+    private String formatCodecName(String mimeType) {
+        if (mimeType == null) return "";
+        if (mimeType.equalsIgnoreCase(MimeTypes.AUDIO_AAC) || mimeType.contains("mp4a")) return "AAC";
+        if (mimeType.equalsIgnoreCase(MimeTypes.AUDIO_AC3)) return "Dolby AC3";
+        if (mimeType.equalsIgnoreCase(MimeTypes.AUDIO_E_AC3)) return "Dolby E-AC3";
+        if (mimeType.equalsIgnoreCase(MimeTypes.AUDIO_MPEG)) return "MP2/MP3";
+        if (mimeType.equalsIgnoreCase(MimeTypes.AUDIO_OPUS)) return "Opus";
+        if (mimeType.equalsIgnoreCase(MimeTypes.AUDIO_VORBIS)) return "Vorbis";
+        return mimeType.replace("audio/", "").toUpperCase(Locale.ROOT);
+    }
+
+    private void checkAudioCompatibility(@NonNull Tracks tracks) {
+        if (audioCompatibilityWarningShown) return;
+
+        boolean hasAudioGroup = false;
+        boolean hasSupportedAudioTrack = false;
+        String unsupportedCodec = null;
+
+        for (Tracks.Group group : tracks.getGroups()) {
+            if (group.getType() == C.TRACK_TYPE_AUDIO) {
+                hasAudioGroup = true;
+                for (int i = 0; i < group.length; i++) {
+                    if (group.isTrackSupported(i)) {
+                        hasSupportedAudioTrack = true;
+                    } else {
+                        Format f = group.getTrackFormat(i);
+                        unsupportedCodec = formatCodecName(f.sampleMimeType);
+                    }
+                }
+            }
+        }
+
+        if (hasAudioGroup && !hasSupportedAudioTrack) {
+            audioCompatibilityWarningShown = true;
+            if (channelList != null && currentIndex < channelList.size()) {
+                Channel ch = channelList.get(currentIndex);
+                List<String> allUrls = ch.getAllUrls();
+                if (allUrls.size() > 1 && activeSignalIndex == 0) {
+                    Toast.makeText(
+                            this,
+                            "⚠️ Audio no compatible (" + (unsupportedCodec != null ? unsupportedCodec : "desconocido") + "). Cambiando a señal alternativa con audio estéreo...",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    handler.postDelayed(() -> {
+                        triedSignalsCount = 0;
+                        playSignal(1);
+                    }, 1200);
+                    return;
+                }
+            }
+
+            Toast.makeText(
+                    this,
+                    "💡 ¿Sin sonido? En TV Box ve a Ajustes de Android > Sonido > Salida Digital y selecciona 'PCM' o 'Estéreo'",
+                    Toast.LENGTH_LONG
+            ).show();
+        }
+    }
+
+    private static class AudioTrackOption {
+        final TrackGroup trackGroup;
+        final int trackIndexInGroup;
+        final String displayName;
+        final boolean isSelected;
+
+        AudioTrackOption(TrackGroup trackGroup, int trackIndexInGroup, String displayName, boolean isSelected) {
+            this.trackGroup = trackGroup;
+            this.trackIndexInGroup = trackIndexInGroup;
+            this.displayName = displayName;
+            this.isSelected = isSelected;
+        }
+    }
+
+    private void showAudioTrackSelectionDialog() {
+        if (player == null) return;
+        Tracks tracks = player.getCurrentTracks();
+        List<AudioTrackOption> options = new java.util.ArrayList<>();
+        int selectedIndex = -1;
+
+        int trackNum = 1;
+        for (Tracks.Group group : tracks.getGroups()) {
+            if (group.getType() == C.TRACK_TYPE_AUDIO) {
+                TrackGroup mediaTrackGroup = group.getMediaTrackGroup();
+                for (int i = 0; i < group.length; i++) {
+                    Format format = group.getTrackFormat(i);
+                    boolean isSelected = group.isTrackSelected(i);
+                    if (isSelected) {
+                        selectedIndex = options.size();
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Pista ").append(trackNum).append(": ");
+
+                    String lang = format.language;
+                    if (lang != null && !lang.isEmpty() && !"und".equalsIgnoreCase(lang)) {
+                        sb.append(lang.toUpperCase(Locale.ROOT)).append(" ");
+                    }
+
+                    String codec = formatCodecName(format.sampleMimeType);
+                    if (!codec.isEmpty()) {
+                        sb.append("[").append(codec).append("] ");
+                    }
+
+                    if (format.channelCount > 0) {
+                        if (format.channelCount == 1) sb.append("(Mono) ");
+                        else if (format.channelCount == 2) sb.append("(Estéreo) ");
+                        else if (format.channelCount == 6) sb.append("(5.1 Surround) ");
+                        else sb.append("(").append(format.channelCount).append(" ch) ");
+                    }
+
+                    if (format.bitrate > 0) {
+                        sb.append(format.bitrate / 1000).append(" kbps ");
+                    }
+
+                    if (isSelected) {
+                        sb.append("✓");
+                    }
+
+                    options.add(new AudioTrackOption(mediaTrackGroup, i, sb.toString().trim(), isSelected));
+                    trackNum++;
+                }
+            }
+        }
+
+        if (options.isEmpty()) {
+            Toast.makeText(this, "No se detectaron pistas de audio alternativas", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String[] itemLabels = new String[options.size()];
+        for (int i = 0; i < options.size(); i++) {
+            itemLabels[i] = options.get(i).displayName;
+        }
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Seleccionar Pista de Audio")
+                .setSingleChoiceItems(itemLabels, selectedIndex, (dialog, which) -> {
+                    dialog.dismiss();
+                    if (which >= 0 && which < options.size()) {
+                        AudioTrackOption chosen = options.get(which);
+                        TrackSelectionOverride override = new TrackSelectionOverride(chosen.trackGroup, chosen.trackIndexInGroup);
+                        player.setTrackSelectionParameters(
+                                player.getTrackSelectionParameters()
+                                        .buildUpon()
+                                        .setOverrideForType(override)
+                                        .build()
+                        );
+                        Toast.makeText(this, "Pista de audio seleccionada: " + chosen.displayName, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 
     private void resolveDailymotionAndPlay(final String videoIdInput, final Channel ch) {
@@ -1113,6 +1369,8 @@ public class PlayerActivity extends AppCompatActivity {
         }
         if (btnSignal != null && btnSignal.getVisibility() == View.VISIBLE) {
             btnSignal.requestFocus();
+        } else if (btnAudioTrack != null && btnAudioTrack.getVisibility() == View.VISIBLE) {
+            btnAudioTrack.requestFocus();
         } else if (btnFavorite != null) {
             btnFavorite.requestFocus();
         }
@@ -1133,6 +1391,8 @@ public class PlayerActivity extends AppCompatActivity {
         }
         if (btnSignal != null && btnSignal.getVisibility() == View.VISIBLE) {
             btnSignal.requestFocus();
+        } else if (btnAudioTrack != null && btnAudioTrack.getVisibility() == View.VISIBLE) {
+            btnAudioTrack.requestFocus();
         } else if (btnFavorite != null) {
             btnFavorite.requestFocus();
         }

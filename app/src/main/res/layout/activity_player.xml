@@ -363,6 +363,25 @@
             android:visibility="gone"
             android:contentDescription="Cambiar señal de transmisión" />
 
+        <!-- Botón Selector de Audio (Pistas de Audio / Idioma / Codec) -->
+        <TextView
+            android:id="@+id/btnAudioTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginEnd="8dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="🔊 Audio"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="@drawable/badge_bg"
+            android:focusable="true"
+            android:clickable="true"
+            android:visibility="gone"
+            android:contentDescription="Cambiar pista de audio" />
+
 
         <!-- Botón corazón favorito -->
         <TextView
