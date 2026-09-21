@@ -281,6 +281,18 @@ https://jmp2.uk/plu-6523f672a6c38300088cb807.m3u8
 https://jmp2.uk/plu-6254598f5083f800076d8563.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Avatar: La Leyenda de Aang (24/7)
 https://jmp2.uk/plu-6759ee82bd523200083b4f0f.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Nick Clásico (Latinoamérica)
+https://jmp2.uk/plu-6824cda00101510f9eeaa011.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Nick Jr. Club (Latinoamérica)
+https://jmp2.uk/plu-5ddd7cb2cbb9010009b4fe32.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Nickelodeon Toons (Latinoamérica)
+https://jmp2.uk/plu-645952687cb4b100084ed52e.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Rugrats (24/7)
+https://jmp2.uk/plu-5ea7215005d66d0007e8128a.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Pluto TV Junior (Latinoamérica)
+https://jmp2.uk/plu-5dcde2ac4bc6c500094ab45b.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Pluto TV Kids (Latinoamérica)
+https://jmp2.uk/plu-5dd6dae8ce788b0009eaf77b.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Documentales",Discovery Turbo (Estados Unidos)
 http://181.119.177.253:8000/play/a04k/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Discovery World (Español)

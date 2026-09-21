@@ -1,6 +1,6 @@
 {
-  "versionCode": 137,
-  "versionName": "2.39",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.39/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.39."
+  "versionCode": 138,
+  "versionName": "2.40",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.40/app-website-release.apk",
+  "releaseNotes": "Versión 2.40: Decodificador universal FFmpeg integrado para compatibilidad total de audio en Android TV Box (soporte para MP2, AAC, AC3). Añadidos 6 nuevos canales infantiles 24/7 en español (Nick Clásico, Nick Jr Club, Nickelodeon Toons, Rugrats, Pluto TV Junior, Pluto TV Kids)."
 }

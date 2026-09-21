@@ -355,7 +355,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void setupPlayer() {
         DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this)
-                .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+                .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
                 .setEnableDecoderFallback(true)
                 .setAllowedVideoJoiningTimeMs(5000);
 
@@ -398,6 +398,7 @@ public class PlayerActivity extends AppCompatActivity {
                 trackSelector.buildUponParameters()
                         .setPreferredAudioMimeTypes(
                                 MimeTypes.AUDIO_AAC,
+                                "audio/mpeg-L2",
                                 MimeTypes.AUDIO_MPEG,
                                 MimeTypes.AUDIO_MP4,
                                 MimeTypes.AUDIO_AC3,

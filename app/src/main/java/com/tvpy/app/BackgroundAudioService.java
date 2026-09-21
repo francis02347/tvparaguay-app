@@ -26,6 +26,7 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 
@@ -252,8 +253,12 @@ public class BackgroundAudioService extends Service {
 
             DataSource.Factory baseFactory = new DefaultDataSource.Factory(this, httpFactory);
 
-            // 4. Inicializar ExoPlayer para Audio
-            player = new ExoPlayer.Builder(this)
+            // 4. Inicializar ExoPlayer para Audio con decodificador universal FFmpeg
+            DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this)
+                    .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
+                    .setEnableDecoderFallback(true);
+
+            player = new ExoPlayer.Builder(this, renderersFactory)
                     .setMediaSourceFactory(new DefaultMediaSourceFactory(baseFactory))
                     .build();
 
