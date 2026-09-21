@@ -2,5 +2,5 @@
   "versionCode": 136,
   "versionName": "2.38",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.38/app-website-release.apk",
-  "releaseNotes": "v2.38: Mejoras integrales de compatibilidad de audio para TV Box y Smart TVs (Dolby AC3, E-AC3, MP2, AAC), selector dinámico de pistas de audio en pantalla y auto-fallback inteligente a señales estéreo."
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.38."
 }
