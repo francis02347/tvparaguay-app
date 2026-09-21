@@ -91,7 +91,7 @@ public class M3uParser {
         if (l.contains("pelicul") || l.contains("movie"))       return "🎬";
         if (l.contains("music"))                                 return "🎵";
         if (l.contains("radio"))                                 return "📻";
-        if (l.contains("niño") || l.contains("kid"))             return "🧸";
+        if (l.contains("niño") || l.contains("kid") || l.contains("infant")) return "🧸";
         if (l.contains("docu"))                                  return "🎥";
         if (l.contains("religi"))                                return "✝️";
         if (l.contains("entret") || l.contains("variedades"))   return "🎬";
