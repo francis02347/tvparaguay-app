@@ -255,22 +255,22 @@ http://181.119.185.32:8000/play/a026/index.m3u8?hls
 http://187.245.231.226:8000/play/a0q0/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Discovery Home & Health (Español)
 http://187.245.231.226:8000/play/a0u5/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://187.102.208.209:8000/play/a0b7/index.m3u8",Cartoon Network (Latinoamérica)
-http://45.170.130.224:8000/play/a011/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://45.170.130.224:8000/play/a011/index.m3u8",Cartoon Network (Latinoamérica)
+http://187.102.208.209:8000/play/a0b7/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Cartoonito (Latinoamérica)
 http://187.102.208.209:8000/play/a0bh/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://187.102.208.209:8000/play/a09h/index.m3u8",Disney Channel (Latinoamérica)
-http://45.170.130.224:8000/play/a01r/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://181.78.14.26:4000/play/a073/index.m3u8|http://45.185.163.75:8000/play/a016/index.m3u8",Disney Junior (Latinoamérica)
-http://45.170.130.224:8000/play/a01m/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://45.170.130.224:8000/play/a01r/index.m3u8",Disney Channel (Latinoamérica)
+http://187.102.208.209:8000/play/a09h/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://45.185.163.75:8000/play/a016/index.m3u8|http://45.170.130.224:8000/play/a01m/index.m3u8",Disney Junior (Latinoamérica)
+http://181.78.14.26:4000/play/a073/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Nickelodeon (Latinoamérica)
 http://45.170.130.224:8000/play/a00q/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://187.102.208.209:8000/play/a0b6/index.m3u8",Nick Jr. (Latinoamérica)
-http://45.170.130.224:8000/play/a03p/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://187.102.208.209:8000/play/a0b8/index.m3u8|http://190.108.93.180:8000/play/a05s/index.m3u8",Discovery Kids (Español)
-http://45.170.130.224:8000/play/a01a/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://187.102.208.209:8000/play/a0a9/index.m3u8",Tooncast (Latinoamérica)
-http://45.170.130.224:8000/play/a01l/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://45.170.130.224:8000/play/a03p/index.m3u8",Nick Jr. (Latinoamérica)
+http://187.102.208.209:8000/play/a0b6/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://190.108.93.180:8000/play/a05s/index.m3u8|http://45.170.130.224:8000/play/a01a/index.m3u8",Discovery Kids (Español)
+http://187.102.208.209:8000/play/a0b8/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://45.170.130.224:8000/play/a01l/index.m3u8",Tooncast (Latinoamérica)
+http://187.102.208.209:8000/play/a0a9/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",BabyFirst TV (Español)
 http://45.170.130.224:8000/play/a017/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Infantil",Clan TVE (España - 1080p)

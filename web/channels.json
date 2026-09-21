@@ -1053,9 +1053,9 @@
     },
     {
       "name": "Cartoon Network (Latinoamérica)",
-      "url": "http://45.170.130.224:8000/play/a011/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a011/index.m3u8",
-      "backup_url": "http://187.102.208.209:8000/play/a0b7/index.m3u8",
+      "url": "http://187.102.208.209:8000/play/a0b7/index.m3u8",
+      "raw_url": "http://187.102.208.209:8000/play/a0b7/index.m3u8",
+      "backup_url": "http://45.170.130.224:8000/play/a011/index.m3u8",
       "logo": "",
       "category": "Infantil",
       "number": 129
@@ -1070,18 +1070,18 @@
     },
     {
       "name": "Disney Channel (Latinoamérica)",
-      "url": "http://45.170.130.224:8000/play/a01r/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a01r/index.m3u8",
-      "backup_url": "http://187.102.208.209:8000/play/a09h/index.m3u8",
+      "url": "http://187.102.208.209:8000/play/a09h/index.m3u8",
+      "raw_url": "http://187.102.208.209:8000/play/a09h/index.m3u8",
+      "backup_url": "http://45.170.130.224:8000/play/a01r/index.m3u8",
       "logo": "",
       "category": "Infantil",
       "number": 131
     },
     {
       "name": "Disney Junior (Latinoamérica)",
-      "url": "http://45.170.130.224:8000/play/a01m/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a01m/index.m3u8",
-      "backup_url": "http://181.78.14.26:4000/play/a073/index.m3u8|http://45.185.163.75:8000/play/a016/index.m3u8",
+      "url": "http://181.78.14.26:4000/play/a073/index.m3u8",
+      "raw_url": "http://181.78.14.26:4000/play/a073/index.m3u8",
+      "backup_url": "http://45.185.163.75:8000/play/a016/index.m3u8|http://45.170.130.224:8000/play/a01m/index.m3u8",
       "logo": "",
       "category": "Infantil",
       "number": 132
@@ -1096,27 +1096,27 @@
     },
     {
       "name": "Nick Jr. (Latinoamérica)",
-      "url": "http://45.170.130.224:8000/play/a03p/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a03p/index.m3u8",
-      "backup_url": "http://187.102.208.209:8000/play/a0b6/index.m3u8",
+      "url": "http://187.102.208.209:8000/play/a0b6/index.m3u8",
+      "raw_url": "http://187.102.208.209:8000/play/a0b6/index.m3u8",
+      "backup_url": "http://45.170.130.224:8000/play/a03p/index.m3u8",
       "logo": "",
       "category": "Infantil",
       "number": 134
     },
     {
       "name": "Discovery Kids (Español)",
-      "url": "http://45.170.130.224:8000/play/a01a/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a01a/index.m3u8",
-      "backup_url": "http://187.102.208.209:8000/play/a0b8/index.m3u8|http://190.108.93.180:8000/play/a05s/index.m3u8",
+      "url": "http://187.102.208.209:8000/play/a0b8/index.m3u8",
+      "raw_url": "http://187.102.208.209:8000/play/a0b8/index.m3u8",
+      "backup_url": "http://190.108.93.180:8000/play/a05s/index.m3u8|http://45.170.130.224:8000/play/a01a/index.m3u8",
       "logo": "",
       "category": "Infantil",
       "number": 135
     },
     {
       "name": "Tooncast (Latinoamérica)",
-      "url": "http://45.170.130.224:8000/play/a01l/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a01l/index.m3u8",
-      "backup_url": "http://187.102.208.209:8000/play/a0a9/index.m3u8",
+      "url": "http://187.102.208.209:8000/play/a0a9/index.m3u8",
+      "raw_url": "http://187.102.208.209:8000/play/a0a9/index.m3u8",
+      "backup_url": "http://45.170.130.224:8000/play/a01l/index.m3u8",
       "logo": "",
       "category": "Infantil",
       "number": 136
