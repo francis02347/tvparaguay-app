@@ -271,28 +271,20 @@ http://187.102.208.209:8000/play/a0b6/index.m3u8
 http://187.102.208.209:8000/play/a0b8/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil" backup-url="http://45.170.130.224:8000/play/a01l/index.m3u8",Tooncast (Latinoamérica)
 http://187.102.208.209:8000/play/a0a9/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",BabyFirst TV (Español)
-http://45.170.130.224:8000/play/a017/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.imgur.com/WxLHBwu.png" tvg-country="Estados Unidos" group-title="Infantil" backup-url="http://181.78.106.127:5000/play/a0sa/index.m3u8",BabyFirst TV (Español)
+https://cdn.fast.jwp.services/v1/channel/1_jB6940Ei_TvhvIHDL/manifest.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Infantil",Clan TVE (España - 1080p)
 https://lge-lgla2.otteravision.com/lge/lgcla/lgcla.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Infantil",El Reino Infantil (Canciones Infantiles)
-https://jmp2.uk/plu-6523f672a6c38300088cb807.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Bob Esponja (24/7)
-https://jmp2.uk/plu-6254598f5083f800076d8563.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Avatar: La Leyenda de Aang (24/7)
-https://jmp2.uk/plu-6759ee82bd523200083b4f0f.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Nick Clásico (Latinoamérica)
-https://jmp2.uk/plu-6824cda00101510f9eeaa011.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Nick Jr. Club (Latinoamérica)
-https://jmp2.uk/plu-5ddd7cb2cbb9010009b4fe32.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Nickelodeon Toons (Latinoamérica)
-https://jmp2.uk/plu-645952687cb4b100084ed52e.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Rugrats (24/7)
-https://jmp2.uk/plu-5ea7215005d66d0007e8128a.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Pluto TV Junior (Latinoamérica)
-https://jmp2.uk/plu-5dcde2ac4bc6c500094ab45b.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Infantil",Pluto TV Kids (Latinoamérica)
-https://jmp2.uk/plu-5dd6dae8ce788b0009eaf77b.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="https://gia.tv/streams/pptv/208314.png" tvg-country="Internacional" group-title="Infantil",Tom y Jerry (24/7)
+https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="https://gia.tv/streams/pptv/211465.png" tvg-country="México" group-title="Infantil",El Chavo TV (24/7)
+https://live20.bozztv.com/giatvplayout7/giatv-211465/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.imgur.com/m6y9AMe.png" tvg-country="Chile" group-title="Infantil",13 Kids (Chile - 1080p)
+https://origin.dpsgo.com/ssai/event/LhHrVtyeQkKZ-Ye_xEU75g/master.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="https://img-evg3.tv360.bitel.com.pe/peru-image/2026/01/06/04/1767647409377/6123aa5e7fc7.png" tvg-country="Perú" group-title="Infantil",Peques TV (1080p)
+https://live-evg7.tv360.bitel.com.pe/bitel/pequestv/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.imgur.com/X2d8y4e.png" tvg-country="Internacional" group-title="Infantil",Xtrema Cartoons (24/7)
+https://stmv6.voxtvhd.com.br/xtremacartoons/xtremacartoons/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Documentales",Discovery Turbo (Estados Unidos)
 http://181.119.177.253:8000/play/a04k/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Discovery World (Español)
