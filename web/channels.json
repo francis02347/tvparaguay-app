@@ -27,8 +27,9 @@
     },
     {
       "name": "Unicanal",
-      "url": "http://45.170.130.224:8000/play/a04y/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a04y/index.m3u8",
+      "url": "dailymotion://k41tDnJts45CTVHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/",
+      "raw_url": "dailymotion://k41tDnJts45CTVHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/",
+      "backup_url": "dailymotion://k3C8CLhvjDCJadHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/",
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 4
@@ -206,12 +207,12 @@
     },
     {
       "name": "Tigo Sports (Paraguay)",
-      "url": "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8",
-      "raw_url": "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8",
+      "url": "http://45.170.130.224:8000/play/a04k/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a04k/index.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 26,
-      "backup_url": "http://45.170.130.224:8000/play/a04k/index.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/novasports001/playlist.m3u8"
+      "backup_url": "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8"
     },
     {
       "name": "Tigo Sports+ (Solo Eventos)",

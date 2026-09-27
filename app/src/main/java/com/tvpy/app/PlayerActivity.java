@@ -909,6 +909,10 @@ public class PlayerActivity extends AppCompatActivity {
                         }
                     }
 
+                    if (embedder == null || embedder.isEmpty()) {
+                        embedder = referer;
+                    }
+
                     // Candidate video IDs to attempt in order
                     java.util.List<String> videoCandidates = new java.util.ArrayList<>();
                     videoCandidates.add(videoId);
@@ -920,6 +924,8 @@ public class PlayerActivity extends AppCompatActivity {
                     } else if (chNameLower.contains("unicanal")) {
                         if (!videoId.equals("k41tDnJts45CTVHcyD4")) videoCandidates.add("k41tDnJts45CTVHcyD4");
                         if (!videoId.equals("k3C8CLhvjDCJadHcyD4")) videoCandidates.add("k3C8CLhvjDCJadHcyD4");
+                    } else if (chNameLower.contains("abc")) {
+                        if (!videoId.equals("kQRS6ZAjGuMkByE4Mtc")) videoCandidates.add("kQRS6ZAjGuMkByE4Mtc");
                     }
 
                     String origin = null;
@@ -1014,12 +1020,31 @@ public class PlayerActivity extends AppCompatActivity {
                                                     m3u8Reader.close();
 
                                                     if (!variants.isEmpty()) {
-                                                        String bestVariant = variants.get(0);
+                                                        String bestVariant = null;
                                                         for (String v : variants) {
-                                                            if (v.contains("live-480") || v.contains("live-720") || v.contains("live-1080")) {
+                                                            if (v.contains("live-1080") || v.contains("1080")) {
                                                                 bestVariant = v;
                                                                 break;
                                                             }
+                                                        }
+                                                        if (bestVariant == null) {
+                                                            for (String v : variants) {
+                                                                if (v.contains("live-720") || v.contains("720")) {
+                                                                    bestVariant = v;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        if (bestVariant == null) {
+                                                            for (String v : variants) {
+                                                                if (v.contains("live-480") || v.contains("480")) {
+                                                                    bestVariant = v;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        if (bestVariant == null) {
+                                                            bestVariant = variants.get(variants.size() - 1);
                                                         }
                                                         int hashIdx = bestVariant.indexOf('#');
                                                         if (hashIdx >= 0) {

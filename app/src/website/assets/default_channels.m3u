@@ -5,8 +5,8 @@ https://d3epa8orr2qy3m.cloudfront.net/ts:abr.m3u8
 https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_baja/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Trece
 dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="http://45.170.130.224:8000/play/a03o/index.m3u8|dailymotion://k41tDnJts45CTVHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/",Unicanal
-http://45.170.130.224:8000/play/a04y/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="dailymotion://k3C8CLhvjDCJadHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/",Unicanal
+dailymotion://k41tDnJts45CTVHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Latele
 https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",C9N
@@ -49,8 +49,8 @@ desdeparaguay://universotv
 https://copacoradios.desdeparaguay.net/productivatv/productivatv_baja/playlist.m3u8?admin=nacion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",Red Digital
 https://video.hostingcaaguazu.com:19360/reddigitalsanpedro/reddigitalsanpedro.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Deporte" backup-url="http://45.170.130.224:8000/play/a04k/index.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/novasports001/playlist.m3u8",Tigo Sports (Paraguay)
-https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Deporte" backup-url="https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8",Tigo Sports (Paraguay)
+http://45.170.130.224:8000/play/a04k/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Deporte",Tigo Sports+ (Solo Eventos)
 http://45.170.130.224:8000/play/a04i/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Venus Media

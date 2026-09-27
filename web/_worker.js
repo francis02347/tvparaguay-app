@@ -149,10 +149,15 @@ function parseDailymotionUrl(dmUrl) {
 
 async function resolveDailymotionStream(videoId, referer, embedder) {
     const metaUrl = `https://www.dailymotion.com/player/metadata/video/${encodeURIComponent(videoId)}?embedder=${encodeURIComponent(embedder || referer)}`;
+    let origin = 'https://www.dailymotion.com';
+    try {
+        origin = new URL(referer).origin;
+    } catch (_) {}
     const res = await fetch(metaUrl, {
         headers: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Referer': referer
+            'Referer': referer,
+            'Origin': origin
         }
     });
 
@@ -216,6 +221,11 @@ async function handleFetchProxy(targetUrlStr, origin, customUa, customReferer, c
         'User-Agent': ua,
         'Referer': ref
     };
+    if (customReferer) {
+        try {
+            headers['Origin'] = new URL(customReferer).origin;
+        } catch (_) {}
+    }
     if (customCookie) {
         headers['Cookie'] = customCookie;
     }

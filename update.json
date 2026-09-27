@@ -1,6 +1,6 @@
 {
-  "versionCode": 139,
-  "versionName": "2.41",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.41/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.41."
+  "versionCode": 140,
+  "versionName": "2.42",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.42/app-website-release.apk",
+  "releaseNotes": "Versión 2.42: Transmisiones restauradas de Trece, Unicanal y ABC TV con resolución directa Dailymotion HD (Origin/Cookies), y reactivación de señal en vivo de Tigo Sports con audio AAC y respaldo CloudFront."
 }
