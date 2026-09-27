@@ -64,6 +64,10 @@ import androidx.media3.exoplayer.upstream.LoadErrorHandlingPolicy;
 import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.datasource.okhttp.OkHttpDataSource;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import androidx.media3.datasource.DataSpec;
 import androidx.media3.datasource.TransferListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -128,6 +132,12 @@ public class PlayerActivity extends AppCompatActivity {
     private int currentIndex = 0;
     private GestureDetector gestureDetector;
     private MapHeaderDataSourceFactory dataSourceFactory;
+    private static final OkHttpClient SHARED_OKHTTP_CLIENT = new OkHttpClient.Builder()
+            .connectTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+            .followRedirects(true)
+            .followSslRedirects(true)
+            .build();
     private BroadcastReceiver backgroundAudioReceiver;
     private BroadcastReceiver screenReceiver;
     private volatile boolean isScreenOffAudioActive = false;
@@ -372,14 +382,11 @@ public class PlayerActivity extends AppCompatActivity {
                 .setBackBuffer(10_000, true) // 10s de backbuffer para estabilidad
                 .build();
 
-        // Timeouts más ágiles (6s en vez de 15s) para detectar y reintentar segmentos caídos de inmediato
-        DefaultHttpDataSource.Factory httpDataSourceFactory = new DefaultHttpDataSource.Factory()
-                .setUserAgent("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
-                .setAllowCrossProtocolRedirects(true)
-                .setConnectTimeoutMs(6000)
-                .setReadTimeoutMs(6000);
+        // DataSource con OkHttp para soporte completo de headers (Origin, Referer, Cookie) y HTTP/2
+        OkHttpDataSource.Factory okHttpDataSourceFactory = new OkHttpDataSource.Factory(SHARED_OKHTTP_CLIENT)
+                .setUserAgent("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
 
-        DataSource.Factory baseFactory = new DefaultDataSource.Factory(this, httpDataSourceFactory);
+        DataSource.Factory baseFactory = new DefaultDataSource.Factory(this, okHttpDataSourceFactory);
         dataSourceFactory = new MapHeaderDataSourceFactory(baseFactory);
 
         // Política de reintentos ágiles en segundo plano sin detener reproducción
@@ -909,6 +916,30 @@ public class PlayerActivity extends AppCompatActivity {
                         }
                     }
 
+                    String chNameLower = ch.getName() != null ? ch.getName().toLowerCase() : "";
+                    if (chNameLower.contains("trece")) {
+                        if (referer == null || !referer.contains("trece")) {
+                            referer = "https://trece.com.py/";
+                        }
+                        if (embedder == null || !embedder.contains("trece")) {
+                            embedder = "https://trece.com.py/";
+                        }
+                    } else if (chNameLower.contains("unicanal")) {
+                        if (referer == null || !referer.contains("unicanal")) {
+                            referer = "https://www.unicanal.com.py/";
+                        }
+                        if (embedder == null || !embedder.contains("unicanal")) {
+                            embedder = "https://www.unicanal.com.py/";
+                        }
+                    } else if (chNameLower.contains("abc")) {
+                        if (referer == null || !referer.contains("abc")) {
+                            referer = "https://www.abc.com.py/";
+                        }
+                        if (embedder == null || !embedder.contains("abc")) {
+                            embedder = "https://www.abc.com.py/";
+                        }
+                    }
+
                     if (embedder == null || embedder.isEmpty()) {
                         embedder = referer;
                     }
@@ -917,7 +948,6 @@ public class PlayerActivity extends AppCompatActivity {
                     java.util.List<String> videoCandidates = new java.util.ArrayList<>();
                     videoCandidates.add(videoId);
 
-                    String chNameLower = ch.getName() != null ? ch.getName().toLowerCase() : "";
                     if (chNameLower.contains("trece")) {
                         if (!videoId.equals("k1bgQZHbBKPqXOHczd4")) videoCandidates.add("k1bgQZHbBKPqXOHczd4");
                         if (!videoId.equals("k1mHLKycOlKgo3Db5GI")) videoCandidates.add("k1mHLKycOlKgo3Db5GI");
@@ -936,149 +966,163 @@ public class PlayerActivity extends AppCompatActivity {
                         } catch (Exception ignored) {}
                     }
 
+                    final String browserUa = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
                     for (String candidateId : videoCandidates) {
-                        String metadataUrl = "https://www.dailymotion.com/player/metadata/video/" + candidateId;
-                        if (embedder != null && !embedder.isEmpty()) {
-                            metadataUrl += "?embedder=" + Uri.encode(embedder);
-                        }
+                        try {
+                            String metadataUrl = "https://www.dailymotion.com/player/metadata/video/" + candidateId;
+                            if (embedder != null && !embedder.isEmpty()) {
+                                metadataUrl += "?embedder=" + Uri.encode(embedder);
+                            }
 
-                        java.net.URL url = new java.net.URL(metadataUrl);
-                        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("GET");
-                        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                        conn.setRequestProperty("Referer", referer);
-                        if (origin != null && !origin.isEmpty()) {
-                            conn.setRequestProperty("Origin", origin);
-                        }
-                        conn.setConnectTimeout(12000);
-                        conn.setReadTimeout(12000);
+                            Request.Builder metaReq = new Request.Builder()
+                                    .url(metadataUrl)
+                                    .header("User-Agent", browserUa);
+                            if (referer != null && !referer.isEmpty()) {
+                                metaReq.header("Referer", referer);
+                            }
+                            if (origin != null && !origin.isEmpty()) {
+                                metaReq.header("Origin", origin);
+                            }
 
-                        int responseCode = conn.getResponseCode();
-                        if (responseCode == 200) {
-                            // Extract cookies case-insensitively
+                            Response metaResp = SHARED_OKHTTP_CLIENT.newCall(metaReq.build()).execute();
+                            if (!metaResp.isSuccessful() || metaResp.body() == null) {
+                                if (metaResp.body() != null) metaResp.close();
+                                continue;
+                            }
+
                             StringBuilder cookieBuilder = new StringBuilder();
-                            for (java.util.Map.Entry<String, java.util.List<String>> entry : conn.getHeaderFields().entrySet()) {
-                                if ("set-cookie".equalsIgnoreCase(entry.getKey()) && entry.getValue() != null) {
-                                    for (String cookie : entry.getValue()) {
-                                        int semiIdx = cookie.indexOf(';');
-                                        String pair = (semiIdx >= 0) ? cookie.substring(0, semiIdx) : cookie;
-                                        if (cookieBuilder.length() > 0) {
-                                            cookieBuilder.append("; ");
-                                        }
-                                        cookieBuilder.append(pair.trim());
-                                    }
+                            List<String> setCookies = metaResp.headers("Set-Cookie");
+                            for (String cookie : setCookies) {
+                                int semiIdx = cookie.indexOf(';');
+                                String pair = (semiIdx >= 0) ? cookie.substring(0, semiIdx) : cookie;
+                                if (cookieBuilder.length() > 0) {
+                                    cookieBuilder.append("; ");
                                 }
+                                cookieBuilder.append(pair.trim());
                             }
                             final String cookieStr = cookieBuilder.toString();
 
-                            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(), "UTF-8"));
-                            StringBuilder sb = new StringBuilder();
-                            String line;
-                            while ((line = in.readLine()) != null) {
-                                sb.append(line);
-                            }
-                            in.close();
+                            String jsonStr = metaResp.body().string();
+                            metaResp.close();
 
-                            org.json.JSONObject json = new org.json.JSONObject(sb.toString());
+                            org.json.JSONObject json = new org.json.JSONObject(jsonStr);
                             org.json.JSONObject qualities = json.optJSONObject("qualities");
-                            if (qualities != null) {
-                                org.json.JSONArray autoArray = qualities.optJSONArray("auto");
-                                if (autoArray != null && autoArray.length() > 0) {
-                                    org.json.JSONObject autoObj = autoArray.getJSONObject(0);
-                                    String masterStreamUrl = autoObj.optString("url");
-                                    if (masterStreamUrl != null && !masterStreamUrl.isEmpty()) {
-                                        String finalPlayUrl = masterStreamUrl;
+                            if (qualities == null) continue;
 
-                                        // Pre-resolución: intentar obtener la variante HLS directa de dmcdn.net
-                                        // para evitar que ExoPlayer requiera validar Cloudflare/tokens en cdndirector
-                                        if (masterStreamUrl.contains("cdndirector.dailymotion.com")) {
-                                            try {
-                                                java.net.URL m3u8Url = new java.net.URL(masterStreamUrl);
-                                                java.net.HttpURLConnection m3u8Conn = (java.net.HttpURLConnection) m3u8Url.openConnection();
-                                                m3u8Conn.setRequestMethod("GET");
-                                                m3u8Conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                                                m3u8Conn.setRequestProperty("Referer", referer);
-                                                if (origin != null && !origin.isEmpty()) {
-                                                    m3u8Conn.setRequestProperty("Origin", origin);
-                                                }
-                                                if (!cookieStr.isEmpty()) {
-                                                    m3u8Conn.setRequestProperty("Cookie", cookieStr);
-                                                }
-                                                m3u8Conn.setConnectTimeout(8000);
-                                                m3u8Conn.setReadTimeout(8000);
+                            org.json.JSONArray autoArray = qualities.optJSONArray("auto");
+                            if (autoArray == null || autoArray.length() == 0) continue;
 
-                                                if (m3u8Conn.getResponseCode() == 200) {
-                                                    java.io.BufferedReader m3u8Reader = new java.io.BufferedReader(new java.io.InputStreamReader(m3u8Conn.getInputStream(), "UTF-8"));
-                                                    String m3u8Line;
-                                                    java.util.List<String> variants = new java.util.ArrayList<>();
-                                                    while ((m3u8Line = m3u8Reader.readLine()) != null) {
-                                                        String trimmed = m3u8Line.trim();
-                                                        if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
-                                                            variants.add(trimmed);
-                                                        }
-                                                    }
-                                                    m3u8Reader.close();
+                            org.json.JSONObject autoObj = autoArray.getJSONObject(0);
+                            String masterStreamUrl = autoObj.optString("url");
+                            if (masterStreamUrl == null || masterStreamUrl.isEmpty()) continue;
 
-                                                    if (!variants.isEmpty()) {
-                                                        String bestVariant = null;
-                                                        for (String v : variants) {
-                                                            if (v.contains("live-1080") || v.contains("1080")) {
-                                                                bestVariant = v;
-                                                                break;
-                                                            }
-                                                        }
-                                                        if (bestVariant == null) {
-                                                            for (String v : variants) {
-                                                                if (v.contains("live-720") || v.contains("720")) {
-                                                                    bestVariant = v;
-                                                                    break;
-                                                                }
-                                                            }
-                                                        }
-                                                        if (bestVariant == null) {
-                                                            for (String v : variants) {
-                                                                if (v.contains("live-480") || v.contains("480")) {
-                                                                    bestVariant = v;
-                                                                    break;
-                                                                }
-                                                            }
-                                                        }
-                                                        if (bestVariant == null) {
-                                                            bestVariant = variants.get(variants.size() - 1);
-                                                        }
-                                                        int hashIdx = bestVariant.indexOf('#');
-                                                        if (hashIdx >= 0) {
-                                                            bestVariant = bestVariant.substring(0, hashIdx);
-                                                        }
-                                                        if (bestVariant.startsWith("http")) {
-                                                            finalPlayUrl = bestVariant;
-                                                        }
-                                                    }
-                                                }
-                                            } catch (Exception ePre) {
-                                                ePre.printStackTrace();
+                            String finalPlayUrl = null;
+
+                            // Pre-resolución con OkHttp: resolver la variante HLS directa de dmcdn.net
+                            // para evitar que ExoPlayer requiera validar Cloudflare/tokens en cdndirector
+                            if (masterStreamUrl.contains("cdndirector.dailymotion.com")) {
+                                Request.Builder m3u8Req = new Request.Builder()
+                                        .url(masterStreamUrl)
+                                        .header("User-Agent", browserUa);
+                                if (referer != null && !referer.isEmpty()) {
+                                    m3u8Req.header("Referer", referer);
+                                }
+                                if (origin != null && !origin.isEmpty()) {
+                                    m3u8Req.header("Origin", origin);
+                                }
+                                if (!cookieStr.isEmpty()) {
+                                    m3u8Req.header("Cookie", cookieStr);
+                                }
+
+                                Response m3u8Resp = SHARED_OKHTTP_CLIENT.newCall(m3u8Req.build()).execute();
+                                if (m3u8Resp.isSuccessful() && m3u8Resp.body() != null) {
+                                    String m3u8Body = m3u8Resp.body().string();
+                                    m3u8Resp.close();
+
+                                    java.util.List<String> variants = new java.util.ArrayList<>();
+                                    String[] lines = m3u8Body.split("\\r?\\n");
+                                    for (String l : lines) {
+                                        String trimmed = l.trim();
+                                        if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
+                                            variants.add(trimmed);
+                                        }
+                                    }
+
+                                    if (!variants.isEmpty()) {
+                                        String bestVariant = null;
+                                        for (String v : variants) {
+                                            if (v.contains("live-1080") || v.contains("1080")) {
+                                                bestVariant = v;
+                                                break;
                                             }
                                         }
-
-                                        final String streamToPlay = finalPlayUrl;
-                                        final String finalReferer = referer;
-                                        final String dmUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
-                                        handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                playResolvedUrl(streamToPlay, cookieStr, finalReferer, ch, dmUserAgent);
+                                        if (bestVariant == null) {
+                                            for (String v : variants) {
+                                                if (v.contains("live-720") || v.contains("720")) {
+                                                    bestVariant = v;
+                                                    break;
+                                                }
                                             }
-                                        });
-                                        return;
+                                        }
+                                        if (bestVariant == null) {
+                                            for (String v : variants) {
+                                                if (v.contains("live-480") || v.contains("480")) {
+                                                    bestVariant = v;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (bestVariant == null) {
+                                            bestVariant = variants.get(variants.size() - 1);
+                                        }
+                                        int hashIdx = bestVariant.indexOf('#');
+                                        if (hashIdx >= 0) {
+                                            bestVariant = bestVariant.substring(0, hashIdx);
+                                        }
+                                        if (bestVariant.startsWith("http")) {
+                                            finalPlayUrl = bestVariant;
+                                        }
                                     }
+                                } else {
+                                    if (m3u8Resp.body() != null) m3u8Resp.close();
                                 }
+                            } else {
+                                finalPlayUrl = masterStreamUrl;
                             }
+
+                            // Si se pudo resolver la variante directa, reproducir de inmediato
+                            if (finalPlayUrl != null && !finalPlayUrl.isEmpty()) {
+                                final String streamToPlay = finalPlayUrl;
+                                final String finalReferer = referer;
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        playResolvedUrl(streamToPlay, cookieStr, finalReferer, ch, browserUa);
+                                    }
+                                });
+                                return;
+                            }
+
+                            // Si no se obtuvo la variante directa pero tenemos masterStreamUrl, intentar con OkHttp
+                            if (masterStreamUrl != null && !masterStreamUrl.isEmpty()) {
+                                final String streamToPlay = masterStreamUrl;
+                                final String finalReferer = referer;
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        playResolvedUrl(streamToPlay, cookieStr, finalReferer, ch, browserUa);
+                                    }
+                                });
+                                return;
+                            }
+                        } catch (Exception eCand) {
+                            android.util.Log.w("PlayerActivity", "Candidate " + candidateId + " failed: " + eCand.getMessage());
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    android.util.Log.e("PlayerActivity", "Error in resolveDailymotionAndPlay: " + e.getMessage(), e);
                 }
-
 
                 handler.post(new Runnable() {
                     @Override

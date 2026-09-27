@@ -1,6 +1,6 @@
 {
-  "versionCode": 141,
-  "versionName": "2.43",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.43/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.43."
+  "versionCode": 142,
+  "versionName": "2.44",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.44/app-website-release.apk",
+  "releaseNotes": "Actualización v2.44: Solución definitiva de reproducción para canales Trece y ABC TV Paraguay con resolución nativa OkHttp y variantes directas HLS."
 }

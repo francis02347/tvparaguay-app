@@ -26,6 +26,8 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.datasource.okhttp.OkHttpDataSource;
+import okhttp3.OkHttpClient;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
@@ -242,10 +244,15 @@ public class BackgroundAudioService extends Service {
                 userAgent = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
             }
 
-            // 3. Crear DataSource.Factory con soporte de headers
-            DefaultHttpDataSource.Factory httpFactory = new DefaultHttpDataSource.Factory()
-                    .setUserAgent(userAgent)
-                    .setAllowCrossProtocolRedirects(true);
+            // 3. Crear DataSource.Factory con soporte de headers y OkHttp
+            OkHttpClient okClient = new OkHttpClient.Builder()
+                    .connectTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+                    .readTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+                    .followRedirects(true)
+                    .followSslRedirects(true)
+                    .build();
+            OkHttpDataSource.Factory httpFactory = new OkHttpDataSource.Factory(okClient)
+                    .setUserAgent(userAgent);
             
             if (!headers.isEmpty()) {
                 httpFactory.setDefaultRequestProperties(headers);
