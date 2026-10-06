@@ -106,7 +106,7 @@
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 13,
-      "backup_url": "http://38.44.109.41:8003/play/a0ev/index.m3u8"
+      "backup_url": "http://200.115.120.1:8000/play/ca016/index.m3u8|http://190.108.93.180:8000/play/a03n/index.m3u8|http://38.44.109.41:8003/play/a0ev/index.m3u8"
     },
     {
       "name": "Paravisión",
@@ -213,7 +213,7 @@
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 26,
-      "backup_url": "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8"
+      "backup_url": "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/events1py/playlist.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/events2py/playlist.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/events3py/playlist.m3u8"
     },
     {
       "name": "Tigo Sports+ (Solo Eventos)",
@@ -221,7 +221,8 @@
       "raw_url": "http://45.170.130.224:8000/play/a04i/index.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
-      "number": 27
+      "number": 27,
+      "backup_url": "https://lbgo.bozztv.com/ssh101/ssh101/events2py/playlist.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/events3py/playlist.m3u8"
     },
     {
       "name": "Venus Media",
@@ -702,7 +703,7 @@
       "logo": "",
       "category": "Deportes",
       "number": 85,
-      "backup_url": "http://200.60.97.100:28888/play/a01c/index.m3u8|http://45.170.130.224:8000/play/a020/index.m3u8"
+      "backup_url": "http://38.44.109.41:8003/play/a02l/index.m3u8|http://200.60.97.100:28888/play/a01c/index.m3u8|http://45.170.130.224:8000/play/a020/index.m3u8|http://181.209.38.115:8000/play/a02l/index.m3u8"
     },
     {
       "name": "Waypoint TV (Estados Unidos)",

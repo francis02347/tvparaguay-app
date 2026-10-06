@@ -235,6 +235,7 @@
         state.isPlaying = true;
         state.networkRetryCount = 0;
         state.mediaRecoveryCount = 0;
+        state.currentSignalIndex = 0;
 
         if (state.playbackTimeout) {
             clearTimeout(state.playbackTimeout);
@@ -336,6 +337,31 @@
                         dom.video.play().catch(() => {});
                     }
                 } else {
+                    let allUrls = [channel.url];
+                    if (channel.backup_url) {
+                        allUrls = allUrls.concat(channel.backup_url.split('|').map(u => u.trim()).filter(Boolean));
+                    }
+                    if (state.currentSignalIndex !== undefined && state.currentSignalIndex + 1 < allUrls.length) {
+                        state.currentSignalIndex++;
+                        state.usedProxy = false;
+                        state.networkRetryCount = 0;
+                        const nextUrl = allUrls[state.currentSignalIndex];
+                        console.warn(`Timeout en señal. Probando señal de respaldo ${state.currentSignalIndex + 1}/${allUrls.length}: ${nextUrl}`);
+                        if (dom.loaderText) dom.loaderText.textContent = `Probando señal de respaldo ${state.currentSignalIndex + 1}...`;
+                        let streamNext = nextUrl;
+                        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://')) {
+                            state.usedProxy = true;
+                            streamNext = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
+                        }
+                        if (state.hls) {
+                            state.hls.loadSource(streamNext);
+                            state.hls.startLoad();
+                        } else {
+                            dom.video.src = streamNext;
+                            dom.video.play().catch(() => {});
+                        }
+                        return;
+                    }
                     handleStreamFatalError('La señal en vivo tardó demasiado en responder.');
                 }
             }
@@ -467,6 +493,26 @@
                             console.warn(`Reintentando carga proxy (${state.networkRetryCount}/2)...`);
                             state.hls.startLoad();
                         } else {
+                            let allUrls = [channel.url];
+                            if (channel.backup_url) {
+                                allUrls = allUrls.concat(channel.backup_url.split('|').map(u => u.trim()).filter(Boolean));
+                            }
+                            if (state.currentSignalIndex !== undefined && state.currentSignalIndex + 1 < allUrls.length) {
+                                state.currentSignalIndex++;
+                                state.usedProxy = false;
+                                state.networkRetryCount = 0;
+                                const nextUrl = allUrls[state.currentSignalIndex];
+                                console.warn(`Error de red en señal. Conectando a señal de respaldo ${state.currentSignalIndex + 1}/${allUrls.length}: ${nextUrl}`);
+                                if (dom.loaderText) dom.loaderText.textContent = `Conectando a señal de respaldo ${state.currentSignalIndex + 1}...`;
+                                let streamNext = nextUrl;
+                                if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://')) {
+                                    state.usedProxy = true;
+                                    streamNext = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
+                                }
+                                state.hls.loadSource(streamNext);
+                                state.hls.startLoad();
+                                return;
+                            }
                             if (state.playbackTimeout) clearTimeout(state.playbackTimeout);
                             handleStreamFatalError('Este canal no se encuentra emitiendo en este momento.');
                         }

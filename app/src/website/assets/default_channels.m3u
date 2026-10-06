@@ -23,7 +23,7 @@ https://stream1.sersat.com/hls/garagetv.m3u8
 desdeparaguay://gentv
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="General",TV Pública (Argentina)
 https://g5.vxral-hor.transport.edge-access.net/b16/ngrp:c7_vivo01_dai_source-20001_all/playlist.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento" backup-url="http://38.44.109.41:8003/play/a0ev/index.m3u8",Telefe Internacional (Argentina)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento" backup-url="http://200.115.120.1:8000/play/ca016/index.m3u8|http://190.108.93.180:8000/play/a03n/index.m3u8|http://38.44.109.41:8003/play/a0ev/index.m3u8",Telefe Internacional (Argentina)
 http://45.170.130.224:8000/play/a03n/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="http://45.170.130.224:8000/play/a032/index.m3u8?hls",Paravisión
 http://45.170.130.224:8000/play/a032/index.m3u8
@@ -49,9 +49,9 @@ desdeparaguay://universotv
 https://copacoradios.desdeparaguay.net/productivatv/productivatv_baja/playlist.m3u8?admin=nacion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",Red Digital
 https://video.hostingcaaguazu.com:19360/reddigitalsanpedro/reddigitalsanpedro.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Deporte" backup-url="https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8",Tigo Sports (Paraguay)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Deporte" backup-url="https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/events1py/playlist.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/events2py/playlist.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/events3py/playlist.m3u8",Tigo Sports (Paraguay)
 http://45.170.130.224:8000/play/a04k/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Deporte",Tigo Sports+ (Solo Eventos)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Deporte" backup-url="https://lbgo.bozztv.com/ssh101/ssh101/events2py/playlist.m3u8|https://lbgo.bozztv.com/ssh101/ssh101/events3py/playlist.m3u8",Tigo Sports+ (Solo Eventos)
 http://45.170.130.224:8000/play/a04i/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Venus Media
 https://tigocloud.desdeparaguay.net/venusmedia/venusmedia/playlist.m3u8
@@ -167,7 +167,7 @@ https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c
 https://rtve01p.origin.c21livecloud.com/live-origin/tdp-hls/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Tennis Channel (Internacional)
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischnlintl-lggb/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" backup-url="http://200.60.97.100:28888/play/a01c/index.m3u8|http://45.170.130.224:8000/play/a020/index.m3u8" group-title="Sports",TyC Sports
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" backup-url="http://38.44.109.41:8003/play/a02l/index.m3u8|http://200.60.97.100:28888/play/a01c/index.m3u8|http://45.170.130.224:8000/play/a020/index.m3u8|http://181.209.38.115:8000/play/a02l/index.m3u8" group-title="Sports",TyC Sports
 http://181.209.38.115:8000/play/a00k/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Sports",Waypoint TV (Estados Unidos)
 https://waypoint-waypointtv-firetv.amagi.tv/playlist.m3u8
