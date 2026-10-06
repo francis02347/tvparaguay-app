@@ -2,5 +2,5 @@
   "versionCode": 143,
   "versionName": "2.45",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.45/app-website-release.apk",
-  "releaseNotes": "Nuevas señales de respaldo para Tigo Sports, TyC Sports y Telefe Argentina, y soporte de failover automático en la web v2.45."
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.45."
 }
