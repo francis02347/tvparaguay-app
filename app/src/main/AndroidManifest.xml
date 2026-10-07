@@ -63,6 +63,12 @@
             android:exported="false"
             android:screenOrientation="unspecified" />
 
+        <activity
+            android:name=".WebPlayerActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden"
+            android:screenOrientation="sensorLandscape" />
+
         <service
             android:name=".BackgroundAudioService"
             android:enabled="true"

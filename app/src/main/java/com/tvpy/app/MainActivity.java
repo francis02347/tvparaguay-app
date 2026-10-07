@@ -32,11 +32,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.Executors;
 import com.google.android.gms.ads.MobileAds;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.widget.Button;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ChannelAdapter adapter;
+    private EventAdapter eventAdapter;
+    private List<LiveEvent> liveEventsList = new ArrayList<>();
+    private boolean showingLiveEvents = false;
     private List<Channel> allChannels;
     private List<Channel> filteredChannels = new ArrayList<>();
     private EditText searchBar;
@@ -56,8 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private String activeGenre = "";
     private android.animation.AnimatorSet tutorialAnimatorSet;
 
-    private static final String ALL  = "Todos";
-    private static final String FAVS = "❤️";
+    private static final String ALL    = "Todos";
+    private static final String EVENTS = "⚽ Partidos del Día";
+    private static final String FAVS   = "❤️";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             ChannelSession.set(filteredChannels, index);
             startActivity(new Intent(this, PlayerActivity.class));
         });
+        eventAdapter = new EventAdapter(new ArrayList<>(), this::showEventLinksDialog);
         recyclerView.setAdapter(adapter);
 
         View btnImportM3u = findViewById(R.id.btnImportM3u);
@@ -140,7 +150,13 @@ public class MainActivity extends AppCompatActivity {
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) {}
-            @Override public void afterTextChanged(Editable s) { applyFilter(); }
+            @Override public void afterTextChanged(Editable s) { 
+                if (showingLiveEvents) {
+                    applyEventsFilter();
+                } else {
+                    applyFilter(); 
+                }
+            }
         });
 
         if (BuildConfig.IS_PLAY_STORE) {
@@ -215,7 +231,11 @@ public class MainActivity extends AppCompatActivity {
         if (adapter != null) { adapter.clearSelection(); deleteBar.setVisibility(View.GONE); }
         loadAllChannels();
         buildFilterChips();
-        applyFilter();
+        if (showingLiveEvents) {
+            loadLiveEvents();
+        } else {
+            applyFilter();
+        }
         checkRemoteChannels();
     }
 
@@ -318,8 +338,9 @@ public class MainActivity extends AppCompatActivity {
         filterChipsContainer.removeAllViews();
 
         // 1. Chip "Todos"
-        boolean isTodosSelected = !showingFavorites && ALL.equals(activeCountry) && activeGenre.isEmpty();
+        boolean isTodosSelected = !showingLiveEvents && !showingFavorites && ALL.equals(activeCountry) && activeGenre.isEmpty();
         addFilterChip(ALL, isTodosSelected, v -> {
+            showingLiveEvents = false;
             showingFavorites = false;
             activeCountry = ALL;
             activeGenre = "";
@@ -327,8 +348,19 @@ public class MainActivity extends AppCompatActivity {
             applyFilter();
         });
 
-        // 2. Chip "❤️" (Favoritos)
-        addFilterChip(FAVS, showingFavorites, v -> {
+        // 2. Chip "⚽ Partidos del Día"
+        addFilterChip(EVENTS, showingLiveEvents, v -> {
+            showingLiveEvents = true;
+            showingFavorites = false;
+            activeCountry = ALL;
+            activeGenre = "";
+            buildFilterChips();
+            loadLiveEvents();
+        });
+
+        // 3. Chip "❤️" (Favoritos)
+        addFilterChip(FAVS, !showingLiveEvents && showingFavorites, v -> {
+            showingLiveEvents = false;
             showingFavorites = true;
             activeCountry = ALL;
             activeGenre = "";
@@ -336,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
             applyFilter();
         });
 
-        // 3. Chips de Géneros
+        // 4. Chips de Géneros
         Set<String> genres = new LinkedHashSet<>();
         for (Channel ch : allChannels) {
             if (ch.getCategory() != null && !ch.getCategory().isEmpty()) {
@@ -344,8 +376,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         for (String genre : genres) {
-            boolean isGenreSelected = !showingFavorites && ALL.equals(activeCountry) && genre.equals(activeGenre);
+            boolean isGenreSelected = !showingLiveEvents && !showingFavorites && ALL.equals(activeCountry) && genre.equals(activeGenre);
             addFilterChip(genre, isGenreSelected, v -> {
+                showingLiveEvents = false;
                 showingFavorites = false;
                 activeCountry = ALL;
                 activeGenre = genre;
@@ -354,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        // 4. Chips de Países
+        // 5. Chips de Países
         Set<String> countries = new LinkedHashSet<>();
         for (Channel ch : allChannels) {
             if (ch.getCountry() != null && !ch.getCountry().isEmpty()) {
@@ -362,8 +395,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         for (String co : countries) {
-            boolean isCountrySelected = !showingFavorites && co.equals(activeCountry) && activeGenre.isEmpty();
+            boolean isCountrySelected = !showingLiveEvents && !showingFavorites && co.equals(activeCountry) && activeGenre.isEmpty();
             addFilterChip(co, isCountrySelected, v -> {
+                showingLiveEvents = false;
                 showingFavorites = false;
                 activeCountry = co;
                 activeGenre = "";
@@ -417,6 +451,16 @@ public class MainActivity extends AppCompatActivity {
     // ─── Filtrado ─────────────────────────────────────────────────────────────
 
     private void applyFilter() {
+        if (showingLiveEvents) {
+            applyEventsFilter();
+            return;
+        }
+
+        if (recyclerView.getAdapter() != adapter) {
+            recyclerView.setAdapter(adapter);
+        }
+        if (alphaBar != null) alphaBar.setVisibility(View.VISIBLE);
+
         if (allChannels == null) return;
         String q = searchBar.getText().toString().toLowerCase().trim();
         Set<String> favUrls = FavoriteStore.loadFavorites(this);
@@ -623,5 +667,151 @@ public class MainActivity extends AppCompatActivity {
     private boolean isAndroidTV() {
         android.app.UiModeManager uiModeManager = (android.app.UiModeManager) getSystemService(UI_MODE_SERVICE);
         return uiModeManager != null && uiModeManager.getCurrentModeType() == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
+    }
+
+    // ─── Partidos del Día (Eventos Deportivos) ──────────────────────────────
+
+    private void loadLiveEvents() {
+        if (!showingLiveEvents) return;
+        if (recyclerView.getAdapter() != eventAdapter) {
+            recyclerView.setAdapter(eventAdapter);
+        }
+        if (alphaBar != null) alphaBar.setVisibility(View.GONE);
+        if (layoutTutorial != null) layoutTutorial.setVisibility(View.GONE);
+
+        if (liveEventsList.isEmpty()) {
+            tvNoResults.setVisibility(View.VISIBLE);
+            tvNoResults.setText("Cargando partidos de hoy...");
+            recyclerView.setVisibility(View.GONE);
+        }
+
+        LiveTvService.getTopMatches(new LiveTvService.Callback<List<LiveEvent>>() {
+            @Override
+            public void onSuccess(List<LiveEvent> result) {
+                if (!showingLiveEvents) return;
+                liveEventsList = result;
+                applyEventsFilter();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                if (!showingLiveEvents) return;
+                if (liveEventsList.isEmpty()) {
+                    tvNoResults.setVisibility(View.VISIBLE);
+                    tvNoResults.setText("No se pudieron cargar los partidos del día.\nToca aquí para reintentar.");
+                    tvNoResults.setOnClickListener(v -> loadLiveEvents());
+                    recyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void applyEventsFilter() {
+        if (!showingLiveEvents) return;
+        if (recyclerView.getAdapter() != eventAdapter) {
+            recyclerView.setAdapter(eventAdapter);
+        }
+        if (alphaBar != null) alphaBar.setVisibility(View.GONE);
+        if (layoutTutorial != null) layoutTutorial.setVisibility(View.GONE);
+
+        String q = searchBar.getText().toString().toLowerCase().trim();
+        List<LiveEvent> filtered = new ArrayList<>();
+        for (LiveEvent ev : liveEventsList) {
+            boolean match = q.isEmpty()
+                    || ev.getTitle().toLowerCase().contains(q)
+                    || ev.getTournament().toLowerCase().contains(q);
+            if (match) filtered.add(ev);
+        }
+
+        eventAdapter.updateEvents(filtered);
+        if (filtered.isEmpty()) {
+            tvNoResults.setVisibility(View.VISIBLE);
+            tvNoResults.setText("No hay partidos programados en este momento.");
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            tvNoResults.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showEventLinksDialog(LiveEvent event) {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_event_links, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        TextView tvTitle = dialogView.findViewById(R.id.tvDialogTitle);
+        TextView tvSubtitle = dialogView.findViewById(R.id.tvDialogSubtitle);
+        View loadingView = dialogView.findViewById(R.id.layoutDialogLoading);
+        TextView tvNoLinks = dialogView.findViewById(R.id.tvDialogNoLinks);
+        RecyclerView rvLinks = dialogView.findViewById(R.id.rvDialogLinks);
+        Button btnClose = dialogView.findViewById(R.id.btnDialogClose);
+
+        tvTitle.setText(event.getTitle());
+        String sub = (event.getTournament().isEmpty() ? "Fútbol" : event.getTournament())
+                + (!event.getTime().isEmpty() ? " • " + event.getTime() : "");
+        tvSubtitle.setText(sub);
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+        rvLinks.setLayoutManager(new LinearLayoutManager(this));
+
+        LiveTvService.getEventLinks(event.getEventUrl(), new LiveTvService.Callback<List<LiveEventLink>>() {
+            @Override
+            public void onSuccess(List<LiveEventLink> links) {
+                if (isFinishing() || isDestroyed()) return;
+                loadingView.setVisibility(View.GONE);
+                if (links.isEmpty()) {
+                    tvNoLinks.setVisibility(View.VISIBLE);
+                } else {
+                    rvLinks.setVisibility(View.VISIBLE);
+                    rvLinks.setAdapter(new EventLinkAdapter(links, link -> {
+                        dialog.dismiss();
+                        playEventLink(event, link);
+                    }));
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                if (isFinishing() || isDestroyed()) return;
+                loadingView.setVisibility(View.GONE);
+                tvNoLinks.setVisibility(View.VISIBLE);
+                tvNoLinks.setText("No se pudieron obtener las señales de transmisión.\nIntenta nuevamente más tarde.");
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void playEventLink(LiveEvent event, LiveEventLink link) {
+        if ("AceStream".equals(link.getPlayerType())) {
+            String rawUrl = link.getUrl();
+            String hash = "";
+            int cIdx = rawUrl.indexOf("c=");
+            if (cIdx != -1) {
+                int end = rawUrl.indexOf("&", cIdx);
+                hash = end != -1 ? rawUrl.substring(cIdx + 2, end) : rawUrl.substring(cIdx + 2);
+            }
+            if (!hash.isEmpty()) {
+                String acestreamUri = "acestream://" + hash;
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(acestreamUri));
+                try {
+                    startActivity(intent);
+                    return;
+                } catch (Exception ignored) {
+                    // Si no tiene AceStream instalado en el dispositivo, abrir en WebPlayer
+                }
+            }
+        }
+
+        Intent intent = new Intent(this, WebPlayerActivity.class);
+        intent.putExtra(WebPlayerActivity.EXTRA_URL, link.getUrl());
+        intent.putExtra(WebPlayerActivity.EXTRA_TITLE, event.getTitle());
+        intent.putExtra(WebPlayerActivity.EXTRA_SUBTITLE, link.getDisplayLanguage() + (!link.getBitrate().isEmpty() ? " • " + link.getBitrate() : ""));
+        startActivity(intent);
     }
 }

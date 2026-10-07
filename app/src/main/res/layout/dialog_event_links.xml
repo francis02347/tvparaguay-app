@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#0D111C"
+    android:padding="20dp">
+
+    <!-- Header del Diálogo -->
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Transmisiones Disponibles" />
+
+    <TextView
+        android:id="@+id/tvDialogSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#9CA3AF"
+        android:textSize="13sp"
+        android:layout_marginTop="4dp"
+        android:text="Elige una señal para reproducir el partido" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1E293B"
+        android:layout_marginVertical="12dp" />
+
+    <!-- Loading State -->
+    <LinearLayout
+        android:id="@+id/layoutDialogLoading"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:indeterminateTint="#3B82F6" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="#9CA3AF"
+            android:textSize="13sp"
+            android:text="Buscando señales activas..." />
+
+    </LinearLayout>
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/tvDialogNoLinks"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:textColor="#9CA3AF"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:text="Las señales para este partido aún no están disponibles.\nSe activan 15 a 30 minutos antes del inicio." />
+
+    <!-- RecyclerView de enlaces -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDialogLinks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="360dp"
+        android:visibility="gone" />
+
+    <!-- Botón Cerrar -->
+    <Button
+        android:id="@+id/btnDialogClose"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="#60A5FA"
+        android:text="Cerrar" />
+
+</LinearLayout>
