@@ -65,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
     private android.animation.AnimatorSet tutorialAnimatorSet;
 
     private static final String ALL    = "Todos";
-    private static final String EVENTS = "⚽ Partidos del Día";
+    private static final String EVENTS = "⚽ Deportes del Día";
     private static final String FAVS   = "❤️";
+    private String activeSport = "Todos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -337,6 +338,50 @@ public class MainActivity extends AppCompatActivity {
     private void buildFilterChips() {
         filterChipsContainer.removeAllViews();
 
+        if (showingLiveEvents) {
+            // Chip: Volver a Canales de TV
+            addFilterChip("📺 Canales de TV", false, v -> {
+                showingLiveEvents = false;
+                buildFilterChips();
+                applyFilter();
+            });
+
+            // Chip: Todos los deportes
+            String allLabel = liveEventsList.isEmpty() ? "🏆 Todos" : "🏆 Todos (" + liveEventsList.size() + ")";
+            addFilterChip(allLabel, "Todos".equals(activeSport), v -> {
+                activeSport = "Todos";
+                buildFilterChips();
+                applyEventsFilter();
+            });
+
+            // Extraer lista única de deportes disponibles
+            Set<String> sportsSet = new LinkedHashSet<>();
+            for (LiveEvent ev : liveEventsList) {
+                if (ev.getSport() != null && !ev.getSport().isEmpty()) {
+                    sportsSet.add(ev.getSport());
+                }
+            }
+
+            for (String sport : sportsSet) {
+                int count = 0;
+                for (LiveEvent ev : liveEventsList) {
+                    if (sport.equalsIgnoreCase(ev.getSport())) count++;
+                }
+                String emoji = getSportEmoji(sport);
+                String label = emoji + " " + sport + " (" + count + ")";
+                boolean isSelected = sport.equalsIgnoreCase(activeSport);
+                addFilterChip(label, isSelected, v -> {
+                    activeSport = sport;
+                    buildFilterChips();
+                    applyEventsFilter();
+                });
+            }
+
+            // Chip: Actualizar deportes
+            addFilterChip("🔄 Actualizar", false, v -> loadLiveEvents());
+            return;
+        }
+
         // 1. Chip "Todos"
         boolean isTodosSelected = !showingLiveEvents && !showingFavorites && ALL.equals(activeCountry) && activeGenre.isEmpty();
         addFilterChip(ALL, isTodosSelected, v -> {
@@ -348,12 +393,11 @@ public class MainActivity extends AppCompatActivity {
             applyFilter();
         });
 
-        // 2. Chip "⚽ Partidos del Día"
-        addFilterChip(EVENTS, showingLiveEvents, v -> {
+        // 2. Chip "⚽ Deportes del Día"
+        String eventsChipLabel = liveEventsList.isEmpty() ? EVENTS : "⚽ Deportes (" + liveEventsList.size() + ")";
+        addFilterChip(eventsChipLabel, false, v -> {
             showingLiveEvents = true;
-            showingFavorites = false;
-            activeCountry = ALL;
-            activeGenre = "";
+            activeSport = "Todos";
             buildFilterChips();
             loadLiveEvents();
         });
@@ -669,7 +713,7 @@ public class MainActivity extends AppCompatActivity {
         return uiModeManager != null && uiModeManager.getCurrentModeType() == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
     }
 
-    // ─── Partidos del Día (Eventos Deportivos) ──────────────────────────────
+    // ─── Deportes y Partidos del Día (Multi-Deportes) ────────────────────────
 
     private void loadLiveEvents() {
         if (!showingLiveEvents) return;
@@ -681,15 +725,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (liveEventsList.isEmpty()) {
             tvNoResults.setVisibility(View.VISIBLE);
-            tvNoResults.setText("Cargando partidos de hoy...");
+            tvNoResults.setText("Cargando eventos deportivos del día...");
             recyclerView.setVisibility(View.GONE);
         }
 
-        LiveTvService.getTopMatches(new LiveTvService.Callback<List<LiveEvent>>() {
+        LiveTvService.getAllUpcoming(new LiveTvService.Callback<List<LiveEvent>>() {
             @Override
             public void onSuccess(List<LiveEvent> result) {
                 if (!showingLiveEvents) return;
                 liveEventsList = result;
+                buildFilterChips();
                 applyEventsFilter();
             }
 
@@ -698,7 +743,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!showingLiveEvents) return;
                 if (liveEventsList.isEmpty()) {
                     tvNoResults.setVisibility(View.VISIBLE);
-                    tvNoResults.setText("No se pudieron cargar los partidos del día.\nToca aquí para reintentar.");
+                    tvNoResults.setText("No se pudieron cargar los eventos del día.\nToca aquí para reintentar.");
                     tvNoResults.setOnClickListener(v -> loadLiveEvents());
                     recyclerView.setVisibility(View.GONE);
                 }
@@ -717,21 +762,41 @@ public class MainActivity extends AppCompatActivity {
         String q = searchBar.getText().toString().toLowerCase().trim();
         List<LiveEvent> filtered = new ArrayList<>();
         for (LiveEvent ev : liveEventsList) {
-            boolean match = q.isEmpty()
+            boolean matchSport = "Todos".equals(activeSport) || ev.getSport().equalsIgnoreCase(activeSport);
+            boolean matchQuery = q.isEmpty()
                     || ev.getTitle().toLowerCase().contains(q)
-                    || ev.getTournament().toLowerCase().contains(q);
-            if (match) filtered.add(ev);
+                    || ev.getTournament().toLowerCase().contains(q)
+                    || ev.getSport().toLowerCase().contains(q);
+            if (matchSport && matchQuery) {
+                filtered.add(ev);
+            }
         }
 
         eventAdapter.updateEvents(filtered);
         if (filtered.isEmpty()) {
             tvNoResults.setVisibility(View.VISIBLE);
-            tvNoResults.setText("No hay partidos programados en este momento.");
+            tvNoResults.setText("No hay eventos disponibles para este deporte en este momento.");
             recyclerView.setVisibility(View.GONE);
         } else {
             tvNoResults.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private String getSportEmoji(String sport) {
+        if (sport == null) return "🏆";
+        String s = sport.toLowerCase();
+        if (s.contains("fútbol") || s.contains("futbol")) return "⚽";
+        if (s.contains("baloncesto") || s.contains("basket")) return "🏀";
+        if (s.contains("tenis") || s.contains("tennis")) return "🎾";
+        if (s.contains("hockey")) return "🏒";
+        if (s.contains("combate") || s.contains("box") || s.contains("mma") || s.contains("judo")) return "🥊";
+        if (s.contains("motor") || s.contains("f1")) return "🏎️";
+        if (s.contains("voleibol")) return "🏐";
+        if (s.contains("balonmano")) return "🤾";
+        if (s.contains("béisbol") || s.contains("beisbol")) return "⚾";
+        if (s.contains("críquet") || s.contains("cricket")) return "🏏";
+        return "🏆";
     }
 
     private void showEventLinksDialog(LiveEvent event) {

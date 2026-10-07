@@ -65,8 +65,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         }
 
         void bind(LiveEvent event, OnEventClickListener listener) {
+            tvEventIcon.setText(event.getSportEmoji());
             tvEventTitle.setText(event.getTitle());
-            tvEventTournament.setText(event.getTournament().isEmpty() ? "Fútbol Internacional" : event.getTournament());
+            String tour = event.getTournament().isEmpty() ? event.getSport() : event.getSport() + " • " + event.getTournament();
+            tvEventTournament.setText(tour);
             tvEventTime.setText(event.getTime());
 
             if (event.isLive()) {
