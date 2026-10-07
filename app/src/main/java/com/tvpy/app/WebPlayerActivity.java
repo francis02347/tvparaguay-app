@@ -176,6 +176,12 @@ public class WebPlayerActivity extends AppCompatActivity {
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
+            public void onReceivedSslError(WebView view, android.webkit.SslErrorHandler handler, android.net.http.SslError error) {
+                // Proceder para no bloquear reproductores de streaming con certificados no estándares o autofirmados
+                handler.proceed();
+            }
+
+            @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
                 String host = uri.getHost() != null ? uri.getHost().toLowerCase() : "";

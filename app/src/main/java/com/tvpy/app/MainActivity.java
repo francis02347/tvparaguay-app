@@ -733,6 +733,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<LiveEvent> result) {
                 if (!showingLiveEvents) return;
+                tvNoResults.setOnClickListener(null);
                 liveEventsList = result;
                 buildFilterChips();
                 applyEventsFilter();
@@ -744,7 +745,10 @@ public class MainActivity extends AppCompatActivity {
                 if (liveEventsList.isEmpty()) {
                     tvNoResults.setVisibility(View.VISIBLE);
                     tvNoResults.setText("No se pudieron cargar los eventos del día.\nToca aquí para reintentar.");
-                    tvNoResults.setOnClickListener(v -> loadLiveEvents());
+                    tvNoResults.setOnClickListener(v -> {
+                        tvNoResults.setText("Reintentando conectar...");
+                        loadLiveEvents();
+                    });
                     recyclerView.setVisibility(View.GONE);
                 }
             }

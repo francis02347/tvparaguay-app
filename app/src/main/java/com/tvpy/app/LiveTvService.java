@@ -15,6 +15,13 @@ import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
+
 public class LiveTvService {
 
     public interface Callback<T> {
@@ -30,12 +37,47 @@ public class LiveTvService {
     private static final String USER_AGENT = 
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
+    private static SSLSocketFactory sslSocketFactory;
+
+    private static synchronized SSLSocketFactory getLenientSslSocketFactory() {
+        if (sslSocketFactory == null) {
+            try {
+                TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+                    }
+                };
+                SSLContext sc = SSLContext.getInstance("TLS");
+                sc.init(null, trustAllCerts, new java.security.SecureRandom());
+                sslSocketFactory = sc.getSocketFactory();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return sslSocketFactory;
+    }
+
     public static void getAllUpcoming(Callback<List<LiveEvent>> callback) {
         EXECUTOR.execute(() -> {
             try {
-                String html = fetchHtml(ALL_UPCOMING_URL);
+                String html;
+                try {
+                    html = fetchHtml(ALL_UPCOMING_URL);
+                } catch (Exception e) {
+                    // Si falla HTTPS o hay timeout, reintentar vía HTTP
+                    html = fetchHtml("http://livetv.sx/es/allupcoming/");
+                }
                 List<LiveEvent> events = parseAllUpcoming(html);
-                MAIN_HANDLER.post(() -> callback.onSuccess(events));
+                if (events.isEmpty()) {
+                    try {
+                        String fallbackHtml = fetchHtml("https://livetv.sx/es/allupcomingsports/1/");
+                        events = parseAllUpcoming(fallbackHtml);
+                    } catch (Exception ignored) {}
+                }
+                final List<LiveEvent> finalEvents = events;
+                MAIN_HANDLER.post(() -> callback.onSuccess(finalEvents));
             } catch (Exception e) {
                 MAIN_HANDLER.post(() -> callback.onError(e));
             }
@@ -55,28 +97,58 @@ public class LiveTvService {
     }
 
     private static String fetchHtml(String targetUrl) throws Exception {
-        URL url = new URL(targetUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("User-Agent", USER_AGENT);
-        conn.setRequestProperty("Referer", BASE_URL + "/");
-        conn.setRequestProperty("Accept-Language", "es-ES,es;q=0.9,en;q=0.8");
-        conn.setConnectTimeout(10000);
-        conn.setReadTimeout(12000);
+        int redirects = 0;
+        String curUrl = targetUrl;
+        while (redirects < 5) {
+            URL url = new URL(curUrl);
+            HttpURLConnection conn;
+            if (curUrl.startsWith("https://")) {
+                HttpsURLConnection sConn = (HttpsURLConnection) url.openConnection();
+                SSLSocketFactory sf = getLenientSslSocketFactory();
+                if (sf != null) {
+                    sConn.setSSLSocketFactory(sf);
+                }
+                sConn.setHostnameVerifier((hostname, session) -> true);
+                conn = sConn;
+            } else {
+                conn = (HttpURLConnection) url.openConnection();
+            }
+            conn.setInstanceFollowRedirects(false);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("User-Agent", USER_AGENT);
+            conn.setRequestProperty("Referer", BASE_URL + "/");
+            conn.setRequestProperty("Accept-Language", "es-ES,es;q=0.9,en;q=0.8");
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(15000);
 
-        int code = conn.getResponseCode();
-        if (code != HttpURLConnection.HTTP_OK && code != 301 && code != 302) {
-            throw new Exception("HTTP Error: " + code);
-        }
+            int code = conn.getResponseCode();
+            if (code == HttpURLConnection.HTTP_MOVED_PERM || code == HttpURLConnection.HTTP_MOVED_TEMP || code == 307 || code == 308) {
+                String loc = conn.getHeaderField("Location");
+                if (loc != null && !loc.isEmpty()) {
+                    if (loc.startsWith("/")) {
+                        curUrl = BASE_URL + loc;
+                    } else {
+                        curUrl = loc;
+                    }
+                    redirects++;
+                    continue;
+                }
+            }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
+            if (code != HttpURLConnection.HTTP_OK) {
+                throw new Exception("HTTP Error: " + code);
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            reader.close();
+            return sb.toString();
         }
-        reader.close();
-        return sb.toString();
+        throw new Exception("Demasiadas redirecciones");
     }
 
     private static List<LiveEvent> parseAllUpcoming(String html) {
