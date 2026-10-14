@@ -374,11 +374,12 @@
     },
     {
       "name": "ESPN (Argentina)",
-      "url": "http://181.209.38.115:8000/play/a00b/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a00b/index.m3u8",
+      "url": "https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8",
+      "raw_url": "https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 46
+      "number": 46,
+      "backup_url": "https://bantel-cdn1.iptvperu.tv:1936/btnscrtn/espn-mux/chunks.m3u8|http://181.78.197.59:8000/play/a07z/index.m3u8|http://181.209.38.115:8000/play/a00b/index.m3u8"
     },
     {
       "name": "ESPN (Señal Principal)",
@@ -391,11 +392,12 @@
     },
     {
       "name": "ESPN 2 (Argentina)",
-      "url": "http://181.209.38.115:8000/play/a02z/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a02z/index.m3u8",
+      "url": "https://barinaslive1.boldmss.com/ESPN_2/ESPN_2.isml/ESPN_2.m3u8",
+      "raw_url": "https://barinaslive1.boldmss.com/ESPN_2/ESPN_2.isml/ESPN_2.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 48
+      "number": 48,
+      "backup_url": "https://bantel-cdn1.iptvperu.tv:1936/btnscrtn/espn2-mux/playlist.m3u8|http://181.78.197.59:8000/play/a080/index.m3u8|http://190.128.214.97:64333/play/a02z/index.m3u8|http://181.209.38.115:8000/play/a02z/index.m3u8"
     },
     {
       "name": "ESPN 2",
@@ -417,11 +419,12 @@
     },
     {
       "name": "ESPN 3 (Argentina)",
-      "url": "http://181.209.38.115:8000/play/a00d/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a00d/index.m3u8",
+      "url": "https://barinaslive1.boldmss.com/ESPN_3/ESPN_3.isml/ESPN_3.m3u8",
+      "raw_url": "https://barinaslive1.boldmss.com/ESPN_3/ESPN_3.isml/ESPN_3.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 51
+      "number": 51,
+      "backup_url": "https://bantel-cdn1.iptvperu.tv:1936/btnscrtn/espn3-mux/playlist.m3u8|http://190.61.47.54:8000/play/a005/index.m3u8|http://181.209.38.115:8000/play/a00d/index.m3u8"
     },
     {
       "name": "ESPN 3",
@@ -443,12 +446,12 @@
     },
     {
       "name": "ESPN 4",
-      "url": "http://181.78.197.59:8000/play/a07n/index.m3u8",
-      "raw_url": "http://181.78.197.59:8000/play/a07n/index.m3u8",
+      "url": "https://barinaslive1.boldmss.com/ESPN_4/ESPN_4.isml/ESPN_4.m3u8",
+      "raw_url": "https://barinaslive1.boldmss.com/ESPN_4/ESPN_4.isml/ESPN_4.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 54,
-      "backup_url": "http://38.44.109.41:8003/play/a0i4/index.m3u8|http://45.170.130.224:8000/play/a01w/index.m3u8"
+      "backup_url": "http://181.78.197.59:8000/play/a07n/index.m3u8|http://38.44.109.41:8003/play/a0i4/index.m3u8"
     },
     {
       "name": "ESPN 4 (Brasil)",
@@ -497,11 +500,12 @@
     },
     {
       "name": "ESPN Premium",
-      "url": "http://181.209.38.115:8000/play/a00f/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a00f/index.m3u8",
+      "url": "http://190.128.214.97:64333/play/a02i/index.m3u8",
+      "raw_url": "http://190.128.214.97:64333/play/a02i/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 60
+      "number": 60,
+      "backup_url": "http://190.128.214.97:64333/play/a00f/index.m3u8|http://181.209.38.115:8000/play/a00f/index.m3u8"
     },
     {
       "name": "ESPN8: The Ocho",
