@@ -1638,3 +1638,18 @@ body {
         font-size: 13px;
     }
 }
+
+/* BOTÓN DE SELECCIÓN DE SEÑAL / RESPALDO EN REPRODUCTOR */
+.yt-hud-btn-signal {
+    background: rgba(0, 242, 254, 0.12) !important;
+    border: 1px solid rgba(0, 242, 254, 0.45) !important;
+    color: var(--accent-primary) !important;
+}
+
+.yt-hud-btn-signal:hover,
+.yt-hud-btn-signal:focus,
+.yt-hud-btn-signal.focused {
+    background: rgba(0, 242, 254, 0.3) !important;
+    border-color: #00F2FE !important;
+    box-shadow: 0 0 14px rgba(0, 242, 254, 0.4) !important;
+}

@@ -404,7 +404,7 @@
       "logo": "",
       "category": "Deportes",
       "number": 49,
-      "backup_url": "http://38.44.109.41:8003/play/a0gd/index.m3u8|http://45.170.130.224:8000/play/a01x/index.m3u8"
+      "backup_url": "https://barinaslive1.boldmss.com/ESPN_2/ESPN_2.isml/ESPN_2.m3u8|http://38.44.109.41:8003/play/a0gd/index.m3u8|http://45.170.130.224:8000/play/a01x/index.m3u8"
     },
     {
       "name": "ESPN 2 (Brasil)",
@@ -431,7 +431,7 @@
       "logo": "",
       "category": "Deportes",
       "number": 52,
-      "backup_url": "http://38.44.109.41:8003/play/a0gq/index.m3u8|http://45.170.130.224:8000/play/a03s/index.m3u8"
+      "backup_url": "https://barinaslive1.boldmss.com/ESPN_3/ESPN_3.isml/ESPN_3.m3u8|http://38.44.109.41:8003/play/a0gq/index.m3u8|http://45.170.130.224:8000/play/a03s/index.m3u8"
     },
     {
       "name": "ESPN 3 (Brasil)",
@@ -1433,8 +1433,8 @@
     "Nacionales (Paraguay)",
     "Deportes",
     "Noticias",
-    "Música & Radio",
     "Internacionales",
-    "Infantil"
+    "Infantil",
+    "Música & Radio"
   ]
 }

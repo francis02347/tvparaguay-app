@@ -30,7 +30,7 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <!-- Estilos de la aplicación -->
-    <link rel="stylesheet" href="styles.css?v=2.54">
+    <link rel="stylesheet" href="styles.css?v=20261021.1546">
 </head>
 <body>
     <!-- FONDO AMBIENTAL -->
@@ -51,7 +51,7 @@
                     <span class="pulse-dot"></span> EN VIVO
                 </div>
                 <div class="version-pill" id="app-version" title="Versión de la plataforma">v2.54</div>
-                <div class="update-pill" id="app-update-time" title="Hora de última actualización">Hora de última actualización 15:25</div>
+                <div class="update-pill" id="app-update-time" title="Fecha y hora de última actualización">Actualización: 21/10/2026 - 15:46</div>
             </div>
 
             <div class="header-center">
@@ -194,6 +194,9 @@
                         <span class="hud-channel-cat" id="hud-channel-cat">Nacionales</span>
                     </div>
                     <div class="hud-bottom-right">
+                        <button id="btn-signal" class="yt-hud-btn yt-hud-btn-list yt-hud-btn-signal focusable hidden" tabindex="0" title="Cambiar señal de transmisión (S)">
+                            <span id="btn-signal-text">📡 Señal 1</span>
+                        </button>
                         <button id="btn-open-channel-list" class="yt-hud-btn yt-hud-btn-list focusable" tabindex="0" title="Ver lista de canales (L)">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                                 <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
@@ -277,6 +280,6 @@
     </nav>
 
     <!-- SCRIPT PRINCIPAL -->
-    <script src="app.js?v=2.54"></script>
+    <script src="app.js?v=20261021.1546"></script>
 </body>
 </html>

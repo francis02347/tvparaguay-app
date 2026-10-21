@@ -68,6 +68,8 @@
         iconPlayPauseSvg: document.getElementById('icon-play-pause-svg'),
         btnForward10: document.getElementById('btn-forward-10'),
         btnNext: document.getElementById('btn-next-channel'),
+        btnSignal: document.getElementById('btn-signal'),
+        btnSignalText: document.getElementById('btn-signal-text'),
         btnOpenDrawer: document.getElementById('btn-open-channel-list'),
         btnFullscreen: document.getElementById('btn-fullscreen'),
         iconFullscreenSvg: document.getElementById('icon-fullscreen-svg'),
@@ -227,6 +229,78 @@
     // ==========================================================================
     // 3. REPRODUCTOR DE VIDEO (HLS.JS + NATIVO SMART TV)
     // ==========================================================================
+    function getAllChannelUrls(channel) {
+        if (!channel) return [];
+        let urls = [];
+        if (channel.url && channel.url.trim()) urls.push(channel.url.trim());
+        if (channel.backup_url) {
+            const backups = channel.backup_url.split('|').map(u => u.trim()).filter(Boolean);
+            for (const b of backups) {
+                if (!urls.includes(b)) urls.push(b);
+            }
+        }
+        return urls;
+    }
+
+    function updateSignalButtonUi() {
+        if (!dom.btnSignal) return;
+        if (!state.currentChannel) {
+            dom.btnSignal.classList.add('hidden');
+            return;
+        }
+        const allUrls = getAllChannelUrls(state.currentChannel);
+        if (allUrls.length > 1) {
+            dom.btnSignal.classList.remove('hidden');
+            const num = (state.currentSignalIndex || 0) + 1;
+            if (dom.btnSignalText) {
+                dom.btnSignalText.textContent = `📡 Señal ${num}/${allUrls.length}`;
+            }
+            dom.btnSignal.setAttribute('title', `Cambiar señal (${num} de ${allUrls.length}). Presiona 'S' para alternar.`);
+        } else {
+            dom.btnSignal.classList.add('hidden');
+        }
+    }
+
+    function cycleNextSignal() {
+        if (!state.currentChannel) return;
+        const allUrls = getAllChannelUrls(state.currentChannel);
+        if (allUrls.length <= 1) return;
+
+        state.currentSignalIndex = ((state.currentSignalIndex || 0) + 1) % allUrls.length;
+        updateSignalButtonUi();
+
+        const nextUrl = allUrls[state.currentSignalIndex];
+        const isBackup = state.currentSignalIndex > 0;
+        const label = isBackup ? `Señal ${state.currentSignalIndex + 1} (Respaldo)` : `Señal ${state.currentSignalIndex + 1} (Principal)`;
+
+        if (dom.loader) dom.loader.classList.remove('hidden');
+        if (dom.loaderText) dom.loaderText.textContent = `Cambiando a ${label}...`;
+        if (dom.errorBox) dom.errorBox.classList.add('hidden');
+
+        if (state.playbackTimeout) {
+            clearTimeout(state.playbackTimeout);
+            state.playbackTimeout = null;
+        }
+        state.networkRetryCount = 0;
+        state.mediaRecoveryCount = 0;
+
+        let streamUrl = nextUrl;
+        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || state.proxyChannels.has(state.currentChannel.name)) {
+            state.usedProxy = true;
+            streamUrl = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
+        } else {
+            state.usedProxy = false;
+        }
+
+        if (state.hls) {
+            state.hls.loadSource(streamUrl);
+            state.hls.startLoad();
+        } else {
+            dom.video.src = streamUrl;
+            dom.video.play().catch(() => {});
+        }
+    }
+
     function playChannel(channel) {
         if (!channel || !channel.url) return;
 
@@ -236,6 +310,7 @@
         state.networkRetryCount = 0;
         state.mediaRecoveryCount = 0;
         state.currentSignalIndex = 0;
+        updateSignalButtonUi();
 
         if (state.playbackTimeout) {
             clearTimeout(state.playbackTimeout);
@@ -343,6 +418,7 @@
                     }
                     if (state.currentSignalIndex !== undefined && state.currentSignalIndex + 1 < allUrls.length) {
                         state.currentSignalIndex++;
+                        updateSignalButtonUi();
                         state.usedProxy = false;
                         state.networkRetryCount = 0;
                         const nextUrl = allUrls[state.currentSignalIndex];
@@ -618,6 +694,7 @@
         // 5. Ocultar modal del reproductor y cuadros flotantes
         try {
             dom.playerModal.classList.add('hidden');
+        if (dom.btnSignal) dom.btnSignal.classList.add('hidden');
             dom.errorBox.classList.add('hidden');
             dom.loader.classList.add('hidden');
             if (dom.unmuteBanner) dom.unmuteBanner.classList.add('hidden');
@@ -946,6 +1023,7 @@
         });
         dom.btnPlayPause.addEventListener('click', wrapHudAction(togglePlayPause));
         dom.btnNext.addEventListener('click', wrapHudAction(nextChannel));
+        if (dom.btnSignal) dom.btnSignal.addEventListener('click', wrapHudAction(cycleNextSignal));
         dom.btnPrev.addEventListener('click', wrapHudAction(prevChannel));
         if (dom.btnRewind10) dom.btnRewind10.addEventListener('click', wrapHudAction(rewind10));
         if (dom.btnForward10) dom.btnForward10.addEventListener('click', wrapHudAction(forward10));
@@ -1232,6 +1310,11 @@
                     } else {
                         dom.btnFullscreen.focus();
                     }
+                    break;
+                case 's':
+                case 'S':
+                    e.preventDefault();
+                    cycleNextSignal();
                     break;
                 case 'Enter':
                     if (active && active.classList.contains('focusable')) {
