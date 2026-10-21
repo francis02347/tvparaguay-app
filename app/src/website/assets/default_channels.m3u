@@ -89,9 +89,9 @@ http://200.60.97.100:28888/play/a0c8/index.m3u8
 http://200.60.97.100:28888/play/a0c9/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports" backup-url="https://cdn-5.nxplay.com.br/ESPN/tracks-v2a1/mono.m3u8",ESPN (Brasil)
 https://cdn-5.nxplay.com.br/ESPN/tracks-v3a1/mono.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports" backup-url="https://bantel-cdn1.iptvperu.tv:1936/btnscrtn/espn-mux/chunks.m3u8|http://181.78.197.59:8000/play/a07z/index.m3u8|http://181.209.38.115:8000/play/a00b/index.m3u8",ESPN (Argentina)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports" backup-url="http://45.170.130.224:8000/play/a04l/index.m3u8|http://181.78.197.59:8000/play/a07z/index.m3u8",ESPN (Argentina)
 https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8|http://38.44.109.41:8003/play/a0hc/index.m3u8|http://45.170.130.224:8000/play/a04l/index.m3u8",ESPN (Señal Principal)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8|http://45.170.130.224:8000/play/a04l/index.m3u8",ESPN (Señal Principal)
 http://181.78.197.59:8000/play/a07z/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports" backup-url="https://bantel-cdn1.iptvperu.tv:1936/btnscrtn/espn2-mux/playlist.m3u8|http://181.78.197.59:8000/play/a080/index.m3u8|http://190.128.214.97:64333/play/a02z/index.m3u8|http://181.209.38.115:8000/play/a02z/index.m3u8",ESPN 2 (Argentina)
 https://barinaslive1.boldmss.com/ESPN_2/ESPN_2.isml/ESPN_2.m3u8

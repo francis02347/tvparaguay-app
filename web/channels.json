@@ -376,7 +376,7 @@
       "logo": "",
       "category": "Deportes",
       "number": 46,
-      "backup_url": "https://bantel-cdn1.iptvperu.tv:1936/btnscrtn/espn-mux/chunks.m3u8|http://181.78.197.59:8000/play/a07z/index.m3u8|http://181.209.38.115:8000/play/a00b/index.m3u8"
+      "backup_url": "http://45.170.130.224:8000/play/a04l/index.m3u8|http://181.78.197.59:8000/play/a07z/index.m3u8"
     },
     {
       "name": "ESPN (Señal Principal)",
@@ -385,7 +385,7 @@
       "logo": "",
       "category": "Deportes",
       "number": 47,
-      "backup_url": "http://38.44.109.41:8003/play/a0hc/index.m3u8|http://45.170.130.224:8000/play/a04l/index.m3u8"
+      "backup_url": "https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8|http://45.170.130.224:8000/play/a04l/index.m3u8"
     },
     {
       "name": "ESPN 2 (Argentina)",

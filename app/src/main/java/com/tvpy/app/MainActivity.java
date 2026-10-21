@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         EpgManager.fetchEpgAsync(this);
+        SignalPreferenceManager.clearSignalPreference(this, "ESPN (Argentina)");
 
         recyclerView  = findViewById(R.id.recyclerView);
         searchBar     = findViewById(R.id.searchBar);
