@@ -90,6 +90,7 @@ public class RecommendedChannels {
         "M+ LaLiga TV 2 HD",
         "M+ Liga de Campeones HD",
         "M+ Liga de Campeones 2 HD",
+        "M+ Liga de Campeones 3 HD",
         "M+ Vamos HD",
         "Motorvision TV (Español)",
         "Rally TV (Internacional)",

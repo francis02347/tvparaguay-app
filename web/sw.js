@@ -1,5 +1,5 @@
 // Service Worker básico para TVV.LAT (PWA Shell Caching)
-const CACHE_NAME = 'tvv-20261022-1856';
+const CACHE_NAME = 'tvv-20261022-2109';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
