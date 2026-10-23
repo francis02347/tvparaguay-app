@@ -2,5 +2,5 @@
   "versionCode": 155,
   "versionName": "2.57",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.57/app-website-release.apk",
-  "releaseNotes": "Actualización v2.57: Reparación de la señal en vivo de SNT (con respaldo CloudFront) y señal en alta definición de Fox Sports 2."
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.57."
 }
