@@ -390,12 +390,11 @@
     },
     {
       "name": "ESPN 2 (Argentina)",
-      "url": "https://barinaslive1.boldmss.com/ESPN_2/ESPN_2.isml/ESPN_2.m3u8",
-      "raw_url": "https://barinaslive1.boldmss.com/ESPN_2/ESPN_2.isml/ESPN_2.m3u8",
+      "url": "http://45.188.229.33:8000/play/a1ab/index.m3u8",
+      "raw_url": "http://45.188.229.33:8000/play/a1ab/index.m3u8",
       "logo": "",
       "category": "Deportes",
-      "number": 48,
-      "backup_url": "https://bantel-cdn1.iptvperu.tv:1936/btnscrtn/espn2-mux/playlist.m3u8|http://181.78.197.59:8000/play/a080/index.m3u8|http://190.128.214.97:64333/play/a02z/index.m3u8|http://181.209.38.115:8000/play/a02z/index.m3u8"
+      "number": 48
     },
     {
       "name": "ESPN 2",
