@@ -3,11 +3,12 @@
   "channels": [
     {
       "name": "SNT",
-      "url": "https://d3epa8orr2qy3m.cloudfront.net/ts:abr.m3u8",
-      "raw_url": "https://d3epa8orr2qy3m.cloudfront.net/ts:abr.m3u8",
+      "url": "https://ddycmnicl95kp.cloudfront.net/live/25646ipbno2g/master.m3u8",
+      "raw_url": "https://ddycmnicl95kp.cloudfront.net/live/25646ipbno2g/master.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
-      "number": 1
+      "number": 1,
+      "backup_url": "https://d6qmllupbc5d2.cloudfront.net/hls/25646ipbno2g/3_5/index.m3u8"
     },
     {
       "name": "Telefuturo",
@@ -544,8 +545,8 @@
     },
     {
       "name": "Fox Sports 2",
-      "url": "http://181.209.38.115:8000/play/a00h/index.m3u8",
-      "raw_url": "http://181.209.38.115:8000/play/a00h/index.m3u8",
+      "url": "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/114.m3u8",
+      "raw_url": "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/114.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 66
