@@ -155,6 +155,12 @@ http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31860/index.m3u8
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31820/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",M+ Vamos HD
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31867/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Sky Sport Bundesliga 1 HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/2480/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Sky Sport Bundesliga 2 HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/7234/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Sky Sport Bundesliga 3 HD
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/7235/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Motorvision TV (Español)
 https://mvg-mv-xumo.otteravision.com/mvg/mv/mv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Rally TV (Internacional)
