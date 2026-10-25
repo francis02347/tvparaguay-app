@@ -130,13 +130,46 @@
 
         <Button
             android:id="@+id/btnRetry"
-            android:layout_width="180dp"
+            android:layout_width="220dp"
             android:layout_height="46dp"
             android:text="Intentar de nuevo"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:background="@drawable/btn_gradient_bg"
             app:backgroundTint="@null" />
+
+        <LinearLayout
+            android:id="@+id/layoutAutoRetryOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/btn_secondary_bg"
+            android:clickable="true"
+            android:focusable="true">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchAutoRetry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:clickable="false"
+                android:focusable="false" />
+
+            <TextView
+                android:id="@+id/tvAutoRetryLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reintentar automáticamente"
+                android:textColor="#DDFFFFFF"
+                android:textSize="13sp"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- ═══════════════════════════════════════════════════

@@ -1,6 +1,6 @@
 {
-  "versionCode": 159,
-  "versionName": "2.61",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.61/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.61."
+  "versionCode": 160,
+  "versionName": "2.62",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.62/app-website-release.apk",
+  "releaseNotes": "Actualización v2.62: Opción de reintento automático (recarga) de transmisiones para dispositivos móviles."
 }

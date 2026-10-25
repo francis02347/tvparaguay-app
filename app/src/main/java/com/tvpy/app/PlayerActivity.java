@@ -115,9 +115,24 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView tvErrorChannelName;
     private TextView tvErrorDiagnostics;
     private android.widget.Button btnRetry;
+    private View layoutAutoRetryOption;
+    private androidx.appcompat.widget.SwitchCompat switchAutoRetry;
     private int autoRetryCount = 0;
     private Runnable autoRetryRunnable;
     private static final int AUTO_RETRY_DELAY_MS = 3000;
+
+    private final Runnable bufferingTimeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (player != null && player.getPlaybackState() == Player.STATE_BUFFERING) {
+                if (isAutoRetryEnabled()) {
+                    android.util.Log.w("PlayerActivity", "Buffering timeout: reintentando transmisión automáticamente...");
+                    android.widget.Toast.makeText(PlayerActivity.this, "Conexión inestable. Reintentando transmisión...", android.widget.Toast.LENGTH_SHORT).show();
+                    loadChannel(currentIndex);
+                }
+            }
+        }
+    };
 
     private View sidePanel;
     private RecyclerView rvSideChannels;
@@ -235,6 +250,8 @@ public class PlayerActivity extends AppCompatActivity {
         tvErrorChannelName = findViewById(R.id.tvErrorChannelName);
         tvErrorDiagnostics = findViewById(R.id.tvErrorDiagnostics);
         btnRetry           = findViewById(R.id.btnRetry);
+        layoutAutoRetryOption = findViewById(R.id.layoutAutoRetryOption);
+        switchAutoRetry       = findViewById(R.id.switchAutoRetry);
         sidePanel          = findViewById(R.id.sidePanel);
         rvSideChannels     = findViewById(R.id.rvSideChannels);
 
@@ -296,11 +313,27 @@ public class PlayerActivity extends AppCompatActivity {
                 handler.removeCallbacks(autoRetryRunnable);
                 autoRetryRunnable = null;
             }
+            autoRetryCount = 0;
             triedSignalsCount = 0;
             showLoading();
             hideErrorScreen();
-            playSignal(activeSignalIndex);
+            loadChannel(currentIndex);
         });
+
+        if (layoutAutoRetryOption != null) {
+            layoutAutoRetryOption.setOnClickListener(v -> {
+                if (switchAutoRetry != null) {
+                    switchAutoRetry.toggle();
+                }
+            });
+            layoutAutoRetryOption.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    v.animate().scaleX(1.05f).scaleY(1.05f).setDuration(150).start();
+                } else {
+                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                }
+            });
+        }
 
         btnFavorite.setOnClickListener(v -> toggleFavorite());
         btnFavorite.setOnFocusChangeListener((v, hasFocus) -> {
@@ -442,7 +475,12 @@ public class PlayerActivity extends AppCompatActivity {
                         handler.removeCallbacks(bufferingDebounceRunnable);
                         handler.postDelayed(bufferingDebounceRunnable, 700);
                     }
+                    handler.removeCallbacks(bufferingTimeoutRunnable);
+                    if (hasInitialPlaybackStarted && isAutoRetryEnabled()) {
+                        handler.postDelayed(bufferingTimeoutRunnable, 14000);
+                    }
                 } else if (state == Player.STATE_READY) {
+                    handler.removeCallbacks(bufferingTimeoutRunnable);
                     handler.removeCallbacks(bufferingDebounceRunnable);
                     hasInitialPlaybackStarted = true;
                     hideLoading();
@@ -451,9 +489,11 @@ public class PlayerActivity extends AppCompatActivity {
                     player.play();
                     updatePipParams();
                 } else if (state == Player.STATE_ENDED) {
+                    handler.removeCallbacks(bufferingTimeoutRunnable);
                     handler.removeCallbacks(bufferingDebounceRunnable);
                     loadChannel(currentIndex);
                 } else if (state == Player.STATE_IDLE) {
+                    handler.removeCallbacks(bufferingTimeoutRunnable);
                     handler.removeCallbacks(bufferingDebounceRunnable);
                     hideLoading();
                 }
@@ -467,6 +507,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             @Override
             public void onPlayerError(PlaybackException error) {
+                handler.removeCallbacks(bufferingTimeoutRunnable);
                 handler.removeCallbacks(bufferingDebounceRunnable);
                 if (error != null && error.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
                     if (player != null) {
@@ -1396,6 +1437,9 @@ public class PlayerActivity extends AppCompatActivity {
         if (bufferingDebounceRunnable != null) {
             handler.removeCallbacks(bufferingDebounceRunnable);
         }
+        if (bufferingTimeoutRunnable != null) {
+            handler.removeCallbacks(bufferingTimeoutRunnable);
+        }
         if (loadingContainer != null) {
             loadingContainer.setVisibility(View.GONE);
         }
@@ -1589,14 +1633,52 @@ public class PlayerActivity extends AppCompatActivity {
         android.util.Log.e("TVPy_Diagnostics", "Fallo al reproducir canal: " + name + 
                 " | error: " + (error != null ? error.getErrorCodeName() : customReason));
 
-        if (isTvBoxOrTelevision()) {
+        if (switchAutoRetry != null) {
+            switchAutoRetry.setOnCheckedChangeListener(null);
+            switchAutoRetry.setChecked(isAutoRetryEnabled());
+            switchAutoRetry.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                setAutoRetryEnabled(isChecked);
+                if (isChecked) {
+                    android.widget.Toast.makeText(PlayerActivity.this, "Reintento automático activado", android.widget.Toast.LENGTH_SHORT).show();
+                    startAutomaticRetry();
+                } else {
+                    android.widget.Toast.makeText(PlayerActivity.this, "Reintento automático desactivado", android.widget.Toast.LENGTH_SHORT).show();
+                    if (autoRetryRunnable != null) {
+                        handler.removeCallbacks(autoRetryRunnable);
+                        autoRetryRunnable = null;
+                    }
+                    if (btnRetry != null) {
+                        btnRetry.setText("Intentar de nuevo");
+                    }
+                }
+            });
+        }
+
+        if (isTvBoxOrTelevision() || isAutoRetryEnabled()) {
             startAutomaticRetry();
         }
+    }
+
+    private boolean isAutoRetryEnabled() {
+        android.content.SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        return prefs.getBoolean("auto_retry_enabled", true);
+    }
+
+    private void setAutoRetryEnabled(boolean enabled) {
+        android.content.SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        prefs.edit().putBoolean("auto_retry_enabled", enabled).apply();
     }
 
     private void startAutomaticRetry() {
         if (autoRetryRunnable != null) {
             handler.removeCallbacks(autoRetryRunnable);
+            autoRetryRunnable = null;
+        }
+        if (!isAutoRetryEnabled()) {
+            if (btnRetry != null) {
+                btnRetry.setText("Intentar de nuevo");
+            }
+            return;
         }
         if (autoRetryCount >= 3) {
             if (btnRetry != null) {
@@ -1605,21 +1687,32 @@ public class PlayerActivity extends AppCompatActivity {
             return;
         }
         autoRetryCount++;
+
+        final int[] secondsRemaining = {3};
         if (btnRetry != null) {
-            btnRetry.setText("Reintentando... (" + autoRetryCount + "/3)");
+            btnRetry.setText("Reintentando en " + secondsRemaining[0] + "s... (" + autoRetryCount + "/3)");
         }
+
         autoRetryRunnable = new Runnable() {
             @Override
             public void run() {
-                if (errorScreen.getVisibility() == View.VISIBLE) {
-                    if (btnRetry != null) {
-                        btnRetry.setText("Intentando...");
+                if (errorScreen != null && errorScreen.getVisibility() == View.VISIBLE) {
+                    secondsRemaining[0]--;
+                    if (secondsRemaining[0] > 0) {
+                        if (btnRetry != null) {
+                            btnRetry.setText("Reintentando en " + secondsRemaining[0] + "s... (" + autoRetryCount + "/3)");
+                        }
+                        handler.postDelayed(this, 1000);
+                    } else {
+                        if (btnRetry != null) {
+                            btnRetry.setText("Cargando de nuevo...");
+                        }
+                        loadChannel(currentIndex);
                     }
-                    loadChannel(currentIndex);
                 }
             }
         };
-        handler.postDelayed(autoRetryRunnable, AUTO_RETRY_DELAY_MS);
+        handler.postDelayed(autoRetryRunnable, 1000);
     }
 
     private void hideErrorScreen() {
