@@ -1,5 +1,5 @@
 {
-  "total": 177,
+  "total": 178,
   "channels": [
     {
       "name": "SNT",
@@ -1036,12 +1036,21 @@
       "number": 126
     },
     {
+      "name": "El Gourmet",
+      "url": "http://190.61.101.11:7050/play/a09s/index.m3u8",
+      "raw_url": "http://190.61.101.11:7050/play/a09s/index.m3u8",
+      "logo": "https://media.elgourmet.com/web/ufwi0lvsd9_eg1500x500.webp",
+      "category": "Internacionales",
+      "number": 127,
+      "backup_url": "http://138.121.15.230:9002/EL-GOURMET/index.m3u8"
+    },
+    {
       "name": "Azteca Internacional (México)",
       "url": "https://azt-mun.otteravision.com/azt/mun/mun.m3u8",
       "raw_url": "https://azt-mun.otteravision.com/azt/mun/mun.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 127
+      "number": 128
     },
     {
       "name": "CBN Español (1080p)",
@@ -1049,7 +1058,7 @@
       "raw_url": "https://fastly.live.brightcove.com/6383462549112/us-east-1/734546207001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoiczFpM3ZpLmVncmVzcy50N2M3emwiLCJhY2NvdW50X2lkIjoiNzM0NTQ2MjA3MDAxIiwiZWhuIjoiZmFzdGx5LmxpdmUuYnJpZ2h0Y292ZS5jb20iLCJpc3MiOiJibGl2ZS1wbGF5YmFjay1zb3VyY2UtYXBpIiwic3ViIjoicGF0aG1hcHRva2VuIiwiYXVkIjpbIjczNDU0NjIwNzAwMSJdLCJqdGkiOiI2MzgzNDYyNTQ5MTEyIn0.g04lznsvgqgIXQt2ZH0H_tWtIeTsMgGjVORsjOJ0T6U/playlist-hls.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 128
+      "number": 129
     },
     {
       "name": "Caracol TV (Colombia)",
@@ -1057,7 +1066,7 @@
       "raw_url": "http://181.78.14.26:4000/play/a00d/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 129,
+      "number": 130,
       "backup_url": "http://181.78.14.26:4000/play/a00c/index.m3u8"
     },
     {
@@ -1066,7 +1075,7 @@
       "raw_url": "http://181.119.185.32:8000/play/a026/index.m3u8?hls",
       "logo": "",
       "category": "Internacionales",
-      "number": 130
+      "number": 131
     },
     {
       "name": "Discovery Channel (Español)",
@@ -1074,7 +1083,7 @@
       "raw_url": "http://187.245.231.226:8000/play/a0q0/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 131,
+      "number": 132,
       "backup_url": "http://190.108.93.180:8000/play/a03u/index.m3u8"
     },
     {
@@ -1083,7 +1092,7 @@
       "raw_url": "http://187.245.231.226:8000/play/a0u5/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 132
+      "number": 133
     },
     {
       "name": "Cartoon Network (Latinoamérica)",
@@ -1092,7 +1101,7 @@
       "backup_url": "http://45.170.130.224:8000/play/a011/index.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 133
+      "number": 134
     },
     {
       "name": "Cartoonito (Latinoamérica)",
@@ -1100,7 +1109,7 @@
       "raw_url": "http://187.102.208.209:8000/play/a0bh/index.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 134
+      "number": 135
     },
     {
       "name": "Disney Channel (Latinoamérica)",
@@ -1109,7 +1118,7 @@
       "backup_url": "http://45.170.130.224:8000/play/a01r/index.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 135
+      "number": 136
     },
     {
       "name": "Disney Junior (Latinoamérica)",
@@ -1118,7 +1127,7 @@
       "backup_url": "http://45.185.163.75:8000/play/a016/index.m3u8|http://45.170.130.224:8000/play/a01m/index.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 136
+      "number": 137
     },
     {
       "name": "Nickelodeon (Latinoamérica)",
@@ -1126,7 +1135,7 @@
       "raw_url": "http://45.170.130.224:8000/play/a00q/index.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 137
+      "number": 138
     },
     {
       "name": "Nick Jr. (Latinoamérica)",
@@ -1135,7 +1144,7 @@
       "backup_url": "http://45.170.130.224:8000/play/a03p/index.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 138
+      "number": 139
     },
     {
       "name": "Discovery Kids (Español)",
@@ -1144,7 +1153,7 @@
       "backup_url": "http://190.108.93.180:8000/play/a05s/index.m3u8|http://45.170.130.224:8000/play/a01a/index.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 139
+      "number": 140
     },
     {
       "name": "Tooncast (Latinoamérica)",
@@ -1153,7 +1162,7 @@
       "backup_url": "http://45.170.130.224:8000/play/a01l/index.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 140
+      "number": 141
     },
     {
       "name": "BabyFirst TV (Español)",
@@ -1161,7 +1170,7 @@
       "raw_url": "https://cdn.fast.jwp.services/v1/channel/1_jB6940Ei_TvhvIHDL/manifest.m3u8",
       "logo": "https://i.imgur.com/WxLHBwu.png",
       "category": "Infantil",
-      "number": 141,
+      "number": 142,
       "backup_url": "http://181.78.106.127:5000/play/a0sa/index.m3u8"
     },
     {
@@ -1170,7 +1179,7 @@
       "raw_url": "https://lge-lgla2.otteravision.com/lge/lgcla/lgcla.m3u8",
       "logo": "",
       "category": "Infantil",
-      "number": 142
+      "number": 143
     },
     {
       "name": "Tom y Jerry (24/7)",
@@ -1178,7 +1187,7 @@
       "raw_url": "https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8",
       "logo": "https://gia.tv/streams/pptv/208314.png",
       "category": "Infantil",
-      "number": 143
+      "number": 144
     },
     {
       "name": "El Chavo TV (24/7)",
@@ -1186,7 +1195,7 @@
       "raw_url": "https://live20.bozztv.com/giatvplayout7/giatv-211465/playlist.m3u8",
       "logo": "https://gia.tv/streams/pptv/211465.png",
       "category": "Infantil",
-      "number": 144
+      "number": 145
     },
     {
       "name": "13 Kids (Chile - 1080p)",
@@ -1194,7 +1203,7 @@
       "raw_url": "https://origin.dpsgo.com/ssai/event/LhHrVtyeQkKZ-Ye_xEU75g/master.m3u8",
       "logo": "https://i.imgur.com/m6y9AMe.png",
       "category": "Infantil",
-      "number": 145
+      "number": 146
     },
     {
       "name": "Peques TV (1080p)",
@@ -1202,7 +1211,7 @@
       "raw_url": "https://live-evg7.tv360.bitel.com.pe/bitel/pequestv/playlist.m3u8",
       "logo": "https://img-evg3.tv360.bitel.com.pe/peru-image/2026/01/06/04/1767647409377/6123aa5e7fc7.png",
       "category": "Infantil",
-      "number": 146
+      "number": 147
     },
     {
       "name": "Xtrema Cartoons (24/7)",
@@ -1210,7 +1219,7 @@
       "raw_url": "https://stmv6.voxtvhd.com.br/xtremacartoons/xtremacartoons/playlist.m3u8",
       "logo": "https://i.imgur.com/X2d8y4e.png",
       "category": "Infantil",
-      "number": 147
+      "number": 148
     },
     {
       "name": "Discovery Turbo (Estados Unidos)",
@@ -1218,7 +1227,7 @@
       "raw_url": "http://181.119.177.253:8000/play/a04k/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 148
+      "number": 149
     },
     {
       "name": "Discovery World (Español)",
@@ -1226,7 +1235,7 @@
       "raw_url": "http://187.245.231.226:8000/play/a0q1/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 149
+      "number": 150
     },
     {
       "name": "Discovery TLC (Español)",
@@ -1234,7 +1243,7 @@
       "raw_url": "http://45.170.130.224:8000/play/a024/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 150,
+      "number": 151,
       "backup_url": "http://187.102.208.209:8000/play/a0a5/index.m3u8|http://190.60.39.220:8000/play/a05r/index.m3u8"
     },
     {
@@ -1243,7 +1252,7 @@
       "raw_url": "https://cdn3.wowza.com/1/SmVrQmZCUXZhVDgz/b3J3MFJv/hls/live/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 151
+      "number": 152
     },
     {
       "name": "Enlace (720p)",
@@ -1251,7 +1260,7 @@
       "raw_url": "https://livecdn.enlace.plus/enlace/smil:enlace-hd.smil/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 152
+      "number": 153
     },
     {
       "name": "Historia (España)",
@@ -1259,7 +1268,7 @@
       "raw_url": "https://d1k3vzh2ivy22k.cloudfront.net/Historia1080.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 153
+      "number": 154
     },
     {
       "name": "Historia y Vida",
@@ -1267,7 +1276,7 @@
       "raw_url": "https://jmp2.uk/plu-67517f923a61d40008c451f0.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 154
+      "number": 155
     },
     {
       "name": "History 2 (Latinoamérica)",
@@ -1275,7 +1284,7 @@
       "raw_url": "http://187.102.208.209:8000/play/a06b/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 155,
+      "number": 156,
       "backup_url": "http://190.93.224.42/HISTORY-2/index.m3u8"
     },
     {
@@ -1284,7 +1293,7 @@
       "raw_url": "http://187.102.208.209:8000/play/a08y/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 156,
+      "number": 157,
       "backup_url": "http://190.93.224.42/HISTORY/index.m3u8"
     },
     {
@@ -1293,7 +1302,7 @@
       "raw_url": "http://187.245.231.226:8000/play/a0q4/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 157
+      "number": 158
     },
     {
       "name": "Las Estrellas (México) [Geo-blocked]",
@@ -1301,7 +1310,7 @@
       "raw_url": "https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 158
+      "number": 159
     },
     {
       "name": "Nat Geo Wild (Español)",
@@ -1309,7 +1318,7 @@
       "raw_url": "http://88.212.15.29/live/test_ngw/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 159,
+      "number": 160,
       "backup_url": "http://187.102.208.209:8000/play/a08z/index.m3u8"
     },
     {
@@ -1318,7 +1327,7 @@
       "raw_url": "http://190.93.224.42/NAT-GEO/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 160
+      "number": 161
     },
     {
       "name": "NatureTime (Español)",
@@ -1326,7 +1335,7 @@
       "raw_url": "https://jmp2.uk/plu-681ba2729624e6275efe0044.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 161
+      "number": 162
     },
     {
       "name": "Pluto TV Animales (Español)",
@@ -1334,7 +1343,7 @@
       "raw_url": "https://jmp2.uk/plu-600ae6a78d801e0007117d21.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 162
+      "number": 163
     },
     {
       "name": "Pluto TV Documentales (Español)",
@@ -1342,7 +1351,7 @@
       "raw_url": "https://jmp2.uk/plu-5ddc503ac7ef120009b101a2.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 163
+      "number": 164
     },
     {
       "name": "Pluto TV Historia (Español)",
@@ -1350,7 +1359,7 @@
       "raw_url": "https://jmp2.uk/plu-61cd7b49543066000713b620.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 164
+      "number": 165
     },
     {
       "name": "Pluto TV Naturaleza (Español)",
@@ -1358,7 +1367,7 @@
       "raw_url": "https://jmp2.uk/plu-5dd85eac039bba0009e86d1d.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 165
+      "number": 166
     },
     {
       "name": "RT Documentary (Internacional)",
@@ -1366,7 +1375,7 @@
       "raw_url": "https://rt-rtd.rttv.com/live/rtdoc/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 166
+      "number": 167
     },
     {
       "name": "RTVE La 1",
@@ -1374,7 +1383,7 @@
       "raw_url": "http://45.170.130.224:8000/play/a016/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 167,
+      "number": 168,
       "backup_url": "https://ztnr.rtve.es/ztnr/1694255.m3u8"
     },
     {
@@ -1383,7 +1392,7 @@
       "raw_url": "https://run-rt-uh-roku.otteravision.com/run/rt_uh/rt_uh.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 168
+      "number": 169
     },
     {
       "name": "Smithsonian Channel (Español)",
@@ -1391,7 +1400,7 @@
       "raw_url": "https://jmp2.uk/plu-63a084934734f30007457b2c.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 169
+      "number": 170
     },
     {
       "name": "TV Globo Bahia (Brasil)",
@@ -1399,7 +1408,7 @@
       "raw_url": "http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 170
+      "number": 171
     },
     {
       "name": "Telemundo (Estados Unidos)",
@@ -1407,7 +1416,7 @@
       "raw_url": "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 171
+      "number": 172
     },
     {
       "name": "Terra Mater WILD (Inglés)",
@@ -1415,7 +1424,7 @@
       "raw_url": "https://53ff3982.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmxheHhUVi1ldV9UZXJyYU1hdGVyV2lsZF9ITFM/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 172
+      "number": 173
     },
     {
       "name": "The Fishing & Hunting Channel",
@@ -1423,7 +1432,7 @@
       "raw_url": "http://88.212.15.19/live/test_fishing_hunting/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 173
+      "number": 174
     },
     {
       "name": "Top Gear (24/7)",
@@ -1431,7 +1440,7 @@
       "raw_url": "https://aegis-cloudfront-1.tubi.video/33ccaca5-a666-4b28-8578-55a9ab9f06d5/playlist.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 174
+      "number": 175
     },
     {
       "name": "Universo (Estados Unidos)",
@@ -1439,7 +1448,7 @@
       "raw_url": "http://187.102.210.46/universo/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 175
+      "number": 176
     },
     {
       "name": "Westv on Streaming",
@@ -1447,7 +1456,7 @@
       "raw_url": "http://38.210.3.64:8090/play/a0p8/index.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 176
+      "number": 177
     },
     {
       "name": "WildEarth (Inglés - Safaris en vivo)",
@@ -1455,7 +1464,7 @@
       "raw_url": "https://dqga3jatxofgx.cloudfront.net/WildEarth.m3u8",
       "logo": "",
       "category": "Internacionales",
-      "number": 177
+      "number": 178
     }
   ],
   "categories": [

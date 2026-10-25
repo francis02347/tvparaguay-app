@@ -140,6 +140,7 @@ public class RecommendedChannels {
         "Vevo Latino (1080p)",
         "Vevo Pop (1080p)",
         "Andalucía Cocina (1080p)",
+        "El Gourmet",
         "Azteca Internacional (México)",
         "CBN Español (1080p)",
         "Caracol TV (Colombia)",

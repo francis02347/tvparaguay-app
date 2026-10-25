@@ -251,6 +251,8 @@ https://amg00056-amg00056c13-rakuten-es-3246.playouts.now.amagi.tv/playlist.m3u8
 https://amg00056-amg00056c6-rakuten-uk-3235.playouts.now.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Cooking",Andalucía Cocina (1080p)
 https://cloud.fastchannel.es/mic/manifiest/hls/acocina/acocina.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="https://media.elgourmet.com/web/ufwi0lvsd9_eg1500x500.webp" tvg-country="Argentina" group-title="Cooking" backup-url="http://138.121.15.230:9002/EL-GOURMET/index.m3u8",El Gourmet
+http://190.61.101.11:7050/play/a09s/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="México" group-title="Entretenimiento",Azteca Internacional (México)
 https://azt-mun.otteravision.com/azt/mun/mun.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",CBN Español (1080p)

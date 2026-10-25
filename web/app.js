@@ -112,7 +112,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=2.59');
+            const resp = await fetch('channels.json?v=2.60');
             const data = await resp.json();
             state.channels = data.channels || [];
             
