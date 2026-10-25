@@ -119,7 +119,7 @@ public class PlayerActivity extends AppCompatActivity {
     private androidx.appcompat.widget.SwitchCompat switchAutoRetry;
     private int autoRetryCount = 0;
     private Runnable autoRetryRunnable;
-    private static final int AUTO_RETRY_DELAY_MS = 3000;
+    private static final int AUTO_RETRY_DELAY_MS = 1000;
 
     private final Runnable bufferingTimeoutRunnable = new Runnable() {
         @Override
@@ -1688,7 +1688,7 @@ public class PlayerActivity extends AppCompatActivity {
         }
         autoRetryCount++;
 
-        final int[] secondsRemaining = {3};
+        final int[] secondsRemaining = {1};
         if (btnRetry != null) {
             btnRetry.setText("Reintentando en " + secondsRemaining[0] + "s... (" + autoRetryCount + "/3)");
         }
