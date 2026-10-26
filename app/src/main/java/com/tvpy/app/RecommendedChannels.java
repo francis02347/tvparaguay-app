@@ -46,6 +46,8 @@ public class RecommendedChannels {
         "Arena Sport 2",
         "Azteca Deportes Network",
         "beIN Sports XTRA en Español",
+        "beIN Sports (USA)",
+        "beIN Sports en Español (USA)",
         "Claro Sports",
         "DAZN 1",
         "DAZN 2",

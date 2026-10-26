@@ -63,6 +63,10 @@ http://mana.etnoselo.tv:80/live/GgvVQ9v62p/GvgYQGVmHD/1514.m3u8
 http://181.119.66.28:8081/AZTECA-DEPORTES-HD/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",beIN Sports XTRA en Español
 https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Deportes",beIN Sports (USA)
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31048/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Deportes",beIN Sports en Español (USA)
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/30015/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deporte",Claro Sports
 https://dai.google.com/linear/hls/event/_OKWx76jT7mivD6d-25QAw/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 1
