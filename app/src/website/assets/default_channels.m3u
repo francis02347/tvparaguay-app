@@ -66,7 +66,7 @@ https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deporte",Claro Sports
 https://dai.google.com/linear/hls/event/_OKWx76jT7mivD6d-25QAw/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 1
-http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31830/index.m3u8
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31831/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 2
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31832/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN 3 Bar HD
@@ -155,6 +155,8 @@ http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31860/index.m3u8
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31820/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",M+ Vamos HD
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31867/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",Deportes por M+
+http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31830/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Sky Sport Bundesliga 1 HD
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/2480/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Sky Sport Bundesliga 2 HD

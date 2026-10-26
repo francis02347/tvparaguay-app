@@ -55,6 +55,7 @@ public class RecommendedChannels {
         "DAZN F1",
         "DAZN LaLiga",
         "Deportes TVC (1080p)",
+        "Deportes por M+",
         "DSports (DirecTV Sports)",
         "DSports 2",
         "DSports+",
