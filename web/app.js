@@ -28,7 +28,9 @@
         isDrawerOpen: false,
         drawerActiveCategory: 'all',
         proxyChannels: new Set(),
-        prefetchTimer: null
+        prefetchTimer: null,
+        autoRetryCount: 0,
+        autoRetryTimer: null
     };
 
     // ELEMENTOS DEL DOM
@@ -301,7 +303,18 @@
         }
     }
 
-    function playChannel(channel) {
+    function playChannel(channel, isAutoRetry = false) {
+        if (!channel) return;
+        if (!isAutoRetry) {
+            if (state.autoRetryTimer) {
+                clearTimeout(state.autoRetryTimer);
+                state.autoRetryTimer = null;
+            }
+            state.autoRetryCount = 0;
+        }
+        if (dom.btnRetry) {
+            dom.btnRetry.textContent = 'Intentar de nuevo';
+        }
         if (!channel || !channel.url) return;
 
         state.currentChannel = channel;
@@ -676,6 +689,11 @@
             clearTimeout(state.hudTimer);
             state.hudTimer = null;
         }
+        if (state.autoRetryTimer) {
+            clearTimeout(state.autoRetryTimer);
+            state.autoRetryTimer = null;
+        }
+        state.autoRetryCount = 0;
 
         // 3. Cerrar drawer de canales si estaba abierto
         if (state.isDrawerOpen) {
@@ -762,12 +780,30 @@
             clearTimeout(state.playbackTimeout);
             state.playbackTimeout = null;
         }
+        if (state.autoRetryTimer) {
+            clearTimeout(state.autoRetryTimer);
+            state.autoRetryTimer = null;
+        }
         dom.loader.classList.add('hidden');
         dom.errorBox.classList.remove('hidden');
         if (customMsg) {
             document.getElementById('error-msg').textContent = customMsg;
         }
         dom.btnRetry.focus();
+
+        // Reintento automático inteligente tras 1 segundo (hasta 3 intentos)
+        if (state.autoRetryCount < 3 && state.currentChannel) {
+            state.autoRetryCount++;
+            dom.btnRetry.textContent = `Reintentando en 1s... (${state.autoRetryCount}/3)`;
+            state.autoRetryTimer = setTimeout(() => {
+                if (!dom.playerModal.classList.contains('hidden') && !dom.errorBox.classList.contains('hidden')) {
+                    dom.btnRetry.textContent = 'Cargando de nuevo...';
+                    playChannel(state.currentChannel, true);
+                }
+            }, 1000);
+        } else {
+            dom.btnRetry.textContent = 'Intentar de nuevo';
+        }
     }
 
     function isHudVisible() {
@@ -1066,6 +1102,11 @@
 
         // Error actions
         dom.btnRetry.addEventListener('click', () => {
+            if (state.autoRetryTimer) {
+                clearTimeout(state.autoRetryTimer);
+                state.autoRetryTimer = null;
+            }
+            state.autoRetryCount = 0;
             if (state.currentChannel) playChannel(state.currentChannel);
         });
         dom.btnErrorBack.addEventListener('click', () => closePlayer(false));
