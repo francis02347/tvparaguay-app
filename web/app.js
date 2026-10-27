@@ -72,6 +72,11 @@
         btnNext: document.getElementById('btn-next-channel'),
         btnSignal: document.getElementById('btn-signal'),
         btnSignalText: document.getElementById('btn-signal-text'),
+        btnVolumeGroup: document.getElementById('hud-volume-group'),
+        btnVolume: document.getElementById('btn-volume'),
+        iconVolumeSvg: document.getElementById('icon-volume-svg'),
+        volumeSlider: document.getElementById('volume-slider'),
+        volumeSliderContainer: document.getElementById('volume-slider-container'),
         btnOpenDrawer: document.getElementById('btn-open-channel-list'),
         btnFullscreen: document.getElementById('btn-fullscreen'),
         iconFullscreenSvg: document.getElementById('icon-fullscreen-svg'),
@@ -101,6 +106,7 @@
         loadProxyChannelsFromStorage();
         startClock();
         setupEventListeners();
+        initVolume();
         await loadChannels();
 
         // Auto-reproducción al entrar a tvv.lat: sintonizar automáticamente el canal 1
@@ -655,13 +661,68 @@
         }
     }
 
+    function updateVolumeUI() {
+        if (!dom.video) return;
+        const isMuted = dom.video.muted || dom.video.volume === 0;
+        const vol = isMuted ? 0 : dom.video.volume;
+
+        if (dom.volumeSlider && document.activeElement !== dom.volumeSlider) {
+            dom.volumeSlider.value = vol;
+            dom.volumeSlider.style.setProperty('--val', vol);
+        }
+
+        if (dom.iconVolumeSvg) {
+            if (isMuted) {
+                dom.iconVolumeSvg.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+                if (dom.btnVolume) dom.btnVolume.title = "Activar sonido (M)";
+            } else if (vol <= 0.5) {
+                dom.iconVolumeSvg.innerHTML = '<path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>';
+                if (dom.btnVolume) dom.btnVolume.title = `Silenciar (M) - Volumen: ${Math.round(vol * 100)}%`;
+            } else {
+                dom.iconVolumeSvg.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+                if (dom.btnVolume) dom.btnVolume.title = `Silenciar (M) - Volumen: ${Math.round(vol * 100)}%`;
+            }
+        }
+    }
+
+    function toggleMute() {
+        if (!dom.video) return;
+        if (dom.video.muted || dom.video.volume === 0) {
+            dom.video.muted = false;
+            let restoreVol = parseFloat(localStorage.getItem('tvv_player_volume') || '1');
+            if (restoreVol <= 0.05) restoreVol = 1.0;
+            dom.video.volume = restoreVol;
+            if (dom.unmuteBanner) dom.unmuteBanner.classList.add('hidden');
+        } else {
+            localStorage.setItem('tvv_player_volume', dom.video.volume);
+            dom.video.muted = true;
+        }
+        updateVolumeUI();
+        showHudTemporary();
+    }
+
     function handleUnmute() {
         if (dom.video) {
             dom.video.muted = false;
+            let restoreVol = parseFloat(localStorage.getItem('tvv_player_volume') || '1');
+            if (restoreVol <= 0.05) restoreVol = 1.0;
+            dom.video.volume = restoreVol;
         }
         if (dom.unmuteBanner) {
             dom.unmuteBanner.classList.add('hidden');
         }
+        updateVolumeUI();
+    }
+
+    function initVolume() {
+        const savedVol = localStorage.getItem('tvv_player_volume');
+        if (savedVol !== null && dom.video) {
+            const v = parseFloat(savedVol);
+            if (!isNaN(v)) {
+                dom.video.volume = Math.max(0, Math.min(1, v));
+            }
+        }
+        updateVolumeUI();
     }
 
     function closePlayer(fromPopstate = false) {
@@ -713,6 +774,7 @@
         try {
             dom.playerModal.classList.add('hidden');
         if (dom.btnSignal) dom.btnSignal.classList.add('hidden');
+        if (dom.btnVolumeGroup) dom.btnVolumeGroup.classList.remove('active');
             dom.errorBox.classList.add('hidden');
             dom.loader.classList.add('hidden');
             if (dom.unmuteBanner) dom.unmuteBanner.classList.add('hidden');
@@ -1070,6 +1132,48 @@
         document.addEventListener('fullscreenchange', updateFullscreenIcon);
         document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
 
+        // Control de volumen e interacciones
+        if (dom.video) {
+            dom.video.addEventListener('volumechange', updateVolumeUI);
+        }
+        if (dom.btnVolume) {
+            dom.btnVolume.addEventListener('click', wrapHudAction(() => {
+                toggleMute();
+            }));
+        }
+        if (dom.volumeSlider) {
+            dom.volumeSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                if (!isNaN(val) && dom.video) {
+                    dom.video.volume = val;
+                    dom.video.muted = (val === 0);
+                    localStorage.setItem('tvv_player_volume', val);
+                    dom.volumeSlider.style.setProperty('--val', val);
+                    if (val > 0 && dom.unmuteBanner) {
+                        dom.unmuteBanner.classList.add('hidden');
+                    }
+                }
+                updateVolumeUI();
+                showHudTemporary(5000);
+            });
+            dom.volumeSlider.addEventListener('click', (e) => e.stopPropagation());
+            dom.volumeSlider.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+        }
+        if (dom.btnVolumeGroup) {
+            dom.btnVolumeGroup.addEventListener('mouseenter', () => {
+                showHudTemporary(6000);
+            });
+            dom.btnVolumeGroup.addEventListener('click', (e) => {
+                if (e.target === dom.volumeSlider) return;
+                dom.btnVolumeGroup.classList.add('active');
+                showHudTemporary(6000);
+            });
+            dom.btnVolumeGroup.addEventListener('touchstart', () => {
+                dom.btnVolumeGroup.classList.add('active');
+                showHudTemporary(6000);
+            }, { passive: true });
+        }
+
         // Botón para desmutear transmisión si el navegador bloqueó audio
         if (dom.btnUnmute) {
             dom.btnUnmute.addEventListener('click', (e) => {
@@ -1139,9 +1243,13 @@
                 // Si el HUD está oculto, cualquier toque en la pantalla lo hace aparecer
                 if (e.cancelable && e.type === 'touchend') e.preventDefault();
                 showHudTemporary();
-            } else if (!e.target.closest('button') && !e.target.closest('#hud-channel-info')) {
-                // Si ya está visible y el toque NO fue en un botón ni en info, ocultar de inmediato
+            } else if (!e.target.closest('button') && !e.target.closest('#hud-channel-info') && !e.target.closest('#hud-volume-group')) {
+                // Si ya está visible y el toque NO fue en un botón ni en info ni en volumen, ocultar de inmediato
                 dom.hud.classList.add('autohidden');
+                if (dom.btnVolumeGroup) dom.btnVolumeGroup.classList.remove('active');
+            }
+            if (!e.target.closest('#hud-volume-group') && dom.btnVolumeGroup) {
+                dom.btnVolumeGroup.classList.remove('active');
             }
         }
 
@@ -1312,6 +1420,14 @@
                         e.preventDefault();
                         dom.btnOpenDrawer.focus();
                         return;
+                    } else if (active === dom.btnOpenDrawer && dom.btnVolume) {
+                        e.preventDefault();
+                        dom.btnVolume.focus();
+                        return;
+                    } else if (active === dom.btnVolume && dom.btnSignal && !dom.btnSignal.classList.contains('hidden')) {
+                        e.preventDefault();
+                        dom.btnSignal.focus();
+                        return;
                     }
                     e.preventDefault();
                     prevChannel();
@@ -1326,6 +1442,14 @@
                         e.preventDefault();
                         dom.btnToggleFav.focus();
                         return;
+                    } else if (active === dom.btnSignal && dom.btnVolume) {
+                        e.preventDefault();
+                        dom.btnVolume.focus();
+                        return;
+                    } else if (active === dom.btnVolume && dom.btnOpenDrawer) {
+                        e.preventDefault();
+                        dom.btnOpenDrawer.focus();
+                        return;
                     } else if (active === dom.btnOpenDrawer && dom.btnFullscreen) {
                         e.preventDefault();
                         dom.btnFullscreen.focus();
@@ -1336,7 +1460,7 @@
                     break;
                 case 'ArrowUp':
                     e.preventDefault();
-                    if (active === dom.btnFullscreen || active === dom.btnOpenDrawer) {
+                    if (active === dom.btnFullscreen || active === dom.btnOpenDrawer || active === dom.btnVolume || active === dom.btnSignal) {
                         dom.btnPlayPause.focus();
                     } else {
                         dom.btnClosePlayer.focus();
@@ -1346,10 +1470,41 @@
                     e.preventDefault();
                     if (active === dom.btnClosePlayer || active === dom.btnToggleFav) {
                         dom.btnPlayPause.focus();
+                    } else if (dom.btnVolume) {
+                        dom.btnVolume.focus();
                     } else if (dom.btnOpenDrawer) {
                         dom.btnOpenDrawer.focus();
                     } else {
                         dom.btnFullscreen.focus();
+                    }
+                    break;
+                case 'm':
+                case 'M':
+                case 'AudioVolumeMute':
+                case 'VolumeMute':
+                    e.preventDefault();
+                    toggleMute();
+                    break;
+                case 'AudioVolumeUp':
+                case 'VolumeUp':
+                    e.preventDefault();
+                    if (dom.video) {
+                        dom.video.muted = false;
+                        dom.video.volume = Math.min(1, dom.video.volume + 0.05);
+                        localStorage.setItem('tvv_player_volume', dom.video.volume);
+                        updateVolumeUI();
+                        showHudTemporary();
+                    }
+                    break;
+                case 'AudioVolumeDown':
+                case 'VolumeDown':
+                    e.preventDefault();
+                    if (dom.video) {
+                        dom.video.volume = Math.max(0, dom.video.volume - 0.05);
+                        if (dom.video.volume === 0) dom.video.muted = true;
+                        localStorage.setItem('tvv_player_volume', dom.video.volume);
+                        updateVolumeUI();
+                        showHudTemporary();
                     }
                     break;
                 case 's':

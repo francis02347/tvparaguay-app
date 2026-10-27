@@ -30,7 +30,7 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <!-- Estilos de la aplicación -->
-    <link rel="stylesheet" href="styles.css?v=20261026.1840">
+    <link rel="stylesheet" href="styles.css?v=20261026.2130">
 </head>
 <body>
     <!-- FONDO AMBIENTAL -->
@@ -51,7 +51,7 @@
                     <span class="pulse-dot"></span> EN VIVO
                 </div>
                 <div class="version-pill" id="app-version" title="Versión de la plataforma">v2.66</div>
-                <div class="update-pill" id="app-update-time" title="Fecha y hora de última actualización">Actualización: 26/10/2026 - 18:40</div>
+                <div class="update-pill" id="app-update-time" title="Fecha y hora de última actualización">Actualización: 26/10/2026 - 21:30</div>
             </div>
 
             <div class="header-center">
@@ -197,6 +197,16 @@
                         <button id="btn-signal" class="yt-hud-btn yt-hud-btn-list yt-hud-btn-signal focusable hidden" tabindex="0" title="Cambiar señal de transmisión (S)">
                             <span id="btn-signal-text">📡 Señal 1</span>
                         </button>
+                        <div class="hud-volume-group" id="hud-volume-group" title="Control de volumen">
+                            <button id="btn-volume" class="yt-hud-btn yt-hud-btn-circle focusable" tabindex="0" title="Silenciar / Activar sonido (M)">
+                                <svg id="icon-volume-svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                            </button>
+                            <div class="volume-slider-container" id="volume-slider-container">
+                                <input type="range" id="volume-slider" class="volume-slider focusable" min="0" max="1" step="0.01" value="1" aria-label="Nivel de volumen">
+                            </div>
+                        </div>
                         <button id="btn-open-channel-list" class="yt-hud-btn yt-hud-btn-list focusable" tabindex="0" title="Ver lista de canales (L)">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                                 <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
@@ -280,6 +290,6 @@
     </nav>
 
     <!-- SCRIPT PRINCIPAL -->
-    <script src="app.js?v=20261026.1840"></script>
+    <script src="app.js?v=20261026.2130"></script>
 </body>
 </html>
