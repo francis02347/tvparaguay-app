@@ -199,6 +199,25 @@ public class PlayerActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_player);
         enterImmersiveMode();
+        RemoteControlManager.getInstance().setListener(new RemoteControlManager.RemoteCommandListener() {
+            @Override
+            public void onRemoteCommand(String action, org.json.JSONObject data) {
+                handleRemotePlayerCommand(action, data);
+            }
+            @Override
+            public void onClientConnected() {
+                Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+            }
+            @Override public void onClientDisconnected() {}
+        });
+        Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+
         checkNotificationPermission();
 
         if (BuildConfig.IS_PLAY_STORE && ENABLE_PREMIUM_BG_AUDIO_PLAYSTORE) {
@@ -1902,14 +1921,22 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         if (isSidePanelVisible()) {
-            if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                    if (keyCode == android.view.KeyEvent.KEYCODE_PROG_YELLOW) {
+            RemoteControlManager.getInstance().showPairingDialog(this);
+            return true;
+        }
+if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
                 hideSidePanel();
                 return true;
             }
             return super.onKeyDown(keyCode, event);
         }
 
-        if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                if (keyCode == android.view.KeyEvent.KEYCODE_PROG_YELLOW) {
+            RemoteControlManager.getInstance().showPairingDialog(this);
+            return true;
+        }
+if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
             if (topBar != null && topBar.getVisibility() == View.VISIBLE) {
                 hideTopBarNow();
                 return true;
@@ -1967,6 +1994,25 @@ public class PlayerActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             enterImmersiveMode();
+        RemoteControlManager.getInstance().setListener(new RemoteControlManager.RemoteCommandListener() {
+            @Override
+            public void onRemoteCommand(String action, org.json.JSONObject data) {
+                handleRemotePlayerCommand(action, data);
+            }
+            @Override
+            public void onClientConnected() {
+                Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+            }
+            @Override public void onClientDisconnected() {}
+        });
+        Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+
             restorePlaybackFromScreenOff();
         }
     }
@@ -2347,6 +2393,25 @@ public class PlayerActivity extends AppCompatActivity {
             if (overlayContainer != null) overlayContainer.setVisibility(View.GONE);
         } else {
             enterImmersiveMode();
+        RemoteControlManager.getInstance().setListener(new RemoteControlManager.RemoteCommandListener() {
+            @Override
+            public void onRemoteCommand(String action, org.json.JSONObject data) {
+                handleRemotePlayerCommand(action, data);
+            }
+            @Override
+            public void onClientConnected() {
+                Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+            }
+            @Override public void onClientDisconnected() {}
+        });
+        Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+
             if (pendingUnlockBgAudio) {
                 pendingUnlockBgAudio = false;
                 showUnlockDialog();
@@ -2359,6 +2424,25 @@ public class PlayerActivity extends AppCompatActivity {
         super.onResume();
         isPlayerActive = true;
         enterImmersiveMode();
+        RemoteControlManager.getInstance().setListener(new RemoteControlManager.RemoteCommandListener() {
+            @Override
+            public void onRemoteCommand(String action, org.json.JSONObject data) {
+                handleRemotePlayerCommand(action, data);
+            }
+            @Override
+            public void onClientConnected() {
+                Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+            }
+            @Override public void onClientDisconnected() {}
+        });
+        Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+
         restorePlaybackFromScreenOff();
         if (!isScreenOffAudioActive && player != null && player.getPlaybackState() == Player.STATE_READY && !BackgroundAudioService.wasStoppedByUser) {
             player.play();
@@ -2597,4 +2681,67 @@ public class PlayerActivity extends AppCompatActivity {
             startBackgroundAudio();
         }
     }
+
+    private void handleRemotePlayerCommand(String action, org.json.JSONObject data) {
+        if (action == null) return;
+        switch (action) {
+            case "CH_UP":
+            case "DPAD_DOWN":
+                navigateToChannel(currentIndex + 1);
+                break;
+
+            case "CH_DOWN":
+            case "DPAD_UP":
+                navigateToChannel(currentIndex - 1);
+                break;
+
+            case "PLAY_PAUSE":
+            case "DPAD_OK":
+                if (player != null) {
+                    player.setPlayWhenReady(!player.getPlayWhenReady());
+                }
+                break;
+
+            case "GUIDE":
+                if (isSidePanelVisible()) hideSidePanel();
+                else showSidePanel();
+                break;
+
+            case "BACK":
+            case "STANDBY":
+                if (isSidePanelVisible()) {
+                    hideSidePanel();
+                } else {
+                    finish();
+                }
+                break;
+
+            case "SELECT_CHANNEL":
+                String chName = data.optString("name", "");
+                int chNum = data.optInt("number", -1);
+                if (channelList != null) {
+                    for (int i = 0; i < channelList.size(); i++) {
+                        Channel c = channelList.get(i);
+                        if ((i + 1) == chNum || c.getName().equalsIgnoreCase(chName)) {
+                            navigateToChannel(i);
+                            return;
+                        }
+                    }
+                }
+                break;
+
+            case "NUMPAD_SELECT":
+                int num = data.optInt("number", -1);
+                if (channelList != null) {
+                    for (int i = 0; i < channelList.size(); i++) {
+                        if ((i + 1) == num) {
+                            navigateToChannel(i);
+                            return;
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
 }

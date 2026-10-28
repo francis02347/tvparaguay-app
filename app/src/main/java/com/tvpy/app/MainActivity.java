@@ -79,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView  = findViewById(R.id.recyclerView);
         searchBar     = findViewById(R.id.searchBar);
+        // Inicializar servicio de Control Remoto Móvil
+        RemoteControlManager.getInstance().init(this);
+        Button btnRemoteControl = findViewById(R.id.btnRemoteControl);
+        if (btnRemoteControl != null) {
+            btnRemoteControl.setOnClickListener(v -> RemoteControlManager.getInstance().showPairingDialog(this));
+        }
+
         tvNoResults   = findViewById(R.id.tvNoResults);
         layoutTutorial = findViewById(R.id.layoutTutorial);
         tvM3uBadge    = findViewById(R.id.tvM3uBadge);
@@ -230,6 +237,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        RemoteControlManager.getInstance().setListener(new RemoteControlManager.RemoteCommandListener() {
+            @Override
+            public void onRemoteCommand(String action, org.json.JSONObject data) {
+                handleRemoteCommand(action, data);
+            }
+            @Override public void onClientConnected() {}
+            @Override public void onClientDisconnected() {}
+        });
+
         if (adapter != null) { adapter.clearSelection(); deleteBar.setVisibility(View.GONE); }
         loadAllChannels();
         buildFilterChips();
@@ -884,4 +900,73 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(WebPlayerActivity.EXTRA_SUBTITLE, link.getDisplayLanguage() + (!link.getBitrate().isEmpty() ? " • " + link.getBitrate() : ""));
         startActivity(intent);
     }
+
+    private void handleRemoteCommand(String action, org.json.JSONObject data) {
+        if (action == null) return;
+        switch (action) {
+            case "SELECT_CHANNEL":
+                String chName = data.optString("name", "");
+                int chNum = data.optInt("number", -1);
+                for (int i = 0; i < filteredChannels.size(); i++) {
+                    Channel c = filteredChannels.get(i);
+                    if ((i + 1) == chNum || c.getName().equalsIgnoreCase(chName)) {
+                        ChannelSession.set(filteredChannels, i);
+                        startActivity(new Intent(this, PlayerActivity.class));
+                        return;
+                    }
+                }
+                for (int i = 0; i < allChannels.size(); i++) {
+                    Channel c = allChannels.get(i);
+                    if ((i + 1) == chNum || c.getName().equalsIgnoreCase(chName)) {
+                        ChannelSession.set(allChannels, i);
+                        startActivity(new Intent(this, PlayerActivity.class));
+                        return;
+                    }
+                }
+                break;
+
+            case "NUMPAD_SELECT":
+                int num = data.optInt("number", -1);
+                for (int i = 0; i < allChannels.size(); i++) {
+                    if ((i + 1) == num) {
+                        ChannelSession.set(allChannels, i);
+                        startActivity(new Intent(this, PlayerActivity.class));
+                        return;
+                    }
+                }
+                break;
+
+            case "SEARCH":
+                String q = data.optString("query", "");
+                if (searchBar != null) {
+                    searchBar.setText(q);
+                }
+                break;
+
+            case "DPAD_UP":
+                if (recyclerView != null) recyclerView.smoothScrollBy(0, -350);
+                break;
+
+            case "DPAD_DOWN":
+                if (recyclerView != null) recyclerView.smoothScrollBy(0, 350);
+                break;
+
+            case "DPAD_OK":
+                if (!filteredChannels.isEmpty()) {
+                    ChannelSession.set(filteredChannels, 0);
+                    startActivity(new Intent(this, PlayerActivity.class));
+                }
+                break;
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+        if (keyCode == android.view.KeyEvent.KEYCODE_PROG_YELLOW) {
+            RemoteControlManager.getInstance().showPairingDialog(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

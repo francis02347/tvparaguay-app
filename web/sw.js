@@ -1,12 +1,15 @@
 // Service Worker básico para TVV.LAT (PWA Shell Caching)
-const CACHE_NAME = 'tvv-20261028-1805';
+const CACHE_NAME = 'tvv-20261028-1930';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './styles.css',
     './app.js',
     './channels.json',
-    './manifest.json'
+    './manifest.json',
+    './remote.html',
+    './remote.css',
+    './remote.js'
 ];
 
 self.addEventListener('install', event => {

@@ -107,6 +107,7 @@
         startClock();
         setupEventListeners();
         initVolume();
+        initRemoteHost();
         await loadChannels();
 
         // Auto-reproducción al entrar a tvv.lat: sintonizar automáticamente el canal 1
@@ -120,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=2.68');
+            const resp = await fetch('channels.json?v=2.69');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -324,6 +325,17 @@
         if (!channel || !channel.url) return;
 
         state.currentChannel = channel;
+        // Notificar al control remoto móvil conectado
+        if (typeof remoteHostState !== 'undefined' && remoteHostState.activeConn && remoteHostState.activeConn.open) {
+            try {
+                remoteHostState.activeConn.send({
+                    type: 'NOW_PLAYING',
+                    channelName: channel.name,
+                    channelNumber: channel.number
+                });
+            } catch (e) {}
+        }
+
         state.currentChannelIndex = state.channels.findIndex(c => c.name === channel.name);
         state.isPlaying = true;
         state.networkRetryCount = 0;

@@ -429,6 +429,20 @@
             android:clickable="true"
             android:contentDescription="Favorito" />
 
+        <!-- Botón vincular control remoto celular -->
+        <TextView
+            android:id="@+id/btnRemotePair"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="📱"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_marginStart="4dp"
+            android:contentDescription="Control Remoto Móvil" />
+
     </LinearLayout>
 
     <!-- ═══════════════════════════════════════════════════
