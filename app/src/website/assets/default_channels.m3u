@@ -83,6 +83,8 @@ https://jmp2.uk/plu-64d626ac9b414d000820e2fc.m3u8
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31834/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN LaLiga
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31856/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Canadá" group-title="Deportes" backup-url="http://89.187.179.148:826/1368/gXwiagaXda/118609",DAZN 1 (Canadá)
+http://89.187.179.148:826/1368/gXwiagaXda/117372
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Deportes TVC (1080p)
 http://190.11.225.124:5000/live/deportes_tvc_hd/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes" backup-url="http://181.78.82.130:8000/play/a0r5/index.m3u8",DSports (DirecTV Sports)
@@ -349,6 +351,8 @@ https://jmp2.uk/plu-63a084934734f30007457b2c.m3u8
 http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Entretenimiento",Telemundo (Estados Unidos)
 https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Entretenimiento" backup-url="http://89.187.179.148:826/1368/gXwiagaXda/1489|http://23.237.104.106:8080/USA_PARAMOUNT_NETWORK/index.m3u8",Paramount+ (Estados Unidos)
+http://89.187.179.148:826/1368/gXwiagaXda/110770
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Documentales",Terra Mater WILD (Inglés)
 https://53ff3982.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmxheHhUVi1ldV9UZXJyYU1hdGVyV2lsZF9ITFM/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Europa" group-title="Documentales",The Fishing & Hunting Channel
