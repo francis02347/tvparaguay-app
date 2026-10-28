@@ -169,6 +169,26 @@ http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/2480/index.m3u8
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/7234/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Sky Sport Bundesliga 3 HD
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/7235/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Main Event
+http://89.187.179.148:826/1368/gXwiagaXda/120351
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Premier League
+http://89.187.179.148:826/1368/gXwiagaXda/120355
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Football
+http://89.187.179.148:826/1368/gXwiagaXda/120349
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports F1
+http://89.187.179.148:826/1368/gXwiagaXda/120348
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Tennis
+http://89.187.179.148:826/1368/gXwiagaXda/120357
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Action
+http://89.187.179.148:826/1368/gXwiagaXda/120346
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Golf
+http://89.187.179.148:826/1368/gXwiagaXda/120350
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Cricket
+http://89.187.179.148:826/1368/gXwiagaXda/120347
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Racing
+http://89.187.179.148:826/1368/gXwiagaXda/120356
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports News
+http://89.187.179.148:826/1368/gXwiagaXda/120353
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Motorvision TV (Español)
 https://mvg-mv-xumo.otteravision.com/mvg/mv/mv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Rally TV (Internacional)
@@ -639,8 +659,6 @@ https://59ef525c24caa.streamlock.net/vmtv/soyplancha/playlist.m3u8
 http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/1596.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Religious",San JosÃ© TV (1080p)
 https://rtmp.info/sanjosetv/envivo/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Sports",Sky Sports F1
-https://xemzi.short.gy/2000005
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",Sol MÃºsica (720p)
 https://d2glyu450vvghm.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-21u4g5cjglv02/sm.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Music",SpektraTV (720p)
