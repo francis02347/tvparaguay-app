@@ -29,11 +29,9 @@
     <!-- Hls.js para reproducción universal de streams m3u8 -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-    <!-- PeerJS para enlace directo con Control Remoto Móvil -->
-    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
     <!-- Estilos de la aplicación -->
-    <link rel="stylesheet" href="styles.css?v=20261028.2015">
+    <link rel="stylesheet" href="styles.css?v=20261028.2035">
 </head>
 <body>
     <!-- FONDO AMBIENTAL -->
@@ -68,13 +66,6 @@
             </div>
 
             <div class="header-right">
-                <button class="remote-pill-btn focusable" id="btn-remote-pill" tabindex="0" title="Vincular Control Remoto Móvil">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                        <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
-                    </svg>
-                    <span>Mando Celular</span>
-                    <span class="remote-dot disconnected" id="remote-host-dot"></span>
-                </button>
                 <div class="channel-counter" id="channel-counter">193 Canales</div>
                 <div class="clock-display" id="clock-display">--:--</div>
             </div>
@@ -153,11 +144,6 @@
                         <span class="back-text-full">Canales</span>
                     </button>
                     <div class="hud-top-right">
-                        <button id="btn-player-remote" class="yt-hud-btn yt-hud-btn-circle focusable" tabindex="0" title="Vincular Control Remoto Móvil">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                                <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
-                            </svg>
-                        </button>
                         <button id="btn-toggle-favorite" class="yt-hud-btn yt-hud-btn-circle focusable" tabindex="0" title="Guardar en Favoritos">
                             <svg id="icon-fav-svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
                                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
@@ -304,46 +290,7 @@
         </button>
     </nav>
 
-    <!-- MODAL DE CONTROL REMOTO / CÓDIGO QR -->
-    <div id="remote-modal" class="remote-modal hidden" role="dialog" aria-modal="true" aria-label="Control Remoto Móvil">
-        <div class="remote-modal-backdrop" id="remote-modal-backdrop"></div>
-        <div class="remote-modal-card">
-            <button class="remote-modal-close focusable" id="btn-close-remote-modal" title="Cerrar (Esc)" tabindex="0">✕</button>
-            <div class="remote-modal-header">
-                <span class="remote-modal-icon">📱</span>
-                <h2>Control Remoto Móvil</h2>
-                <p>Controla esta pantalla desde tu smartphone sin instalar nada</p>
-            </div>
-            
-            <div class="remote-qr-box">
-                <img id="remote-qr-img" src="" alt="Código QR para control remoto" width="200" height="200">
-                <div class="remote-qr-spinner" id="remote-qr-spinner">Cargando código QR...</div>
-            </div>
-
-            <div class="remote-pin-display">
-                <span class="remote-pin-label">CÓDIGO PIN</span>
-                <span class="remote-pin-digits" id="remote-pin-digits">----</span>
-            </div>
-
-            <div class="remote-steps">
-                <div class="remote-step">
-                    <span class="step-num">1</span>
-                    <span>Apunta la cámara de tu celular al código QR</span>
-                </div>
-                <div class="remote-step">
-                    <span class="step-num">2</span>
-                    <span>O entra a <strong>tvv.lat/remote.html</strong> e ingresa el PIN</span>
-                </div>
-            </div>
-
-            <div class="remote-status-bar" id="remote-modal-status">
-                <span class="status-pulse"></span>
-                <span id="remote-status-msg">Esperando conexión del móvil...</span>
-            </div>
-        </div>
-    </div>
-
     <!-- SCRIPT PRINCIPAL -->
-    <script src="app.js?v=20261028.2015"></script>
+    <script src="app.js?v=20261028.2035"></script>
 </body>
 </html>
