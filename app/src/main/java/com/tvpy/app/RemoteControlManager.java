@@ -178,9 +178,9 @@ public class RemoteControlManager {
         qrBox.addView(pb);
         layout.addView(qrBox);
 
-        // Dirección Web Local directa
+        // Dirección Web Local directa (Recomendada)
         TextView tvLocalUrlLabel = new TextView(activity);
-        tvLocalUrlLabel.setText("O entra en el navegador de tu celular a:");
+        tvLocalUrlLabel.setText("Opción 1: En tu celular abre en el navegador:");
         tvLocalUrlLabel.setTextSize(12);
         tvLocalUrlLabel.setTextColor(Color.parseColor("#94a3b8"));
         tvLocalUrlLabel.setGravity(Gravity.CENTER);
@@ -193,12 +193,21 @@ public class RemoteControlManager {
         tvLocalUrl.setTextColor(Color.parseColor("#00f0ff"));
         tvLocalUrl.setGravity(Gravity.CENTER);
         int urlMargin = (int) (4 * activity.getResources().getDisplayMetrics().density);
-        tvLocalUrl.setPadding(0, urlMargin, 0, (int) (12 * activity.getResources().getDisplayMetrics().density));
+        tvLocalUrl.setPadding(0, urlMargin, 0, (int) (8 * activity.getResources().getDisplayMetrics().density));
         layout.addView(tvLocalUrl);
+
+        // Opción 2: tvv.lat/remote
+        TextView tvCloudLabel = new TextView(activity);
+        tvCloudLabel.setText("Opción 2: Entra a tvv.lat/remote e ingresa la IP o el PIN: " + pin);
+        tvCloudLabel.setTextSize(11);
+        tvCloudLabel.setTextColor(Color.parseColor("#cbd5e1"));
+        tvCloudLabel.setGravity(Gravity.CENTER);
+        tvCloudLabel.setPadding(0, 0, 0, (int) (10 * activity.getResources().getDisplayMetrics().density));
+        layout.addView(tvCloudLabel);
 
         // Estado
         TextView tvStatus = new TextView(activity);
-        tvStatus.setText("Misma red Wi-Fi detectada (" + wifiIp + ")");
+        tvStatus.setText("● Wi-Fi Local Activo (" + wifiIp + ":8088)");
         tvStatus.setTextSize(12);
         tvStatus.setTextColor(Color.parseColor("#10b981"));
         tvStatus.setGravity(Gravity.CENTER);

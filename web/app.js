@@ -121,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=2.69');
+            const resp = await fetch('channels.json?v=2.70');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -1825,6 +1825,164 @@
                 "'": '&#39;'
             }[m];
         });
+    }
+
+    // ==========================================================================
+    // CONTROL REMOTO MÓVIL (HOST / PANTALLA RECEPTORA)
+    // ==========================================================================
+    const remoteHostState = {
+        pin: null,
+        peer: null,
+        activeConn: null,
+        isConnected: false
+    };
+
+    function initRemoteHost() {
+        // Generar PIN aleatorio de 4 dígitos para esta sesión
+        let savedPin = sessionStorage.getItem('tvv_host_pin');
+        if (!savedPin) {
+            savedPin = String(Math.floor(1000 + Math.random() * 9000));
+            sessionStorage.setItem('tvv_host_pin', savedPin);
+        }
+        remoteHostState.pin = savedPin;
+
+        const pinDisplay = document.getElementById('remote-pin-digits');
+        if (pinDisplay) pinDisplay.textContent = remoteHostState.pin;
+
+        const modal = document.getElementById('remote-modal');
+        const btnPill = document.getElementById('btn-remote-pill');
+        const btnPlayerRemote = document.getElementById('btn-player-remote');
+        const btnClose = document.getElementById('btn-close-remote-modal');
+        const backdrop = document.getElementById('remote-modal-backdrop');
+        const qrImg = document.getElementById('remote-qr-img');
+        const qrSpinner = document.getElementById('remote-qr-spinner');
+        const hostDot = document.getElementById('remote-host-dot');
+        const statusMsg = document.getElementById('remote-status-msg');
+
+        function openRemoteModal() {
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            if (qrImg && (!qrImg.src || qrImg.src === '' || qrImg.src.includes('about:blank'))) {
+                const targetUrl = `${window.location.origin}/remote.html?pin=${remoteHostState.pin}`;
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=8&data=${encodeURIComponent(targetUrl)}`;
+                qrImg.src = qrUrl;
+                qrImg.onload = () => {
+                    if (qrSpinner) qrSpinner.style.display = 'none';
+                    qrImg.style.display = 'block';
+                };
+            }
+            if (btnClose) btnClose.focus();
+        }
+
+        function closeRemoteModal() {
+            if (!modal) return;
+            modal.classList.add('hidden');
+        }
+
+        if (btnPill) btnPill.addEventListener('click', openRemoteModal);
+        if (btnPlayerRemote) btnPlayerRemote.addEventListener('click', openRemoteModal);
+        if (btnClose) btnClose.addEventListener('click', closeRemoteModal);
+        if (backdrop) backdrop.addEventListener('click', closeRemoteModal);
+
+        // Iniciar PeerJS para escuchar al móvil si la librería Peer está disponible
+        if (typeof Peer !== 'undefined') {
+            try {
+                const hostPeerId = 'tvv-host-' + remoteHostState.pin;
+                remoteHostState.peer = new Peer(hostPeerId, {
+                    debug: 0,
+                    config: {
+                        iceServers: [
+                            { urls: 'stun:stun.l.google.com:19302' },
+                            { urls: 'stun:stun1.l.google.com:19302' }
+                        ]
+                    }
+                });
+
+                remoteHostState.peer.on('open', () => {
+                    console.log('Remote Host listo con PIN:', remoteHostState.pin);
+                });
+
+                remoteHostState.peer.on('connection', (conn) => {
+                    remoteHostState.activeConn = conn;
+                    remoteHostState.isConnected = true;
+                    if (hostDot) hostDot.className = 'remote-dot connected';
+                    if (statusMsg) statusMsg.textContent = '¡Control Remoto móvil conectado!';
+
+                    // Notificar canal actual
+                    if (state.currentChannel) {
+                        try {
+                            conn.send({
+                                type: 'NOW_PLAYING',
+                                channelName: state.currentChannel.name,
+                                channelNumber: state.currentChannel.number
+                            });
+                        } catch (e) {}
+                    }
+
+                    conn.on('data', (payload) => {
+                        handleRemoteCommand(payload);
+                    });
+
+                    conn.on('close', () => {
+                        remoteHostState.isConnected = false;
+                        if (hostDot) hostDot.className = 'remote-dot disconnected';
+                        if (statusMsg) statusMsg.textContent = 'Móvil desconectado. Esperando...';
+                    });
+                });
+
+                remoteHostState.peer.on('error', (err) => {
+                    console.warn('PeerJS Remote Host error:', err);
+                });
+            } catch (err) {
+                console.warn('Error inicializando PeerJS en web:', err);
+            }
+        }
+    }
+
+    function handleRemoteCommand(payload) {
+        if (!payload || !payload.action) return;
+        const act = payload.action;
+
+        if (act === 'DPAD_UP') {
+            navigateGrid('up');
+        } else if (act === 'DPAD_DOWN') {
+            navigateGrid('down');
+        } else if (act === 'DPAD_LEFT') {
+            navigateGrid('left');
+        } else if (act === 'DPAD_RIGHT') {
+            navigateGrid('right');
+        } else if (act === 'DPAD_OK') {
+            selectCurrentGridItem();
+        } else if (act === 'VOL_UP') {
+            adjustVolume(0.05);
+        } else if (act === 'VOL_DOWN') {
+            adjustVolume(-0.05);
+        } else if (act === 'MUTE') {
+            toggleMute();
+        } else if (act === 'CH_UP') {
+            changeChannelByOffset(1);
+        } else if (act === 'CH_DOWN') {
+            changeChannelByOffset(-1);
+        } else if (act === 'PLAY_PAUSE') {
+            togglePlayPause();
+        } else if (act === 'BACK') {
+            if (state.isPlayerActive) {
+                closePlayer();
+            }
+        } else if (act === 'FULLSCREEN') {
+            toggleFullscreen();
+        } else if (act === 'SELECT_CHANNEL') {
+            const ch = state.channels.find(c => c.number === payload.number || c.name === payload.name);
+            if (ch) playChannel(ch);
+        } else if (act === 'NUMPAD_SELECT') {
+            const ch = state.channels.find(c => c.number === payload.number);
+            if (ch) playChannel(ch);
+        } else if (act === 'SEARCH') {
+            if (dom.searchInput) {
+                dom.searchInput.value = payload.query || '';
+                filterChannels(payload.query || '');
+            }
+        }
     }
 
     // REGISTRO DE SERVICE WORKER (PWA)

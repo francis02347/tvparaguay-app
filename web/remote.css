@@ -700,3 +700,407 @@ body {
     background: var(--accent-cyan);
     color: #07090e;
 }
+
+
+/* ==========================================================================
+   ALERT BANNER & DIAGNOSTIC MODAL (v2.70)
+   ========================================================================== */
+.header-right-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-indicator-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.status-indicator-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.diag-trigger-icon {
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+/* Banner de alerta de red */
+.remote-alert-banner {
+    margin: 8px 0 12px 0;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeInSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.remote-alert-banner.hidden {
+    display: none !important;
+}
+
+.alert-top {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.alert-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.alert-text-box {
+    flex: 1;
+}
+
+.alert-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 3px;
+    flex-wrap: wrap;
+}
+
+.alert-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: #fca5a5;
+}
+
+.alert-code-badge {
+    background: rgba(239, 68, 68, 0.25);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: #fecaca;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.alert-desc {
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.35;
+}
+
+.alert-action-row {
+    display: flex;
+    gap: 8px;
+}
+
+.alert-action-btn {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.alert-action-btn.primary {
+    background: #00f0ff;
+    color: #07090e;
+}
+
+.alert-action-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+}
+
+/* Modal Tabs (Wi-Fi vs PIN) */
+.modal-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.modal-tab-btn {
+    flex: 1;
+    padding: 8px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-tab-btn.active {
+    background: var(--surface-card);
+    color: var(--accent-cyan);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.modal-subview {
+    display: none;
+}
+
+.modal-subview.active {
+    display: block;
+}
+
+.modal-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+/* Input Wi-Fi IP */
+.wifi-input-group {
+    display: flex;
+    align-items: center;
+    background: var(--surface-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0 12px;
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.wifi-input-group:focus-within {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.url-prefix, .url-suffix {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#wifi-ip-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--accent-cyan);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 14px 6px;
+    outline: none;
+    text-align: center;
+}
+
+.recent-lan-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 12px;
+}
+
+.recent-label {
+    color: var(--text-muted);
+}
+
+.recent-ip-chip {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    color: var(--accent-cyan);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+/* Modal de Diagnóstico */
+.diag-card {
+    max-width: 480px;
+    text-align: left;
+}
+
+.diag-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.diag-title-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.diag-header-icon {
+    font-size: 24px;
+}
+
+.diag-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.diag-subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.diag-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.diag-close-btn:hover {
+    color: #fff;
+}
+
+.diag-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.diag-metric {
+    background: var(--surface-dark);
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.diag-metric.full-width {
+    grid-column: span 2;
+}
+
+.metric-label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.metric-val {
+    font-size: 12px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.metric-val.highlight {
+    font-family: 'JetBrains Mono', monospace;
+    color: #f87171;
+}
+
+.metric-val.desc {
+    font-size: 11px;
+    font-weight: 400;
+    color: #94a3b8;
+    line-height: 1.35;
+}
+
+.diag-terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+}
+
+.btn-copy-diag {
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    color: var(--accent-cyan);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-copy-diag:hover {
+    background: rgba(0, 240, 255, 0.25);
+}
+
+.diag-terminal {
+    height: 170px;
+    background: #030712;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 8px 10px;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+}
+
+.log-entry {
+    word-break: break-all;
+}
+
+.log-time {
+    color: #64748b;
+    margin-right: 6px;
+}
+
+.log-level-info {
+    color: #38bdf8;
+}
+
+.log-level-success {
+    color: #34d399;
+}
+
+.log-level-warn {
+    color: #fbbf24;
+}
+
+.log-level-error {
+    color: #f87171;
+    font-weight: 700;
+}
+
+.diag-footer-actions {
+    display: flex;
+    gap: 8px;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
