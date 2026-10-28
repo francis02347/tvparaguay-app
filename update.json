@@ -2,5 +2,5 @@
   "versionCode": 168,
   "versionName": "2.70",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.70/app-website-release.apk",
-  "releaseNotes": "v2.70: Consola de diagnóstico técnico en vivo, códigos de error detallados (ERR_PEER_UNAVAILABLE, ERR_LAN_TIMEOUT) y conexión Wi-Fi local directa."
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.70."
 }
