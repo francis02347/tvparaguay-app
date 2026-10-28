@@ -1,6 +1,6 @@
 {
-  "versionCode": 168,
-  "versionName": "2.70",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.70/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.70."
+  "versionCode": 169,
+  "versionName": "2.71",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.71/app-website-release.apk",
+  "releaseNotes": "v2.71: Optimización de la parrilla deportiva retirando canales secundarios de Sky Sports."
 }
