@@ -1,0 +1,702 @@
+/* ==========================================================================
+   TVV REMOTE - STYLESHEET (MOBILE FIRST OLED LUXURY THEME)
+   ========================================================================== */
+
+:root {
+    --bg-dark: #07090e;
+    --surface-dark: #0e131f;
+    --surface-card: #141b2d;
+    --surface-hover: #1c253d;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(0, 240, 255, 0.25);
+    
+    --accent-cyan: #00f0ff;
+    --accent-blue: #3b82f6;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --dpad-size: 260px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+.remote-app {
+    width: 100%;
+    max-width: 440px;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: env(safe-area-inset-top, 10px) 16px env(safe-area-inset-bottom, 16px) 16px;
+    background: radial-gradient(circle at 50% 0%, #151d33 0%, var(--bg-dark) 70%);
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.remote-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-logo {
+    font-size: 24px;
+}
+
+.brand-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #fff 30%, var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-indicator .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.status-indicator.connected {
+    color: var(--accent-green);
+}
+.status-indicator.connected .dot {
+    background-color: var(--accent-green);
+    box-shadow: 0 0 8px var(--accent-green);
+}
+
+.status-indicator.disconnected {
+    color: var(--accent-red);
+}
+.status-indicator.disconnected .dot {
+    background-color: var(--accent-red);
+}
+
+.status-indicator.connecting {
+    color: #f59e0b;
+}
+.status-indicator.connecting .dot {
+    background-color: #f59e0b;
+    animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+}
+
+.header-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 7px 12px;
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.header-btn:active {
+    transform: scale(0.95);
+    background: var(--surface-hover);
+    border-color: var(--accent-cyan);
+}
+
+/* ==========================================================================
+   TABS
+   ========================================================================== */
+.remote-tabs {
+    display: flex;
+    background: rgba(14, 19, 31, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 4px;
+    margin: 12px 0 10px 0;
+}
+
+.tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: var(--surface-card);
+    color: var(--accent-cyan);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   VISTA 1: MANDO D-PAD
+   ========================================================================== */
+.tab-content {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tab-content.active {
+    display: flex;
+}
+
+.top-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.action-btn {
+    height: 48px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.action-btn:active {
+    transform: scale(0.92);
+    background: var(--surface-hover);
+    color: var(--accent-cyan);
+}
+
+.btn-power:active {
+    color: var(--accent-red);
+}
+
+/* CAJA DE BÚSQUEDA RÁPIDA */
+.search-input-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    animation: fadeIn 0.2s ease;
+}
+
+.search-input-box.hidden {
+    display: none;
+}
+
+.search-input-box input {
+    flex: 1;
+    background: var(--surface-card);
+    border: 1px solid var(--accent-cyan);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+}
+
+.search-input-box button {
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
+    padding: 0 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   D-PAD VIRTUAL
+   ========================================================================== */
+.dpad-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.dpad-cross {
+    position: relative;
+    width: var(--dpad-size);
+    height: var(--dpad-size);
+    background: radial-gradient(circle, #1a2238 0%, #0d121f 70%);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        0 0 20px rgba(0, 240, 255, 0.05);
+}
+
+.dpad-btn {
+    position: absolute;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.dpad-btn:active {
+    color: var(--accent-cyan);
+    filter: drop-shadow(0 0 8px var(--accent-cyan));
+}
+
+.dpad-btn.up {
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 70px;
+}
+
+.dpad-btn.down {
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 70px;
+}
+
+.dpad-btn.left {
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 70px;
+    height: 80px;
+}
+
+.dpad-btn.right {
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 70px;
+    height: 80px;
+}
+
+.dpad-btn.center-ok {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #242f4c, #131a2b);
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.dpad-btn.center-ok:active {
+    transform: translate(-50%, -50%) scale(0.92);
+    background: linear-gradient(145deg, #131a2b, var(--accent-blue));
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+/* ==========================================================================
+   ROCKERS (VOL / CH)
+   ========================================================================== */
+.rockers-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 10px;
+}
+
+.rocker-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 6px;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.04);
+}
+
+.rocker-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin: 4px 0;
+}
+
+.rocker-btn {
+    width: 100%;
+    height: 48px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.rocker-btn:active {
+    background: var(--surface-hover);
+    color: var(--accent-cyan);
+    transform: scale(0.92);
+}
+
+.center-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1.2;
+}
+
+.sub-action-btn {
+    height: 38px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.sub-action-btn:active {
+    background: var(--surface-hover);
+    color: var(--accent-cyan);
+    transform: scale(0.95);
+}
+
+/* ==========================================================================
+   VISTA 2: LISTA DE CANALES
+   ========================================================================== */
+.channel-search-bar {
+    margin-bottom: 8px;
+}
+
+.channel-search-bar input {
+    width: 100%;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+.channel-search-bar input:focus {
+    border-color: var(--accent-cyan);
+}
+
+.channel-category-chips {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+}
+
+.channel-category-chips::-webkit-scrollbar {
+    display: none;
+}
+
+.chip {
+    flex-shrink: 0;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.chip.active {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-cyan);
+}
+
+.remote-channel-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 4px;
+}
+
+.channel-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    padding: 10px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.channel-item:active {
+    background: var(--surface-hover);
+    border-color: var(--accent-cyan);
+    transform: scale(0.98);
+}
+
+.channel-item .ch-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    background: rgba(0, 240, 255, 0.1);
+    padding: 3px 6px;
+    border-radius: 6px;
+    min-width: 32px;
+    text-align: center;
+}
+
+.channel-item .ch-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.channel-item .ch-cat {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   VISTA 3: TECLADO NUMÉRICO
+   ========================================================================== */
+.numpad-display {
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 16px 0;
+}
+
+.numpad-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    letter-spacing: 4px;
+}
+
+.numpad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    flex: 1;
+    align-content: center;
+}
+
+.num-btn {
+    height: 64px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.num-btn:active {
+    background: var(--surface-hover);
+    border-color: var(--accent-cyan);
+    transform: scale(0.92);
+}
+
+.num-btn.clear-btn {
+    color: var(--accent-red);
+}
+
+.num-btn.enter-btn {
+    background: var(--accent-blue);
+    border-color: var(--accent-cyan);
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   MODAL DE EMPAREJAMIENTO
+   ========================================================================== */
+.pairing-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.pairing-modal.hidden {
+    display: none;
+}
+
+.modal-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-glow);
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    max-width: 340px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+.modal-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.modal-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.pin-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.pin-digit {
+    width: 50px;
+    height: 60px;
+    background: var(--surface-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--accent-cyan);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+}
+
+.pin-digit:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-secondary, .btn-primary {
+    flex: 1;
+    padding: 12px 0;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+}
+
+.btn-primary {
+    background: var(--accent-cyan);
+    color: #07090e;
+}

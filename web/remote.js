@@ -1,17 +1,26 @@
 /**
  * TVV REMOTE - Mobile Client Controller
- * Conexión WebRTC P2P de latencia ultrabaja mediante PeerJS
+ * Soporte dual: Red Wi-Fi Local directa (sin internet) y WebRTC P2P (PeerJS)
  */
 
 (function () {
     'use strict';
 
+    // Detección de Modo Wi-Fi Local (Servidor nativo en Android TV)
+    const urlParams = new URLSearchParams(window.location.search);
+    const isLocalDirect = window.location.port === '8088';
+    const lanParam = urlParams.get('lan');
+    const isLocalMode = isLocalDirect || !!lanParam;
+    const localBaseUrl = isLocalDirect ? window.location.origin : (lanParam ? (lanParam.startsWith('http') ? lanParam : 'http://' + lanParam) : '');
+
     // Estado de la aplicación
     const state = {
+        isLocal: isLocalMode,
         peer: null,
         conn: null,
         roomCode: null,
         isConnected: false,
+        reconnectTimer: null,
         channels: [],
         activeCategory: 'all',
         numpadValue: '',
@@ -84,24 +93,71 @@
     }
 
     // ==========================================================================
-    // COMUNICACIÓN P2P (PEERJS / WEBRTC)
+    // ESTADO DE CONEXIÓN
     // ==========================================================================
     function setConnectionStatus(status, text) {
-        dom.statusBadge.className = 'status-indicator ' + status;
-        dom.statusText.textContent = text;
+        if (dom.statusBadge) {
+            dom.statusBadge.className = 'status-indicator ' + status;
+        }
+        if (dom.statusText) {
+            dom.statusText.textContent = text;
+        }
         state.isConnected = (status === 'connected');
     }
 
+    // ==========================================================================
+    // MODO 1: RED WI-FI LOCAL DIRECTA (LATENCIA CERO, SIN INTERNET)
+    // ==========================================================================
+    function initLocalWifiMode() {
+        setConnectionStatus('connected', 'Wi-Fi Local');
+        if (dom.roomCodeTag) dom.roomCodeTag.textContent = 'WI-FI';
+
+        // Polling de estado ligero cada 3 segundos
+        setInterval(async () => {
+            try {
+                const res = await fetch(localBaseUrl + '/api/status');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (!state.isConnected) {
+                        setConnectionStatus('connected', 'Wi-Fi Local');
+                    }
+                    if (data.channelName) {
+                        console.log('Canal sintonizado en TV:', data.channelName);
+                    }
+                }
+            } catch (e) {
+                // Si falla un poll, mantener conectado
+            }
+        }, 3000);
+    }
+
+    function sendLocalCommand(payload) {
+        haptic();
+        let query = '?action=' + encodeURIComponent(payload.action);
+        if (payload.number !== undefined) query += '&number=' + encodeURIComponent(payload.number);
+        if (payload.name) query += '&name=' + encodeURIComponent(payload.name);
+        if (payload.query !== undefined) query += '&query=' + encodeURIComponent(payload.query);
+
+        fetch(localBaseUrl + '/api/cmd' + query, { mode: 'no-cors' }).catch(err => {
+            console.warn('Error enviando comando local:', err);
+        });
+    }
+
+    // ==========================================================================
+    // MODO 2: COMUNICACIÓN P2P (PEERJS / WEBRTC EN LA NUBE)
+    // ==========================================================================
     function initPeerConnection(targetRoom) {
         if (!targetRoom) return;
         state.roomCode = targetRoom.toUpperCase().trim();
-        dom.roomCodeTag.textContent = state.roomCode;
-        setConnectionStatus('connecting', 'Conectando...');
+        if (dom.roomCodeTag) dom.roomCodeTag.textContent = state.roomCode;
+        setConnectionStatus('connecting', 'Buscando TV...');
 
-        // Guardar última sala para reconexión automática
         localStorage.setItem('tvv_last_room', state.roomCode);
 
-        // Destruir conexión anterior si existe
+        if (state.reconnectTimer) {
+            clearTimeout(state.reconnectTimer);
+            state.reconnectTimer = null;
+        }
         if (state.conn) {
             try { state.conn.close(); } catch (e) {}
             state.conn = null;
@@ -111,7 +167,11 @@
             state.peer = null;
         }
 
-        // Crear Peer anónimo móvil
+        if (typeof Peer === 'undefined') {
+            setConnectionStatus('disconnected', 'Sin PeerJS');
+            return;
+        }
+
         const remotePeerId = 'tvv-remote-' + Math.random().toString(36).substring(2, 9);
         state.peer = new Peer(remotePeerId, {
             debug: 0,
@@ -130,11 +190,30 @@
 
         state.peer.on('error', (err) => {
             console.warn('Peer error:', err);
-            setConnectionStatus('disconnected', 'Error de red');
+            if (err.type === 'peer-unavailable') {
+                // La TV aún no se conectó o se apagó: esperar y reintentar amablemente
+                setConnectionStatus('connecting', 'Buscando TV (' + state.roomCode + ')...');
+                if (state.reconnectTimer) clearTimeout(state.reconnectTimer);
+                state.reconnectTimer = setTimeout(() => {
+                    if (!state.isConnected) {
+                        const hostPeerId = 'tvv-host-' + state.roomCode;
+                        connectToHost(hostPeerId);
+                    }
+                }, 3000);
+            } else {
+                setConnectionStatus('disconnected', 'Reintentando...');
+                if (state.reconnectTimer) clearTimeout(state.reconnectTimer);
+                state.reconnectTimer = setTimeout(() => {
+                    initPeerConnection(state.roomCode);
+                }, 4000);
+            }
         });
     }
 
     function connectToHost(hostPeerId) {
+        if (!state.peer || state.peer.destroyed) return;
+        setConnectionStatus('connecting', 'Sincronizando...');
+
         state.conn = state.peer.connect(hostPeerId, {
             reliable: true,
             serialization: 'json'
@@ -143,7 +222,6 @@
         state.conn.on('open', () => {
             setConnectionStatus('connected', 'Conectado');
             haptic(60);
-            // Saludo inicial
             sendCommand({ action: 'HELLO', client: 'TVV Mobile Remote' });
         });
 
@@ -152,20 +230,29 @@
         });
 
         state.conn.on('close', () => {
-            setConnectionStatus('disconnected', 'Desconectado');
+            setConnectionStatus('connecting', 'Reconectando TV...');
+            if (state.reconnectTimer) clearTimeout(state.reconnectTimer);
+            state.reconnectTimer = setTimeout(() => {
+                connectToHost(hostPeerId);
+            }, 3000);
         });
 
         state.conn.on('error', () => {
-            setConnectionStatus('disconnected', 'Error');
+            setConnectionStatus('connecting', 'Buscando señal...');
         });
     }
 
     function sendCommand(payload) {
+        if (state.isLocal) {
+            sendLocalCommand(payload);
+            return;
+        }
+
         haptic();
         if (state.conn && state.conn.open) {
             state.conn.send(payload);
         } else {
-            console.log('No conectado a la TV. Comando:', payload);
+            console.log('Esperando conexión con la TV para enviar:', payload);
         }
     }
 
@@ -247,12 +334,21 @@
     // ==========================================================================
     async function loadChannelsList() {
         try {
-            const resp = await fetch('channels.json?v=2.68');
+            const fetchUrl = (state.isLocal ? localBaseUrl : '') + '/channels.json?v=2.69';
+            const resp = await fetch(fetchUrl);
             const data = await resp.json();
             state.channels = data.channels || [];
             renderChannelList();
         } catch (err) {
-            dom.remoteChannelList.innerHTML = '<div class="loading-state">Error cargando canales</div>';
+            try {
+                // Fallback secundario
+                const resp = await fetch('channels.json?v=2.69');
+                const data = await resp.json();
+                state.channels = data.channels || [];
+                renderChannelList();
+            } catch (e) {
+                dom.remoteChannelList.innerHTML = '<div class="loading-state">Error cargando canales</div>';
+            }
         }
     }
 
@@ -283,7 +379,6 @@
         });
         dom.remoteChannelList.innerHTML = html;
 
-        // Eventos táctiles en cada canal
         dom.remoteChannelList.querySelectorAll('.channel-item').forEach(el => {
             el.addEventListener('click', () => {
                 const num = parseInt(el.dataset.num, 10);
@@ -324,7 +419,6 @@
                 dom.numpadVal.textContent = state.numpadValue;
             }
             
-            // Auto submit tras 1.5s
             if (state.numpadTimer) clearTimeout(state.numpadTimer);
             state.numpadTimer = setTimeout(() => {
                 submitNumpad();
@@ -395,14 +489,13 @@
     // ==========================================================================
     // INICIALIZACIÓN
     // ==========================================================================
-    function checkUrlRoom() {
-        const urlParams = new URLSearchParams(window.location.search);
+    if (state.isLocal) {
+        initLocalWifiMode();
+    } else {
         const roomParam = urlParams.get('room') || urlParams.get('pin') || urlParams.get('r');
-        
         if (roomParam) {
             initPeerConnection(roomParam);
         } else {
-            // Revisar último guardado
             const last = localStorage.getItem('tvv_last_room');
             if (last) {
                 initPeerConnection(last);
@@ -412,8 +505,6 @@
         }
     }
 
-    // Cargar canales y arrancar conexión
     loadChannelsList();
-    checkUrlRoom();
 
 })();
