@@ -120,8 +120,6 @@ public class RecommendedChannels {
         "Waypoint TV (Estados Unidos)",
         "beIN Sports XTRA en Español (1080p)",
         "Premiere Clubes (Brasil)",
-        "Premiere 2 (Brasil)",
-        "Premiere 3 (Brasil)",
         "DW en Español",
         "Euronews en Español",
         "France 24 Español",
