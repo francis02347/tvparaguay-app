@@ -2424,6 +2424,7 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
         super.onResume();
         isPlayerActive = true;
         enterImmersiveMode();
+        RemoteControlManager.getInstance().setActiveActivity(this);
         RemoteControlManager.getInstance().setListener(new RemoteControlManager.RemoteCommandListener() {
             @Override
             public void onRemoteCommand(String action, org.json.JSONObject data) {
@@ -2685,6 +2686,11 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
     private void handleRemotePlayerCommand(String action, org.json.JSONObject data) {
         if (action == null) return;
         switch (action) {
+            case "CHECK_UPDATE":
+            case "UPDATE_APP":
+                new UpdateManager(this).checkForUpdates(true);
+                break;
+
             case "CH_UP":
             case "DPAD_DOWN":
                 navigateToChannel(currentIndex + 1);

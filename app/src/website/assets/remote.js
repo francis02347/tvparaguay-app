@@ -1,5 +1,5 @@
 /**
- * TVV REMOTE - Mobile Client Controller (v2.70)
+ * TVV REMOTE - Mobile Client Controller (v2.76)
  * Soporte dual: Red Wi-Fi Local directa (sin internet) y WebRTC P2P (PeerJS)
  * Sistema de Diagnóstico Técnico en Tiempo Real y Códigos de Error Específicos
  */
@@ -28,6 +28,7 @@
         numpadTimer: null,
         currentErrorCode: null,
         currentErrorDesc: null,
+        toastTimer: null,
         logs: []
     };
 
@@ -98,6 +99,8 @@
         btnGuide: document.getElementById('btn-guide'),
         btnFullscreen: document.getElementById('btn-fullscreen'),
         btnPower: document.getElementById('btn-power'),
+        btnUpdateTv: document.getElementById('btn-update-tv'),
+        toast: document.getElementById('remote-toast'),
         
         // Búsqueda
         btnKeyboardSearch: document.getElementById('btn-keyboard-search'),
@@ -229,6 +232,16 @@
     function escapeHtml(text) {
         if (!text) return '';
         return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function showToast(message, duration = 3000) {
+        if (!dom.toast) return;
+        dom.toast.textContent = message;
+        dom.toast.classList.remove('hidden');
+        if (state.toastTimer) clearTimeout(state.toastTimer);
+        state.toastTimer = setTimeout(() => {
+            dom.toast.classList.add('hidden');
+        }, duration);
     }
 
     // ==========================================================================
@@ -694,6 +707,20 @@
             });
         }
     });
+
+    // Botón de Actualizar App en TV
+    if (dom.btnUpdateTv) {
+        dom.btnUpdateTv.addEventListener('click', () => {
+            haptic(40);
+            dom.btnUpdateTv.classList.add('loading');
+            showToast('🔄 Comprobando actualización en la TV...');
+            diag.log('Solicitud de actualización enviada a la TV', 'info');
+            sendCommand({ action: 'CHECK_UPDATE' });
+            setTimeout(() => {
+                if (dom.btnUpdateTv) dom.btnUpdateTv.classList.remove('loading');
+            }, 2500);
+        });
+    }
 
     // Búsqueda con teclado del celular
     if (dom.btnKeyboardSearch && dom.searchBox) {

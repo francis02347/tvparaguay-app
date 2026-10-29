@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        RemoteControlManager.getInstance().setActiveActivity(this);
         RemoteControlManager.getInstance().setListener(new RemoteControlManager.RemoteCommandListener() {
             @Override
             public void onRemoteCommand(String action, org.json.JSONObject data) {
@@ -904,6 +905,15 @@ public class MainActivity extends AppCompatActivity {
     private void handleRemoteCommand(String action, org.json.JSONObject data) {
         if (action == null) return;
         switch (action) {
+            case "CHECK_UPDATE":
+            case "UPDATE_APP":
+                new UpdateManager(this).checkForUpdates(true);
+                break;
+
+            case "STANDBY":
+                moveTaskToBack(true);
+                break;
+
             case "SELECT_CHANNEL":
                 String chName = data.optString("name", "");
                 int chNum = data.optInt("number", -1);

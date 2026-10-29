@@ -39,6 +39,7 @@ public class RemoteControlManager {
     private String lastChannelName = "";
     private int lastChannelNumber = 1;
     private Context appContext;
+    private java.lang.ref.WeakReference<Activity> activeActivityRef;
 
     public interface RemoteCommandListener {
         void onRemoteCommand(String action, JSONObject data);
@@ -85,6 +86,14 @@ public class RemoteControlManager {
         this.currentListener = listener;
     }
 
+    public void setActiveActivity(Activity activity) {
+        this.activeActivityRef = new java.lang.ref.WeakReference<>(activity);
+    }
+
+    public Activity getActiveActivity() {
+        return activeActivityRef != null ? activeActivityRef.get() : null;
+    }
+
     public void removeListener(RemoteCommandListener listener) {
         if (this.currentListener == listener) {
             this.currentListener = null;
@@ -116,6 +125,14 @@ public class RemoteControlManager {
                         if (am != null) {
                             am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_TOGGLE_MUTE, AudioManager.FLAG_SHOW_UI);
                         }
+                    }
+                }
+
+                if ("CHECK_UPDATE".equals(action) || "UPDATE_APP".equals(action)) {
+                    Activity act = getActiveActivity();
+                    if (act != null && !act.isFinishing()) {
+                        new UpdateManager(act).checkForUpdates(true);
+                        return;
                     }
                 }
 
