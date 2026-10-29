@@ -24,6 +24,7 @@
         mediaRecoveryCount: 0,
         usedProxy: false,
         hls: null,
+        mpegts: null,
         isPlaying: false,
         isDrawerOpen: false,
         drawerActiveCategory: 'all',
@@ -367,10 +368,18 @@
 
         showHudTemporary();
 
-        // Destruir reproductor HLS anterior si existía
         if (state.hls) {
-            state.hls.destroy();
+            try { state.hls.destroy(); } catch (e) {}
             state.hls = null;
+        }
+        if (state.mpegts) {
+            try {
+                state.mpegts.pause();
+                state.mpegts.unload();
+                state.mpegts.detachMediaElement();
+                state.mpegts.destroy();
+            } catch (e) {}
+            state.mpegts = null;
         }
         dom.video.pause();
 
@@ -485,6 +494,35 @@
 
         dom.video.onplaying = onPlaybackStarted;
 
+        // Soporte nativo para streams directos MPEG-TS (Premiere, Sky Sports, DAZN, Paramount+)
+        const isTsStream = !channel.url.toLowerCase().includes('.m3u8') && 
+                           !channel.url.startsWith('dailymotion://') && 
+                           !channel.url.startsWith('desdeparaguay://');
+
+        if (isTsStream && window.mpegts && mpegts.isSupported()) {
+            try {
+                state.mpegts = mpegts.createPlayer({
+                    type: 'mse',
+                    isLive: true,
+                    url: streamUrl
+                }, {
+                    enableWorker: true,
+                    lazyLoad: false,
+                    liveBufferLatencyChasing: true
+                });
+                state.mpegts.attachMediaElement(dom.video);
+                state.mpegts.load();
+                state.mpegts.play().catch(e => console.warn('mpegts play notice:', e));
+
+                state.mpegts.on(mpegts.Events.ERROR, function (type, detail, info) {
+                    console.warn('mpegts Event Error:', type, detail, info);
+                });
+                return;
+            } catch (err) {
+                console.warn('mpegts no pudo inicializar el stream, recurriendo a Hls.js:', err);
+            }
+        }
+
         if (Hls.isSupported()) {
             state.hls = new Hls({
                 enableWorker: true,              // Demuxing en hilo secundario Web Worker (sin lag en la UI móvil)
@@ -542,6 +580,30 @@
 
             state.hls.on(Hls.Events.ERROR, function (event, data) {
                 console.warn('Hls Event Error:', data.type, data.details, 'fatal:', data.fatal);
+
+                // Si ocurre un error de parsing de manifiesto en un stream que resulta ser TS puro, cambiar a mpegts
+                if (data.details === Hls.ErrorDetails.MANIFEST_PARSING_ERROR && window.mpegts && mpegts.isSupported()) {
+                    console.warn('Manifest parsing error detectado, activando motor mpegts...');
+                    try {
+                        state.hls.destroy();
+                        state.hls = null;
+                        state.mpegts = mpegts.createPlayer({
+                            type: 'mse',
+                            isLive: true,
+                            url: streamUrl
+                        }, {
+                            enableWorker: true,
+                            lazyLoad: false,
+                            liveBufferLatencyChasing: true
+                        });
+                        state.mpegts.attachMediaElement(dom.video);
+                        state.mpegts.load();
+                        state.mpegts.play().catch(() => {});
+                        return;
+                    } catch (e) {
+                        console.warn('Fallo transicion a mpegts:', e);
+                    }
+                }
 
                 // Si el error no es fatal, el pipeline de Hls.js lo maneja internamente
                 if (!data.fatal) {
@@ -802,12 +864,21 @@
             } catch (e) {}
         }
 
-        // 9. Destruir Hls de forma segura
+        // 9. Destruir Hls y mpegts de forma segura
         if (state.hls) {
             try {
                 state.hls.destroy();
             } catch (e) {}
             state.hls = null;
+        }
+        if (state.mpegts) {
+            try {
+                state.mpegts.pause();
+                state.mpegts.unload();
+                state.mpegts.detachMediaElement();
+                state.mpegts.destroy();
+            } catch (e) {}
+            state.mpegts = null;
         }
 
         // 10. Desconectar video limpiamente SIN disparar evento de error
