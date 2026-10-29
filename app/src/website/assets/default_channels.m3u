@@ -181,6 +181,14 @@ http://89.187.179.148:826/1368/gXwiagaXda/120348
 http://89.187.179.148:826/1368/gXwiagaXda/120346
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Racing
 http://89.187.179.148:826/1368/gXwiagaXda/120356
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports Mix (1080p)
+http://89.187.179.148:826/1368/gXwiagaXda/120352
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports+ (1080p)
+http://89.187.179.148:826/1368/gXwiagaXda/120354
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports 1 (4K UHD)
+http://89.187.179.148:826/1368/gXwiagaXda/120395
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Reino Unido" group-title="Deportes",Sky Sports 2 (4K UHD)
+http://89.187.179.148:826/1368/gXwiagaXda/120396
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Alemania" group-title="Deportes",Motorvision TV (Español)
 https://mvg-mv-xumo.otteravision.com/mvg/mv/mv.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Rally TV (Internacional)

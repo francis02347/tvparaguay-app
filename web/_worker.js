@@ -330,6 +330,25 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
     const statusLine = headerLines[0] || 'HTTP/1.1 200 OK';
     const statusCode = parseInt(statusLine.split(' ')[1], 10) || 200;
 
+    // Manejar redirecciones HTTP 301/302/307/308 automáticamente
+    if (statusCode >= 301 && statusCode <= 308) {
+        let location = null;
+        for (let i = 1; i < headerLines.length; i++) {
+            const line = headerLines[i];
+            const colonIdx = line.indexOf(':');
+            if (colonIdx > 0 && line.slice(0, colonIdx).trim().toLowerCase() === 'location') {
+                location = line.slice(colonIdx + 1).trim();
+                break;
+            }
+        }
+        if (location) {
+            reader.releaseLock();
+            try { await socket.close(); } catch (_) {}
+            const nextUrl = new URL(location, targetUrlStr).toString();
+            return await handleProxy(nextUrl, origin, customUa, customReferer, customCookie);
+        }
+    }
+
     const respHeaders = new Headers({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
