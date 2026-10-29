@@ -139,8 +139,8 @@ http://138.59.227.20:8000/play/a085/index.m3u8
 https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/114.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes" backup-url="http://138.59.227.20:8000/play/a06y/index.m3u8",Fox Sports 3
 http://45.134.141.161:2200/ARG/FOX_Sports_3_Argentina_HD/tracks-v1a1/mono.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Deportes",TNT Sports
-http://181.209.38.115:8000/play/a00j/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Deportes" backup-url="http://45.188.229.33:8000/play/a137/index.m3u8",TNT Sports
+http://138.59.227.20:8000/play/a06z/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Deportes",FS1 (Estados Unidos)
 http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Golazo Network
