@@ -40,6 +40,13 @@ public class RemoteControlManager {
     private int lastChannelNumber = 1;
     private Context appContext;
     private java.lang.ref.WeakReference<Activity> activeActivityRef;
+    private Bitmap cachedQrBitmap = null;
+    private String cachedQrUrl = null;
+
+    public interface QrCallback {
+        void onQrLoaded(Bitmap bitmap, String localUrl);
+        void onError(Exception e);
+    }
 
     public interface RemoteCommandListener {
         void onRemoteCommand(String action, JSONObject data);
@@ -80,6 +87,9 @@ public class RemoteControlManager {
             localServer.start();
             Log.d(TAG, "Local Wi-Fi Remote Server started.");
         }
+
+        // Precargar codigo QR en segundo plano
+        getOrGenerateQrBitmap(appContext, null);
     }
 
     public void setListener(RemoteCommandListener listener) {
@@ -100,13 +110,70 @@ public class RemoteControlManager {
         }
     }
 
+    public boolean isClientConnected() {
+        return isClientConnected;
+    }
+
+    public void setClientConnected(boolean connected) {
+        this.isClientConnected = connected;
+    }
+
+    public void notifyClientConnected() {
+        boolean was = isClientConnected;
+        isClientConnected = true;
+        if (!was) {
+            mainHandler.post(() -> {
+                if (currentListener != null) {
+                    currentListener.onClientConnected();
+                }
+            });
+        }
+    }
+
+    public void getOrGenerateQrBitmap(Context context, QrCallback callback) {
+        String wifiIp = LocalRemoteServer.getWifiIpAddress(context);
+        String localRemoteUrl = "http://" + wifiIp + ":" + LocalRemoteServer.PORT;
+        if (cachedQrBitmap != null && localRemoteUrl.equals(cachedQrUrl)) {
+            if (callback != null) callback.onQrLoaded(cachedQrBitmap, localRemoteUrl);
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                String qrApiUrl = "https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=" + URLEncoder.encode(localRemoteUrl, "UTF-8");
+                HttpURLConnection conn = (HttpURLConnection) new URL(qrApiUrl).openConnection();
+                conn.setConnectTimeout(6000);
+                conn.setReadTimeout(6000);
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                Bitmap bmp = BitmapFactory.decodeStream(is);
+                if (bmp != null) {
+                    cachedQrBitmap = bmp;
+                    cachedQrUrl = localRemoteUrl;
+                    if (callback != null) {
+                        mainHandler.post(() -> callback.onQrLoaded(bmp, localRemoteUrl));
+                    }
+                } else {
+                    if (callback != null) {
+                        mainHandler.post(() -> callback.onError(new Exception("Decoded QR bitmap is null")));
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error generating QR: " + e.getMessage());
+                if (callback != null) {
+                    mainHandler.post(() -> callback.onError(e));
+                }
+            }
+        }).start();
+    }
+
     public void notifyNowPlaying(String channelName, int channelNumber) {
         this.lastChannelName = channelName != null ? channelName : "";
         this.lastChannelNumber = channelNumber;
     }
 
     public void dispatchDirectCommand(String action, JSONObject data) {
-        isClientConnected = true;
+        notifyClientConnected();
         mainHandler.post(() -> {
             try {
                 if (appContext != null) {
@@ -247,25 +314,21 @@ public class RemoteControlManager {
         btnClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
 
-        // Generar QR apuntando directamente al servidor local Wi-Fi
-        new Thread(() -> {
-            try {
-                String targetUrl = localRemoteUrl;
-                String qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=" + URLEncoder.encode(targetUrl, "UTF-8");
-                HttpURLConnection conn = (HttpURLConnection) new URL(qrUrl).openConnection();
-                conn.setConnectTimeout(8000);
-                conn.setReadTimeout(8000);
-                conn.connect();
-                InputStream is = conn.getInputStream();
-                Bitmap bmp = BitmapFactory.decodeStream(is);
+        // Generar o usar QR en cache apuntando al servidor local Wi-Fi
+        getOrGenerateQrBitmap(activity, new QrCallback() {
+            @Override
+            public void onQrLoaded(Bitmap bmp, String localUrl) {
                 activity.runOnUiThread(() -> {
                     qrBox.removeView(pb);
                     imgQr.setImageBitmap(bmp);
                     qrBox.addView(imgQr);
                 });
-            } catch (Exception e) {
+            }
+
+            @Override
+            public void onError(Exception e) {
                 Log.e(TAG, "Error loading QR", e);
             }
-        }).start();
+        });
     }
 }

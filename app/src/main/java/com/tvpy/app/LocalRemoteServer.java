@@ -139,6 +139,7 @@ public class LocalRemoteServer {
 
             // API: Estado de la TV
             if (path.startsWith("/api/status")) {
+                RemoteControlManager.getInstance().notifyClientConnected();
                 JSONObject statusObj = new JSONObject();
                 statusObj.put("status", "connected");
                 statusObj.put("channelName", RemoteControlManager.getInstance().getLastChannelName());
@@ -153,6 +154,7 @@ public class LocalRemoteServer {
             String contentType;
 
             if ("/".equals(path) || "/remote".equals(path) || "/remote.html".equals(path) || "/index.html".equals(path)) {
+                RemoteControlManager.getInstance().notifyClientConnected();
                 assetPath = "remote.html";
                 contentType = "text/html; charset=utf-8";
             } else if ("/remote.css".equals(path)) {

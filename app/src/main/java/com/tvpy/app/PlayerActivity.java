@@ -22,6 +22,10 @@ import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.content.Context;
 import android.graphics.drawable.Icon;
+import android.graphics.Bitmap;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.app.RemoteAction;
 import android.app.PendingIntent;
 import android.annotation.TargetApi;
@@ -92,6 +96,12 @@ public class PlayerActivity extends AppCompatActivity {
     private AnimatorSet anim1, anim2, anim3;
 
     private TextView tvChannelName;
+    // Mini Overlay Flotante QR
+    private View cardRemoteQr;
+    private ImageView imgRemoteQr;
+    private ProgressBar pbRemoteQr;
+    private TextView tvRemoteQrUrl;
+    private boolean isQrDismissedByUser = false;
     private View topBar;
     private TextView btnSignal;
     private TextView btnAudioTrack;
@@ -206,10 +216,7 @@ public class PlayerActivity extends AppCompatActivity {
             }
             @Override
             public void onClientConnected() {
-                Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
-        if (activeCh != null) {
-            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
-        }
+                runOnUiThread(() -> onRemoteClientConnected());
             }
             @Override public void onClientDisconnected() {}
         });
@@ -362,6 +369,8 @@ public class PlayerActivity extends AppCompatActivity {
                 v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
             }
         });
+
+        setupRemoteQrOverlay();
 
 
         // Gestos (tap → topBar; fling → navegar)
@@ -1921,10 +1930,10 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         if (isSidePanelVisible()) {
-                    if (keyCode == android.view.KeyEvent.KEYCODE_PROG_YELLOW) {
-            RemoteControlManager.getInstance().showPairingDialog(this);
-            return true;
-        }
+            if (keyCode == android.view.KeyEvent.KEYCODE_PROG_YELLOW) {
+                toggleRemoteQrOverlay();
+                return true;
+            }
 if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
                 hideSidePanel();
                 return true;
@@ -1932,8 +1941,8 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
             return super.onKeyDown(keyCode, event);
         }
 
-                if (keyCode == android.view.KeyEvent.KEYCODE_PROG_YELLOW) {
-            RemoteControlManager.getInstance().showPairingDialog(this);
+        if (keyCode == android.view.KeyEvent.KEYCODE_PROG_YELLOW) {
+            toggleRemoteQrOverlay();
             return true;
         }
 if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
@@ -2001,10 +2010,7 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
             }
             @Override
             public void onClientConnected() {
-                Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
-        if (activeCh != null) {
-            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
-        }
+                runOnUiThread(() -> onRemoteClientConnected());
             }
             @Override public void onClientDisconnected() {}
         });
@@ -2400,10 +2406,7 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
             }
             @Override
             public void onClientConnected() {
-                Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
-        if (activeCh != null) {
-            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
-        }
+                runOnUiThread(() -> onRemoteClientConnected());
             }
             @Override public void onClientDisconnected() {}
         });
@@ -2750,4 +2753,122 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
         }
     }
 
+
+    // ==========================================================================
+    // OVERLAY FLOTANTE QR: VINCULACIÓN AUTOMÁTICA DE CONTROL REMOTO
+    // ==========================================================================
+    private void setupRemoteQrOverlay() {
+        cardRemoteQr  = findViewById(R.id.cardRemoteQr);
+        imgRemoteQr   = findViewById(R.id.imgRemoteQr);
+        pbRemoteQr    = findViewById(R.id.pbRemoteQr);
+        tvRemoteQrUrl = findViewById(R.id.tvRemoteQrUrl);
+        View btnDismissQr = findViewById(R.id.btnDismissQr);
+
+        if (btnDismissQr != null) {
+            btnDismissQr.setOnClickListener(v -> {
+                isQrDismissedByUser = true;
+                hideRemoteQrOverlay(false);
+            });
+        }
+
+        View btnRemotePair = findViewById(R.id.btnRemotePair);
+        if (btnRemotePair != null) {
+            btnRemotePair.setOnClickListener(v -> {
+                isQrDismissedByUser = false;
+                toggleRemoteQrOverlay();
+            });
+            btnRemotePair.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    v.animate().scaleX(1.2f).scaleY(1.2f).setDuration(150).start();
+                } else {
+                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                }
+            });
+        }
+
+        // Si aún no hay celular conectado, mostrar el QR flotante
+        if (!RemoteControlManager.getInstance().isClientConnected() && !isQrDismissedByUser) {
+            showRemoteQrOverlay();
+        } else if (cardRemoteQr != null) {
+            cardRemoteQr.setVisibility(View.GONE);
+        }
+    }
+
+    private void showRemoteQrOverlay() {
+        if (cardRemoteQr == null) return;
+        cardRemoteQr.setVisibility(View.VISIBLE);
+        cardRemoteQr.setAlpha(0f);
+        cardRemoteQr.setScaleX(0.85f);
+        cardRemoteQr.setScaleY(0.85f);
+        cardRemoteQr.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(300)
+                .start();
+
+        if (pbRemoteQr != null) pbRemoteQr.setVisibility(View.VISIBLE);
+        if (imgRemoteQr != null) imgRemoteQr.setImageDrawable(null);
+
+        RemoteControlManager.getInstance().getOrGenerateQrBitmap(this, new RemoteControlManager.QrCallback() {
+            @Override
+            public void onQrLoaded(Bitmap bitmap, String localUrl) {
+                if (isFinishing() || isDestroyed()) return;
+                if (pbRemoteQr != null) pbRemoteQr.setVisibility(View.GONE);
+                if (imgRemoteQr != null) imgRemoteQr.setImageBitmap(bitmap);
+                if (tvRemoteQrUrl != null) {
+                    String shortUrl = localUrl.replace("http://", "").replace("https://", "");
+                    tvRemoteQrUrl.setText(shortUrl);
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                if (isFinishing() || isDestroyed()) return;
+                if (pbRemoteQr != null) pbRemoteQr.setVisibility(View.GONE);
+                if (tvRemoteQrUrl != null) {
+                    String wifiIp = LocalRemoteServer.getWifiIpAddress(PlayerActivity.this);
+                    tvRemoteQrUrl.setText(wifiIp + ":8088");
+                }
+            }
+        });
+    }
+
+    private void hideRemoteQrOverlay(boolean showConfirmation) {
+        if (cardRemoteQr != null && cardRemoteQr.getVisibility() == View.VISIBLE) {
+            cardRemoteQr.animate()
+                    .alpha(0f)
+                    .scaleX(0.8f)
+                    .scaleY(0.8f)
+                    .setDuration(350)
+                    .withEndAction(() -> {
+                        cardRemoteQr.setVisibility(View.GONE);
+                        cardRemoteQr.setAlpha(1f);
+                        cardRemoteQr.setScaleX(1f);
+                        cardRemoteQr.setScaleY(1f);
+                    })
+                    .start();
+            if (showConfirmation) {
+                Toast.makeText(this, "📱 Celular vinculado como control remoto", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void toggleRemoteQrOverlay() {
+        if (cardRemoteQr != null && cardRemoteQr.getVisibility() == View.VISIBLE) {
+            isQrDismissedByUser = true;
+            hideRemoteQrOverlay(false);
+        } else {
+            isQrDismissedByUser = false;
+            showRemoteQrOverlay();
+        }
+    }
+
+    private void onRemoteClientConnected() {
+        Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
+        if (activeCh != null) {
+            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
+        }
+        hideRemoteQrOverlay(true);
+    }
 }

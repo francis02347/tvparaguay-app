@@ -479,4 +479,100 @@
             android:clickable="true" />
     </LinearLayout>
 
+    <!-- MINI OVERLAY FLOTANTE QR: VINCULAR CONTROL REMOTO CELULAR -->
+    <LinearLayout
+        android:id="@+id/cardRemoteQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/bg_remote_qr_card"
+        android:padding="10dp"
+        android:elevation="14dp"
+        android:focusable="false"
+        android:clickable="false"
+        android:visibility="gone">
+
+        <!-- Fila superior: Titulo e icono -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📱"
+                android:textSize="12sp"
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Control Celular"
+                android:textColor="#00f0ff"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <TextView
+                android:id="@+id/btnDismissQr"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:text="✕"
+                android:textColor="#94a3b8"
+                android:textSize="11sp"
+                android:gravity="center"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="false"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <!-- Contenedor del Codigo QR -->
+        <FrameLayout
+            android:layout_width="105dp"
+            android:layout_height="105dp"
+            android:background="@drawable/bg_qr_white_box"
+            android:padding="4dp">
+
+            <ImageView
+                android:id="@+id/imgRemoteQr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:contentDescription="Codigo QR para Control Remoto" />
+
+            <ProgressBar
+                android:id="@+id/pbRemoteQr"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <!-- URL o IP debajo del QR -->
+        <TextView
+            android:id="@+id/tvRemoteQrUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="192.168.1.XX:8088"
+            android:textColor="#e2e8f0"
+            android:textSize="10sp"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:paddingTop="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Escanea para vincular"
+            android:textColor="#94a3b8"
+            android:textSize="9sp" />
+    </LinearLayout>
+
 </FrameLayout>
