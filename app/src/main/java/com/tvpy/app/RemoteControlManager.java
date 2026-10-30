@@ -42,6 +42,16 @@ public class RemoteControlManager {
     private java.lang.ref.WeakReference<Activity> activeActivityRef;
     private Bitmap cachedQrBitmap = null;
     private String cachedQrUrl = null;
+    private final java.util.concurrent.ConcurrentHashMap<String, Long> activeClients = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final long CLIENT_TIMEOUT_MS = 8500;
+
+    private final Runnable heartbeatCleanerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            checkActiveClientsTimeout();
+            mainHandler.postDelayed(this, 3000);
+        }
+    };
 
     public interface QrCallback {
         void onQrLoaded(Bitmap bitmap, String localUrl);
@@ -88,6 +98,10 @@ public class RemoteControlManager {
             Log.d(TAG, "Local Wi-Fi Remote Server started.");
         }
 
+        // Iniciar monitor de latidos / presencia de clientes remotos
+        mainHandler.removeCallbacks(heartbeatCleanerRunnable);
+        mainHandler.postDelayed(heartbeatCleanerRunnable, 3000);
+
         // Precargar codigo QR en segundo plano
         getOrGenerateQrBitmap(appContext, null);
     }
@@ -110,8 +124,65 @@ public class RemoteControlManager {
         }
     }
 
+    public synchronized void recordClientHeartbeat(String clientId) {
+        if (clientId == null || clientId.trim().isEmpty()) {
+            clientId = "default_client";
+        }
+        boolean wasEmpty = activeClients.isEmpty();
+        activeClients.put(clientId, System.currentTimeMillis());
+        if (wasEmpty) {
+            isClientConnected = true;
+            mainHandler.post(() -> {
+                if (currentListener != null) {
+                    currentListener.onClientConnected();
+                }
+            });
+        }
+    }
+
+    public synchronized void removeClient(String clientId) {
+        if (clientId == null) return;
+        activeClients.remove(clientId);
+        if (activeClients.isEmpty() && isClientConnected) {
+            isClientConnected = false;
+            mainHandler.post(() -> {
+                if (currentListener != null) {
+                    currentListener.onClientDisconnected();
+                }
+            });
+        }
+    }
+
+    public synchronized void checkActiveClientsTimeout() {
+        if (activeClients.isEmpty()) return;
+        long now = System.currentTimeMillis();
+        boolean removed = false;
+        java.util.Iterator<java.util.Map.Entry<String, Long>> it = activeClients.entrySet().iterator();
+        while (it.hasNext()) {
+            java.util.Map.Entry<String, Long> entry = it.next();
+            if (now - entry.getValue() > CLIENT_TIMEOUT_MS) {
+                it.remove();
+                removed = true;
+            }
+        }
+
+        if (removed && activeClients.isEmpty() && isClientConnected) {
+            isClientConnected = false;
+            Log.d(TAG, "All remote clients disconnected (heartbeat timeout).");
+            mainHandler.post(() -> {
+                if (currentListener != null) {
+                    currentListener.onClientDisconnected();
+                }
+            });
+        }
+    }
+
+    public int getConnectedClientsCount() {
+        return activeClients.size();
+    }
+
     public boolean isClientConnected() {
-        return isClientConnected;
+        return !activeClients.isEmpty() || isClientConnected;
     }
 
     public void setClientConnected(boolean connected) {
@@ -119,15 +190,7 @@ public class RemoteControlManager {
     }
 
     public void notifyClientConnected() {
-        boolean was = isClientConnected;
-        isClientConnected = true;
-        if (!was) {
-            mainHandler.post(() -> {
-                if (currentListener != null) {
-                    currentListener.onClientConnected();
-                }
-            });
-        }
+        recordClientHeartbeat("default_client");
     }
 
     public void getOrGenerateQrBitmap(Context context, QrCallback callback) {

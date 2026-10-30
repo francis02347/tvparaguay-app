@@ -7,6 +7,13 @@
 (function () {
     'use strict';
 
+    // Identificador único persistente para presencia / multi-dispositivo
+    let clientId = localStorage.getItem('tvv_client_id');
+    if (!clientId) {
+        clientId = 'dev_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now().toString(36);
+        localStorage.setItem('tvv_client_id', clientId);
+    }
+
     // Detección de Modo Wi-Fi Local (Servidor nativo en Android TV)
     const urlParams = new URLSearchParams(window.location.search);
     const isLocalDirect = window.location.port === '8088';
@@ -284,10 +291,10 @@
             localStorage.setItem('tvv_last_lan_ip', window.location.hostname);
         }
 
-        // Polling de estado ligero cada 3.5 segundos
-        setInterval(async () => {
+        // Polling de estado ligero y Heartbeat cada 3 segundos
+        const sendHeartbeat = async () => {
             try {
-                const res = await fetch(localBaseUrl + '/api/status');
+                const res = await fetch(localBaseUrl + '/api/status?client=' + encodeURIComponent(clientId));
                 if (res.ok) {
                     const data = await res.json();
                     if (!state.isConnected) {
@@ -309,12 +316,24 @@
                     'No se pudo comunicar con la app de la tele en el puerto 8088. Comprueba que el televisor siga encendido y en la misma red Wi-Fi.'
                 );
             }
-        }, 3500);
+        };
+
+        sendHeartbeat();
+        setInterval(sendHeartbeat, 3000);
+
+        // Desconexión rápida al cerrar pestaña o salir de la app
+        window.addEventListener('pagehide', () => {
+            try {
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon(localBaseUrl + '/api/disconnect?client=' + encodeURIComponent(clientId));
+                }
+            } catch (ignored) {}
+        });
     }
 
     function sendLocalCommand(payload) {
         haptic();
-        let query = '?action=' + encodeURIComponent(payload.action);
+        let query = '?action=' + encodeURIComponent(payload.action) + '&client=' + encodeURIComponent(clientId);
         if (payload.number !== undefined) query += '&number=' + encodeURIComponent(payload.number);
         if (payload.name) query += '&name=' + encodeURIComponent(payload.name);
         if (payload.query !== undefined) query += '&query=' + encodeURIComponent(payload.query);

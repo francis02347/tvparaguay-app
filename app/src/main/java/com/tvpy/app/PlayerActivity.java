@@ -218,7 +218,10 @@ public class PlayerActivity extends AppCompatActivity {
             public void onClientConnected() {
                 runOnUiThread(() -> onRemoteClientConnected());
             }
-            @Override public void onClientDisconnected() {}
+            @Override
+            public void onClientDisconnected() {
+                runOnUiThread(() -> onRemoteClientDisconnected());
+            }
         });
         Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
         if (activeCh != null) {
@@ -2012,7 +2015,10 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
             public void onClientConnected() {
                 runOnUiThread(() -> onRemoteClientConnected());
             }
-            @Override public void onClientDisconnected() {}
+            @Override
+            public void onClientDisconnected() {
+                runOnUiThread(() -> onRemoteClientDisconnected());
+            }
         });
         Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
         if (activeCh != null) {
@@ -2435,12 +2441,12 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
             }
             @Override
             public void onClientConnected() {
-                Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
-        if (activeCh != null) {
-            RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
-        }
+                runOnUiThread(() -> onRemoteClientConnected());
             }
-            @Override public void onClientDisconnected() {}
+            @Override
+            public void onClientDisconnected() {
+                runOnUiThread(() -> onRemoteClientDisconnected());
+            }
         });
         Channel activeCh = (channelList != null && currentIndex >= 0 && currentIndex < channelList.size()) ? channelList.get(currentIndex) : null;
         if (activeCh != null) {
@@ -2870,5 +2876,12 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
             RemoteControlManager.getInstance().notifyNowPlaying(activeCh.getName(), currentIndex + 1);
         }
         hideRemoteQrOverlay(true);
+    }
+
+    private void onRemoteClientDisconnected() {
+        // Si el usuario no cerro el QR manualmente con la "✕", volver a mostrarlo suavemente
+        if (!isQrDismissedByUser) {
+            showRemoteQrOverlay();
+        }
     }
 }

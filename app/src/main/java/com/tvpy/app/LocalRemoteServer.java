@@ -117,8 +117,23 @@ public class LocalRemoteServer {
                 }
             }
 
+            String clientIp = socket.getInetAddress() != null ? socket.getInetAddress().getHostAddress() : "unknown";
+            String clientId = params.get("client");
+            if (clientId == null || clientId.trim().isEmpty()) {
+                clientId = clientIp;
+            }
+
+            // API: Desconexión explícita (al cerrar pestaña/navegador)
+            if (path.startsWith("/api/disconnect") || path.startsWith("/api/leave")) {
+                RemoteControlManager.getInstance().removeClient(clientId);
+                byte[] resp = "{\"status\":\"disconnected\"}".getBytes("UTF-8");
+                sendResponse(out, 200, "OK", "application/json", resp);
+                return;
+            }
+
             // API: Comando remoto
             if (path.startsWith("/api/cmd")) {
+                RemoteControlManager.getInstance().recordClientHeartbeat(clientId);
                 String action = params.get("action");
                 if (action != null) {
                     JSONObject data = new JSONObject();
@@ -137,11 +152,12 @@ public class LocalRemoteServer {
                 return;
             }
 
-            // API: Estado de la TV
+            // API: Estado de la TV y Heartbeat
             if (path.startsWith("/api/status")) {
-                RemoteControlManager.getInstance().notifyClientConnected();
+                RemoteControlManager.getInstance().recordClientHeartbeat(clientId);
                 JSONObject statusObj = new JSONObject();
                 statusObj.put("status", "connected");
+                statusObj.put("clientsCount", RemoteControlManager.getInstance().getConnectedClientsCount());
                 statusObj.put("channelName", RemoteControlManager.getInstance().getLastChannelName());
                 statusObj.put("channelNumber", RemoteControlManager.getInstance().getLastChannelNumber());
                 byte[] resp = statusObj.toString().getBytes("UTF-8");
@@ -154,7 +170,7 @@ public class LocalRemoteServer {
             String contentType;
 
             if ("/".equals(path) || "/remote".equals(path) || "/remote.html".equals(path) || "/index.html".equals(path)) {
-                RemoteControlManager.getInstance().notifyClientConnected();
+                RemoteControlManager.getInstance().recordClientHeartbeat(clientId);
                 assetPath = "remote.html";
                 contentType = "text/html; charset=utf-8";
             } else if ("/remote.css".equals(path)) {
