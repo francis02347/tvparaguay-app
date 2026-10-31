@@ -63,10 +63,6 @@ export default {
                 let customCookie = reqUrl.searchParams.get('cookie') || null;
                 let customReferer = reqUrl.searchParams.get('referer') || null;
 
-                // Si el destino es un CDN que soporta CORS de forma nativa (CloudFront), redirigir directo
-                if (targetUrlStr.includes('cloudfront.net')) {
-                    return Response.redirect(targetUrlStr, 302);
-                }
 
                 // 1. Resolver esquema dailymotion:// (Trece, Unicanal, ABC-TV Paraguay)
                 if (targetUrlStr.startsWith('dailymotion://')) {
