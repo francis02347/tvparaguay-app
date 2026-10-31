@@ -294,7 +294,11 @@
         state.mediaRecoveryCount = 0;
 
         let streamUrl = nextUrl;
-        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || state.proxyChannels.has(state.currentChannel.name)) {
+        const isCloudfrontStream = nextUrl.includes('cloudfront.net');
+        if (isCloudfrontStream && state.currentChannel) {
+            forgetProxyChannel(state.currentChannel.name);
+        }
+        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || (!isCloudfrontStream && state.proxyChannels.has(state.currentChannel?.name))) {
             state.usedProxy = true;
             streamUrl = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
         } else {
@@ -418,7 +422,11 @@
 
         // Determinar URL de arranque: HTTP, desdeparaguay:// o canal memorizado que requiere proxy
         let streamUrl = channel.url;
-        if (channel.url.startsWith('http://') || channel.url.startsWith('desdeparaguay://') || state.proxyChannels.has(channel.name)) {
+        const isCloudfront = channel.url.includes('cloudfront.net');
+        if (isCloudfront) {
+            forgetProxyChannel(channel.name);
+        }
+        if (channel.url.startsWith('http://') || channel.url.startsWith('desdeparaguay://') || (!isCloudfront && state.proxyChannels.has(channel.name))) {
             state.usedProxy = true;
             streamUrl = `/api/proxy?url=${encodeURIComponent(channel.url)}`;
         } else {
@@ -480,8 +488,10 @@
             state.mediaRecoveryCount = 0;
             dom.loader.classList.add('hidden');
 
-            // Si funcionó a través del proxy, memorizarlo para arranques futuros instantáneos
-            if (state.usedProxy && channel && channel.name) {
+            // Si funcionó directo sin proxy, asegurarnos de que no esté en proxyChannels
+            if (!state.usedProxy && channel && channel.name) {
+                forgetProxyChannel(channel.name);
+            } else if (state.usedProxy && channel && channel.name && !channel.url.includes('cloudfront.net')) {
                 rememberProxyChannel(channel.name);
             }
 
@@ -1794,7 +1804,11 @@
             if (raw) {
                 const list = JSON.parse(raw);
                 if (Array.isArray(list)) {
-                    state.proxyChannels = new Set(list);
+                    // Purgar Tigo Sports o cualquier canal que ahora esté en CloudFront o sea HTTPS nativo
+                    const cleaned = list.filter(name => !name.toLowerCase().includes('tigo sports'));
+                    state.proxyChannels = new Set(cleaned);
+                    saveProxyChannelsToStorage();
+                    return;
                 }
             }
         } catch (e) {}
@@ -1806,8 +1820,19 @@
         } catch (e) {}
     }
 
+    function forgetProxyChannel(channelName) {
+        if (!channelName) return;
+        if (state.proxyChannels.has(channelName)) {
+            state.proxyChannels.delete(channelName);
+            saveProxyChannelsToStorage();
+        }
+    }
+
     function rememberProxyChannel(channelName) {
         if (!channelName) return;
+        if (state.currentChannel && state.currentChannel.url && state.currentChannel.url.includes('cloudfront.net')) {
+            return;
+        }
         state.proxyChannels.add(channelName);
         saveProxyChannelsToStorage();
     }
