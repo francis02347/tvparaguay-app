@@ -653,6 +653,12 @@ public class PlayerActivity extends AppCompatActivity {
             return;
         }
 
+        if (cleanUrl.startsWith("streamxhd://")) {
+            String streamId = cleanUrl.substring("streamxhd://".length()).trim();
+            resolveStreamXhdAndPlay(streamId, ch);
+            return;
+        }
+
         if (cleanUrl.startsWith("desdeparaguay://")) {
             String channelId = cleanUrl.substring("desdeparaguay://".length()).trim();
             resolveDesdeParaguayAndPlay(channelId, ch);
@@ -1200,6 +1206,99 @@ public class PlayerActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         handleSignalFailure("Fallo al resolver transmisión Dailymotion", null);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void resolveStreamXhdAndPlay(final String streamId, final Channel ch) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String embedUrl = "https://streamxhd.st/live1.php?stream=" + java.net.URLEncoder.encode(streamId, "UTF-8");
+                    java.net.URL url = new java.net.URL(embedUrl);
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(8000);
+                    conn.setReadTimeout(8000);
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                    conn.setRequestProperty("Referer", "https://pelotalibre.biz/");
+
+                    if (conn.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                        java.io.BufferedReader reader = new java.io.BufferedReader(
+                            new java.io.InputStreamReader(conn.getInputStream(), "UTF-8")
+                        );
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            sb.append(line).append("\n");
+                        }
+                        reader.close();
+
+                        String html = sb.toString();
+                        java.util.regex.Pattern arrPattern = java.util.regex.Pattern.compile(
+                            "[a-zA-Z0-9_]+\\s*=\\s*(\\[\\[\\d+,\\s*\"[^\"]+\"\\].*?\\]);", java.util.regex.Pattern.DOTALL
+                        );
+                        java.util.regex.Matcher arrMatcher = arrPattern.matcher(html);
+                        if (arrMatcher.find()) {
+                            String jsonArrStr = arrMatcher.group(1);
+                            org.json.JSONArray jsonArr = new org.json.JSONArray(jsonArrStr);
+
+                            java.util.regex.Pattern numPattern = java.util.regex.Pattern.compile(
+                                "function\\s+[a-zA-Z0-9_]+\\(\\)\\s*\\{\\s*return\\s+(\\d+);\\s*\\}"
+                            );
+                            java.util.regex.Matcher numMatcher = numPattern.matcher(html);
+                            int num1 = 0, num2 = 0;
+                            if (numMatcher.find()) num1 = Integer.parseInt(numMatcher.group(1));
+                            if (numMatcher.find()) num2 = Integer.parseInt(numMatcher.group(1));
+                            int k = num1 + num2;
+
+                            java.util.List<org.json.JSONArray> list = new java.util.ArrayList<>();
+                            for (int i = 0; i < jsonArr.length(); i++) {
+                                list.add(jsonArr.getJSONArray(i));
+                            }
+                            java.util.Collections.sort(list, new java.util.Comparator<org.json.JSONArray>() {
+                                @Override
+                                public int compare(org.json.JSONArray a, org.json.JSONArray b) {
+                                    try {
+                                        return Integer.compare(a.getInt(0), b.getInt(0));
+                                    } catch (Exception e) {
+                                        return 0;
+                                    }
+                                }
+                            });
+
+                            StringBuilder resolvedUrl = new StringBuilder();
+                            for (org.json.JSONArray item : list) {
+                                String b64 = item.getString(1);
+                                byte[] decodedBytes = android.util.Base64.decode(b64, android.util.Base64.DEFAULT);
+                                String decodedStr = new String(decodedBytes, "ISO-8859-1");
+                                String digits = decodedStr.replaceAll("\\D+", "");
+                                int charCode = Integer.parseInt(digits) - k;
+                                resolvedUrl.append((char) charCode);
+                            }
+
+                            final String finalUrl = resolvedUrl.toString().trim();
+                            if (finalUrl.startsWith("http")) {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        playResolvedUrl(finalUrl, null, "https://streamxhd.st/", ch);
+                                    }
+                                });
+                                return;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        handleSignalFailure("Fallo al resolver transmisión Tigo Sports", null);
                     }
                 });
             }

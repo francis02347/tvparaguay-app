@@ -298,7 +298,7 @@
         if (isCloudfrontStream && state.currentChannel) {
             forgetProxyChannel(state.currentChannel.name);
         }
-        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || (!isCloudfrontStream && state.proxyChannels.has(state.currentChannel?.name))) {
+        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || nextUrl.startsWith('streamxhd://') || (!isCloudfrontStream && state.proxyChannels.has(state.currentChannel?.name))) {
             state.usedProxy = true;
             streamUrl = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
         } else {
@@ -426,7 +426,7 @@
         if (isCloudfront) {
             forgetProxyChannel(channel.name);
         }
-        if (channel.url.startsWith('http://') || channel.url.startsWith('desdeparaguay://') || (!isCloudfront && state.proxyChannels.has(channel.name))) {
+        if (channel.url.startsWith('http://') || channel.url.startsWith('desdeparaguay://') || channel.url.startsWith('streamxhd://') || (!isCloudfront && state.proxyChannels.has(channel.name))) {
             state.usedProxy = true;
             streamUrl = `/api/proxy?url=${encodeURIComponent(channel.url)}`;
         } else {
@@ -462,7 +462,7 @@
                         console.warn(`Timeout en señal. Probando señal de respaldo ${state.currentSignalIndex + 1}/${allUrls.length}: ${nextUrl}`);
                         if (dom.loaderText) dom.loaderText.textContent = `Probando señal de respaldo ${state.currentSignalIndex + 1}...`;
                         let streamNext = nextUrl;
-                        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://')) {
+                        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || nextUrl.startsWith('streamxhd://')) {
                             state.usedProxy = true;
                             streamNext = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
                         }
@@ -507,7 +507,8 @@
         // Soporte nativo para streams directos MPEG-TS (Premiere, Sky Sports, DAZN, Paramount+)
         const isTsStream = !channel.url.toLowerCase().includes('.m3u8') && 
                            !channel.url.startsWith('dailymotion://') && 
-                           !channel.url.startsWith('desdeparaguay://');
+                           !channel.url.startsWith('desdeparaguay://') &&
+                           !channel.url.startsWith('streamxhd://');
 
         if (isTsStream && window.mpegts && mpegts.isSupported()) {
             try {
@@ -673,7 +674,7 @@
                                 console.warn(`Error de red en señal. Conectando a señal de respaldo ${state.currentSignalIndex + 1}/${allUrls.length}: ${nextUrl}`);
                                 if (dom.loaderText) dom.loaderText.textContent = `Conectando a señal de respaldo ${state.currentSignalIndex + 1}...`;
                                 let streamNext = nextUrl;
-                                if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://')) {
+                                if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || nextUrl.startsWith('streamxhd://')) {
                                     state.usedProxy = true;
                                     streamNext = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
                                 }
@@ -1852,7 +1853,7 @@
             if (!ch || !ch.url || ch.url.startsWith('dailymotion://')) return;
 
             let targetUrl = ch.url;
-            if (ch.url.startsWith('http://') || ch.url.startsWith('desdeparaguay://') || state.proxyChannels.has(ch.name)) {
+            if (ch.url.startsWith('http://') || ch.url.startsWith('desdeparaguay://') || ch.url.startsWith('streamxhd://') || state.proxyChannels.has(ch.name)) {
                 targetUrl = `/api/proxy?url=${encodeURIComponent(ch.url)}`;
             }
 
@@ -1868,7 +1869,7 @@
                     }
                 }).catch(() => {
                     // Si falla por CORS silenciosamente, lo recordamos como proxy para que al sintonizarlo arranque directo
-                    if (!state.proxyChannels.has(ch.name) && !ch.url.startsWith('http://') && !ch.url.startsWith('desdeparaguay://')) {
+                    if (!state.proxyChannels.has(ch.name) && !ch.url.startsWith('http://') && !ch.url.startsWith('desdeparaguay://') && !ch.url.startsWith('streamxhd://')) {
                         rememberProxyChannel(ch.name);
                     }
                 });

@@ -105,7 +105,15 @@ export default {
                     }
                 }
 
-                // 3. Manejo de parámetros de encabezados en formato pipe (|User-Agent=...|Referer=...)
+                                // 3. Resolver esquema streamxhd:// (Tigo Sports, etc.)
+                if (targetUrlStr.startsWith('streamxhd://')) {
+                    const streamId = targetUrlStr.replace('streamxhd://', '').split('?')[0].trim();
+                    const resolvedUrl = await resolveStreamXhd(streamId);
+                    targetUrlStr = resolvedUrl;
+                    customReferer = 'https://streamxhd.st/';
+                }
+
+                // 4. Manejo de parámetros de encabezados en formato pipe (|User-Agent=...|Referer=...)
                 let customUa = null;
                 if (targetUrlStr.includes('|')) {
                     const parts = targetUrlStr.split('|');
@@ -192,6 +200,38 @@ async function resolveDailymotionStream(videoId, referer, embedder) {
         cookieStr: cookieStr,
         referer: referer
     };
+}
+
+async function resolveStreamXhd(streamId) {
+    const embedUrl = `https://streamxhd.st/live1.php?stream=${encodeURIComponent(streamId)}`;
+    const res = await fetch(embedUrl, {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://pelotalibre.biz/'
+        }
+    });
+    if (!res.ok) {
+        throw new Error(`streamxhd HTTP error: ${res.status}`);
+    }
+    const html = await res.text();
+    const arrMatch = html.match(/([a-zA-Z0-9_]+)\s*=\s*(\[\[\d+,\s*"[^"]+"\][\s\S]*?\]);/);
+    if (!arrMatch) {
+        throw new Error('streamxhd array structure not found');
+    }
+    const arr = JSON.parse(arrMatch[2]);
+    const numMatches = [...html.matchAll(/function\s+[a-zA-Z0-9_]+\(\)\s*\{\s*return\s+(\d+);\s*\}/g)];
+    if (numMatches.length < 2) {
+        throw new Error('streamxhd key functions not found');
+    }
+    const k = parseInt(numMatches[0][1], 10) + parseInt(numMatches[1][1], 10);
+    arr.sort((a, b) => a[0] - b[0]);
+    let playbackUrl = '';
+    for (const item of arr) {
+        const decoded = atob(item[1]);
+        const digits = decoded.replace(/\D/g, '');
+        playbackUrl += String.fromCharCode(parseInt(digits, 10) - k);
+    }
+    return playbackUrl;
 }
 
 async function handleProxy(targetUrlStr, origin, customUa, customReferer, customCookie) {
