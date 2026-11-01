@@ -293,12 +293,30 @@
         state.networkRetryCount = 0;
         state.mediaRecoveryCount = 0;
 
+        if (nextUrl.startsWith('streamxhd://')) {
+            const streamId = nextUrl.replace('streamxhd://', '').split('?')[0].trim();
+            if (state.hls) { state.hls.stopLoad(); }
+            dom.video.classList.add('hidden');
+            dom.iframe.classList.remove('hidden');
+            dom.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+            dom.iframe.src = `https://streamxhd.st/live1.php?stream=${encodeURIComponent(streamId)}`;
+            if (dom.loader) dom.loader.classList.add('hidden');
+            return;
+        } else {
+            if (dom.iframe) {
+                dom.iframe.removeAttribute('src');
+                dom.iframe.removeAttribute('sandbox');
+                dom.iframe.classList.add('hidden');
+            }
+            dom.video.classList.remove('hidden');
+        }
+
         let streamUrl = nextUrl;
         const isCloudfrontStream = nextUrl.includes('cloudfront.net');
         if (isCloudfrontStream && state.currentChannel) {
             forgetProxyChannel(state.currentChannel.name);
         }
-        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || nextUrl.startsWith('streamxhd://') || (!isCloudfrontStream && state.proxyChannels.has(state.currentChannel?.name))) {
+        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || (!isCloudfrontStream && state.proxyChannels.has(state.currentChannel?.name))) {
             state.usedProxy = true;
             streamUrl = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
         } else {
@@ -413,9 +431,25 @@
             return;
         }
 
+        // Canales StreamXHD (Tigo Sports): reproducir mediante iframe seguro para mantener IP nativa del usuario y bloqueo de publicidad
+        if (channel.url.startsWith('streamxhd://')) {
+            const streamId = channel.url.replace('streamxhd://', '').split('?')[0].trim();
+
+            dom.video.classList.add('hidden');
+            dom.iframe.classList.remove('hidden');
+            dom.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+            dom.iframe.src = `https://streamxhd.st/live1.php?stream=${encodeURIComponent(streamId)}`;
+            dom.loader.classList.add('hidden');
+
+            state.focusedZone = 'player_hud';
+            dom.btnClosePlayer.focus();
+            return;
+        }
+
         // Asegurar que el iframe esté oculto y el video visible para todos los demás canales HLS
         if (dom.iframe) {
             dom.iframe.removeAttribute('src');
+            dom.iframe.removeAttribute('sandbox');
             dom.iframe.classList.add('hidden');
         }
         dom.video.classList.remove('hidden');
@@ -871,6 +905,7 @@
             try {
                 dom.iframe.src = 'about:blank';
                 dom.iframe.removeAttribute('src');
+                dom.iframe.removeAttribute('sandbox');
                 dom.iframe.classList.add('hidden');
             } catch (e) {}
         }
