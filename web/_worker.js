@@ -37,8 +37,10 @@ export default {
                 });
 
                 let html = await res.text();
-                // Forzar inicio automático
-                html = html.replace('"autostart":"off"', '"autostart":"on"');
+                // Forzar inicio automático y desmutear
+                html = html.replace('"autostart":"off"', '"autostart":"on"')
+                           .replace('"enable_mute":true', '"enable_mute":false')
+                           .replace('"enable_mute": true', '"enable_mute": false');
 
                 return new Response(html, {
                     status: 200,
@@ -214,16 +216,44 @@ async function resolveStreamXhd(streamId) {
         throw new Error(`streamxhd HTTP error: ${res.status}`);
     }
     const html = await res.text();
-    const arrMatch = html.match(/([a-zA-Z0-9_]+)\s*=\s*(\[\[\d+,\s*"[^"]+"\][\s\S]*?\]);/);
-    if (!arrMatch) {
+
+    const kMatch = html.match(/var\s+k\s*=\s*([a-zA-Z0-9_]+)\(\)\s*\+\s*([a-zA-Z0-9_]+)\(\)/);
+    let k = 0;
+    if (kMatch) {
+        const fn1 = kMatch[1];
+        const fn2 = kMatch[2];
+        const r1 = html.match(new RegExp(`function\\s+${fn1}\\(\\)\\s*\\{\\s*return\\s+(\\d+);`));
+        const r2 = html.match(new RegExp(`function\\s+${fn2}\\(\\)\\s*\\{\\s*return\\s+(\\d+);`));
+        if (r1 && r2) {
+            k = parseInt(r1[1], 10) + parseInt(r2[1], 10);
+        }
+    }
+    if (k === 0) {
+        const numMatches = [...html.matchAll(/function\s+[a-zA-Z0-9_]+\(\)\s*\{\s*return\s+(\d+);\s*\}/g)];
+        if (numMatches.length >= 2) {
+            k = parseInt(numMatches[0][1], 10) + parseInt(numMatches[1][1], 10);
+        }
+    }
+
+    let arr = null;
+    const arrNameMatch = html.match(/([a-zA-Z0-9_]+)\.sort\(\(a,b\)=>a\[0\]-b\[0\]\);\s*var\s+k\s*=/);
+    if (arrNameMatch) {
+        const arrName = arrNameMatch[1];
+        const arrDefMatch = html.match(new RegExp(`${arrName}\\s*=\\s*(\\[\\[\\d+,\\s*"[^"]+"\\][\\s\\S]*?\\]);`));
+        if (arrDefMatch) {
+            arr = JSON.parse(arrDefMatch[1]);
+        }
+    }
+    if (!arr) {
+        const arrMatch = html.match(/([a-zA-Z0-9_]+)\s*=\s*(\[\[\d+,\s*"[^"]+"\][\s\S]*?\]);/);
+        if (arrMatch) {
+            arr = JSON.parse(arrMatch[2]);
+        }
+    }
+    if (!arr) {
         throw new Error('streamxhd array structure not found');
     }
-    const arr = JSON.parse(arrMatch[2]);
-    const numMatches = [...html.matchAll(/function\s+[a-zA-Z0-9_]+\(\)\s*\{\s*return\s+(\d+);\s*\}/g)];
-    if (numMatches.length < 2) {
-        throw new Error('streamxhd key functions not found');
-    }
-    const k = parseInt(numMatches[0][1], 10) + parseInt(numMatches[1][1], 10);
+
     arr.sort((a, b) => a[0] - b[0]);
     let playbackUrl = '';
     for (const item of arr) {

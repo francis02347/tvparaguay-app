@@ -1114,56 +1114,15 @@ public class PlayerActivity extends AppCompatActivity {
                                 }
 
                                 Response m3u8Resp = SHARED_OKHTTP_CLIENT.newCall(m3u8Req.build()).execute();
-                                if (m3u8Resp.isSuccessful() && m3u8Resp.body() != null) {
-                                    String m3u8Body = m3u8Resp.body().string();
-                                    m3u8Resp.close();
-
-                                    java.util.List<String> variants = new java.util.ArrayList<>();
-                                    String[] lines = m3u8Body.split("\\r?\\n");
-                                    for (String l : lines) {
-                                        String trimmed = l.trim();
-                                        if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
-                                            variants.add(trimmed);
-                                        }
-                                    }
-
-                                    if (!variants.isEmpty()) {
-                                        String bestVariant = null;
-                                        for (String v : variants) {
-                                            if (v.contains("live-1080") || v.contains("1080")) {
-                                                bestVariant = v;
-                                                break;
-                                            }
-                                        }
-                                        if (bestVariant == null) {
-                                            for (String v : variants) {
-                                                if (v.contains("live-720") || v.contains("720")) {
-                                                    bestVariant = v;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (bestVariant == null) {
-                                            for (String v : variants) {
-                                                if (v.contains("live-480") || v.contains("480")) {
-                                                    bestVariant = v;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (bestVariant == null) {
-                                            bestVariant = variants.get(variants.size() - 1);
-                                        }
-                                        int hashIdx = bestVariant.indexOf('#');
-                                        if (hashIdx >= 0) {
-                                            bestVariant = bestVariant.substring(0, hashIdx);
-                                        }
-                                        if (bestVariant.startsWith("http")) {
-                                            finalPlayUrl = bestVariant;
-                                        }
-                                    }
+                                if (m3u8Resp.isSuccessful()) {
+                                    // Utilizar la URL final resuelta del master playlist (post-redirect de cdndirector a dmcdn.net)
+                                    // Mantener el master playlist intacto permite a ExoPlayer decodificar tanto el video como la pista de audio (CMAF demuxeado)
+                                    finalPlayUrl = m3u8Resp.request().url().toString();
                                 } else {
-                                    if (m3u8Resp.body() != null) m3u8Resp.close();
+                                    finalPlayUrl = masterStreamUrl;
+                                }
+                                if (m3u8Resp.body() != null) {
+                                    m3u8Resp.close();
                                 }
                             } else {
                                 finalPlayUrl = masterStreamUrl;
@@ -1237,14 +1196,24 @@ public class PlayerActivity extends AppCompatActivity {
                         reader.close();
 
                         String html = sb.toString();
-                        java.util.regex.Pattern arrPattern = java.util.regex.Pattern.compile(
-                            "[a-zA-Z0-9_]+\\s*=\\s*(\\[\\[\\d+,\\s*\"[^\"]+\"\\].*?\\]);", java.util.regex.Pattern.DOTALL
-                        );
-                        java.util.regex.Matcher arrMatcher = arrPattern.matcher(html);
-                        if (arrMatcher.find()) {
-                            String jsonArrStr = arrMatcher.group(1);
-                            org.json.JSONArray jsonArr = new org.json.JSONArray(jsonArrStr);
 
+                        java.util.regex.Pattern kFormulaPattern = java.util.regex.Pattern.compile(
+                            "var\\s+k\\s*=\\s*([a-zA-Z0-9_]+)\\(\\)\\s*\\+\\s*([a-zA-Z0-9_]+)\\(\\)"
+                        );
+                        java.util.regex.Matcher kFormulaMatcher = kFormulaPattern.matcher(html);
+                        int k = 0;
+                        if (kFormulaMatcher.find()) {
+                            String fn1 = kFormulaMatcher.group(1);
+                            String fn2 = kFormulaMatcher.group(2);
+                            java.util.regex.Pattern p1 = java.util.regex.Pattern.compile("function\\s+" + fn1 + "\\(\\)\\s*\\{\\s*return\\s+(\\d+);");
+                            java.util.regex.Pattern p2 = java.util.regex.Pattern.compile("function\\s+" + fn2 + "\\(\\)\\s*\\{\\s*return\\s+(\\d+);");
+                            java.util.regex.Matcher m1 = p1.matcher(html);
+                            java.util.regex.Matcher m2 = p2.matcher(html);
+                            int v1 = m1.find() ? Integer.parseInt(m1.group(1)) : 0;
+                            int v2 = m2.find() ? Integer.parseInt(m2.group(1)) : 0;
+                            k = v1 + v2;
+                        }
+                        if (k == 0) {
                             java.util.regex.Pattern numPattern = java.util.regex.Pattern.compile(
                                 "function\\s+[a-zA-Z0-9_]+\\(\\)\\s*\\{\\s*return\\s+(\\d+);\\s*\\}"
                             );
@@ -1252,7 +1221,36 @@ public class PlayerActivity extends AppCompatActivity {
                             int num1 = 0, num2 = 0;
                             if (numMatcher.find()) num1 = Integer.parseInt(numMatcher.group(1));
                             if (numMatcher.find()) num2 = Integer.parseInt(numMatcher.group(1));
-                            int k = num1 + num2;
+                            k = num1 + num2;
+                        }
+
+                        String jsonArrStr = null;
+                        java.util.regex.Pattern arrNamePattern = java.util.regex.Pattern.compile(
+                            "([a-zA-Z0-9_]+)\\.sort\\(\\(a,b\\)=>a\\[0\\]-b\\[0\\]\\);\\s*var\\s+k\\s*="
+                        );
+                        java.util.regex.Matcher arrNameMatcher = arrNamePattern.matcher(html);
+                        if (arrNameMatcher.find()) {
+                            String arrName = arrNameMatcher.group(1);
+                            java.util.regex.Pattern arrDefPattern = java.util.regex.Pattern.compile(
+                                java.util.regex.Pattern.quote(arrName) + "\\s*=\\s*(\\[\\[\\d+,\\s*\"[^\"]+\"\\].*?\\]);"
+                            );
+                            java.util.regex.Matcher arrDefMatcher = arrDefPattern.matcher(html);
+                            if (arrDefMatcher.find()) {
+                                jsonArrStr = arrDefMatcher.group(1);
+                            }
+                        }
+                        if (jsonArrStr == null) {
+                            java.util.regex.Pattern arrPattern = java.util.regex.Pattern.compile(
+                                "[a-zA-Z0-9_]+\\s*=\\s*(\\[\\[\\d+,\\s*\"[^\"]+\"\\].*?\\]);", java.util.regex.Pattern.DOTALL
+                            );
+                            java.util.regex.Matcher arrMatcher = arrPattern.matcher(html);
+                            if (arrMatcher.find()) {
+                                jsonArrStr = arrMatcher.group(1);
+                            }
+                        }
+
+                        if (jsonArrStr != null) {
+                            org.json.JSONArray jsonArr = new org.json.JSONArray(jsonArrStr);
 
                             java.util.List<org.json.JSONArray> list = new java.util.ArrayList<>();
                             for (int i = 0; i < jsonArr.length(); i++) {

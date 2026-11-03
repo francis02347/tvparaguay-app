@@ -121,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=2.71');
+            const resp = await fetch('channels.json?v=20261103.1400');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -470,7 +470,7 @@
         // Temporizador de seguridad de 20 segundos (permite buffering estable sin abortos prematuros)
         state.playbackTimeout = setTimeout(() => {
             if (state.isPlaying && dom.video.currentTime === 0) {
-                if (!state.usedProxy) {
+                if (!state.usedProxy && !channel.url.includes('cloudfront.net')) {
                     console.warn('Timeout en directo, cambiando a proxy seguro...');
                     state.usedProxy = true;
                     rememberProxyChannel(channel.name);
@@ -495,8 +495,18 @@
                         const nextUrl = allUrls[state.currentSignalIndex];
                         console.warn(`Timeout en señal. Probando señal de respaldo ${state.currentSignalIndex + 1}/${allUrls.length}: ${nextUrl}`);
                         if (dom.loaderText) dom.loaderText.textContent = `Probando señal de respaldo ${state.currentSignalIndex + 1}...`;
+                        if (nextUrl.startsWith('streamxhd://')) {
+                            const streamId = nextUrl.replace('streamxhd://', '').split('?')[0].trim();
+                            if (state.hls) { state.hls.stopLoad(); }
+                            dom.video.classList.add('hidden');
+                            dom.iframe.classList.remove('hidden');
+                            dom.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+                            dom.iframe.src = `https://streamxhd.st/live1.php?stream=${encodeURIComponent(streamId)}`;
+                            if (dom.loader) dom.loader.classList.add('hidden');
+                            return;
+                        }
                         let streamNext = nextUrl;
-                        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || nextUrl.startsWith('streamxhd://')) {
+                        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://')) {
                             state.usedProxy = true;
                             streamNext = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
                         }
@@ -707,8 +717,18 @@
                                 const nextUrl = allUrls[state.currentSignalIndex];
                                 console.warn(`Error de red en señal. Conectando a señal de respaldo ${state.currentSignalIndex + 1}/${allUrls.length}: ${nextUrl}`);
                                 if (dom.loaderText) dom.loaderText.textContent = `Conectando a señal de respaldo ${state.currentSignalIndex + 1}...`;
+                                if (nextUrl.startsWith('streamxhd://')) {
+                                    const streamId = nextUrl.replace('streamxhd://', '').split('?')[0].trim();
+                                    if (state.hls) { state.hls.stopLoad(); }
+                                    dom.video.classList.add('hidden');
+                                    dom.iframe.classList.remove('hidden');
+                                    dom.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+                                    dom.iframe.src = `https://streamxhd.st/live1.php?stream=${encodeURIComponent(streamId)}`;
+                                    if (dom.loader) dom.loader.classList.add('hidden');
+                                    return;
+                                }
                                 let streamNext = nextUrl;
-                                if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://') || nextUrl.startsWith('streamxhd://')) {
+                                if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://')) {
                                     state.usedProxy = true;
                                     streamNext = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
                                 }
