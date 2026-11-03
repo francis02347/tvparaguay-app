@@ -121,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=20261103.1810');
+            const resp = await fetch('channels.json?v=20261103.1825');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -1990,7 +1990,7 @@
     }
 
     // EXPOSICIÓN GLOBAL PARA AUTOMATIZACIÓN Y DEBUG
-    window.tvv = { playChannel, stopPlayback, state };
+    window.tvv = { playChannel, closePlayer, state };
 
     // INICIAR
     document.addEventListener('DOMContentLoaded', init);
