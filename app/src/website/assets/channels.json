@@ -210,12 +210,12 @@
     },
     {
       "name": "Tigo Sports (Paraguay)",
-      "url": "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8",
-      "raw_url": "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/0fd608d0807c48edb4713da6b80e8c34/index.m3u8",
+      "url": "http://45.170.130.224:8000/play/a04k/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a04k/index.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 26,
-      "backup_url": "http://45.170.130.224:8000/play/a04k/index.m3u8?hls|streamxhd://tigo1"
+      "backup_url": "http://45.134.141.161:2200/ARG/Tigo_Sports/tracks-v1a1/mono.m3u8|streamxhd://tigo1"
     },
     {
       "name": "Tigo Sports+ (Solo Eventos)",
@@ -399,12 +399,12 @@
     },
     {
       "name": "ESPN (Argentina)",
-      "url": "http://45.170.130.224:8000/play/a04l/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a04l/index.m3u8",
+      "url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
+      "raw_url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 49,
-      "backup_url": "http://181.78.197.59:8000/play/a07z/index.m3u8|https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8"
+      "backup_url": "http://181.78.197.59:8000/play/a0ff/index.m3u8"
     },
     {
       "name": "ESPN (Señal Principal)",
@@ -413,7 +413,7 @@
       "logo": "",
       "category": "Deportes",
       "number": 50,
-      "backup_url": "https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8|http://45.170.130.224:8000/play/a04l/index.m3u8"
+      "backup_url": "http://181.78.197.59:8000/play/a0ff/index.m3u8"
     },
     {
       "name": "ESPN 2 (Argentina)",
@@ -442,12 +442,12 @@
     },
     {
       "name": "ESPN 3 (Argentina)",
-      "url": "https://barinaslive1.boldmss.com/ESPN_3/ESPN_3.isml/ESPN_3.m3u8",
-      "raw_url": "https://barinaslive1.boldmss.com/ESPN_3/ESPN_3.isml/ESPN_3.m3u8",
+      "url": "http://181.78.197.59:8000/play/a081/index.m3u8",
+      "raw_url": "http://181.78.197.59:8000/play/a081/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 54,
-      "backup_url": "https://bantel-cdn1.iptvperu.tv:1936/btnscrtn/espn3-mux/playlist.m3u8|http://190.61.47.54:8000/play/a005/index.m3u8|http://181.209.38.115:8000/play/a00d/index.m3u8"
+      "backup_url": "http://45.170.130.224:8000/play/a03s/index.m3u8"
     },
     {
       "name": "ESPN 3",
@@ -456,7 +456,7 @@
       "logo": "",
       "category": "Deportes",
       "number": 55,
-      "backup_url": "https://barinaslive1.boldmss.com/ESPN_3/ESPN_3.isml/ESPN_3.m3u8|http://38.44.109.41:8003/play/a0gq/index.m3u8|http://45.170.130.224:8000/play/a03s/index.m3u8"
+      "backup_url": "http://45.170.130.224:8000/play/a03s/index.m3u8"
     },
     {
       "name": "ESPN 3 (Brasil)",

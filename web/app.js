@@ -121,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=20261103.1400');
+            const resp = await fetch('channels.json?v=20261103.1715');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -467,62 +467,68 @@
             state.usedProxy = false;
         }
 
-        // Temporizador de seguridad de 20 segundos (permite buffering estable sin abortos prematuros)
-        state.playbackTimeout = setTimeout(() => {
-            if (state.isPlaying && dom.video.currentTime === 0) {
-                if (!state.usedProxy && !channel.url.includes('cloudfront.net')) {
-                    console.warn('Timeout en directo, cambiando a proxy seguro...');
-                    state.usedProxy = true;
-                    rememberProxyChannel(channel.name);
-                    const proxied = `/api/proxy?url=${encodeURIComponent(channel.url)}`;
-                    if (state.hls) {
-                        state.hls.loadSource(proxied);
-                        state.hls.startLoad();
-                    } else {
-                        dom.video.src = proxied;
-                        dom.video.play().catch(() => {});
-                    }
-                } else {
-                    let allUrls = [channel.url];
-                    if (channel.backup_url) {
-                        allUrls = allUrls.concat(channel.backup_url.split('|').map(u => u.trim()).filter(Boolean));
-                    }
-                    if (state.currentSignalIndex !== undefined && state.currentSignalIndex + 1 < allUrls.length) {
-                        state.currentSignalIndex++;
-                        updateSignalButtonUi();
-                        state.usedProxy = false;
-                        state.networkRetryCount = 0;
-                        const nextUrl = allUrls[state.currentSignalIndex];
-                        console.warn(`Timeout en señal. Probando señal de respaldo ${state.currentSignalIndex + 1}/${allUrls.length}: ${nextUrl}`);
-                        if (dom.loaderText) dom.loaderText.textContent = `Probando señal de respaldo ${state.currentSignalIndex + 1}...`;
-                        if (nextUrl.startsWith('streamxhd://')) {
-                            const streamId = nextUrl.replace('streamxhd://', '').split('?')[0].trim();
-                            if (state.hls) { state.hls.stopLoad(); }
-                            dom.video.classList.add('hidden');
-                            dom.iframe.classList.remove('hidden');
-                            dom.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
-                            dom.iframe.src = `https://streamxhd.st/live1.php?stream=${encodeURIComponent(streamId)}`;
-                            if (dom.loader) dom.loader.classList.add('hidden');
-                            return;
-                        }
-                        let streamNext = nextUrl;
-                        if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://')) {
-                            state.usedProxy = true;
-                            streamNext = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
-                        }
+        // Temporizador de seguridad con reintento progresivo de señales
+        function armPlaybackTimeout() {
+            if (state.playbackTimeout) clearTimeout(state.playbackTimeout);
+            state.playbackTimeout = setTimeout(() => {
+                if (state.isPlaying && dom.video.currentTime === 0) {
+                    if (!state.usedProxy && !channel.url.includes('cloudfront.net')) {
+                        console.warn('Timeout en directo, cambiando a proxy seguro...');
+                        state.usedProxy = true;
+                        rememberProxyChannel(channel.name);
+                        const proxied = `/api/proxy?url=${encodeURIComponent(channel.url)}`;
                         if (state.hls) {
-                            state.hls.loadSource(streamNext);
+                            state.hls.loadSource(proxied);
                             state.hls.startLoad();
                         } else {
-                            dom.video.src = streamNext;
+                            dom.video.src = proxied;
                             dom.video.play().catch(() => {});
                         }
-                        return;
+                        armPlaybackTimeout();
+                    } else {
+                        let allUrls = [channel.url];
+                        if (channel.backup_url) {
+                            allUrls = allUrls.concat(channel.backup_url.split('|').map(u => u.trim()).filter(Boolean));
+                        }
+                        if (state.currentSignalIndex !== undefined && state.currentSignalIndex + 1 < allUrls.length) {
+                            state.currentSignalIndex++;
+                            updateSignalButtonUi();
+                            state.usedProxy = false;
+                            state.networkRetryCount = 0;
+                            const nextUrl = allUrls[state.currentSignalIndex];
+                            console.warn(`Timeout en señal. Probando señal de respaldo ${state.currentSignalIndex + 1}/${allUrls.length}: ${nextUrl}`);
+                            if (dom.loaderText) dom.loaderText.textContent = `Probando señal de respaldo ${state.currentSignalIndex + 1}...`;
+                            if (nextUrl.startsWith('streamxhd://')) {
+                                const streamId = nextUrl.replace('streamxhd://', '').split('?')[0].trim();
+                                if (state.hls) { state.hls.stopLoad(); }
+                                dom.video.classList.add('hidden');
+                                dom.iframe.classList.remove('hidden');
+                                dom.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+                                dom.iframe.src = `https://streamxhd.st/live1.php?stream=${encodeURIComponent(streamId)}`;
+                                if (dom.loader) dom.loader.classList.add('hidden');
+                                return;
+                            }
+                            let streamNext = nextUrl;
+                            if (nextUrl.startsWith('http://') || nextUrl.startsWith('desdeparaguay://')) {
+                                state.usedProxy = true;
+                                streamNext = `/api/proxy?url=${encodeURIComponent(nextUrl)}`;
+                            }
+                            if (state.hls) {
+                                state.hls.loadSource(streamNext);
+                                state.hls.startLoad();
+                            } else {
+                                dom.video.src = streamNext;
+                                dom.video.play().catch(() => {});
+                            }
+                            armPlaybackTimeout();
+                            return;
+                        }
+                        handleStreamFatalError('La señal en vivo tardó demasiado en responder.');
                     }
-                    handleStreamFatalError('La señal en vivo tardó demasiado en responder.');
                 }
-            }
-        }, 20000);
+            }, 15000);
+        }
+        armPlaybackTimeout();
 
         function onPlaybackStarted() {
             if (state.playbackTimeout) {
@@ -1860,10 +1866,7 @@
             if (raw) {
                 const list = JSON.parse(raw);
                 if (Array.isArray(list)) {
-                    // Purgar Tigo Sports o cualquier canal que ahora esté en CloudFront o sea HTTPS nativo
-                    const cleaned = list.filter(name => !name.toLowerCase().includes('tigo sports'));
-                    state.proxyChannels = new Set(cleaned);
-                    saveProxyChannelsToStorage();
+                    state.proxyChannels = new Set(list);
                     return;
                 }
             }
