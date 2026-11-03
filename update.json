@@ -1,6 +1,6 @@
 {
-  "versionCode": 177,
-  "versionName": "2.79",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.79/app-website-release.apk",
-  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.79."
+  "versionCode": 180,
+  "versionName": "2.82",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.82/app-website-release.apk",
+  "releaseNotes": "Actualización v2.82: Reparación de transmisiones en vivo de Tigo Sports, ESPN 1 y ESPN 3 Argentina en Full HD y sonido Unicanal."
 }

@@ -121,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=20261103.1825');
+            const resp = await fetch('channels.json?v=20261103.1930');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -1983,9 +1983,26 @@
     // REGISTRO DE SERVICE WORKER (PWA)
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').catch(err => {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                // Comprobación inmediata de actualización
+                reg.update();
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    if (newWorker) {
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('Nueva versión detectada, recargando...');
+                                window.location.reload();
+                            }
+                        });
+                    }
+                });
+            }).catch(err => {
                 console.log('SW no registrado:', err);
             });
+        });
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            window.location.reload();
         });
     }
 

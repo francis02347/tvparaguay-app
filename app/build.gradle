@@ -52,8 +52,8 @@ android {
         applicationId "com.tvpy.tvapp"
         minSdk 26
         targetSdk 35
-        versionCode 179
-        versionName "2.81"
+        versionCode 180
+        versionName "2.82"
     }
 
     buildFeatures {

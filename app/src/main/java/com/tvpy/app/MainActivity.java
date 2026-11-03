@@ -266,11 +266,13 @@ public class MainActivity extends AppCompatActivity {
             try {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
                 if (PlayerActivity.isPlayerActive) return;
-                URL url = new URL("https://raw.githubusercontent.com/francis02347/tvparaguay-app/refs/heads/main/app/src/website/assets/default_channels.m3u");
+                URL url = new URL("https://raw.githubusercontent.com/francis02347/tvparaguay-app/refs/heads/main/app/src/website/assets/default_channels.m3u?t=" + System.currentTimeMillis());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setConnectTimeout(10000);
                 conn.setReadTimeout(15000);
                 conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+                conn.setRequestProperty("Cache-Control", "no-cache");
+                conn.setRequestProperty("Pragma", "no-cache");
                 
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
