@@ -121,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=20261103.1715');
+            const resp = await fetch('channels.json?v=20261103.1810');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -391,7 +391,11 @@
         showHudTemporary();
 
         if (state.hls) {
-            try { state.hls.destroy(); } catch (e) {}
+            try {
+                state.hls.stopLoad();
+                state.hls.detachMedia();
+                state.hls.destroy();
+            } catch (e) {}
             state.hls = null;
         }
         if (state.mpegts) {
@@ -403,7 +407,11 @@
             } catch (e) {}
             state.mpegts = null;
         }
-        dom.video.pause();
+        try {
+            dom.video.pause();
+            dom.video.removeAttribute('src');
+            dom.video.load();
+        } catch (e) {}
 
         // Canales Dailymotion: reproducir mediante el reproductor embebido /player/dm que spoofea el referer oficial
         if (channel.url.startsWith('dailymotion://')) {
@@ -680,8 +688,7 @@
                         dom.video.play().catch(() => {});
                         return;
                     } else if (state.mediaRecoveryCount === 3) {
-                        console.warn('Cambiando perfil de decodificación de audio...');
-                        state.hls.swapAudioCodec();
+                        console.warn('Reintentando recuperación profunda de decodificador...');
                         state.hls.recoverMediaError();
                         dom.video.play().catch(() => {});
                         return;
@@ -939,6 +946,8 @@
         // 9. Destruir Hls y mpegts de forma segura
         if (state.hls) {
             try {
+                state.hls.stopLoad();
+                state.hls.detachMedia();
                 state.hls.destroy();
             } catch (e) {}
             state.hls = null;
@@ -1979,6 +1988,9 @@
             });
         });
     }
+
+    // EXPOSICIÓN GLOBAL PARA AUTOMATIZACIÓN Y DEBUG
+    window.tvv = { playChannel, stopPlayback, state };
 
     // INICIAR
     document.addEventListener('DOMContentLoaded', init);
