@@ -121,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=20261103.1930');
+            const resp = await fetch('channels.json?v=20261105.1200');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -413,25 +413,44 @@
             dom.video.load();
         } catch (e) {}
 
-        // Canales Dailymotion: reproducir mediante el reproductor embebido /player/dm que spoofea el referer oficial
+        // Canales Dailymotion: reproducir mediante el reproductor oficial geo.dailymotion.com
         if (channel.url.startsWith('dailymotion://')) {
             const raw = channel.url.replace('dailymotion://', '').trim();
             const parts = raw.split('?');
-            const videoId = parts[0].trim();
-            let ref = 'https://trece.com.py/';
+            let videoId = parts[0].trim();
             let playerId = 'x1at3a';
 
+            if (parts.length > 1) {
+                const params = new URLSearchParams(parts[1]);
+                if (params.get('p')) playerId = params.get('p');
+            }
+
             if (channel.name.toLowerCase().includes('unicanal')) {
-                ref = 'https://www.unicanal.com.py/';
-                playerId = 'x1apn6';
+                if (videoId === 'k41tDnJts45CTVHcyD4' || !videoId) videoId = 'xak2lou';
+                playerId = 'x1ilma';
+            } else if (channel.name.toLowerCase().includes('trece')) {
+                playerId = 'x1at3a';
             } else if (channel.name.toLowerCase().includes('abc')) {
-                ref = 'https://www.abc.com.py/';
                 playerId = 'x1b1gw';
             }
 
+            // Desmontar reproductor de video HTML5 previo
+            try {
+                if (state.hls) {
+                    state.hls.stopLoad();
+                    state.hls.detachMedia();
+                    state.hls.destroy();
+                    state.hls = null;
+                }
+                dom.video.pause();
+                dom.video.removeAttribute('src');
+                dom.video.load();
+            } catch (e) {}
+
+            if (dom.unmuteBanner) dom.unmuteBanner.classList.add('hidden');
             dom.video.classList.add('hidden');
             dom.iframe.classList.remove('hidden');
-            dom.iframe.src = `/player/dm?v=${encodeURIComponent(videoId)}&p=${playerId}&ref=${encodeURIComponent(ref)}`;
+            dom.iframe.src = `https://geo.dailymotion.com/player/${playerId}.html?video=${encodeURIComponent(videoId)}&autoplay=1`;
             dom.loader.classList.add('hidden');
 
             state.focusedZone = 'player_hud';

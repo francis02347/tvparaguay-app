@@ -32,7 +32,7 @@
 
 
     <!-- Estilos de la aplicación -->
-    <link rel="stylesheet" href="styles.css?v=20261103.1930">
+    <link rel="stylesheet" href="styles.css?v=20261105.1200">
 </head>
 <body>
     <!-- FONDO AMBIENTAL -->
@@ -53,7 +53,7 @@
                     <span class="pulse-dot"></span> EN VIVO
                 </div>
                 <div class="version-pill" id="app-version" title="Versión de la plataforma">v2.82</div>
-                <div class="update-pill" id="app-update-time" title="Fecha y hora de última actualización">Actualización: 03/11/2026 - 19:30</div>
+                <div class="update-pill" id="app-update-time" title="Fecha y hora de última actualización">Actualización: 05/11/2026 - 12:00</div>
             </div>
 
             <div class="header-center">
@@ -112,7 +112,7 @@
     <div id="player-modal" class="player-modal hidden">
         <div class="player-wrapper" id="player-wrapper">
             <video id="tv-video" class="tv-video" playsinline></video>
-            <iframe id="tv-iframe" class="tv-video hidden" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="tv-iframe" class="tv-video hidden" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
             
             <!-- BANNER FLOTANTE PARA ACTIVAR SONIDO SI EL NAVEGADOR BLOQUEA AUTOPLAY CON AUDIO -->
             <div id="unmute-banner" class="unmute-banner hidden">
@@ -292,6 +292,6 @@
     </nav>
 
     <!-- SCRIPT PRINCIPAL -->
-    <script src="app.js?v=20261103.1930"></script>
+    <script src="app.js?v=20261105.1200"></script>
 </body>
 </html>
