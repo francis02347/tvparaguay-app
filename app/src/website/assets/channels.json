@@ -210,12 +210,12 @@
     },
     {
       "name": "Tigo Sports (Paraguay)",
-      "url": "http://45.170.130.224:8000/play/a04k/index.m3u8",
-      "raw_url": "http://45.170.130.224:8000/play/a04k/index.m3u8",
+      "url": "http://45.134.141.161:2200/ARG/Tigo_Sports/tracks-v1a1/mono.m3u8",
+      "raw_url": "http://45.134.141.161:2200/ARG/Tigo_Sports/tracks-v1a1/mono.m3u8",
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 26,
-      "backup_url": "http://45.134.141.161:2200/ARG/Tigo_Sports/tracks-v1a1/mono.m3u8|streamxhd://tigo1"
+      "backup_url": "streamxhd://tigo1|http://45.170.130.224:8000/play/a04k/index.m3u8"
     },
     {
       "name": "Tigo Sports+ (Solo Eventos)",
@@ -408,12 +408,12 @@
     },
     {
       "name": "ESPN (Señal Principal)",
-      "url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
-      "raw_url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
+      "url": "http://181.78.197.59:8000/play/a0ff/index.m3u8",
+      "raw_url": "http://181.78.197.59:8000/play/a0ff/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 50,
-      "backup_url": "http://181.78.197.59:8000/play/a0ff/index.m3u8"
+      "backup_url": "http://181.78.197.59:8000/play/a07z/index.m3u8"
     },
     {
       "name": "ESPN 2 (Argentina)",
@@ -451,12 +451,12 @@
     },
     {
       "name": "ESPN 3",
-      "url": "http://181.78.197.59:8000/play/a081/index.m3u8",
-      "raw_url": "http://181.78.197.59:8000/play/a081/index.m3u8",
+      "url": "http://45.170.130.224:8000/play/a03s/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a03s/index.m3u8",
       "logo": "",
       "category": "Deportes",
       "number": 55,
-      "backup_url": "http://45.170.130.224:8000/play/a03s/index.m3u8"
+      "backup_url": "http://181.78.197.59:8000/play/a081/index.m3u8"
     },
     {
       "name": "ESPN 3 (Brasil)",

@@ -57,6 +57,15 @@ public class ChannelDeduplicator {
             } else {
                 Channel existing = byUrl.get(url);
                 existing.addBackupUrls(ch.getBackupUrls());
+
+                // Si ambos canales son canales recomendados distintos (ej. ESPN 3 (Argentina) y ESPN 3), no descartar ninguno
+                if (RecommendedChannels.NAMES.contains(existing.getName()) &&
+                    RecommendedChannels.NAMES.contains(ch.getName()) &&
+                    !existing.getName().equalsIgnoreCase(ch.getName())) {
+                    byUrl.put(url + "#" + ch.getName(), ch);
+                    continue;
+                }
+
                 boolean existingCorrupt = existing.getName().contains("Ã");
                 boolean newCorrupt = ch.getName().contains("Ã");
                 if (existingCorrupt && !newCorrupt) {
@@ -64,8 +73,14 @@ public class ChannelDeduplicator {
                 } else if (!existingCorrupt && newCorrupt) {
                     // Keep existing
                 } else {
-                    // Prefer the shorter name as it's typically cleaner
-                    if (ch.getName().length() < existing.getName().length()) {
+                    // Preservar canales con especificacion de pais (ej: "(Argentina)", "(Paraguay)")
+                    boolean existingHasCountry = existing.getName().contains("(") && existing.getName().contains(")");
+                    boolean newHasCountry = ch.getName().contains("(") && ch.getName().contains(")");
+                    if (!existingHasCountry && newHasCountry) {
+                        byUrl.put(url, ch);
+                    } else if (existingHasCountry && !newHasCountry) {
+                        // Conservar existing que tiene el pais explicito
+                    } else if (ch.getName().length() < existing.getName().length()) {
                         byUrl.put(url, ch);
                     }
                 }
