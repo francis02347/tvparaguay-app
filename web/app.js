@@ -121,7 +121,7 @@
     // ==========================================================================
     async function loadChannels() {
         try {
-            const resp = await fetch('channels.json?v=20261105.1950');
+            const resp = await fetch('channels.json?v=20261105.2035');
             const data = await resp.json();
             state.channels = data.channels || [];
             
@@ -513,10 +513,7 @@
                         }
                         armPlaybackTimeout();
                     } else {
-                        let allUrls = [channel.url];
-                        if (channel.backup_url) {
-                            allUrls = allUrls.concat(channel.backup_url.split('|').map(u => u.trim()).filter(Boolean));
-                        }
+                        let allUrls = getAllChannelUrls(channel);
                         if (state.currentSignalIndex !== undefined && state.currentSignalIndex + 1 < allUrls.length) {
                             state.currentSignalIndex++;
                             updateSignalButtonUi();
@@ -738,10 +735,7 @@
                             console.warn(`Reintentando carga proxy (${state.networkRetryCount}/2)...`);
                             state.hls.startLoad();
                         } else {
-                            let allUrls = [channel.url];
-                            if (channel.backup_url) {
-                                allUrls = allUrls.concat(channel.backup_url.split('|').map(u => u.trim()).filter(Boolean));
-                            }
+                            let allUrls = getAllChannelUrls(channel);
                             if (state.currentSignalIndex !== undefined && state.currentSignalIndex + 1 < allUrls.length) {
                                 state.currentSignalIndex++;
                                 state.usedProxy = false;

@@ -427,6 +427,9 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
     });
 
     let isM3u8 = target.pathname.toLowerCase().endsWith('.m3u8');
+    let contentLength = null;
+    let isChunked = false;
+
     for (let i = 1; i < headerLines.length; i++) {
         const line = headerLines[i];
         const colonIdx = line.indexOf(':');
@@ -438,19 +441,29 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
                 if (v.includes('mpegurl') || v.includes('application/x-mpegurl')) {
                     isM3u8 = true;
                 }
+            } else if (k === 'content-length') {
+                const parsed = parseInt(v, 10);
+                if (!isNaN(parsed) && parsed >= 0) contentLength = parsed;
+            } else if (k === 'transfer-encoding' && v.toLowerCase().includes('chunked')) {
+                isChunked = true;
             }
         }
     }
 
     if (isM3u8) {
         const bodyChunks = [bodyRemainder];
+        let currentLen = bodyRemainder.length;
         while (true) {
+            if (contentLength !== null && currentLen >= contentLength) {
+                break;
+            }
             const { value, done } = await reader.read();
             if (done) break;
             bodyChunks.push(value);
+            currentLen += value.length;
         }
         reader.releaseLock();
-        await socket.close();
+        try { await socket.close(); } catch (_) {}
 
         let totalLen = bodyChunks.reduce((acc, c) => acc + c.length, 0);
         let fullBuf = new Uint8Array(totalLen);
@@ -458,6 +471,10 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
         for (const chunk of bodyChunks) {
             fullBuf.set(chunk, offset);
             offset += chunk.length;
+        }
+
+        if (isChunked) {
+            fullBuf = decodeChunked(fullBuf);
         }
 
         const m3u8Text = new TextDecoder().decode(fullBuf);
@@ -476,13 +493,26 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
     }
 
     // Para segmentos TS / binarios: Streaming directo mediante ReadableStream (latencia cero al primer byte)
+    let bytesStreamed = 0;
     const stream = new ReadableStream({
         async start(controller) {
             if (bodyRemainder && bodyRemainder.length > 0) {
+                bytesStreamed += bodyRemainder.length;
                 controller.enqueue(bodyRemainder);
+                if (contentLength !== null && bytesStreamed >= contentLength) {
+                    controller.close();
+                    reader.releaseLock();
+                    try { await socket.close(); } catch (_) {}
+                }
             }
         },
         async pull(controller) {
+            if (contentLength !== null && bytesStreamed >= contentLength) {
+                controller.close();
+                reader.releaseLock();
+                try { await socket.close(); } catch (_) {}
+                return;
+            }
             try {
                 const { value, done } = await reader.read();
                 if (done) {
@@ -490,7 +520,13 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
                     reader.releaseLock();
                     try { await socket.close(); } catch (_) {}
                 } else {
+                    bytesStreamed += value.length;
                     controller.enqueue(value);
+                    if (contentLength !== null && bytesStreamed >= contentLength) {
+                        controller.close();
+                        reader.releaseLock();
+                        try { await socket.close(); } catch (_) {}
+                    }
                 }
             } catch (err) {
                 controller.error(err);
@@ -504,6 +540,9 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
         }
     });
 
+    if (contentLength !== null) {
+        respHeaders.set('content-length', contentLength.toString());
+    }
     if (!respHeaders.has('content-type')) {
         respHeaders.set('content-type', 'video/mp2t');
     }
@@ -513,6 +552,40 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
         status: statusCode,
         headers: respHeaders
     });
+}
+
+function decodeChunked(buf) {
+    let cursor = 0;
+    const pieces = [];
+    while (cursor < buf.length) {
+        let lineEnd = -1;
+        for (let i = cursor; i < buf.length - 1; i++) {
+            if (buf[i] === 13 && buf[i+1] === 10) {
+                lineEnd = i;
+                break;
+            }
+        }
+        if (lineEnd === -1) break;
+        const hexStr = new TextDecoder().decode(buf.slice(cursor, lineEnd)).trim().split(';')[0];
+        const chunkSize = parseInt(hexStr, 16);
+        if (isNaN(chunkSize) || chunkSize === 0) break;
+        const chunkStart = lineEnd + 2;
+        const chunkEnd = chunkStart + chunkSize;
+        if (chunkEnd > buf.length) {
+            pieces.push(buf.slice(chunkStart));
+            break;
+        }
+        pieces.push(buf.slice(chunkStart, chunkEnd));
+        cursor = chunkEnd + 2;
+    }
+    const total = pieces.reduce((a, b) => a + b.length, 0);
+    const result = new Uint8Array(total);
+    let off = 0;
+    for (const p of pieces) {
+        result.set(p, off);
+        off += p.length;
+    }
+    return result;
 }
 
 function rewriteM3u8(content, baseUrlStr, origin, extraParams = {}) {
