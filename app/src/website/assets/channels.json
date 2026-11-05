@@ -20,9 +20,9 @@
     },
     {
       "name": "Trece",
-      "url": "dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/",
-      "raw_url": "dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/",
-      "backup_url": "dailymotion://k1mHLKycOlKgo3Db5GI?referer=https://trece.com.py/&embedder=https://trece.com.py/",
+      "url": "http://45.170.130.224:8000/play/a04y/index.m3u8",
+      "raw_url": "http://45.170.130.224:8000/play/a04y/index.m3u8",
+      "backup_url": "dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/",
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 3

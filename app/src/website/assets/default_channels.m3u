@@ -3,8 +3,8 @@
 https://ddycmnicl95kp.cloudfront.net/live/25646ipbno2g/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Telefuturo
 https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_baja/playlist.m3u8?admin=tvaccion
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="dailymotion://k1mHLKycOlKgo3Db5GI?referer=https://trece.com.py/&embedder=https://trece.com.py/",Trece
-dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="dailymotion://k1bgQZHbBKPqXOHczd4?referer=https://trece.com.py/&embedder=https://trece.com.py/",Trece
+http://45.170.130.224:8000/play/a04y/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="dailymotion://k3C8CLhvjDCJadHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/",Unicanal
 dailymotion://xak2lou?p=x1ilma&referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Latele
