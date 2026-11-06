@@ -354,7 +354,8 @@ async function handleSocketProxy(targetUrlStr, origin, customUa, customReferer, 
     const ua = customUa || 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36';
     const pathAndQuery = (target.pathname || '/') + (target.search || '');
 
-    let reqHeaders = `GET ${pathAndQuery} HTTP/1.1\r\nHost: ${target.hostname}:${port}\r\nUser-Agent: ${ua}\r\nAccept: */*\r\nConnection: close\r\n`;
+    const hostHdr = ((port === 80 && !isHttps) || (port === 443 && isHttps)) ? target.hostname : `${target.hostname}:${port}`;
+    let reqHeaders = `GET ${pathAndQuery} HTTP/1.1\r\nHost: ${hostHdr}\r\nUser-Agent: ${ua}\r\nAccept: */*\r\nConnection: close\r\n`;
     if (customReferer) {
         reqHeaders += `Referer: ${customReferer}\r\n`;
     }

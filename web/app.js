@@ -430,8 +430,6 @@
                 playerId = 'x1ilma';
             } else if (channel.name.toLowerCase().includes('trece')) {
                 playerId = 'x1at3a';
-            } else if (channel.name.toLowerCase().includes('abc')) {
-                playerId = 'x1b1gw';
             }
 
             // Desmontar reproductor de video HTML5 previo

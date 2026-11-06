@@ -33,8 +33,8 @@ https://copacotf.desdeparaguay.net/e40tv/e40tv_py_alta/playlist.m3u8?admin=tvacc
 https://copacogen.desdeparaguay.net/monumentaltv/monumentaltv_med/playlist.m3u8?admin=tvaccion
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",Ñandutí
 https://zn1tf.desdeparaguay.net/nandutitv/nandutitv_alta/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",ABC-TV Paraguay
-dailymotion://kQRS6ZAjGuMkByE4Mtc?referer=https://www.abc.com.py/&embedder=https://www.abc.com.py/
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias" backup-url="dailymotion://kQRS6ZAjGuMkByE4Mtc?referer=https://www.abc.com.py/&embedder=https://www.abc.com.py/",ABC-TV Paraguay
+http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/7.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Canal Pro
 https://www.desde-paraguay.com/pro.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",HEi Now
