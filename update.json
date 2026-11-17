@@ -1,6 +1,7 @@
 {
-  "versionCode": 185,
-  "versionName": "2.87",
+  "versionCode": 186,
+  "versionName": "2.88",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.87/app-website-release.apk",
-  "releaseNotes": "Actualización v2.87: Reparación de la transmisión en vivo de ESPN 3 (Argentina) en HD nativo y optimización de señales deportivas."
+  "releaseNotes": "Actualización v2.87: Reparación de la transmisión en vivo de ESPN 3 (Argentina) en HD nativo y optimización de señales deportivas.",
+  "changelog": "Reparada la transmisión en vivo del canal Trece (Canal 3) con reproducción HLS nativa de alta definición."
 }

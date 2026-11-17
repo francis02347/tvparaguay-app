@@ -413,47 +413,50 @@
             dom.video.load();
         } catch (e) {}
 
-        // Canales Dailymotion: reproducir mediante el reproductor oficial geo.dailymotion.com
+        // Canales Dailymotion: reproducir mediante el reproductor oficial geo.dailymotion.com o HLS nativo
         if (channel.url.startsWith('dailymotion://')) {
-            const raw = channel.url.replace('dailymotion://', '').trim();
-            const parts = raw.split('?');
-            let videoId = parts[0].trim();
-            let playerId = 'x1at3a';
+            // Trece se reproduce vía HLS nativo con redirección 302 directa desde el CDN para evitar bloqueo de dominio de Dailymotion
+            if (channel.name.toLowerCase().includes('trece')) {
+                // Continuar hacia el reproductor HLS nativo
+            } else {
+                const raw = channel.url.replace('dailymotion://', '').trim();
+                const parts = raw.split('?');
+                let videoId = parts[0].trim();
+                let playerId = 'x1at3a';
 
-            if (parts.length > 1) {
-                const params = new URLSearchParams(parts[1]);
-                if (params.get('p')) playerId = params.get('p');
-            }
-
-            if (channel.name.toLowerCase().includes('unicanal')) {
-                if (videoId === 'k41tDnJts45CTVHcyD4' || !videoId) videoId = 'xak2lou';
-                playerId = 'x1ilma';
-            } else if (channel.name.toLowerCase().includes('trece')) {
-                playerId = 'x1at3a';
-            }
-
-            // Desmontar reproductor de video HTML5 previo
-            try {
-                if (state.hls) {
-                    state.hls.stopLoad();
-                    state.hls.detachMedia();
-                    state.hls.destroy();
-                    state.hls = null;
+                if (parts.length > 1) {
+                    const params = new URLSearchParams(parts[1]);
+                    if (params.get('p')) playerId = params.get('p');
                 }
-                dom.video.pause();
-                dom.video.removeAttribute('src');
-                dom.video.load();
-            } catch (e) {}
 
-            if (dom.unmuteBanner) dom.unmuteBanner.classList.add('hidden');
-            dom.video.classList.add('hidden');
-            dom.iframe.classList.remove('hidden');
-            dom.iframe.src = `https://geo.dailymotion.com/player/${playerId}.html?video=${encodeURIComponent(videoId)}&autoplay=1`;
-            dom.loader.classList.add('hidden');
+                if (channel.name.toLowerCase().includes('unicanal')) {
+                    if (videoId === 'k41tDnJts45CTVHcyD4' || !videoId) videoId = 'xak2lou';
+                    playerId = 'x1ilma';
+                }
 
-            state.focusedZone = 'player_hud';
-            dom.btnClosePlayer.focus();
-            return;
+                // Desmontar reproductor de video HTML5 previo
+                try {
+                    if (state.hls) {
+                        state.hls.stopLoad();
+                        state.hls.detachMedia();
+                        state.hls.destroy();
+                        state.hls = null;
+                    }
+                    dom.video.pause();
+                    dom.video.removeAttribute('src');
+                    dom.video.load();
+                } catch (e) {}
+
+                if (dom.unmuteBanner) dom.unmuteBanner.classList.add('hidden');
+                dom.video.classList.add('hidden');
+                dom.iframe.classList.remove('hidden');
+                dom.iframe.src = `https://geo.dailymotion.com/player/${playerId}.html?video=${encodeURIComponent(videoId)}&autoplay=1`;
+                dom.loader.classList.add('hidden');
+
+                state.focusedZone = 'player_hud';
+                dom.btnClosePlayer.focus();
+                return;
+            }
         }
 
         // Canales StreamXHD (Tigo Sports): reproducir mediante iframe seguro para mantener IP nativa del usuario y bloqueo de publicidad
@@ -485,7 +488,7 @@
         if (isCloudfront) {
             forgetProxyChannel(channel.name);
         }
-        if (channel.url.startsWith('http://') || channel.url.startsWith('desdeparaguay://') || channel.url.startsWith('streamxhd://') || (!isCloudfront && state.proxyChannels.has(channel.name))) {
+        if (channel.url.startsWith('http://') || channel.url.startsWith('desdeparaguay://') || channel.url.startsWith('dailymotion://') || channel.url.startsWith('streamxhd://') || (!isCloudfront && state.proxyChannels.has(channel.name))) {
             state.usedProxy = true;
             streamUrl = `/api/proxy?url=${encodeURIComponent(channel.url)}`;
         } else {

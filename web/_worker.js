@@ -70,13 +70,16 @@ export default {
                 if (targetUrlStr.startsWith('dailymotion://')) {
                     const parsedDm = parseDailymotionUrl(targetUrlStr);
                     const dmMeta = await resolveDailymotionStream(parsedDm.videoId, parsedDm.referer, parsedDm.embedder);
-                    targetUrlStr = dmMeta.masterUrl;
-                    if (dmMeta.cookieStr) {
-                        customCookie = dmMeta.cookieStr;
-                    }
-                    if (dmMeta.referer) {
-                        customReferer = dmMeta.referer;
-                    }
+                    return new Response(null, {
+                        status: 302,
+                        headers: {
+                            'Location': dmMeta.masterUrl,
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+                            'Access-Control-Allow-Headers': '*',
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
                 }
 
                 // 2. Resolver esquema desdeparaguay://

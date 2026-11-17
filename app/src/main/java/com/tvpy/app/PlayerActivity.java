@@ -1027,6 +1027,7 @@ public class PlayerActivity extends AppCompatActivity {
                     videoCandidates.add(videoId);
 
                     if (chNameLower.contains("trece")) {
+                        if (!videoId.equals("xak2neu")) videoCandidates.add(0, "xak2neu");
                         if (!videoId.equals("k1bgQZHbBKPqXOHczd4")) videoCandidates.add("k1bgQZHbBKPqXOHczd4");
                         if (!videoId.equals("k1mHLKycOlKgo3Db5GI")) videoCandidates.add("k1mHLKycOlKgo3Db5GI");
                     } else if (chNameLower.contains("unicanal")) {
