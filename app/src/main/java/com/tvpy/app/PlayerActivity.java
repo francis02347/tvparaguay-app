@@ -2868,6 +2868,19 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
         tvRemoteQrUrl = findViewById(R.id.tvRemoteQrUrl);
         View btnDismissQr = findViewById(R.id.btnDismissQr);
 
+        if (cardRemoteQr != null) {
+            cardRemoteQr.setOnClickListener(v -> {
+                RemoteControlManager.getInstance().showPairingDialog(PlayerActivity.this);
+            });
+            cardRemoteQr.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    v.animate().scaleX(1.06f).scaleY(1.06f).setDuration(150).start();
+                } else {
+                    v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                }
+            });
+        }
+
         if (btnDismissQr != null) {
             btnDismissQr.setOnClickListener(v -> {
                 isQrDismissedByUser = true;
@@ -2878,8 +2891,7 @@ if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
         View btnRemotePair = findViewById(R.id.btnRemotePair);
         if (btnRemotePair != null) {
             btnRemotePair.setOnClickListener(v -> {
-                isQrDismissedByUser = false;
-                toggleRemoteQrOverlay();
+                RemoteControlManager.getInstance().showPairingDialog(PlayerActivity.this);
             });
             btnRemotePair.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {

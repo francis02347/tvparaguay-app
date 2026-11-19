@@ -1,7 +1,7 @@
 {
-  "versionCode": 186,
-  "versionName": "2.88",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.87/app-website-release.apk",
-  "releaseNotes": "Actualización v2.87: Reparación de la transmisión en vivo de ESPN 3 (Argentina) en HD nativo y optimización de señales deportivas.",
-  "changelog": "Reparada la transmisión en vivo del canal Trece (Canal 3) con reproducción HLS nativa de alta definición."
+  "versionCode": 187,
+  "versionName": "2.89",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.89/app-website-release.apk",
+  "releaseNotes": "Actualización v2.89: Optimización integral del control remoto por código QR durante la reproducción en vivo. Generación offline instantánea con ZXing, detección robusta de IP LAN y diálogo ampliado al pulsar OK o el botón móvil.",
+  "changelog": "Corregido el escaneo del código QR durante la transmisión en vivo de canales. Eliminada la dependencia de red externa para generar el QR, asegurada la IP local y habilitada la ampliación interactiva del mando directamente desde el reproductor."
 }

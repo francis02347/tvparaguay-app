@@ -20,10 +20,18 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Random;
 
 public class RemoteControlManager {
@@ -193,26 +201,71 @@ public class RemoteControlManager {
         recordClientHeartbeat("default_client");
     }
 
+    public static Bitmap generateLocalQrBitmap(String content, int size) throws Exception {
+        QRCodeWriter writer = new QRCodeWriter();
+        Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
+        hints.put(EncodeHintType.MARGIN, 1);
+
+        BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, size, size, hints);
+        int width = bitMatrix.getWidth();
+        int height = bitMatrix.getHeight();
+        int[] pixels = new int[width * height];
+        for (int y = 0; y < height; y++) {
+            int offset = y * width;
+            for (int x = 0; x < width; x++) {
+                pixels[offset + x] = bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE;
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
+    }
+
     public void getOrGenerateQrBitmap(Context context, QrCallback callback) {
         String wifiIp = LocalRemoteServer.getWifiIpAddress(context);
-        String localRemoteUrl = "http://" + wifiIp + ":" + LocalRemoteServer.PORT;
-        if (cachedQrBitmap != null && localRemoteUrl.equals(cachedQrUrl)) {
+        boolean isRealLanIp = LocalRemoteServer.isValidLanIp(wifiIp);
+        String localRemoteUrl = "http://" + wifiIp + ":" + LocalRemoteServer.PORT + "/";
+
+        if (cachedQrBitmap != null && localRemoteUrl.equals(cachedQrUrl) && isRealLanIp) {
             if (callback != null) callback.onQrLoaded(cachedQrBitmap, localRemoteUrl);
             return;
         }
 
         new Thread(() -> {
+            // 1. Generación nativa offline ultra-rápida (ZXing - sin consumo de red ni demoras)
+            try {
+                Bitmap bmp = generateLocalQrBitmap(localRemoteUrl, 512);
+                if (bmp != null) {
+                    if (isRealLanIp) {
+                        cachedQrBitmap = bmp;
+                        cachedQrUrl = localRemoteUrl;
+                    }
+                    if (callback != null) {
+                        mainHandler.post(() -> callback.onQrLoaded(bmp, localRemoteUrl));
+                    }
+                    return;
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "ZXing offline QR generation failed, falling back to HTTP: " + e.getMessage());
+            }
+
+            // 2. Fallback por red solo si ZXing fallara (como salvaguarda)
             try {
                 String qrApiUrl = "https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=" + URLEncoder.encode(localRemoteUrl, "UTF-8");
                 HttpURLConnection conn = (HttpURLConnection) new URL(qrApiUrl).openConnection();
-                conn.setConnectTimeout(6000);
-                conn.setReadTimeout(6000);
+                conn.setConnectTimeout(4000);
+                conn.setReadTimeout(4000);
                 conn.connect();
                 InputStream is = conn.getInputStream();
                 Bitmap bmp = BitmapFactory.decodeStream(is);
                 if (bmp != null) {
-                    cachedQrBitmap = bmp;
-                    cachedQrUrl = localRemoteUrl;
+                    if (isRealLanIp) {
+                        cachedQrBitmap = bmp;
+                        cachedQrUrl = localRemoteUrl;
+                    }
                     if (callback != null) {
                         mainHandler.post(() -> callback.onQrLoaded(bmp, localRemoteUrl));
                     }
@@ -279,7 +332,8 @@ public class RemoteControlManager {
         if (activity == null || activity.isFinishing()) return;
 
         String wifiIp = LocalRemoteServer.getWifiIpAddress(activity);
-        String localRemoteUrl = "http://" + wifiIp + ":" + LocalRemoteServer.PORT;
+        boolean isLan = LocalRemoteServer.isValidLanIp(wifiIp);
+        String localRemoteUrl = "http://" + wifiIp + ":" + LocalRemoteServer.PORT + "/";
         String cloudRemoteUrl = "https://tvv.lat/remote.html?pin=" + pin;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -354,9 +408,14 @@ public class RemoteControlManager {
 
         // Estado
         TextView tvStatus = new TextView(activity);
-        tvStatus.setText("● Wi-Fi Local Activo (" + wifiIp + ":8088)");
+        if (isLan) {
+            tvStatus.setText("● Wi-Fi Local Activo (" + wifiIp + ":8088)");
+            tvStatus.setTextColor(Color.parseColor("#10b981"));
+        } else {
+            tvStatus.setText("⚠ Conecta tu televisor a la red Wi-Fi");
+            tvStatus.setTextColor(Color.parseColor("#f59e0b"));
+        }
         tvStatus.setTextSize(12);
-        tvStatus.setTextColor(Color.parseColor("#10b981"));
         tvStatus.setGravity(Gravity.CENTER);
         tvStatus.setPadding(0, 0, 0, (int) (16 * activity.getResources().getDisplayMetrics().density));
         layout.addView(tvStatus);

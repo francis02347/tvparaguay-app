@@ -1,7 +1,12 @@
 package com.tvpy.app;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
+import android.net.Network;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.text.format.Formatter;
 import android.util.Log;
 
@@ -225,28 +230,87 @@ public class LocalRemoteServer {
     }
 
     public static String getWifiIpAddress(Context context) {
+        if (context == null) return "127.0.0.1";
+
+        // 1. Intentar obtener IP de red activa a través de ConnectivityManager (Android 6.0+)
+        try {
+            ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (cm != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Network activeNetwork = cm.getActiveNetwork();
+                if (activeNetwork != null) {
+                    LinkProperties linkProperties = cm.getLinkProperties(activeNetwork);
+                    if (linkProperties != null) {
+                        for (LinkAddress linkAddress : linkProperties.getLinkAddresses()) {
+                            InetAddress addr = linkAddress.getAddress();
+                            if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
+                                String host = addr.getHostAddress();
+                                if (isValidLanIp(host)) {
+                                    return host;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+
+        // 2. Iterar interfaces de red de forma exhaustiva, priorizando interfaces físicas (wlan*, eth*, en*)
+        try {
+            String candidateIp = null;
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                if (intf.isLoopback() || !intf.isUp()) continue;
+                String ifName = intf.getName() != null ? intf.getName().toLowerCase() : "";
+
+                // Descartar adaptadores virtuales, VPNs, Wi-Fi Direct p2p que no son accesibles por LAN
+                if (ifName.contains("p2p") || ifName.contains("dummy") || ifName.contains("tun") ||
+                    ifName.contains("rmnet") || ifName.contains("docker") || ifName.contains("vbox") ||
+                    ifName.contains("virbr")) {
+                    continue;
+                }
+
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                        String host = inetAddress.getHostAddress();
+                        if (isValidLanIp(host)) {
+                            // Si la interfaz es Wi-Fi o Ethernet (la común en Android TV), retornar inmediatamente
+                            if (ifName.startsWith("wlan") || ifName.startsWith("eth") || ifName.startsWith("en")) {
+                                return host;
+                            }
+                            if (candidateIp == null) {
+                                candidateIp = host;
+                            }
+                        }
+                    }
+                }
+            }
+            if (candidateIp != null) {
+                return candidateIp;
+            }
+        } catch (Exception ignored) {}
+
+        // 3. Fallback WifiManager (legacy)
         try {
             WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if (wm != null && wm.getConnectionInfo() != null) {
                 int ipInt = wm.getConnectionInfo().getIpAddress();
                 if (ipInt != 0) {
-                    return Formatter.formatIpAddress(ipInt);
-                }
-            }
-        } catch (Exception ignored) {}
-
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                        return inetAddress.getHostAddress();
+                    String ip = Formatter.formatIpAddress(ipInt);
+                    if (isValidLanIp(ip)) {
+                        return ip;
                     }
                 }
             }
         } catch (Exception ignored) {}
 
         return "127.0.0.1";
+    }
+
+    public static boolean isValidLanIp(String ip) {
+        if (ip == null || ip.isEmpty() || "127.0.0.1".equals(ip) || "0.0.0.0".equals(ip)) {
+            return false;
+        }
+        return ip.startsWith("192.168.") || ip.startsWith("10.") || ip.startsWith("172.");
     }
 }

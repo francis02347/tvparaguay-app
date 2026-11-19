@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>TVV Remote Bridge</title>
+    <!-- PeerJS para enlace WebRTC P2P con el celular -->
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+</head>
+<body style="background:#000; color:#fff; font-family:sans-serif;">
+    <div id="status">Iniciando puente de control remoto...</div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pin = (urlParams.get('pin') || '9999').toUpperCase();
+            const hostPeerId = 'tvv-host-' + pin;
+
+            let activeConn = null;
+
+            try {
+                const peer = new Peer(hostPeerId, {
+                    debug: 0,
+                    config: {
+                        iceServers: [
+                            { urls: 'stun:stun.l.google.com:19302' },
+                            { urls: 'stun:stun1.l.google.com:19302' }
+                        ]
+                    }
+                });
+
+                peer.on('open', (id) => {
+                    document.getElementById('status').textContent = 'Listo en sala: ' + hostPeerId;
+                    if (window.AndroidBridge && window.AndroidBridge.onBridgeReady) {
+                        window.AndroidBridge.onBridgeReady(pin);
+                    }
+                });
+
+                peer.on('connection', (conn) => {
+                    activeConn = conn;
+
+                    conn.on('open', () => {
+                        document.getElementById('status').textContent = 'Cliente móvil conectado';
+                        if (window.AndroidBridge && window.AndroidBridge.onClientConnected) {
+                            window.AndroidBridge.onClientConnected();
+                        }
+                    });
+
+                    conn.on('data', (data) => {
+                        if (window.AndroidBridge && window.AndroidBridge.onCommand) {
+                            const jsonStr = (typeof data === 'string') ? data : JSON.stringify(data);
+                            window.AndroidBridge.onCommand(jsonStr);
+                        }
+                    });
+
+                    conn.on('close', () => {
+                        activeConn = null;
+                        document.getElementById('status').textContent = 'Cliente desconectado';
+                        if (window.AndroidBridge && window.AndroidBridge.onClientDisconnected) {
+                            window.AndroidBridge.onClientDisconnected();
+                        }
+                    });
+
+                    conn.on('error', (err) => {
+                        activeConn = null;
+                    });
+                });
+
+                peer.on('error', (err) => {
+                    document.getElementById('status').textContent = 'Error: ' + err.type;
+                    if (window.AndroidBridge && window.AndroidBridge.onBridgeError) {
+                        window.AndroidBridge.onBridgeError(err.type);
+                    }
+                });
+
+                // Función invocada desde Java para responder al celular (ej. enviar canal actual)
+                window.sendToRemote = function(payload) {
+                    if (activeConn && activeConn.open) {
+                        try {
+                            activeConn.send(payload);
+                        } catch (e) {}
+                    }
+                };
+
+            } catch (err) {
+                document.getElementById('status').textContent = 'Error crítico: ' + err;
+            }
+        })();
+    </script>
+</body>
+</html>
