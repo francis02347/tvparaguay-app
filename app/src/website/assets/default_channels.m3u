@@ -83,8 +83,8 @@ https://jmp2.uk/plu-64d626ac9b414d000820e2fc.m3u8
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31834/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="España" group-title="Deportes",DAZN LaLiga
 http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31856/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Canadá" group-title="Deportes" backup-url="http://89.187.179.148:826/1368/gXwiagaXda/118609",DAZN 1 (Canadá)
-http://89.187.179.148:826/1368/gXwiagaXda/117372
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Canadá" group-title="Deportes" backup-url="http://9c54a664.edemist.com/iptv/VAELY9WB8FTQNL/31831/index.m3u8|https://jmp2.uk/plu-649b6898f2ec0000081a9460.m3u8",DAZN 1 (Canadá)
+https://jmp2.uk/plu-647f07e74cfc2c0008a2e557.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Deportes TVC (1080p)
 http://190.11.225.124:5000/live/deportes_tvc_hd/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes" backup-url="http://181.78.82.130:8000/play/a0r5/index.m3u8",DSports (DirecTV Sports)
@@ -119,8 +119,8 @@ https://cdn-5.nxplay.com.br/ESPN_4/playlist.m3u8
 http://181.78.197.59:8000/play/a074/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://38.44.109.41:8003/play/a0g7/index.m3u8|http://38.44.109.41:8003/play/a0gm/index.m3u8",ESPN 6
 http://181.78.197.59:8000/play/a08c/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://181.78.197.59:8000/play/a06a/index.m3u8|http://38.44.109.41:8003/play/a0hx/index.m3u8",ESPN 7
-http://45.170.130.224:8000/play/a027/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://190.108.93.180:8000/play/a040/index.m3u8|http://45.188.229.33:8000/play/a1j0/index.m3u8|http://45.170.130.224:8000/play/a027/index.m3u8",ESPN 7
+http://181.78.197.59:8000/play/a06a/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN Extra (Brasil)
 http://hls1.sua.tv/live/espnextrafhd/s.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports" backup-url="http://190.128.214.97:64333/play/a00f/index.m3u8|http://181.209.38.115:8000/play/a00f/index.m3u8",ESPN Premium
@@ -135,12 +135,14 @@ https://aegis-cloudfront-1.tubi.video/8d9284ec-c451-4e51-a1d4-d16e5c8972af/index
 https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/376.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes" backup-url="http://45.188.229.33:8000/play/a1dh/index.m3u8",Fox Sports 1
 http://138.59.227.20:8000/play/a085/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes",Fox Sports 2
-https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/114.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Deportes" backup-url="http://45.188.229.33:8000/play/a1b1/index.m3u8|http://45.188.229.33:8000/play/a1ae/index.m3u8",Fox Sports 2
+https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/10532.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Deportes" backup-url="http://138.59.227.20:8000/play/a06y/index.m3u8",Fox Sports 3
 http://45.134.141.161:2200/ARG/FOX_Sports_3_Argentina_HD/tracks-v1a1/mono.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Deportes" backup-url="http://45.188.229.33:8000/play/a137/index.m3u8",TNT Sports
 http://138.59.227.20:8000/play/a06z/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Gran Bretaña" group-title="Deportes",TNT Sports 1 (Gran Bretaña)
+https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/1917.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Estados Unidos" group-title="Deportes",FS1 (Estados Unidos)
 http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Sports",Golazo Network

@@ -1,7 +1,7 @@
 {
-  "versionCode": 188,
-  "versionName": "2.90",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.90/app-website-release.apk",
-  "releaseNotes": "Actualización v2.90: Reparación de la transmisión en vivo de ESPN 3 (Argentina) y ESPN 3 con respaldo HD activo en web y app.",
-  "changelog": "Restaurada la señal en vivo de ESPN 3 (Argentina) y ESPN 3 con servidores de respaldo activos y verificados."
+  "versionCode": 189,
+  "versionName": "2.91",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.91/app-website-release.apk",
+  "releaseNotes": "Actualización v2.91: Reparación de ESPN 7 Sur, Fox Sports 2 Argentina, DAZN Canadá y incorporación de TNT Sports 1 (Gran Bretaña) en HD.",
+  "changelog": "Reparadas las transmisiones en vivo de ESPN 7 Sur, Fox Sports 2 Argentina y DAZN Canadá; añadido TNT Sports 1 (Gran Bretaña) en HD."
 }
