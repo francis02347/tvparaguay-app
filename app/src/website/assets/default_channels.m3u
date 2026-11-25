@@ -105,10 +105,10 @@ http://45.188.229.33:8000/play/a1ab/index.m3u8
 http://181.78.197.59:8000/play/a080/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 2 (Brasil)
 https://cdn-5.nxplay.com.br/ESPN_2/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports" backup-url="http://45.188.229.33:8000/play/a1b0/index.m3u8|http://190.128.214.97:64333/play/a01i/index.m3u8",ESPN 3 (Argentina)
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Sports" backup-url="http://45.170.130.224:8000/play/a03s/index.m3u8|http://181.78.197.59:8000/play/a081/index.m3u8",ESPN 3 (Argentina)
 http://190.108.93.180:8000/play/a032/index.m3u8
-#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://190.108.93.180:8000/play/a032/index.m3u8",ESPN 3
-http://45.188.229.33:8000/play/a1b0/index.m3u8
+#EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://190.108.93.180:8000/play/a032/index.m3u8|http://181.78.197.59:8000/play/a081/index.m3u8",ESPN 3
+http://45.170.130.224:8000/play/a03s/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Brasil" group-title="Sports",ESPN 3 (Brasil)
 https://cdn-5.nxplay.com.br/ESPN_3/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Internacional" group-title="Sports" backup-url="http://181.78.197.59:8000/play/a07n/index.m3u8|http://38.44.109.41:8003/play/a0i4/index.m3u8",ESPN 4
