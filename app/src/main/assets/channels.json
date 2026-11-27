@@ -12,8 +12,8 @@
     },
     {
       "name": "Telefuturo",
-      "url": "https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_baja/playlist.m3u8?admin=tvaccion",
-      "raw_url": "https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_baja/playlist.m3u8?admin=tvaccion",
+      "url": "desdeparaguay://telefuturo",
+      "raw_url": "desdeparaguay://telefuturo",
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 2
@@ -55,8 +55,8 @@
     },
     {
       "name": "NPY",
-      "url": "https://copacogen.desdeparaguay.net/npy/npy_py_baja/playlist.m3u8?admin=tvaccion",
-      "raw_url": "https://copacogen.desdeparaguay.net/npy/npy_py_baja/playlist.m3u8?admin=tvaccion",
+      "url": "desdeparaguay://npy",
+      "raw_url": "desdeparaguay://npy",
       "logo": "",
       "category": "Nacionales (Paraguay)",
       "number": 7

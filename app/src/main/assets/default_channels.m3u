@@ -2,7 +2,7 @@
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="https://d6qmllupbc5d2.cloudfront.net/hls/25646ipbno2g/3_5/index.m3u8",SNT
 https://ddycmnicl95kp.cloudfront.net/live/25646ipbno2g/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento",Telefuturo
-https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_baja/playlist.m3u8?admin=tvaccion
+desdeparaguay://telefuturo
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="http://190.128.214.97:64333/play/a04p/index.m3u8",Trece
 dailymotion://xak2neu?p=x1ilma&referer=https://trece.com.py/&embedder=https://trece.com.py/
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Entretenimiento" backup-url="dailymotion://k3C8CLhvjDCJadHcyD4?referer=https://www.unicanal.com.py/&embedder=https://www.unicanal.com.py/",Unicanal
@@ -12,7 +12,7 @@ https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tva
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias" backup-url="https://d2h2wh04y3aqtb.cloudfront.net/hls/qnxsy62odjyb/5_4/index.m3u8",C9N
 https://ddycmnicl95kp.cloudfront.net/live/qnxsy62odjyb/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Paraguay" group-title="Noticias",NPY
-https://copacogen.desdeparaguay.net/npy/npy_py_baja/playlist.m3u8?admin=tvaccion
+desdeparaguay://npy
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Noticias",A24 Argentina
 https://g1.vxral-hor.transport.edge-access.net/a15/ngrp:a24-100056_all/a24-100056.m3u8|User-Agent=Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
 #EXTINF:-1 tvg-id="" tvg-logo="" tvg-country="Argentina" group-title="Entretenimiento",América TV Argentina

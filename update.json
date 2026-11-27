@@ -1,7 +1,7 @@
 {
-  "versionCode": 189,
-  "versionName": "2.91",
-  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.91/app-website-release.apk",
-  "releaseNotes": "Actualización v2.91: Reparación de ESPN 7 Sur, Fox Sports 2 Argentina, DAZN Canadá y incorporación de TNT Sports 1 (Gran Bretaña) en HD.",
-  "changelog": "Reparadas las transmisiones en vivo de ESPN 7 Sur, Fox Sports 2 Argentina y DAZN Canadá; añadido TNT Sports 1 (Gran Bretaña) en HD."
+  "versionCode": 190,
+  "versionName": "2.92",
+  "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.92/app-website-release.apk",
+  "releaseNotes": "Actualización v2.92: Reparación de las transmisiones en vivo de Telefuturo y NPY en Full HD 1080p con resolución automática de token.",
+  "changelog": "Reparadas las señales en vivo de Telefuturo y NPY utilizando resolución dinámica en Full HD 1080p en web y app."
 }
