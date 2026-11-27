@@ -2,6 +2,5 @@
   "versionCode": 190,
   "versionName": "2.92",
   "apkUrl": "https://github.com/francis02347/tvparaguay-app/releases/download/v2.92/app-website-release.apk",
-  "releaseNotes": "Actualización v2.92: Reparación de las transmisiones en vivo de Telefuturo y NPY en Full HD 1080p con resolución automática de token.",
-  "changelog": "Reparadas las señales en vivo de Telefuturo y NPY utilizando resolución dinámica en Full HD 1080p en web y app."
+  "releaseNotes": "Actualización automática de la versión completa (sabor web) construida para la versión v2.92."
 }
